@@ -1,0 +1,1361 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Crop Diagnosis - Kerala Farmer Advisory</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+    <style>
+        :root {
+            --primary: #10b981;
+            --primary-dark: #059669;
+            --secondary: #3b82f6;
+            --accent: #8b5cf6;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --success: #10b981;
+            --bg-light: #f8fafc;
+            --bg-dark: #0f172a;
+            --card-light: #ffffff;
+            --card-dark: #1e293b;
+            --text-light: #334155;
+            --text-dark: #f1f5f9;
+            --text-secondary-light: #64748b;
+            --text-secondary-dark: #94a3b8;
+            --border-light: #e2e8f0;
+            --border-dark: #334155;
+            --sidebar-light: #ffffff;
+            --sidebar-dark: #1e293b;
+            --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --gradient-4: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-light);
+            color: var(--text-light);
+            overflow-x: hidden;
+            transition: all 0.3s ease;
+            line-height: 1.6;
+        }
+
+        body.dark {
+            background: var(--bg-dark);
+            color: var(--text-dark);
+        }
+
+        /* Enhanced Sidebar Navigation */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100vh;
+            width: 280px;
+            background: var(--sidebar-light);
+            z-index: 1000;
+            transition: transform 0.3s ease;
+            box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);
+            border-right: 1px solid var(--border-light);
+        }
+
+        body.dark .sidebar {
+            background: var(--sidebar-dark);
+            border-right-color: var(--border-dark);
+        }
+
+        .sidebar-header {
+            padding: 2rem 1.5rem;
+            border-bottom: 1px solid var(--border-light);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+        }
+
+        body.dark .sidebar-header {
+            border-bottom-color: var(--border-dark);
+        }
+
+        .logo {
+            color: white;
+            font-size: 1.4rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .logo i {
+            font-size: 1.8rem;
+        }
+
+        .nav-menu {
+            padding: 2rem 0;
+        }
+
+        .nav-section {
+            margin-bottom: 2rem;
+        }
+
+        .nav-section-title {
+            padding: 0 1.5rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-secondary-light);
+            margin-bottom: 0.75rem;
+        }
+
+        body.dark .nav-section-title {
+            color: var(--text-secondary-dark);
+        }
+
+        .nav-item {
+            display: block;
+            color: inherit;
+            text-decoration: none;
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+            position: relative;
+        }
+
+        .nav-item:hover {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--primary);
+            border-left-color: var(--primary);
+        }
+
+        .nav-item.active {
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--primary);
+            border-left-color: var(--primary);
+            font-weight: 600;
+        }
+
+        .nav-item i {
+            font-size: 1.2rem;
+            width: 20px;
+        }
+
+        .sidebar-footer {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            padding: 1.5rem;
+            border-top: 1px solid var(--border-light);
+        }
+
+        body.dark .sidebar-footer {
+            border-top-color: var(--border-dark);
+        }
+
+        .user-info {
+            color: var(--text-secondary-light);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        body.dark .user-info {
+            color: var(--text-secondary-dark);
+        }
+
+        .theme-toggle-sidebar {
+            width: 100%;
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--primary);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            padding: 0.8rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .theme-toggle-sidebar:hover {
+            background: rgba(16, 185, 129, 0.2);
+        }
+
+        .logout-btn {
+            width: 100%;
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            padding: 0.8rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .logout-btn:hover {
+            background: rgba(239, 68, 68, 0.2);
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 280px;
+            min-height: 100vh;
+            background: var(--bg-light);
+            transition: margin-left 0.3s ease;
+        }
+
+        body.dark .main-content {
+            background: var(--bg-dark);
+        }
+
+        /* Simple Top Bar */
+        .simple-topbar {
+            background: var(--card-light);
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            border-bottom: 1px solid var(--border-light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        body.dark .simple-topbar {
+            background: var(--card-dark);
+            border-bottom-color: var(--border-dark);
+        }
+
+        .topbar-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .simple-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-light);
+            margin: 0;
+        }
+
+        body.dark .simple-title {
+            color: var(--text-dark);
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .status-badge {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--primary);
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1rem;
+        }
+
+        .content-area {
+            padding: 3rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Upload Section */
+        .upload-section {
+            background: var(--card-light);
+            border-radius: 24px;
+            padding: 3rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border-light);
+            margin-bottom: 3rem;
+        }
+
+        body.dark .upload-section {
+            background: var(--card-dark);
+            border-color: var(--border-dark);
+        }
+
+        .upload-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .upload-header h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-light);
+            margin-bottom: 1rem;
+        }
+
+        body.dark .upload-header h2 {
+            color: var(--text-dark);
+        }
+
+        .upload-header p {
+            color: var(--text-secondary-light);
+            font-size: 1.1rem;
+        }
+
+        body.dark .upload-header p {
+            color: var(--text-secondary-dark);
+        }
+
+        .upload-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: start;
+        }
+
+        /* Image Upload Area */
+        .image-upload-area {
+            position: relative;
+        }
+
+        .upload-zone {
+            border: 3px dashed var(--border-light);
+            border-radius: 20px;
+            padding: 3rem 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: var(--bg-light);
+            min-height: 300px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        body.dark .upload-zone {
+            border-color: var(--border-dark);
+            background: var(--bg-dark);
+        }
+
+        .upload-zone:hover,
+        .upload-zone.drag-over {
+            border-color: var(--primary);
+            background: rgba(16, 185, 129, 0.05);
+            transform: translateY(-2px);
+        }
+
+        .upload-zone.has-image {
+            padding: 1rem;
+            min-height: auto;
+        }
+
+        .upload-icon {
+            font-size: 4rem;
+            color: var(--text-secondary-light);
+            margin-bottom: 1rem;
+        }
+
+        body.dark .upload-icon {
+            color: var(--text-secondary-dark);
+        }
+
+        .upload-zone.drag-over .upload-icon {
+            color: var(--primary);
+        }
+
+        .upload-text {
+            color: var(--text-secondary-light);
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+        }
+
+        body.dark .upload-text {
+            color: var(--text-secondary-dark);
+        }
+
+        .upload-subtext {
+            color: var(--text-secondary-light);
+            font-size: 0.9rem;
+        }
+
+        body.dark .upload-subtext {
+            color: var(--text-secondary-dark);
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .preview-image {
+            max-width: 100%;
+            max-height: 400px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            display: none;
+        }
+
+        .remove-image {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--danger);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+        }
+
+        /* Form Fields */
+        .form-fields {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .field-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .field-label {
+            font-weight: 600;
+            color: var(--text-light);
+            font-size: 1rem;
+        }
+
+        body.dark .field-label {
+            color: var(--text-dark);
+        }
+
+        .field-input,
+        .field-select,
+        .field-textarea {
+            padding: 1rem;
+            border: 2px solid var(--border-light);
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+            font-family: 'Inter', sans-serif;
+            background: var(--card-light);
+            color: var(--text-light);
+        }
+
+        body.dark .field-input,
+        body.dark .field-select,
+        body.dark .field-textarea {
+            background: var(--card-dark);
+            border-color: var(--border-dark);
+            color: var(--text-dark);
+        }
+
+        .field-input:focus,
+        .field-select:focus,
+        .field-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+        }
+
+        .field-textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .analyze-btn {
+            background: var(--gradient-4);
+            color: white;
+            border: none;
+            padding: 1.2rem 2rem;
+            border-radius: 16px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            box-shadow: 0 10px 30px rgba(67, 233, 123, 0.3);
+        }
+
+        .analyze-btn:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(67, 233, 123, 0.4);
+        }
+
+        .analyze-btn:disabled {
+            background: #94a3b8;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Enhanced Results Section */
+        .results-section {
+            background: var(--card-light);
+            border-radius: 24px;
+            padding: 3rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border-light);
+            display: none;
+        }
+
+        body.dark .results-section {
+            background: var(--card-dark);
+            border-color: var(--border-dark);
+        }
+
+        .results-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 3rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--border-light);
+        }
+
+        body.dark .results-header {
+            border-bottom-color: var(--border-dark);
+        }
+
+        .result-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient-4);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.8rem;
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .result-card {
+            background: var(--bg-light);
+            border-radius: 16px;
+            padding: 2rem;
+            border: 1px solid var(--border-light);
+            transition: all 0.3s ease;
+        }
+
+        body.dark .result-card {
+            background: var(--bg-dark);
+            border-color: var(--border-dark);
+        }
+
+        .result-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .result-card-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .result-card-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: white;
+        }
+
+        .diagnosis-icon {
+            background: var(--gradient-1);
+        }
+
+        .treatment-icon {
+            background: var(--gradient-2);
+        }
+
+        .prevention-icon {
+            background: var(--gradient-3);
+        }
+
+        .result-card-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text-light);
+        }
+
+        body.dark .result-card-title {
+            color: var(--text-dark);
+        }
+
+        .result-card-content {
+            color: var(--text-light);
+            line-height: 1.8;
+        }
+
+        body.dark .result-card-content {
+            color: var(--text-dark);
+        }
+
+        .result-card-content h4 {
+            font-weight: 700;
+            color: var(--primary);
+            margin: 1rem 0 0.5rem 0;
+            font-size: 1rem;
+        }
+
+        .result-card-content ul {
+            margin-left: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .result-card-content li {
+            margin-bottom: 0.5rem;
+        }
+
+        .result-card-content strong {
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        .severity-badge {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-top: 1rem;
+        }
+
+        .severity-mild {
+            background: rgba(34, 197, 94, 0.2);
+            color: #16a34a;
+        }
+
+        .severity-moderate {
+            background: rgba(245, 158, 11, 0.2);
+            color: #d97706;
+        }
+
+        .severity-severe {
+            background: rgba(239, 68, 68, 0.2);
+            color: #dc2626;
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 3rem;
+            background: var(--card-light);
+            border-radius: 24px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border-light);
+        }
+
+        body.dark .loading {
+            background: var(--card-dark);
+            border-color: var(--border-dark);
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid var(--border-light);
+            border-top: 4px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        body.dark .loading-spinner {
+            border-color: var(--border-dark);
+            border-top-color: var(--primary);
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .mobile-menu-btn {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .upload-form {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .results-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .simple-topbar {
+                padding: 1rem;
+            }
+
+            .simple-title {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Enhanced Sidebar Navigation -->
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <i class="fas fa-leaf"></i>
+                <span>Kerala Farmer</span>
+            </div>
+        </div>
+
+        <div class="nav-menu">
+            <div class="nav-section">
+                <div class="nav-section-title">Main Menu</div>
+                <a href="dashboard.html" class="nav-item">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="ask-query.html" class="nav-item">
+                    <i class="fas fa-robot"></i>
+                    <span>Ask Query</span>
+                </a>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">Tools</div>
+                <a href="crop-diagnosis.html" class="nav-item">
+                    <i class="fas fa-camera"></i>
+                    <span>Crop Diagnosis</span>
+                </a>
+                <a href="weather-alerts.html" class="nav-item">
+                    <i class="fas fa-cloud-sun"></i>
+                    <span>Weather & Alerts</span>
+                </a>
+                <a href="market-prices.html" class="nav-item">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Market Prices</span>
+                </a>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">Community</div>
+                <a href="farmer-community.html" class="nav-item">
+                    <i class="fas fa-users"></i>
+                    <span>Community</span>
+                </a>
+
+                <a href="profile.html" class="nav-item">
+                    <i class="fas fa-users"></i>
+                    <span>Profile</span>
+                </a>
+            </div>
+        </div>
+
+
+        <div class="sidebar-footer">
+            <div id="userInfo" class="user-info">Loading user...</div>
+            <button class="theme-toggle-sidebar" onclick="toggleTheme()">
+                <i class="fas fa-sun"></i>
+                <span>Toggle Theme</span>
+            </button>
+            <button id="logoutBtn" class="logout-btn">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Simple Top Bar -->
+        <div class="simple-topbar">
+            <div class="topbar-left">
+                <button class="mobile-menu-btn" onclick="toggleSidebar()">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1 class="simple-title">📸 Crop Diagnosis</h1>
+            </div>
+            <div class="topbar-right">
+                <span class="status-badge">🟢 AI Ready</span>
+            </div>
+        </div>
+
+        <div class="content-area">
+            <!-- Upload Section -->
+            <div class="upload-section">
+                <div class="upload-header">
+                    <h2>Upload Crop Image for AI Analysis</h2>
+                    <p>Take a clear photo of the affected crop part and get instant AI-powered diagnosis with treatment
+                        recommendations</p>
+                </div>
+
+                <form id="diagnosisForm" class="upload-form">
+                    <!-- Image Upload Area -->
+                    <div class="image-upload-area">
+                        <div class="upload-zone" id="uploadZone">
+                            <div class="upload-icon">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                            </div>
+                            <div class="upload-text">
+                                Drop your crop image here or click to browse
+                            </div>
+                            <div class="upload-subtext">
+                                Supports JPEG, PNG, WebP (Max 10MB)
+                            </div>
+                        </div>
+                        <input type="file" id="fileInput" class="file-input" accept="image/*" required>
+                        <img id="previewImage" class="preview-image" alt="Preview">
+                        <button type="button" id="removeImage" class="remove-image">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+
+                    <!-- Form Fields -->
+                    <div class="form-fields">
+                        <div class="field-group">
+                            <label class="field-label">Crop Type</label>
+                            <select id="cropType" class="field-select">
+                                <option value="">Select crop type</option>
+                                <option value="rice">Rice</option>
+                                <option value="tomato">Tomato</option>
+                                <option value="pepper">Pepper</option>
+                                <option value="coconut">Coconut</option>
+                                <option value="banana">Banana</option>
+                                <option value="cardamom">Cardamom</option>
+                                <option value="rubber">Rubber</option>
+                                <option value="tea">Tea</option>
+                                <option value="coffee">Coffee</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+
+                        <div class="field-group">
+                            <label class="field-label">Location</label>
+                            <input type="text" id="location" class="field-input" placeholder="e.g., Wayanad, Kerala">
+                        </div>
+
+                        <div class="field-group">
+                            <label class="field-label">Observed Symptoms</label>
+                            <textarea id="symptoms" class="field-textarea"
+                                placeholder="Describe what you see: yellowing leaves, spots, wilting, etc."></textarea>
+                        </div>
+
+                        <button type="submit" id="analyzeBtn" class="analyze-btn">
+                            <i class="fas fa-microscope"></i>
+                            Analyze Crop with AI
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Loading Section -->
+            <div class="loading" id="loadingSection">
+                <div class="loading-spinner"></div>
+                <h3 style="color: var(--text-light); margin-bottom: 1rem;">🔬 AI Analysis in Progress</h3>
+                <p style="color: var(--text-secondary-light);">Our advanced AI is examining your crop image to provide
+                    accurate diagnosis and treatment recommendations</p>
+            </div>
+
+            <!-- Enhanced Results Section -->
+            <div class="results-section" id="resultsSection">
+                <div class="results-header">
+                    <div class="result-icon">
+                        <i class="fas fa-clipboard-check"></i>
+                    </div>
+                    <div>
+                        <h3
+                            style="font-size: 1.8rem; color: var(--text-light); margin-bottom: 0.5rem; font-weight: 800;">
+                            AI Diagnosis Results</h3>
+                        <p style="color: var(--text-secondary-light); font-size: 1.1rem;">Comprehensive analysis and
+                            treatment recommendations</p>
+                    </div>
+                </div>
+
+                <div class="results-grid">
+                    <!-- Diagnosis Card -->
+                    <div class="result-card">
+                        <div class="result-card-header">
+                            <div class="result-card-icon diagnosis-icon">
+                                <i class="fas fa-stethoscope"></i>
+                            </div>
+                            <h4 class="result-card-title">🔍 Diagnosis</h4>
+                        </div>
+                        <div id="diagnosisContent" class="result-card-content">
+                            <!-- AI diagnosis will be inserted here -->
+                        </div>
+                    </div>
+
+                    <!-- Treatment Card -->
+                    <div class="result-card">
+                        <div class="result-card-header">
+                            <div class="result-card-icon treatment-icon">
+                                <i class="fas fa-pills"></i>
+                            </div>
+                            <h4 class="result-card-title">💊 Treatment</h4>
+                        </div>
+                        <div id="treatmentContent" class="result-card-content">
+                            <!-- Treatment recommendations will be inserted here -->
+                        </div>
+                    </div>
+
+                    <!-- Prevention Card -->
+                    <div class="result-card">
+                        <div class="result-card-header">
+                            <div class="result-card-icon prevention-icon">
+                                <i class="fas fa-shield-alt"></i>
+                            </div>
+                            <h4 class="result-card-title">🛡️ Prevention</h4>
+                        </div>
+                        <div id="preventionContent" class="result-card-content">
+                            <!-- Prevention tips will be inserted here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>// NAVIGATION ACTIVE STATE MANAGER
+        // Update this function in ALL pages (dashboard.html, weather-alerts.html, ask-query.html, crop-diagnosis.html)
+        function setActiveNavigation() {
+            const currentPage = window.location.pathname.split('/').pop() || 'dashboard.html';
+            const navItems = document.querySelectorAll('.nav-item');
+
+            navItems.forEach(item => item.classList.remove('active'));
+
+            let activeSelector = '';
+
+            if (currentPage === 'dashboard.html' || currentPage === '' || currentPage === '/') {
+                activeSelector = 'a[href="dashboard.html"]';
+            } else if (currentPage === 'weather-alerts.html') {
+                activeSelector = 'a[href="weather-alerts.html"]';
+            } else if (currentPage === 'ask-query.html') {
+                activeSelector = 'a[href="ask-query.html"]';
+            } else if (currentPage === 'crop-diagnosis.html') {
+                activeSelector = 'a[href="crop-diagnosis.html"]';
+            } else if (currentPage === 'market-prices.html') {
+                // ADD THIS LINE:
+                activeSelector = 'a[href="market-prices.html"]';
+            }
+
+            if (activeSelector) {
+                const activeItem = document.querySelector(activeSelector);
+                if (activeItem) {
+                    activeItem.classList.add('active');
+                }
+            }
+        }
+
+
+        // Call this function when page loads
+        document.addEventListener('DOMContentLoaded', function () {
+            setActiveNavigation();
+        });
+
+        // Also call it in your existing window.onload
+        window.onload = () => {
+            console.log('Page loaded, initializing...');
+            checkAuth();
+            loadUserInfo();
+            initializeTheme();
+            setActiveNavigation(); // ADD THIS LINE
+
+            // Your existing code...
+            setTimeout(() => {
+                loadWeatherData();
+            }, 500);
+        };
+
+        // Dark mode state
+        let isDarkMode = localStorage.getItem('darkMode') === 'true';
+
+        // Initialize theme on load
+        function initializeTheme() {
+            if (isDarkMode) {
+                document.body.classList.add('dark');
+                const themeIcon = document.querySelector('.theme-toggle-sidebar i');
+                const themeText = document.querySelector('.theme-toggle-sidebar span');
+                if (themeIcon) themeIcon.className = 'fas fa-moon';
+                if (themeText) themeText.textContent = 'Light Mode';
+            }
+        }
+
+        // Toggle theme
+        function toggleTheme() {
+            isDarkMode = !isDarkMode;
+            document.body.classList.toggle('dark');
+
+            const themeIcon = document.querySelector('.theme-toggle-sidebar i');
+            const themeText = document.querySelector('.theme-toggle-sidebar span');
+
+            if (isDarkMode) {
+                if (themeIcon) themeIcon.className = 'fas fa-moon';
+                if (themeText) themeText.textContent = 'Light Mode';
+            } else {
+                if (themeIcon) themeIcon.className = 'fas fa-sun';
+                if (themeText) themeText.textContent = 'Toggle Theme';
+            }
+
+            localStorage.setItem('darkMode', isDarkMode);
+        }
+
+        // Global variables
+        const uploadZone = document.getElementById('uploadZone');
+        const fileInput = document.getElementById('fileInput');
+        const previewImage = document.getElementById('previewImage');
+        const removeImageBtn = document.getElementById('removeImage');
+        const diagnosisForm = document.getElementById('diagnosisForm');
+        const analyzeBtn = document.getElementById('analyzeBtn');
+        const loadingSection = document.getElementById('loadingSection');
+        const resultsSection = document.getElementById('resultsSection');
+
+        let selectedFile = null;
+
+        // Authentication check
+        async function checkAuth() {
+            try {
+                const res = await fetch('/api/user/check-auth', { credentials: 'include' });
+                if (!res.ok) throw new Error('Unauthorized');
+            } catch {
+                alert('Please login to access this page');
+                window.location.href = 'index.html';
+            }
+        }
+
+        // Load user info
+        async function loadUserInfo() {
+            try {
+                const res = await fetch('/api/user/profile', { credentials: 'include' });
+                if (res.ok) {
+                    const user = await res.json();
+                    document.getElementById('userInfo').innerHTML = `
+            <div style="font-weight: 600;">${user.username}</div>
+            <div style="font-size: 0.8rem; opacity: 0.8;">${user.email}</div>
+          `;
+                }
+            } catch (error) {
+                console.error('Failed to load user info');
+            }
+        }
+
+        // File upload handling
+        uploadZone.addEventListener('click', () => fileInput.click());
+
+        uploadZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadZone.classList.add('drag-over');
+        });
+
+        uploadZone.addEventListener('dragleave', (e) => {
+            e.preventDefault();
+            uploadZone.classList.remove('drag-over');
+        });
+
+        uploadZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadZone.classList.remove('drag-over');
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                handleFileSelect(files[0]);
+            }
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                handleFileSelect(e.target.files[0]);
+            }
+        });
+
+        function handleFileSelect(file) {
+            // Validate file type
+            const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+            if (!allowedTypes.includes(file.type)) {
+                alert('Please select a JPEG, PNG, or WebP image file');
+                return;
+            }
+
+            // Validate file size (10MB)
+            if (file.size > 10 * 1024 * 1024) {
+                alert('File size must be less than 10MB');
+                return;
+            }
+
+            selectedFile = file;
+
+            // Show preview
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                previewImage.src = e.target.result;
+                previewImage.style.display = 'block';
+                removeImageBtn.style.display = 'flex';
+                uploadZone.classList.add('has-image');
+
+                // Hide upload text
+                uploadZone.querySelector('.upload-icon').style.display = 'none';
+                uploadZone.querySelector('.upload-text').style.display = 'none';
+                uploadZone.querySelector('.upload-subtext').style.display = 'none';
+            };
+            reader.readAsDataURL(file);
+        }
+
+        removeImageBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            selectedFile = null;
+            fileInput.value = '';
+            previewImage.style.display = 'none';
+            removeImageBtn.style.display = 'none';
+            uploadZone.classList.remove('has-image');
+
+            // Show upload text
+            uploadZone.querySelector('.upload-icon').style.display = 'block';
+            uploadZone.querySelector('.upload-text').style.display = 'block';
+            uploadZone.querySelector('.upload-subtext').style.display = 'block';
+        });
+
+        // Parse AI response into structured sections
+        function parseAIResponse(response) {
+            const sections = {
+                diagnosis: '',
+                treatment: '',
+                prevention: '',
+                severity: 'moderate'
+            };
+
+            // Split response into sections based on common patterns
+            const lines = response.split('\n').filter(line => line.trim());
+            let currentSection = 'diagnosis';
+            let sectionContent = [];
+
+            lines.forEach(line => {
+                const lowerLine = line.toLowerCase();
+
+                if (lowerLine.includes('treatment') || lowerLine.includes('recommendation') || lowerLine.includes('action')) {
+                    if (sectionContent.length > 0) {
+                        sections[currentSection] = sectionContent.join('\n');
+                        sectionContent = [];
+                    }
+                    currentSection = 'treatment';
+                } else if (lowerLine.includes('prevent') || lowerLine.includes('future') || lowerLine.includes('avoid')) {
+                    if (sectionContent.length > 0) {
+                        sections[currentSection] = sectionContent.join('\n');
+                        sectionContent = [];
+                    }
+                    currentSection = 'prevention';
+                } else if (lowerLine.includes('severe')) {
+                    sections.severity = 'severe';
+                    sectionContent.push(line);
+                } else if (lowerLine.includes('mild')) {
+                    sections.severity = 'mild';
+                    sectionContent.push(line);
+                } else {
+                    sectionContent.push(line);
+                }
+            });
+
+            // Add remaining content to current section
+            if (sectionContent.length > 0) {
+                sections[currentSection] = sectionContent.join('\n');
+            }
+
+            // Ensure each section has content
+            if (!sections.diagnosis) sections.diagnosis = response.substring(0, response.length / 3);
+            if (!sections.treatment) sections.treatment = "Consult with local agricultural extension officer for specific treatment recommendations.";
+            if (!sections.prevention) sections.prevention = "Follow good agricultural practices and regular monitoring to prevent future issues.";
+
+            return sections;
+        }
+
+        // Format content with better styling
+        function formatContent(content, type) {
+            if (!content) return '';
+
+            let formatted = content
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                .replace(/(\d+\.\s)/g, '<br><strong>$1</strong>')
+                .replace(/(-\s)/g, '<br>• ');
+
+            // Add severity badge for diagnosis
+            if (type === 'diagnosis') {
+                const severity = content.toLowerCase().includes('severe') ? 'severe' :
+                    content.toLowerCase().includes('mild') ? 'mild' : 'moderate';
+                formatted += `<div class="severity-badge severity-${severity}">Severity: ${severity}</div>`;
+            }
+
+            return formatted;
+        }
+
+        // Form submission
+        diagnosisForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            if (!selectedFile) {
+                alert('Please select an image to analyze');
+                return;
+            }
+
+            // Show loading
+            loadingSection.style.display = 'block';
+            resultsSection.style.display = 'none';
+            analyzeBtn.disabled = true;
+            analyzeBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Analyzing...';
+
+            // Scroll to loading section
+            loadingSection.scrollIntoView({ behavior: 'smooth' });
+
+            try {
+                const formData = new FormData();
+                formData.append('cropImage', selectedFile);
+                formData.append('cropType', document.getElementById('cropType').value);
+                formData.append('location', document.getElementById('location').value);
+                formData.append('symptoms', document.getElementById('symptoms').value);
+
+                const response = await fetch('/api/diagnosis/analyze', {
+                    method: 'POST',
+                    credentials: 'include',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.message || 'Analysis failed');
+                }
+
+                // Parse and display results
+                const parsedResults = parseAIResponse(data.diagnosis);
+
+                document.getElementById('diagnosisContent').innerHTML = formatContent(parsedResults.diagnosis, 'diagnosis');
+                document.getElementById('treatmentContent').innerHTML = formatContent(parsedResults.treatment, 'treatment');
+                document.getElementById('preventionContent').innerHTML = formatContent(parsedResults.prevention, 'prevention');
+
+                // Show results
+                loadingSection.style.display = 'none';
+                resultsSection.style.display = 'block';
+
+                // Scroll to results
+                resultsSection.scrollIntoView({ behavior: 'smooth' });
+
+            } catch (error) {
+                console.error('Analysis error:', error);
+                alert('Failed to analyze crop image: ' + error.message);
+                loadingSection.style.display = 'none';
+            } finally {
+                analyzeBtn.disabled = false;
+                analyzeBtn.innerHTML = '<i class="fas fa-microscope"></i> Analyze Crop with AI';
+            }
+        });
+
+        // Logout function
+        document.getElementById('logoutBtn').addEventListener('click', async () => {
+            if (confirm('Are you sure you want to logout?')) {
+                try {
+                    await fetch('/api/auth/logout', { method: 'POST', credentials: 'include' });
+                    window.location.href = 'index.html';
+                } catch {
+                    window.location.href = 'index.html';
+                }
+            }
+        });
+
+        // Coming soon notification
+        function showComingSoon() {
+            alert('🚀 This feature is coming soon! We\'re working hard to bring you the best farming tools.');
+        }
+
+        // Mobile sidebar toggle
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+        }
+
+        // Close sidebar on outside click (mobile)
+        document.addEventListener('click', function (event) {
+            const sidebar = document.getElementById('sidebar');
+            const menuBtn = document.querySelector('.mobile-menu-btn');
+
+            if (window.innerWidth <= 768 &&
+                sidebar.classList.contains('open') &&
+                !sidebar.contains(event.target) &&
+                !menuBtn.contains(event.target)) {
+                sidebar.classList.remove('open');
+            }
+        });
+
+        // Initialize
+        window.onload = () => {
+            checkAuth();
+            loadUserInfo();
+            initializeTheme();
+        };
+    </script>
+</body>
+
+</html>

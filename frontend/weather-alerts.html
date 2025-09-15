@@ -1,0 +1,1721 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Weather & Alerts - Kerala Farmer Advisory</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+    <style>
+        :root {
+            --primary: #10b981;
+            --primary-dark: #059669;
+            --secondary: #3b82f6;
+            --accent: #8b5cf6;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --success: #10b981;
+            --bg-light: #f8fafc;
+            --bg-dark: #0f172a;
+            --card-light: #ffffff;
+            --card-dark: #1e293b;
+            --text-light: #334155;
+            --text-dark: #f1f5f9;
+            --text-secondary-light: #64748b;
+            --text-secondary-dark: #94a3b8;
+            --border-light: #e2e8f0;
+            --border-dark: #334155;
+            --sidebar-light: #ffffff;
+            --sidebar-dark: #1e293b;
+            --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --gradient-4: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-light);
+            color: var(--text-light);
+            overflow-x: hidden;
+            transition: all 0.3s ease;
+            line-height: 1.6;
+        }
+
+        body.dark {
+            background: var(--bg-dark);
+            color: var(--text-dark);
+        }
+
+        /* Enhanced Sidebar Navigation */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100vh;
+            width: 280px;
+            background: var(--sidebar-light);
+            z-index: 1000;
+            transition: transform 0.3s ease;
+            box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);
+            border-right: 1px solid var(--border-light);
+        }
+
+        body.dark .sidebar {
+            background: var(--sidebar-dark);
+            border-right-color: var(--border-dark);
+        }
+
+        .sidebar-header {
+            padding: 2rem 1.5rem;
+            border-bottom: 1px solid var(--border-light);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+        }
+
+        .logo {
+            color: white;
+            font-size: 1.4rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .logo i {
+            font-size: 1.8rem;
+        }
+
+        .nav-menu {
+            padding: 2rem 0;
+        }
+
+        .nav-section {
+            margin-bottom: 2rem;
+        }
+
+        .nav-section-title {
+            padding: 0 1.5rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-secondary-light);
+            margin-bottom: 0.75rem;
+        }
+
+        body.dark .nav-section-title {
+            color: var(--text-secondary-dark);
+        }
+
+        /* FIXED NAVIGATION STATES */
+        .nav-item {
+            display: block;
+            color: inherit;
+            text-decoration: none;
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+            position: relative;
+        }
+
+        .nav-item:hover {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--primary);
+            border-left-color: var(--primary);
+            text-decoration: none;
+        }
+
+        .nav-item.active {
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--primary) !important;
+            border-left-color: var(--primary);
+            font-weight: 600;
+        }
+
+        body.dark .nav-item.active {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--primary) !important;
+        }
+
+        .nav-item i {
+            font-size: 1.2rem;
+            width: 20px;
+        }
+
+
+        .sidebar-footer {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            padding: 1.5rem;
+            border-top: 1px solid var(--border-light);
+        }
+
+        .user-info {
+            color: var(--text-secondary-light);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .theme-toggle-sidebar {
+            width: 100%;
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--primary);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            padding: 0.8rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .theme-toggle-sidebar:hover {
+            background: rgba(16, 185, 129, 0.2);
+        }
+
+        .logout-btn {
+            width: 100%;
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            padding: 0.8rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .logout-btn:hover {
+            background: rgba(239, 68, 68, 0.2);
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 280px;
+            min-height: 100vh;
+            background: var(--bg-light);
+            transition: margin-left 0.3s ease;
+        }
+
+        body.dark .main-content {
+            background: var(--bg-dark);
+        }
+
+        /* Simple Top Bar */
+        .simple-topbar {
+            background: var(--card-light);
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            border-bottom: 1px solid var(--border-light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        body.dark .simple-topbar {
+            background: var(--card-dark);
+            border-bottom-color: var(--border-dark);
+        }
+
+        .topbar-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .simple-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-light);
+            margin: 0;
+        }
+
+        body.dark .simple-title {
+            color: var(--text-dark);
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .location-selector {
+            background: var(--card-light);
+            border: 1px solid var(--border-light);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        body.dark .location-selector {
+            background: var(--card-dark);
+            border-color: var(--border-dark);
+            color: var(--text-dark);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1rem;
+        }
+
+        .content-area {
+            padding: 2rem;
+        }
+
+        /* Weather Overview Card */
+        .weather-overview {
+            background: var(--gradient-3);
+            border-radius: 24px;
+            padding: 3rem;
+            color: white;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .weather-overview::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 300px;
+            height: 300px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+        }
+
+        .weather-main {
+            position: relative;
+            z-index: 2;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .current-weather {
+            text-align: center;
+        }
+
+        .weather-temp {
+            font-size: 4rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+
+        .weather-condition {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 1rem;
+        }
+
+        .weather-location {
+            font-size: 1rem;
+            opacity: 0.8;
+        }
+
+        .weather-details {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .detail-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .detail-icon {
+            width: 24px;
+            text-align: center;
+        }
+
+        .weather-icon {
+            font-size: 6rem;
+            opacity: 0.8;
+        }
+
+        /* Alerts Section */
+        .alerts-section {
+            margin-bottom: 2rem;
+        }
+
+        .alerts-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-light);
+        }
+
+        body.dark .section-title {
+            color: var(--text-dark);
+        }
+
+        .alerts-toggle {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--card-light);
+            padding: 0.8rem 1rem;
+            border-radius: 20px;
+            border: 1px solid var(--border-light);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        body.dark .alerts-toggle {
+            background: var(--card-dark);
+            border-color: var(--border-dark);
+        }
+
+        .alerts-toggle:hover {
+            background: rgba(16, 185, 129, 0.1);
+            border-color: var(--primary);
+        }
+
+        .toggle-switch {
+            width: 50px;
+            height: 28px;
+            background: #ccc;
+            border-radius: 20px;
+            position: relative;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .toggle-switch.active {
+            background: var(--primary);
+        }
+
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 24px;
+            height: 24px;
+            background: white;
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+        }
+
+        .toggle-switch.active::after {
+            transform: translateX(22px);
+        }
+
+        .alerts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .alert-card {
+            background: var(--card-light);
+            border-radius: 16px;
+            padding: 2rem;
+            border-left: 4px solid;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        body.dark .alert-card {
+            background: var(--card-dark);
+        }
+
+        .alert-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .alert-card.high {
+            border-left-color: var(--danger);
+        }
+
+        .alert-card.medium {
+            border-left-color: var(--warning);
+        }
+
+        .alert-card.low {
+            border-left-color: var(--primary);
+        }
+
+        .alert-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .alert-icon {
+            font-size: 2rem;
+        }
+
+        .alert-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text-light);
+        }
+
+        body.dark .alert-title {
+            color: var(--text-dark);
+        }
+
+        .alert-message {
+            color: var(--text-secondary-light);
+            line-height: 1.6;
+        }
+
+        body.dark .alert-message {
+            color: var(--text-secondary-dark);
+        }
+
+        /* Forecast Section */
+        .forecast-section {
+            background: var(--card-light);
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border-light);
+        }
+
+        body.dark .forecast-section {
+            background: var(--card-dark);
+            border-color: var(--border-dark);
+        }
+
+        .forecast-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .forecast-card {
+            text-align: center;
+            padding: 1.5rem;
+            background: var(--bg-light);
+            border-radius: 16px;
+            transition: all 0.3s ease;
+        }
+
+        body.dark .forecast-card {
+            background: var(--bg-dark);
+        }
+
+        .forecast-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .forecast-day {
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .forecast-icon {
+            font-size: 2.5rem;
+            margin: 0.5rem 0;
+        }
+
+        .forecast-temp {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .forecast-desc {
+            font-size: 0.9rem;
+            color: var(--text-secondary-light);
+        }
+
+        body.dark .forecast-desc {
+            color: var(--text-secondary-dark);
+        }
+
+        /* SIMPLE & PERFECT GRID LAYOUT */
+        .advice-section {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        /* Each advice category as a row */
+        .advice-card {
+            width: 100%;
+            background: var(--card-light);
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border-light);
+        }
+
+        body.dark .advice-card {
+            background: var(--card-dark);
+            border-color: var(--border-dark);
+        }
+
+        /* Container for advice items in each category */
+        .advice-card>div:last-child {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.2rem;
+            margin-top: 2rem;
+        }
+
+        /* UNIFORM ADVICE CARDS */
+        .enhanced-advice {
+            background: var(--bg-light);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border-left: 4px solid transparent;
+            transition: all 0.3s ease;
+            height: 350px;
+            /* FIXED HEIGHT FOR ALL */
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        body.dark .enhanced-advice {
+            background: var(--bg-dark);
+        }
+
+        .enhanced-advice[data-priority="high"] {
+            border-left-color: #ef4444;
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.05) 0%, var(--bg-light) 20%);
+        }
+
+        body.dark .enhanced-advice[data-priority="high"] {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.05) 0%, var(--bg-dark) 20%);
+        }
+
+        .enhanced-advice[data-priority="medium"] {
+            border-left-color: #f59e0b;
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.05) 0%, var(--bg-light) 20%);
+        }
+
+        body.dark .enhanced-advice[data-priority="medium"] {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.05) 0%, var(--bg-dark) 20%);
+        }
+
+        .enhanced-advice[data-priority="low"] {
+            border-left-color: #10b981;
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, var(--bg-light) 20%);
+        }
+
+        body.dark .enhanced-advice[data-priority="low"] {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, var(--bg-dark) 20%);
+        }
+
+        .enhanced-advice:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        /* HEADER SECTION */
+        .advice-item-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            flex-shrink: 0;
+        }
+
+        .advice-item-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .priority-high-icon {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+        }
+
+        .priority-medium-icon {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+        }
+
+        .priority-low-icon {
+            background: linear-gradient(135deg, #10b981, #059669);
+        }
+
+        .seasonal-icon {
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+        }
+
+        .advice-meta {
+            flex: 1;
+        }
+
+        .advice-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-light);
+            margin-bottom: 0.5rem;
+            line-height: 1.3;
+        }
+
+        body.dark .advice-title {
+            color: var(--text-dark);
+        }
+
+        .advice-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+        }
+
+        .priority-badge,
+        .action-badge,
+        .time-badge,
+        .season-badge {
+            padding: 0.2rem 0.5rem;
+            border-radius: 8px;
+            font-size: 0.6rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .priority-high {
+            background: rgba(239, 68, 68, 0.15);
+            color: #dc2626;
+        }
+
+        .priority-medium {
+            background: rgba(245, 158, 11, 0.15);
+            color: #d97706;
+        }
+
+        .priority-low {
+            background: rgba(34, 197, 94, 0.15);
+            color: #16a34a;
+        }
+
+        .action-badge {
+            background: rgba(59, 130, 246, 0.15);
+            color: #2563eb;
+        }
+
+        .time-badge {
+            background: rgba(139, 92, 246, 0.15);
+            color: #7c3aed;
+        }
+
+        .season-badge {
+            background: rgba(16, 185, 129, 0.15);
+            color: #059669;
+        }
+
+        /* ENSURE SCROLL WORKS PROPERLY */
+        .advice-content-scroll {
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding-right: 0.5rem;
+            margin-bottom: 1rem;
+            max-height: 180px;
+            /* Maximum height before scrolling kicks in */
+        }
+
+        /* Enhanced scrollbar visibility */
+        .advice-content-scroll::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .advice-content-scroll::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.05);
+            border-radius: 3px;
+        }
+
+        .advice-content-scroll::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 3px;
+        }
+
+        .advice-content-scroll::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-dark);
+        }
+
+        body.dark .advice-content-scroll::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        /* Ensure content inside scroll area flows properly */
+        .advice-content-scroll>* {
+            margin-bottom: 0.8rem;
+        }
+
+        .advice-content-scroll>*:last-child {
+            margin-bottom: 0;
+        }
+
+
+        .advice-description {
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: var(--text-light);
+            margin-bottom: 1rem;
+        }
+
+        body.dark .advice-description {
+            color: var(--text-dark);
+        }
+
+        .advice-detail {
+            background: rgba(16, 185, 129, 0.05);
+            padding: 0.8rem;
+            border-radius: 8px;
+            margin-bottom: 0.8rem;
+            font-size: 0.8rem;
+            border-left: 3px solid var(--primary);
+        }
+
+        body.dark .advice-detail {
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        .advice-detail strong {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        /* FIXED BUTTONS AT BOTTOM */
+        .advice-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: auto;
+            flex-shrink: 0;
+        }
+
+        .advice-action-btn {
+            flex: 1;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.6rem 0.8rem;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.3rem;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .advice-action-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+
+        .advice-action-btn.secondary {
+            background: transparent;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+        }
+
+        .advice-action-btn.secondary:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .advice-action-btn:disabled {
+            background: #10b981;
+            cursor: not-allowed;
+            opacity: 0.7;
+            transform: none;
+        }
+
+        .advice-action-btn i {
+            font-size: 0.7rem;
+        }
+
+        /* Completed state */
+        .enhanced-advice.completed {
+            opacity: 0.8;
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, var(--bg-light) 30%);
+            border-left-color: #10b981;
+        }
+
+        body.dark .enhanced-advice.completed {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, var(--bg-dark) 30%);
+        }
+
+        /* Seasonal items */
+        .seasonal-item {
+            border-left-color: #8b5cf6 !important;
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.05) 0%, var(--bg-light) 20%) !important;
+        }
+
+        body.dark .seasonal-item {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.05) 0%, var(--bg-dark) 20%) !important;
+        }
+
+        /* Mobile responsive */
+        @media (max-width: 768px) {
+            .advice-card>div:last-child {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .enhanced-advice {
+                height: 320px;
+                padding: 1.2rem;
+            }
+
+            .advice-card {
+                padding: 1.5rem;
+            }
+        }
+
+        /* Remove any conflicting margins */
+        .enhanced-advice {
+            margin: 0;
+        }
+
+        .enhanced-advice+.enhanced-advice {
+            margin-top: 0;
+        }
+
+
+        /* Loading and Error States */
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-secondary-light);
+        }
+
+        .error {
+            text-align: center;
+            padding: 3rem;
+            color: var(--danger);
+            background: var(--card-light);
+            border-radius: 16px;
+            margin: 2rem 0;
+        }
+
+        body.dark .error {
+            background: var(--card-dark);
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .mobile-menu-btn {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .weather-main {
+                grid-template-columns: 1fr;
+                text-align: center;
+                gap: 2rem;
+            }
+
+            .alerts-grid,
+            .forecast-grid,
+
+            .content-area {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <i class="fas fa-leaf"></i>
+                <span>Kerala Farmer</span>
+            </div>
+        </div>
+
+        <div class="nav-menu">
+            <div class="nav-section">
+                <div class="nav-section-title">Main Menu</div>
+                <a href="dashboard.html" class="nav-item">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="ask-query.html" class="nav-item">
+                    <i class="fas fa-robot"></i>
+                    <span>Ask Query</span>
+                </a>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">Tools</div>
+                <a href="crop-diagnosis.html" class="nav-item">
+                    <i class="fas fa-camera"></i>
+                    <span>Crop Diagnosis</span>
+                </a>
+                <a href="weather-alerts.html" class="nav-item">
+                    <i class="fas fa-cloud-sun"></i>
+                    <span>Weather & Alerts</span>
+                </a>
+                <a href="market-prices.html" class="nav-item">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Market Prices</span>
+                </a>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">Community</div>
+                <a href="farmer-community.html" class="nav-item">
+                    <i class="fas fa-users"></i>
+                    <span>Community</span>
+                </a>
+
+                <a href="profile.html" class="nav-item">
+                    <i class="fas fa-users"></i>
+                    <span>Profile</span>
+                </a>
+            </div>
+        </div>
+
+
+        <div class="sidebar-footer">
+            <div id="userInfo" class="user-info">Loading user...</div>
+            <button class="theme-toggle-sidebar" onclick="toggleTheme()">
+                <i class="fas fa-sun"></i>
+                <span>Toggle Theme</span>
+            </button>
+            <button id="logoutBtn" class="logout-btn">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </button>
+        </div>
+    </nav>
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Simple Top Bar -->
+        <div class="simple-topbar">
+            <div class="topbar-left">
+                <button class="mobile-menu-btn" onclick="toggleSidebar()">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1 class="simple-title">🌤️ Weather & Alerts</h1>
+            </div>
+            <div class="topbar-right">
+                <input type="text" id="locationInput" class="location-selector"
+                    placeholder="Enter location (e.g., Kochi, Kerala)" value="Kochi, Kerala">
+                <button onclick="refreshWeather()"
+                    style="background: var(--primary); color: white; border: none; padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer;">
+                    <i class="fas fa-sync-alt"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="content-area">
+            <!-- Loading State -->
+            <div id="loadingState" class="loading">
+                <i class="fas fa-spinner fa-spin" style="font-size: 2rem; margin-bottom: 1rem;"></i>
+                <p>Loading weather data...</p>
+            </div>
+
+            <!-- Error State -->
+            <div id="errorState" class="error" style="display: none;">
+                <i class="fas fa-exclamation-triangle" style="font-size: 2rem; margin-bottom: 1rem;"></i>
+                <h3>Failed to load weather data</h3>
+                <p id="errorMessage"></p>
+                <button onclick="refreshWeather()"
+                    style="margin-top: 1rem; background: var(--primary); color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 8px; cursor: pointer;">
+                    Try Again
+                </button>
+            </div>
+
+            <!-- Weather Content -->
+            <div id="weatherContent" style="display: none;">
+                <!-- Weather Overview -->
+                <div class="weather-overview">
+                    <div class="weather-main">
+                        <div class="current-weather">
+                            <div id="weatherTemp" class="weather-temp">--°C</div>
+                            <div id="weatherCondition" class="weather-condition">Loading...</div>
+                            <div id="weatherLocation" class="weather-location">--</div>
+                        </div>
+
+                        <div class="weather-details">
+                            <div class="detail-item">
+                                <i class="fas fa-tint detail-icon"></i>
+                                <span>Humidity: <strong id="humidity">--%</strong></span>
+                            </div>
+                            <div class="detail-item">
+                                <i class="fas fa-wind detail-icon"></i>
+                                <span>Wind: <strong id="windSpeed">-- km/h</strong></span>
+                            </div>
+                            <div class="detail-item">
+                                <i class="fas fa-eye detail-icon"></i>
+                                <span>Visibility: <strong id="visibility">-- km</strong></span>
+                            </div>
+                            <div class="detail-item">
+                                <i class="fas fa-thermometer-half detail-icon"></i>
+                                <span>Feels like: <strong id="feelsLike">--°C</strong></span>
+                            </div>
+                            <div class="detail-item">
+                                <i class="fas fa-compress-arrows-alt detail-icon"></i>
+                                <span>Pressure: <strong id="pressure">-- hPa</strong></span>
+                            </div>
+                        </div>
+
+                        <div class="weather-icon">
+                            <i id="mainWeatherIcon" class="fas fa-sun"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Alerts Section -->
+                <div class="alerts-section">
+                    <div class="alerts-header">
+                        <h2 class="section-title">🚨 Weather Alerts</h2>
+                        <div class="alerts-toggle" onclick="toggleAlerts()">
+                            <span>SMS Alerts</span>
+                            <div id="alertsToggle" class="toggle-switch">
+                            </div>
+                        </div>
+                    </div>
+                    <div id="alertsGrid" class="alerts-grid">
+                        <!-- Alerts will be inserted here -->
+                    </div>
+                </div>
+
+                <!-- 5-Day Forecast -->
+                <div class="forecast-section">
+                    <h2 class="section-title">📅 5-Day Forecast</h2>
+                    <div id="forecastGrid" class="forecast-grid">
+                        <!-- Forecast cards will be inserted here -->
+                    </div>
+                </div>
+
+                <!-- Farming Advice -->
+                <div class="advice-section">
+                    <!-- Today's Advice -->
+                    <div class="advice-card">
+                        <div class="advice-header">
+                            <div class="advice-icon today-icon">
+                                <i class="fas fa-calendar-day"></i>
+                            </div>
+                            <div>
+                                <h3 class="section-title" style="font-size: 1.3rem;">Today's Farming Advice</h3>
+                                <p style="color: var(--text-secondary-light); margin: 0;">Recommendations for today
+                                    based on current weather</p>
+                            </div>
+                        </div>
+                        <div id="todayAdvice">
+                            <!-- Today's advice items will be inserted here -->
+                        </div>
+                    </div>
+
+                    <!-- Upcoming Advice -->
+                    <div class="advice-card">
+                        <div class="advice-header">
+                            <div class="advice-icon upcoming-icon">
+                                <i class="fas fa-calendar-week"></i>
+                            </div>
+                            <div>
+                                <h3 class="section-title" style="font-size: 1.3rem;">Upcoming Weather Tips</h3>
+                                <p style="color: var(--text-secondary-light); margin: 0;">Plan ahead with forecast-based
+                                    recommendations</p>
+                            </div>
+                        </div>
+                        <div id="upcomingAdvice">
+                            <!-- Upcoming advice items will be inserted here -->
+                        </div>
+                    </div>
+
+                    <!-- General Advice -->
+                    <div class="advice-card">
+                        <div class="advice-header">
+                            <div class="advice-icon general-icon">
+                                <i class="fas fa-lightbulb"></i>
+                            </div>
+                            <div>
+                                <h3 class="section-title" style="font-size: 1.3rem;">General Tips</h3>
+                                <p style="color: var(--text-secondary-light); margin: 0;">Best practices for weather
+                                    monitoring</p>
+                            </div>
+                        </div>
+                        <div id="generalAdvice">
+                            <!-- General advice items will be inserted here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    </script>
+    <script>// NAVIGATION ACTIVE STATE MANAGER
+        // Update this function in ALL pages (dashboard.html, weather-alerts.html, ask-query.html, crop-diagnosis.html)
+        function setActiveNavigation() {
+            const currentPage = window.location.pathname.split('/').pop() || 'dashboard.html';
+            const navItems = document.querySelectorAll('.nav-item');
+
+            navItems.forEach(item => item.classList.remove('active'));
+
+            let activeSelector = '';
+
+            if (currentPage === 'dashboard.html' || currentPage === '' || currentPage === '/') {
+                activeSelector = 'a[href="dashboard.html"]';
+            } else if (currentPage === 'weather-alerts.html') {
+                activeSelector = 'a[href="weather-alerts.html"]';
+            } else if (currentPage === 'ask-query.html') {
+                activeSelector = 'a[href="ask-query.html"]';
+            } else if (currentPage === 'crop-diagnosis.html') {
+                activeSelector = 'a[href="crop-diagnosis.html"]';
+            } else if (currentPage === 'market-prices.html') {
+                // ADD THIS LINE:
+                activeSelector = 'a[href="market-prices.html"]';
+            }
+
+            if (activeSelector) {
+                const activeItem = document.querySelector(activeSelector);
+                if (activeItem) {
+                    activeItem.classList.add('active');
+                }
+            }
+        }
+
+
+        // Call this function when page loads
+        document.addEventListener('DOMContentLoaded', function () {
+            setActiveNavigation();
+        });
+
+        // Also call it in your existing window.onload
+        window.onload = () => {
+            console.log('Page loaded, initializing...');
+            checkAuth();
+            loadUserInfo();
+            initializeTheme();
+            setActiveNavigation(); // ADD THIS LINE
+
+            // Your existing code...
+            setTimeout(() => {
+                loadWeatherData();
+            }, 500);
+        };
+
+        // Dark mode state
+        let isDarkMode = localStorage.getItem('darkMode') === 'true';
+        let alertsEnabled = false;
+
+        // Initialize theme
+        function initializeTheme() {
+            if (isDarkMode) {
+                document.body.classList.add('dark');
+                const themeIcon = document.querySelector('.theme-toggle-sidebar i');
+                const themeText = document.querySelector('.theme-toggle-sidebar span');
+                if (themeIcon) themeIcon.className = 'fas fa-moon';
+                if (themeText) themeText.textContent = 'Light Mode';
+            }
+        }
+
+        // Toggle theme
+        function toggleTheme() {
+            isDarkMode = !isDarkMode;
+            document.body.classList.toggle('dark');
+            const themeIcon = document.querySelector('.theme-toggle-sidebar i');
+            const themeText = document.querySelector('.theme-toggle-sidebar span');
+            if (isDarkMode) {
+                if (themeIcon) themeIcon.className = 'fas fa-moon';
+                if (themeText) themeText.textContent = 'Light Mode';
+            } else {
+                if (themeIcon) themeIcon.className = 'fas fa-sun';
+                if (themeText) themeText.textContent = 'Toggle Theme';
+            }
+            localStorage.setItem('darkMode', isDarkMode);
+        }
+
+        // Check authentication
+        async function checkAuth() {
+            try {
+                const res = await fetch('/api/user/check-auth', { credentials: 'include' });
+                if (!res.ok) throw new Error('Unauthorized');
+            } catch {
+                // For demo, don't redirect
+                console.log('Demo mode - auth skipped');
+            }
+        }
+
+        // Load user info
+        async function loadUserInfo() {
+            try {
+                const res = await fetch('/api/user/profile', { credentials: 'include' });
+                if (res.ok) {
+                    const user = await res.json();
+                    document.getElementById('userInfo').innerHTML = `
+                <div style="font-weight: 600;">${user.username}</div>
+                <div style="font-size: 0.8rem; opacity: 0.8;">${user.email}</div>
+            `;
+                }
+            } catch (error) {
+                // Demo user info
+                document.getElementById('userInfo').innerHTML = `
+            <div style="font-weight: 600;">Demo User</div>
+            <div style="font-size: 0.8rem; opacity: 0.8;">farmer@kerala.gov.in</div>
+        `;
+            }
+        }
+
+        // Get weather condition from code
+        function getWeatherCondition(code) {
+            const conditions = {
+                0: { desc: 'Clear sky', icon: 'sun' },
+                1: { desc: 'Mainly clear', icon: 'sun' },
+                2: { desc: 'Partly cloudy', icon: 'cloud-sun' },
+                3: { desc: 'Overcast', icon: 'cloud' },
+                61: { desc: 'Light rain', icon: 'cloud-rain' },
+                63: { desc: 'Moderate rain', icon: 'cloud-rain' },
+                65: { desc: 'Heavy rain', icon: 'cloud-showers-heavy' },
+                95: { desc: 'Thunderstorm', icon: 'bolt' }
+            };
+            return conditions[code] || { desc: 'Partly cloudy', icon: 'cloud-sun' };
+        }
+
+        // Load weather data
+        async function loadWeatherData() {
+            const location = document.getElementById('locationInput').value || 'Kochi, Kerala';
+
+            try {
+                console.log(`Loading weather for: ${location}`);
+
+                // Show loading
+                document.getElementById('loadingState').style.display = 'block';
+                document.getElementById('errorState').style.display = 'none';
+                document.getElementById('weatherContent').style.display = 'none';
+
+                const response = await fetch(`/api/weather/current/${encodeURIComponent(location)}`, {
+                    credentials: 'include'
+                });
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(`HTTP ${response.status}: ${errorText}`);
+                }
+
+                const weatherData = await response.json();
+                console.log('Weather data received:', weatherData);
+
+                // Display the data
+                displayWeatherData(weatherData);
+
+                // Hide loading, show content
+                document.getElementById('loadingState').style.display = 'none';
+                document.getElementById('weatherContent').style.display = 'block';
+
+            } catch (error) {
+                console.error('Weather loading error:', error);
+
+                // Hide loading, show error
+                document.getElementById('loadingState').style.display = 'none';
+                document.getElementById('errorState').style.display = 'block';
+                document.getElementById('errorMessage').textContent = error.message;
+            }
+        }
+
+        // Display weather data
+        function displayWeatherData(data) {
+            console.log('Displaying weather data:', data);
+
+            const current = data.current;
+            const condition = getWeatherCondition(current.weather_code);
+
+            // Update current weather
+            document.getElementById('weatherTemp').textContent = `${current.temp}°C`;
+            document.getElementById('weatherCondition').textContent = condition.desc;
+            document.getElementById('weatherLocation').textContent = `${data.location.name}, ${data.location.country}`;
+
+            document.getElementById('humidity').textContent = `${current.humidity}%`;
+            document.getElementById('windSpeed').textContent = `${current.wind_speed} km/h`;
+            document.getElementById('visibility').textContent = `${current.visibility} km`;
+            document.getElementById('feelsLike').textContent = `${current.feels_like}°C`;
+            document.getElementById('pressure').textContent = `${current.pressure} hPa`;
+
+            document.getElementById('mainWeatherIcon').className = `fas fa-${condition.icon}`;
+
+            // Display alerts
+            displayAlerts(data.alerts);
+
+            // Display forecast
+            displayForecast(data.forecast);
+
+            // Display farming advice (ENHANCED VERSION)
+            displayFarmingAdvice(data.farmingAdvice);
+        }
+
+        // Display alerts
+        function displayAlerts(alerts) {
+            const alertsGrid = document.getElementById('alertsGrid');
+
+            if (!alerts || alerts.length === 0) {
+                alertsGrid.innerHTML = `
+            <div class="alert-card low">
+                <div class="alert-header">
+                    <div class="alert-icon">✅</div>
+                    <div class="alert-title">No Active Alerts</div>
+                </div>
+                <div class="alert-message">Weather conditions are normal.</div>
+            </div>
+        `;
+                return;
+            }
+
+            alertsGrid.innerHTML = alerts.map(alert => `
+        <div class="alert-card ${alert.severity}">
+            <div class="alert-header">
+                <div class="alert-icon">${alert.icon}</div>
+                <div class="alert-title">${alert.title}</div>
+            </div>
+            <div class="alert-message">${alert.message}</div>
+        </div>
+    `).join('');
+        }
+
+        // Display forecast
+        function displayForecast(forecast) {
+            const forecastGrid = document.getElementById('forecastGrid');
+
+            const forecastHTML = forecast.time.slice(1, 6).map((time, index) => {
+                const date = new Date(time);
+                const dayName = date.toLocaleDateString('en-US', { weekday: 'short' });
+                const monthDay = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+                const condition = getWeatherCondition(forecast.weather_code[index + 1]);
+
+                return `
+            <div class="forecast-card">
+                <div class="forecast-day">${dayName}</div>
+                <div style="font-size: 0.8rem; color: var(--text-secondary-light);">${monthDay}</div>
+                <div class="forecast-icon">
+                    <i class="fas fa-${condition.icon}"></i>
+                </div>
+                <div class="forecast-temp">
+                    ${Math.round(forecast.temperature_2m_max[index + 1])}° / ${Math.round(forecast.temperature_2m_min[index + 1])}°
+                </div>
+                <div class="forecast-desc">${condition.desc}</div>
+                ${forecast.precipitation_sum[index + 1] > 0 ?
+                        `<div style="font-size: 0.8rem; color: #06b6d4;">💧 ${Math.round(forecast.precipitation_sum[index + 1])}mm</div>` :
+                        ''
+                    }
+            </div>
+        `;
+            }).join('');
+
+            forecastGrid.innerHTML = forecastHTML;
+        }
+
+        // FIXED: Enhanced Display farming advice with working scroll
+        function displayFarmingAdvice(advice) {
+            const todayAdvice = document.getElementById('todayAdvice');
+            const upcomingAdvice = document.getElementById('upcomingAdvice');
+            const generalAdvice = document.getElementById('generalAdvice');
+
+            // Enhanced advice rendering with WORKING scrollable content
+            const renderAdvice = (adviceList, sectionType = 'default') => {
+                if (!adviceList || adviceList.length === 0) {
+                    return '<p style="color: var(--text-secondary-light); text-align: center; padding: 2rem;">No specific recommendations available.</p>';
+                }
+
+                return adviceList.map(item => `
+            <div class="advice-item enhanced-advice" data-priority="${item.priority}">
+                <div class="advice-item-header">
+                    <div class="advice-item-icon ${getPriorityClass(item.priority)}">${item.icon}</div>
+                    <div class="advice-meta">
+                        <div class="advice-title">${item.title}</div>
+                        <div class="advice-badges">
+                            <span class="priority-badge priority-${item.priority}">
+                                ${item.priority.toUpperCase()}
+                            </span>
+                            ${item.action ? `<span class="action-badge">${item.action}</span>` : ''}
+                            ${item.timeframe ? `<span class="time-badge">⏰ ${item.timeframe}</span>` : ''}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="advice-content">
+                    <div class="advice-content-scroll">
+                        <p class="advice-description">${item.description}</p>
+                        
+                        ${item.crops ? `
+                            <div class="advice-detail">
+                                <strong>🌾 Applicable to:</strong> ${item.crops}
+                            </div>
+                        ` : ''}
+                        
+                        ${item.details ? `
+                            <div class="advice-detail">
+                                <strong>💡 Note:</strong> ${item.details}
+                            </div>
+                        ` : ''}
+                    </div>
+                    
+                    <div class="advice-actions">
+                        <button class="advice-action-btn" onclick="markAsCompleted(this)">
+                            <i class="fas fa-check"></i> Done
+                        </button>
+                        <button class="advice-action-btn secondary" onclick="shareAdvice('${item.title.replace(/'/g, "\\'")}', '${item.description.replace(/'/g, "\\'")}')">
+                            <i class="fas fa-share"></i> Share
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+            };
+
+            todayAdvice.innerHTML = renderAdvice(advice.today, 'today');
+            upcomingAdvice.innerHTML = renderAdvice(advice.upcoming, 'upcoming');
+            generalAdvice.innerHTML = renderAdvice(advice.general, 'general');
+
+            // Add seasonal advice if available
+            if (advice.seasonal && advice.seasonal.length > 0) {
+                addSeasonalAdviceSection(advice.seasonal);
+            }
+        }
+
+
+        // Helper function to get priority icon classes
+        function getPriorityClass(priority) {
+            const classes = {
+                'high': 'priority-high-icon',
+                'medium': 'priority-medium-icon',
+                'low': 'priority-low-icon'
+            };
+            return classes[priority] || 'priority-medium-icon';
+        }
+
+        // FIXED: Add seasonal advice section with scroll
+        function addSeasonalAdviceSection(seasonalAdvice) {
+            const adviceSection = document.querySelector('.advice-section');
+
+            // Check if seasonal section already exists
+            if (!document.getElementById('seasonalAdvice')) {
+                const seasonalCard = document.createElement('div');
+                seasonalCard.className = 'advice-card';
+                seasonalCard.innerHTML = `
+            <div class="advice-header">
+                <div class="advice-icon seasonal-icon">
+                    <i class="fas fa-calendar-alt"></i>
+                </div>
+                <div>
+                    <h3 class="section-title" style="font-size: 1.3rem;">🗓️ Seasonal Planning</h3>
+                    <p style="color: var(--text-secondary-light); margin: 0;">Long-term farming strategies and seasonal tips</p>
+                </div>
+            </div>
+            <div id="seasonalAdvice"></div>
+        `;
+
+                adviceSection.appendChild(seasonalCard);
+            }
+
+            const seasonalContainer = document.getElementById('seasonalAdvice');
+            seasonalContainer.innerHTML = seasonalAdvice.map(item => `
+        <div class="advice-item enhanced-advice seasonal-item">
+            <div class="advice-item-header">
+                <div class="advice-item-icon seasonal-icon">${item.icon}</div>
+                <div class="advice-meta">
+                    <div class="advice-title">${item.title}</div>
+                    <div class="advice-badges">
+                        <span class="priority-badge priority-${item.priority}">
+                            ${item.priority.toUpperCase()}
+                        </span>
+                        <span class="season-badge">🗓️ ${item.timeframe}</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="advice-content">
+                <div class="advice-content-scroll">
+                    <p class="advice-description">${item.description}</p>
+                    <div class="advice-detail">
+                        <strong>🌾 Focus crops:</strong> ${item.crops}
+                    </div>
+                    <div class="advice-detail">
+                        <strong>💡 Strategy:</strong> ${item.details}
+                    </div>
+                </div>
+            </div>
+        </div>
+    `).join('');
+        }
+
+
+        // Interactive functions for advice items
+        function markAsCompleted(button) {
+            const adviceItem = button.closest('.advice-item');
+            adviceItem.classList.add('completed');
+            button.innerHTML = '<i class="fas fa-check-circle"></i> Completed';
+            button.disabled = true;
+
+            // Show success message
+            showNotification('✅ Task marked as completed!', 'Great job following farming best practices.');
+        }
+
+        function shareAdvice(title, description) {
+            if (navigator.share) {
+                navigator.share({
+                    title: `Farming Tip: ${title}`,
+                    text: description,
+                    url: window.location.href
+                });
+            } else {
+                // Fallback to clipboard
+                const shareText = `🌾 Farming Tip: ${title}\n\n${description}\n\n- Kerala Farmer Advisory System`;
+                navigator.clipboard.writeText(shareText).then(() => {
+                    showNotification('📋 Copied to clipboard!', 'You can now share this farming tip.');
+                });
+            }
+        }
+
+        function showNotification(title, message) {
+            if ('Notification' in window && Notification.permission === 'granted') {
+                new Notification(title, {
+                    body: message,
+                    icon: '/favicon.ico'
+                });
+            } else {
+                // Fallback to alert
+                alert(`${title}\n${message}`);
+            }
+        }
+
+        // Toggle alerts
+        async function toggleAlerts() {
+            try {
+                alertsEnabled = !alertsEnabled;
+                const toggle = document.getElementById('alertsToggle');
+                toggle.classList.toggle('active', alertsEnabled);
+
+                if (alertsEnabled && 'Notification' in window) {
+                    const permission = await Notification.requestPermission();
+                    if (permission === 'granted') {
+                        new Notification('✅ Weather Alerts Enabled', {
+                            body: 'You will receive notifications for severe weather.',
+                            icon: '/favicon.ico'
+                        });
+                    }
+                }
+
+                // Save to backend
+                await fetch('/api/weather/alerts/toggle', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
+                    body: JSON.stringify({ enabled: alertsEnabled })
+                });
+
+            } catch (error) {
+                console.error('Failed to toggle alerts:', error);
+            }
+        }
+
+        // Refresh weather
+        function refreshWeather() {
+            console.log('Refreshing weather...');
+            loadWeatherData();
+        }
+
+        // Logout
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            if (confirm('Logout?')) {
+                window.location.href = 'index.html';
+            }
+        });
+
+        // Coming soon
+        function showComingSoon() {
+            alert('🚀 Coming soon!');
+        }
+
+        // Mobile sidebar
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+        }
+
+        // Initialize everything
+        window.onload = () => {
+            console.log('Page loaded, initializing...');
+            checkAuth();
+            loadUserInfo();
+            initializeTheme();
+
+            // Load weather data immediately
+            setTimeout(() => {
+                loadWeatherData();
+            }, 500);
+        };
+
+        // Load weather when location changes
+        document.getElementById('locationInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                loadWeatherData();
+            }
+        });
+
+        console.log('Weather alerts script loaded');
+    </script>
+
+</body>
+
+</html>
