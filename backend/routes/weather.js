@@ -2,18 +2,23 @@ const express = require('express');
 const router = express.Router();
 const axios = require('axios');
 const auth = require('../middleware/auth');
+const Groq = require('groq-sdk');
 
-// Simple weather route with fallback data
+// Groq client (FREE LLaMA 3.1)
+const groq = new Groq({
+    apiKey: process.env.GROQ_API_KEY // set in .env
+});
+
+// ================= WEATHER ROUTE =================
 router.get('/current/:location', auth, async (req, res) => {
     try {
         const { location } = req.params;
         console.log(`Getting weather for: ${location}`);
 
-        // Try to get real weather data
         let weatherData;
 
         try {
-            // Get coordinates first
+            // 1) Geocoding
             const geoResponse = await axios.get('https://geocoding-api.open-meteo.com/v1/search', {
                 params: {
                     name: location,
@@ -27,7 +32,7 @@ router.get('/current/:location', auth, async (req, res) => {
                 const coords = geoResponse.data.results[0];
                 console.log(`Found coordinates: ${coords.latitude}, ${coords.longitude}`);
 
-                // Get weather data
+                // 2) Forecast from Open-Meteo
                 const weatherResponse = await axios.get('https://api.open-meteo.com/v1/forecast', {
                     params: {
                         latitude: coords.latitude,
@@ -54,7 +59,9 @@ router.get('/current/:location', auth, async (req, res) => {
                     },
                     location: {
                         name: coords.name,
-                        country: coords.country
+                        country: coords.country,
+                        lat: coords.latitude,
+                        lon: coords.longitude
                     },
                     forecast: {
                         time: data.daily.time,
@@ -86,7 +93,9 @@ router.get('/current/:location', auth, async (req, res) => {
                 },
                 location: {
                     name: location.split(',')[0] || 'Kochi',
-                    country: 'India'
+                    country: 'India',
+                    lat: null,
+                    lon: null
                 },
                 forecast: {
                     time: ['2025-09-15', '2025-09-16', '2025-09-17', '2025-09-18', '2025-09-19'],
@@ -98,7 +107,7 @@ router.get('/current/:location', auth, async (req, res) => {
             };
         }
 
-        // Generate alerts and advice - FIXED FUNCTION CALLS
+        // Alerts + local advice
         weatherData.alerts = generateWeatherAlerts(weatherData.current);
         weatherData.farmingAdvice = generateFarmingAdvice(weatherData.current);
 
@@ -114,7 +123,7 @@ router.get('/current/:location', auth, async (req, res) => {
     }
 });
 
-// FIXED: generateWeatherAlerts function (was generateAlerts)
+// ================= ALERTS (RULE-BASED) =================
 function generateWeatherAlerts(current) {
     const alerts = [];
 
@@ -151,7 +160,6 @@ function generateWeatherAlerts(current) {
         });
     }
 
-    // High humidity alert
     if (current.humidity > 85) {
         alerts.push({
             type: 'humidity',
@@ -177,7 +185,7 @@ function generateWeatherAlerts(current) {
     return alerts;
 }
 
-// ENHANCED: generateFarmingAdvice function with detailed tips
+// ================= FARMING ADVICE (RULE ENGINE) =================
 function generateFarmingAdvice(current) {
     const temp = current.temp;
     const humidity = current.humidity;
@@ -194,35 +202,25 @@ function generateFarmingAdvice(current) {
 function getTodayAdvice(temp, humidity, windSpeed, weatherCode) {
     const advice = [];
 
-    // Temperature-based advice
     if (temp > 35) {
         advice.push({
             icon: '🌡️',
             title: 'Extreme Heat Protection',
-            description: 'Install shade nets over vegetable crops. Water plants early morning (5-7 AM) and evening (6-8 PM). Increase mulching to retain soil moisture.',
+            description: 'Use shade nets, water early morning and late evening, and add mulching to keep soil moisture.',
             priority: 'high',
             action: 'Immediate',
             crops: 'Tomato, Pepper, Leafy vegetables',
             timeframe: 'Today'
         });
-        advice.push({
-            icon: '🐄',
-            title: 'Livestock Care',
-            description: 'Provide extra water and shade for cattle. Avoid grazing during 11 AM - 4 PM. Use fans or sprinklers in cattle sheds.',
-            priority: 'high',
-            action: 'Urgent',
-            crops: 'Dairy, Poultry',
-            timeframe: 'Immediately'
-        });
     } else if (temp > 30) {
         advice.push({
             icon: '💧',
             title: 'Increase Irrigation Frequency',
-            description: 'Water crops twice daily. Check drip irrigation systems. Apply organic mulch around plants to reduce water evaporation.',
+            description: 'Water crops twice daily and check drip lines so plants don’t dry out.',
             priority: 'medium',
             action: 'Today',
             crops: 'All crops',
-            timeframe: '2-3 times daily'
+            timeframe: '2–3 times daily'
         });
     }
 
@@ -230,7 +228,7 @@ function getTodayAdvice(temp, humidity, windSpeed, weatherCode) {
         advice.push({
             icon: '🌱',
             title: 'Cold Protection Measures',
-            description: 'Cover young seedlings with plastic sheets. Use smoke generation to prevent frost. Harvest mature vegetables before temperature drops further.',
+            description: 'Cover seedlings, reduce irrigation, and harvest sensitive vegetables early.',
             priority: 'high',
             action: 'Before sunset',
             crops: 'Seedlings, Vegetables',
@@ -238,14 +236,13 @@ function getTodayAdvice(temp, humidity, windSpeed, weatherCode) {
         });
     }
 
-    // Humidity-based advice
     if (humidity > 85) {
         advice.push({
             icon: '🍄',
             title: 'Fungal Disease Prevention',
-            description: 'Apply copper-based fungicide spray. Ensure proper plant spacing for air circulation. Avoid overhead watering to reduce leaf wetness.',
+            description: 'Avoid wetting leaves, improve air flow, and monitor for leaf spots and rotting.',
             priority: 'medium',
-            action: 'Morning application',
+            action: 'Morning',
             crops: 'Tomato, Potato, Grapes',
             timeframe: 'Before 10 AM'
         });
@@ -254,8 +251,8 @@ function getTodayAdvice(temp, humidity, windSpeed, weatherCode) {
     if (humidity < 40) {
         advice.push({
             icon: '🌿',
-            title: 'Combat Dry Air Effects',
-            description: 'Increase watering frequency. Install micro-sprinklers for humid microclimate. Monitor plants for stress signs like wilting and leaf curl.',
+            title: 'Dry Air Effects',
+            description: 'Increase watering and watch for wilting or leaf curl.',
             priority: 'medium',
             action: 'Monitor closely',
             crops: 'All sensitive crops',
@@ -263,12 +260,11 @@ function getTodayAdvice(temp, humidity, windSpeed, weatherCode) {
         });
     }
 
-    // Wind-based advice
     if (windSpeed > 30) {
         advice.push({
             icon: '🌪️',
             title: 'Wind Damage Prevention',
-            description: 'Support tall plants with stakes. Harvest ready fruits before they fall. Secure greenhouse covers and shade nets. Avoid spraying pesticides.',
+            description: 'Support tall crops, secure nets and covers, and avoid spraying chemicals.',
             priority: 'high',
             action: 'Immediate',
             crops: 'Banana, Coconut, Tall vegetables',
@@ -276,26 +272,24 @@ function getTodayAdvice(temp, humidity, windSpeed, weatherCode) {
         });
     }
 
-    // Weather code specific advice
     if (weatherCode >= 61 && weatherCode <= 65) {
         advice.push({
             icon: '☔',
             title: 'Rainy Day Management',
-            description: 'Check field drainage systems. Postpone fertilizer application. Cover harvested crops. Apply bordeaux mixture for disease prevention.',
+            description: 'Check drainage, postpone fertilizer, and keep harvested produce covered.',
             priority: 'high',
             action: 'Before rain intensifies',
             crops: 'All field crops',
-            timeframe: 'Next 2-4 hours'
+            timeframe: 'Next 2–4 hours'
         });
     }
 
-    // Always include a general tip
     advice.push({
         icon: '📊',
         title: 'Daily Monitoring',
-        description: 'Check soil moisture 2 inches deep. Inspect plants for pest/disease symptoms. Record daily observations in farm diary.',
+        description: 'Check soil moisture and look for early pest/disease signs twice a day.',
         priority: 'low',
-        action: 'Routine check',
+        action: 'Routine',
         crops: 'All crops',
         timeframe: 'Morning & Evening'
     });
@@ -306,52 +300,37 @@ function getTodayAdvice(temp, humidity, windSpeed, weatherCode) {
 function getUpcomingAdvice(currentTemp, weatherCode) {
     const advice = [];
 
-    // Seasonal preparation
     advice.push({
         icon: '📅',
         title: 'Week Ahead Planning',
-        description: 'Prepare for monsoon season. Stock up on organic pesticides. Plan sowing of monsoon crops like rice, sugarcane, and cotton.',
+        description: 'Plan sowing or transplanting according to expected rain and field condition.',
         priority: 'medium',
         action: 'This week',
         crops: 'Rice, Sugarcane, Cotton',
-        timeframe: 'Next 7 days',
-        details: 'Ideal sowing time for Kharif crops in Kerala'
+        timeframe: 'Next 7 days'
     });
 
     advice.push({
         icon: '🌾',
         title: 'Harvest Planning',
-        description: 'Monitor ripening stages of current crops. Plan labor requirements for harvesting. Arrange storage facilities and transportation.',
+        description: 'Arrange labour and storage in advance if crops are nearing maturity.',
         priority: 'medium',
         action: 'Plan ahead',
         crops: 'Mature crops',
-        timeframe: '2-3 weeks',
-        details: 'Peak harvesting season approaching'
+        timeframe: '2–3 weeks'
     });
 
     if (currentTemp > 30) {
         advice.push({
             icon: '🌡️',
-            title: 'Heat Wave Preparation',
-            description: 'Install permanent shade structures. Dig additional water storage pits. Consider drought-resistant crop varieties for next season.',
+            title: 'Heat Preparation',
+            description: 'Plan shade, extra water storage and consider more heat-tolerant varieties.',
             priority: 'medium',
-            action: 'Long-term planning',
+            action: 'Next month',
             crops: 'All crops',
-            timeframe: 'Next month',
-            details: 'Climate adaptation strategy'
+            timeframe: 'Next month'
         });
     }
-
-    advice.push({
-        icon: '💰',
-        title: 'Market Price Monitoring',
-        description: 'Track commodity prices for better selling decisions. Connect with local mandis and cooperative societies. Consider value addition opportunities.',
-        priority: 'low',
-        action: 'Weekly review',
-        crops: 'Cash crops',
-        timeframe: 'Ongoing',
-        details: 'Maximize farm income through timing'
-    });
 
     return advice;
 }
@@ -361,52 +340,11 @@ function getGeneralAdvice() {
         {
             icon: '📱',
             title: 'Smart Weather Monitoring',
-            description: 'Use weather apps for hourly updates. Set up rain gauge in field. Subscribe to weather alerts from IMD (India Meteorological Department).',
+            description: 'Use simple apps and rain gauge; note daily conditions in a farm diary.',
             priority: 'medium',
             action: 'Setup once',
-            crops: 'All farming operations',
-            timeframe: 'Ongoing',
-            details: 'Technology-aided farming for better decisions'
-        },
-        {
-            icon: '🌱',
-            title: 'Integrated Pest Management (IPM)',
-            description: 'Use yellow sticky traps for monitoring. Encourage beneficial insects like ladybugs. Rotate between organic and chemical pesticides to prevent resistance.',
-            priority: 'high',
-            action: 'Implement system',
-            crops: 'All crops',
-            timeframe: 'Season-long',
-            details: 'Sustainable pest control approach'
-        },
-        {
-            icon: '💧',
-            title: 'Water Conservation Techniques',
-            description: 'Install drip irrigation for 30-50% water savings. Practice rainwater harvesting. Use moisture meters to optimize watering.',
-            priority: 'high',
-            action: 'Gradual implementation',
-            crops: 'All crops',
-            timeframe: 'Long-term investment',
-            details: 'Sustainable water management'
-        },
-        {
-            icon: '🧪',
-            title: 'Soil Health Management',
-            description: 'Test soil pH every 6 months. Add organic compost regularly. Practice crop rotation to maintain soil fertility.',
-            priority: 'medium',
-            action: 'Regular maintenance',
-            crops: 'All field crops',
-            timeframe: 'Bi-annual',
-            details: 'Foundation of productive farming'
-        },
-        {
-            icon: '📋',
-            title: 'Farm Record Keeping',
-            description: 'Maintain digital or physical farm diary. Record inputs, outputs, and expenses. Track crop performance and weather patterns.',
-            priority: 'medium',
-            action: 'Daily habit',
             crops: 'All operations',
-            timeframe: 'Daily',
-            details: 'Data-driven farming decisions'
+            timeframe: 'Ongoing'
         }
     ];
 }
@@ -415,44 +353,109 @@ function getSeasonalAdvice() {
     return [
         {
             icon: '🌧️',
-            title: 'Monsoon Preparation (June-September)',
-            description: 'Ensure proper field drainage. Stock fungicides for disease control. Plan Kharif crop sowing schedule. Repair farm equipment.',
+            title: 'Monsoon Preparation',
+            description: 'Clean drains, strengthen bunds and prepare fungicides for common diseases.',
             priority: 'high',
-            action: 'Seasonal preparation',
-            crops: 'Rice, Sugarcane, Cotton',
-            timeframe: 'Pre-monsoon',
-            details: 'Critical period for Kerala agriculture'
-        },
-        {
-            icon: '☀️',
-            title: 'Summer Management (March-May)',
-            description: 'Focus on water conservation. Harvest Rabi crops. Prepare land for next season. Maintain irrigation infrastructure.',
-            priority: 'high',
-            action: 'Season management',
-            crops: 'Vegetables, Cash crops',
-            timeframe: 'Summer months',
-            details: 'Water stress management crucial'
-        },
-        {
-            icon: '🍂',
-            title: 'Post-Monsoon Care (October-December)',
-            description: 'Focus on disease management due to humidity. Plan Rabi crop sowing. Harvest Kharif crops. Prepare for winter vegetables.',
-            priority: 'medium',
-            action: 'Transition planning',
-            crops: 'Winter vegetables',
-            timeframe: 'Post-monsoon',
-            details: 'Optimal growing conditions in Kerala'
+            action: 'Before heavy rains',
+            crops: 'Rice and vegetables',
+            timeframe: 'Pre-monsoon'
         }
     ];
 }
 
-// Simple alerts toggle
+// ================= SIMPLE ALERTS TOGGLE =================
 router.post('/alerts/toggle', auth, (req, res) => {
     const { enabled } = req.body;
     res.json({
         message: enabled ? 'Alerts enabled' : 'Alerts disabled',
         enabled
     });
+});
+
+// ================== AI FARM ADVICE (FREE — GROQ LLaMA) ==================
+router.post('/ai/farm-advice', auth, async (req, res) => {
+    try {
+        const { lat, lon, question } = req.body || {};
+        console.log('AI farm advice request:', { lat, lon, question });
+
+        if (typeof lat !== 'number' || typeof lon !== 'number') {
+            return res.status(400).json({
+                message: 'lat and lon are required as numbers'
+            });
+        }
+
+        // 1) Live weather for that exact point
+        const weatherResponse = await axios.get('https://api.open-meteo.com/v1/forecast', {
+            params: {
+                latitude: lat,
+                longitude: lon,
+                current: 'temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,surface_pressure,wind_speed_10m',
+                timezone: 'auto',
+                forecast_days: 1
+            },
+            timeout: 8000
+        });
+
+        const data = weatherResponse.data;
+        const current = {
+            temp: Math.round(data.current.temperature_2m),
+            humidity: data.current.relative_humidity_2m,
+            pressure: Math.round(data.current.surface_pressure),
+            wind_speed: Math.round(data.current.wind_speed_10m * 3.6),
+            feels_like: Math.round(data.current.apparent_temperature),
+            weather_code: data.current.weather_code,
+            visibility: 10
+        };
+
+        const farmingAdvice = generateFarmingAdvice(current);
+        const farmerQuestion = question?.trim() || 'What should I do on my farm today?';
+
+        const prompt = `
+You are KrishiMitr, an agriculture support AI for small farmers in Kerala.
+
+Weather at farm:
+• Temperature: ${current.temp}°C (feels like ${current.feels_like}°C)
+• Humidity: ${current.humidity}%
+• Wind: ${current.wind_speed} km/h
+• Pressure: ${current.pressure} hPa
+• Weather code: ${current.weather_code}
+
+Farmer asked:
+"${farmerQuestion}"
+
+Answer rules:
+- Answer directly, no greeting.
+- 1 short sentence describing how the weather will feel today.
+- Then give 3–4 bullet points with clear steps the farmer should take today.
+- Very simple English (farmer level).
+- No technical names, no long theories.
+- Max 110 words.
+        `.trim();
+
+        const completion = await groq.chat.completions.create({
+            model: 'llama-3.1-8b-instant',   // ✅ current supported model
+            messages: [
+                { role: 'user', content: prompt }
+            ]
+        });
+
+        const answer = completion.choices[0]?.message?.content ||
+            'Sorry, I could not generate advice right now.';
+
+        res.json({
+            answer,
+            current,
+            advice: farmingAdvice
+        });
+    } catch (error) {
+        console.error('AI farm advice error:', error);
+
+        res.status(500).json({
+            answer:
+                'AI is not responding right now. As a safe rule: avoid spraying before rain, irrigate early morning or evening on hot days, and keep drainage clear.',
+            error: error.message
+        });
+    }
 });
 
 module.exports = router;
