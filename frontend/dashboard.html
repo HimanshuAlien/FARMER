@@ -4,24 +4,26 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Kerala Smart Farming Dashboard - SIH 2024</title>
+    <title> SIH 2025</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+
     <style>
         :root {
-            --primary: #10b981;
-            --primary-dark: #059669;
-            --secondary: #3b82f6;
+            --primary: #16a34a;
+            --primary-dark: #15803d;
+            --primary-light: #86efac;
+            --secondary: #0ea5e9;
             --accent: #8b5cf6;
             --warning: #f59e0b;
             --danger: #ef4444;
             --success: #10b981;
-            --bg-light: #f8fafc;
+            --bg-light: #f1f5f9;
             --bg-dark: #0f172a;
             --card-light: #ffffff;
             --card-dark: #1e293b;
-            --text-light: #334155;
+            --text-light: #1e293b;
             --text-dark: #f1f5f9;
             --text-secondary-light: #64748b;
             --text-secondary-dark: #94a3b8;
@@ -29,10 +31,6 @@
             --border-dark: #334155;
             --sidebar-light: #ffffff;
             --sidebar-dark: #1e293b;
-            --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            --gradient-4: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
         }
 
         * {
@@ -55,7 +53,7 @@
             color: var(--text-dark);
         }
 
-        /* Sidebar Navigation - Always visible on desktop */
+        /* Sidebar */
         .sidebar {
             position: fixed;
             left: 0;
@@ -64,45 +62,76 @@
             width: 280px;
             background: var(--sidebar-light);
             z-index: 1000;
-            transition: transform 0.3s ease;
-            box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, background 0.3s ease;
+            box-shadow: 4px 0 15px rgba(15, 23, 42, 0.12);
             border-right: 1px solid var(--border-light);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
         }
 
         body.dark .sidebar {
             background: var(--sidebar-dark);
             border-right-color: var(--border-dark);
+            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.6);
         }
 
         .sidebar-header {
-            padding: 2rem 1.5rem;
-            border-bottom: 1px solid var(--border-light);
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-        }
-
-        body.dark .sidebar-header {
-            border-bottom-color: var(--border-dark);
+            padding: 1.6rem 1.5rem;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.35);
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(59, 130, 246, 0.08));
         }
 
         .logo {
-            color: white;
-            font-size: 1.4rem;
-            font-weight: 700;
             display: flex;
             align-items: center;
             gap: 0.8rem;
         }
 
-        .logo i {
-            font-size: 1.8rem;
+        .logo-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 0.9rem;
+            object-fit: contain;
+            background: #ecfdf5;
+            padding: 4px;
+        }
+
+        body.dark .logo-icon {
+            background: #022c22;
+        }
+
+        .logo-brand {
+            display: flex;
+            gap: 0.2rem;
+            align-items: baseline;
+            letter-spacing: 0.02em;
+        }
+
+        .logo-text-krishi {
+            color: var(--primary);
+            font-weight: 800;
+            font-size: 1.25rem;
+        }
+
+        .logo-text-mitr {
+            color: #020617;
+            font-weight: 800;
+            font-size: 1.25rem;
+        }
+
+        body.dark .logo-text-mitr {
+            color: #f9fafb;
         }
 
         .nav-menu {
-            padding: 2rem 0;
+            flex: 1;
+            overflow-y: auto;
+            padding: 1.5rem 0;
         }
 
         .nav-section {
-            margin-bottom: 2rem;
+            margin-bottom: 1rem;
         }
 
         .nav-section-title {
@@ -110,9 +139,9 @@
             font-size: 0.75rem;
             font-weight: 600;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: var(--text-secondary-light);
-            margin-bottom: 0.75rem;
+            letter-spacing: 0.06em;
+            color: #4b5563;
+            margin-bottom: 0.6rem;
         }
 
         body.dark .nav-section-title {
@@ -120,140 +149,121 @@
         }
 
         .nav-item {
-            display: block;
-            color: inherit;
-            text-decoration: none;
-            padding: 1rem 1.5rem;
             display: flex;
             align-items: center;
-            gap: 1rem;
-            transition: all 0.3s ease;
+            gap: 0.9rem;
+            text-decoration: none;
+            padding: 0.75rem 1.5rem;
+            color: #111827;
+            font-weight: 500;
+            transition: all 0.2s ease;
             border-left: 3px solid transparent;
-            position: relative;
+            font-size: 0.95rem;
         }
 
-        .nav-item:hover {
-            background: rgba(16, 185, 129, 0.1);
-            color: var(--primary);
-            border-left-color: var(--primary);
-        }
-
-        .nav-item.active {
-            background: rgba(16, 185, 129, 0.15);
-            color: var(--primary);
-            border-left-color: var(--primary);
-            font-weight: 600;
+        body.dark .nav-item {
+            color: #e5e7eb;
         }
 
         .nav-item i {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             width: 20px;
         }
 
+        .nav-item:hover {
+            color: var(--primary);
+            border-left-color: var(--primary);
+            background: rgba(16, 185, 129, 0.06);
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+            font-weight: 600;
+            border-left-color: var(--primary);
+            background: rgba(16, 185, 129, 0.08);
+        }
+
         .sidebar-footer {
-            position: absolute;
-            bottom: 0;
+            flex-shrink: 0;
             width: 100%;
-            padding: 1.5rem;
+            padding: 1.2rem 1.5rem 1.5rem;
             border-top: 1px solid var(--border-light);
+            background: var(--sidebar-light);
+            display: flex;
+            flex-direction: column;
+            gap: 0.7rem;
         }
 
         body.dark .sidebar-footer {
+            background: var(--sidebar-dark);
             border-top-color: var(--border-dark);
         }
 
         .user-info {
             color: var(--text-secondary-light);
-            font-size: 0.9rem;
-            margin-bottom: 1rem;
+            font-size: 0.85rem;
         }
 
         body.dark .user-info {
             color: var(--text-secondary-dark);
         }
 
-        .theme-toggle-sidebar {
+        .theme-toggle-sidebar,
+        .logout-btn {
             width: 100%;
-            background: rgba(16, 185, 129, 0.1);
-            color: var(--primary);
-            border: 1px solid rgba(16, 185, 129, 0.2);
-            padding: 0.8rem;
-            border-radius: 8px;
-            font-size: 0.9rem;
+            border-radius: 999px;
+            padding: 0.65rem 0.8rem;
+            font-size: 0.8rem;
             cursor: pointer;
-            transition: all 0.3s ease;
+            border: 1px solid transparent;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 0.5rem;
-            margin-bottom: 1rem;
+            gap: 0.45rem;
+            transition: all 0.2s ease;
+            font-weight: 500;
+        }
+
+        .theme-toggle-sidebar {
+            background: rgba(16, 185, 129, 0.06);
+            color: var(--primary);
+            border-color: rgba(16, 185, 129, 0.25);
         }
 
         .theme-toggle-sidebar:hover {
-            background: rgba(16, 185, 129, 0.2);
+            background: rgba(16, 185, 129, 0.12);
         }
 
         .logout-btn {
-            width: 100%;
-            background: rgba(239, 68, 68, 0.1);
+            background: rgba(239, 68, 68, 0.06);
             color: var(--danger);
-            border: 1px solid rgba(239, 68, 68, 0.2);
-            padding: 0.8rem;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
+            border-color: rgba(239, 68, 68, 0.25);
         }
 
         .logout-btn:hover {
-            background: rgba(239, 68, 68, 0.2);
+            background: rgba(239, 68, 68, 0.12);
         }
 
-        /* Simple Top Bar */
-        .top-bar {
-            background: var(--card-light);
-            padding: 1rem 2rem;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-            border-bottom: 1px solid var(--border-light);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 260px;
+                transform: translateX(-100%);
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0 !important;
+                width: 100% !important;
+            }
         }
 
-        body.dark .top-bar {
-            background: var(--card-dark);
-            border-bottom-color: var(--border-dark);
-        }
-
-        .page-title {
-            font-size: 1.8rem;
-            font-weight: 600;
-            color: var(--text-light);
-        }
-
-        body.dark .page-title {
-            color: var(--text-dark);
-        }
-
-        .top-bar-right {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .mobile-menu-btn {
-            display: none;
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 0.5rem;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 1.2rem;
+        @media (max-width: 480px) {
+            .sidebar {
+                width: 240px;
+            }
         }
 
         /* Main Content */
@@ -270,424 +280,14 @@
 
         .content-area {
             padding: 2rem;
+            max-width: 100%;
         }
 
-        /* Welcome Section */
-        .welcome-section {
-            background: var(--gradient-1);
-            border-radius: 20px;
-            padding: 3rem;
-            margin-bottom: 2rem;
-            color: white;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .welcome-section::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -20%;
-            width: 300px;
-            height: 300px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-        }
-
-        .welcome-content {
-            position: relative;
-            z-index: 2;
-        }
-
-        .welcome-title {
-            font-size: 2.5rem;
-            font-weight: 800;
-            margin-bottom: 1rem;
-        }
-
-        .welcome-subtitle {
-            font-size: 1.1rem;
-            opacity: 0.9;
-            margin-bottom: 1.5rem;
-        }
-
-        .welcome-time {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            background: rgba(255, 255, 255, 0.2);
-            padding: 0.5rem 1rem;
-            border-radius: 25px;
-            backdrop-filter: blur(10px);
-        }
-
-        /* Stats Grid */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-
-        .stat-card {
-            background: var(--card-light);
-            border-radius: 16px;
-            padding: 2rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-            border: 1px solid var(--border-light);
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        body.dark .stat-card {
-            background: var(--card-dark);
-            border-color: var(--border-dark);
-        }
-
-        .stat-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: var(--primary);
-        }
-
-        .stat-card:nth-child(1)::before {
-            background: var(--gradient-1);
-        }
-
-        .stat-card:nth-child(2)::before {
-            background: var(--gradient-2);
-        }
-
-        .stat-card:nth-child(3)::before {
-            background: var(--gradient-3);
-        }
-
-        .stat-card:nth-child(4)::before {
-            background: var(--gradient-4);
-        }
-
-        .stat-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-        }
-
-        .stat-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-        }
-
-        .stat-icon {
-            width: 50px;
-            height: 50px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            color: white;
-            background: var(--primary);
-        }
-
-        .stat-card:nth-child(1) .stat-icon {
-            background: var(--gradient-1);
-        }
-
-        .stat-card:nth-child(2) .stat-icon {
-            background: var(--gradient-2);
-        }
-
-        .stat-card:nth-child(3) .stat-icon {
-            background: var(--gradient-3);
-        }
-
-        .stat-card:nth-child(4) .stat-icon {
-            background: var(--gradient-4);
-        }
-
-        .stat-trend {
-            font-size: 0.8rem;
-            color: var(--success);
-            display: flex;
-            align-items: center;
-            gap: 0.25rem;
-        }
-
-        .stat-number {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-        }
-
-        .stat-label {
-            color: var(--text-secondary-light);
-            font-size: 0.9rem;
-            font-weight: 500;
-        }
-
-        body.dark .stat-label {
-            color: var(--text-secondary-dark);
-        }
-
-        /* Weather Widget */
-        .weather-widget {
-            background: var(--gradient-3);
-            border-radius: 20px;
-            padding: 2.5rem;
-            margin-bottom: 2rem;
-            color: white;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .weather-widget::before {
-            content: '';
-            position: absolute;
-            top: -30%;
-            right: -30%;
-            width: 200px;
-            height: 200px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-        }
-
-        .weather-main {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: relative;
-            z-index: 2;
-        }
-
-        .weather-temp {
-            font-size: 3.5rem;
-            font-weight: 800;
-            line-height: 1;
-        }
-
-        .weather-condition {
-            font-size: 1.2rem;
-            opacity: 0.9;
-            margin-bottom: 1rem;
-        }
-
-        .weather-details {
-            display: flex;
-            gap: 2rem;
-            font-size: 0.9rem;
-        }
-
-        .weather-detail {
-            text-align: center;
-        }
-
-        .weather-icon {
-            font-size: 4rem;
-            opacity: 0.8;
-        }
-
-        /* Features Grid */
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 2rem;
-            margin-bottom: 2rem;
-        }
-
-        .feature-card {
-            background: var(--card-light);
-            border-radius: 20px;
-            padding: 2.5rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-            border: 1px solid var(--border-light);
-            transition: all 0.3s ease;
-        }
-
-        body.dark .feature-card {
-            background: var(--card-dark);
-            border-color: var(--border-dark);
-        }
-
-        .feature-card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-        }
-
-        .feature-header {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .feature-icon {
-            width: 60px;
-            height: 60px;
-            border-radius: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.8rem;
-            color: white;
-            background: var(--primary);
-        }
-
-        .feature-card:nth-child(1) .feature-icon {
-            background: var(--gradient-1);
-        }
-
-        .feature-card:nth-child(2) .feature-icon {
-            background: var(--gradient-2);
-        }
-
-        .feature-card:nth-child(3) .feature-icon {
-            background: var(--gradient-3);
-        }
-
-        .feature-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 0.25rem;
-        }
-
-        .feature-description {
-            color: var(--text-secondary-light);
-            line-height: 1.6;
-            margin-bottom: 2rem;
-        }
-
-        body.dark .feature-description {
-            color: var(--text-secondary-dark);
-        }
-
-        .feature-button {
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 1rem 1.5rem;
-            border-radius: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 0.95rem;
-        }
-
-        .feature-button:hover {
-            background: var(--primary-dark);
-            transform: translateY(-2px);
-        }
-
-        .feature-button.coming-soon {
-            background: var(--warning);
-            cursor: not-allowed;
-        }
-
-        .feature-button.coming-soon:hover {
-            background: var(--warning);
-            transform: none;
-        }
-
-        /* Activity Section */
-        .activity-section {
-            background: var(--card-light);
-            border-radius: 20px;
-            padding: 2.5rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-            border: 1px solid var(--border-light);
-        }
-
-        body.dark .activity-section {
-            background: var(--card-dark);
-            border-color: var(--border-dark);
-        }
-
-        .section-title {
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-bottom: 2rem;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
-
-        .activity-item {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            padding: 1.25rem 0;
-            border-bottom: 1px solid var(--border-light);
-            transition: all 0.3s ease;
-        }
-
-        body.dark .activity-item {
-            border-bottom-color: var(--border-dark);
-        }
-
-        .activity-item:last-child {
-            border-bottom: none;
-        }
-
-        .activity-item:hover {
-            transform: translateX(8px);
-        }
-
-        .activity-icon {
-            width: 45px;
-            height: 45px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-            color: white;
-            background: var(--primary);
-        }
-
-        .activity-item:nth-child(2n) .activity-icon {
-            background: var(--gradient-2);
-        }
-
-        .activity-item:nth-child(3n) .activity-icon {
-            background: var(--gradient-3);
-        }
-
-        .activity-item:nth-child(4n) .activity-icon {
-            background: var(--gradient-4);
-        }
-
-        .activity-content {
-            flex: 1;
-        }
-
-        .activity-text {
-            font-weight: 500;
-            margin-bottom: 0.25rem;
-        }
-
-        .activity-time {
-            font-size: 0.85rem;
-            color: var(--text-secondary-light);
-        }
-
-        body.dark .activity-time {
-            color: var(--text-secondary-dark);
-        }
-
-        /* Simple Top Bar */
+        /* ========== TOP BAR ========== */
         .simple-topbar {
             background: var(--card-light);
-            padding: 1rem 2rem;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            padding: 1.5rem 2.3rem;
+            box-shadow: 0 1px 3px rgba(15, 23, 42, 0.12);
             border-bottom: 1px solid var(--border-light);
             display: flex;
             justify-content: space-between;
@@ -708,9 +308,22 @@
             gap: 1rem;
         }
 
+        .topbar-logo {
+            width: 40px;
+            height: 40px;
+            border-radius: 0.9rem;
+            object-fit: contain;
+            background: #ecfdf5;
+            padding: 4px;
+        }
+
+        body.dark .topbar-logo {
+            background: #022c22;
+        }
+
         .simple-title {
             font-size: 1.5rem;
-            font-weight: 700;
+            font-weight: 800;
             color: var(--text-light);
             margin: 0;
         }
@@ -726,13 +339,36 @@
         }
 
         .status-badge {
-            background: rgba(16, 185, 129, 0.1);
+            background: rgba(22, 163, 74, 0.08);
             color: var(--primary);
-            padding: 0.4rem 0.8rem;
-            border-radius: 20px;
-            font-size: 0.8rem;
+            padding: 0.45rem 1.1rem;
+            border-radius: 999px;
+            font-size: 0.85rem;
             font-weight: 600;
-            border: 1px solid rgba(16, 185, 129, 0.2);
+            border: 1px solid rgba(22, 163, 74, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--primary);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
         }
 
         .mobile-menu-btn {
@@ -740,18 +376,482 @@
             background: var(--primary);
             color: white;
             border: none;
-            padding: 0.5rem;
-            border-radius: 8px;
+            padding: 0.6rem;
+            border-radius: 0.7rem;
             cursor: pointer;
             font-size: 1.1rem;
         }
 
-        .weather-widget:hover {
+        /* Compact Welcome Banner */
+        .welcome-banner {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            border-radius: 16px;
+            padding: 1.5rem 2rem;
+            margin-bottom: 2rem;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 12px rgba(22, 163, 74, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .welcome-banner::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 300px;
+            height: 300px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 50%;
+        }
+
+        .welcome-banner::after {
+            content: '';
+            position: absolute;
+            bottom: -40%;
+            left: 20%;
+            width: 200px;
+            height: 200px;
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 50%;
+        }
+
+        .welcome-text {
+            position: relative;
+            z-index: 2;
+        }
+
+        .welcome-text h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .welcome-text p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .welcome-meta {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            font-size: 0.9rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            backdrop-filter: blur(10px);
+        }
+
+        /* Two Column Layout */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1.8fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Stats Cards Grid - Enhanced */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.25rem;
+        }
+
+        .stat-card {
+            background: var(--card-light);
+            border-radius: 16px;
+            padding: 1.75rem;
+            border: 1px solid var(--border-light);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            min-height: 160px;
+        }
+
+        body.dark .stat-card {
+            background: var(--card-dark);
+            border-color: var(--border-dark);
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            right: -20px;
+            width: 70px;
+            height: 70px;
+            background: var(--primary);
+            opacity: 0;
+            border-radius: 50%;
+            transition: all 0.4s ease;
+        }
+
+        .stat-card::after {
+            content: '';
+            position: absolute;
+            bottom: -20px;
+            left: -20px;
+            width: 50px;
+            height: 50px;
+            background: var(--primary);
+            opacity: 0;
+            border-radius: 50%;
+            transition: all 0.4s ease;
+        }
+
+        .stat-card:hover::before {
+            opacity: 0.06;
+            top: -10px;
+            right: -10px;
+        }
+
+        .stat-card:hover::after {
+            opacity: 0.04;
+            bottom: -10px;
+            left: -10px;
+        }
+
+        .stat-card:hover {
             transform: translateY(-4px);
-            box-shadow: 0 8px 30px rgba(79, 172, 254, 0.3);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            border-color: var(--primary);
+        }
+
+        .stat-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .stat-info h3 {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-secondary-light);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+        }
+
+        body.dark .stat-info h3 {
+            color: var(--text-secondary-dark);
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--text-light);
+            line-height: 1;
+        }
+
+        body.dark .stat-value {
+            color: var(--text-dark);
+        }
+
+        .stat-icon-box {
+            width: 70px;
+            height: 70px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            overflow: hidden;
+            background: transparent;
+        }
+
+        .stat-icon-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .stat-trend {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--success);
+            margin-top: 0.5rem;
+        }
+
+        /* Weather Card */
+        .weather-card {
+            background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+            border-radius: 16px;
+            padding: 2rem;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            height: 100%;
+            box-shadow: 0 4px 20px rgba(14, 165, 233, 0.3);
+        }
+
+        .weather-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 350px;
+            height: 350px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 50%;
+        }
+
+        .weather-card::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: -10%;
+            width: 250px;
+            height: 250px;
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 50%;
+        }
+
+        .weather-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 35px rgba(14, 165, 233, 0.4);
+        }
+
+        .weather-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .weather-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1.5rem;
+        }
+
+        .weather-icon-large {
+            width: 90px;
+            height: 90px;
+            object-fit: contain;
+        }
+
+        .weather-temp-large {
+            font-size: 3.5rem;
+            font-weight: 800;
+            line-height: 1;
+        }
+
+        .weather-condition {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            margin-top: 0.5rem;
+        }
+
+        .weather-details-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .weather-detail-item {
+            text-align: center;
+        }
+
+        .weather-detail-item i {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+            opacity: 0.8;
+        }
+
+        .weather-detail-value {
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+
+        .weather-detail-label {
+            font-size: 0.8rem;
+            opacity: 0.8;
+            margin-top: 0.25rem;
+        }
+
+        /* Features Section */
+        .features-section {
+            margin-top: 2rem;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--text-light);
+        }
+
+        body.dark .section-title {
+            color: var(--text-dark);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .feature-card {
+            background: var(--card-light);
+            border-radius: 16px;
+            padding: 2rem;
+            border: 1px solid var(--border-light);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        body.dark .feature-card {
+            background: var(--card-dark);
+            border-color: var(--border-dark);
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100px;
+            height: 100px;
+            opacity: 0.05;
+            border-radius: 50%;
+            transform: translate(30%, -30%);
+        }
+
+        .feature-card:nth-child(1)::before {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .feature-card:nth-child(2)::before {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        .feature-card:nth-child(3)::before {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .feature-card:nth-child(4)::before {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            border-color: var(--primary);
+        }
+
+        .feature-icon-wrapper {
+            width: 80px;
+            height: 80px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            margin-bottom: 1.25rem;
+            overflow: hidden;
+            background: transparent !important;
+        }
+
+        .feature-icon-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .feature-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text-light);
+            margin-bottom: 0.75rem;
+        }
+
+        body.dark .feature-title {
+            color: var(--text-dark);
+        }
+
+        .feature-description {
+            color: var(--text-secondary-light);
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+        }
+
+        body.dark .feature-description {
+            color: var(--text-secondary-dark);
+        }
+
+        .feature-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .feature-btn:hover {
+            background: var(--primary-dark);
+            transform: translateX(4px);
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 1024px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
 
         @media (max-width: 768px) {
+            .sidebar {
+                width: 260px;
+                transform: translateX(-100%);
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0 !important;
+            }
+
             .mobile-menu-btn {
                 display: inline-flex;
                 align-items: center;
@@ -759,79 +859,74 @@
             }
 
             .simple-topbar {
-                padding: 1rem;
+                padding: 1.1rem 1.1rem;
             }
 
             .simple-title {
-                font-size: 1.2rem;
-            }
-        }
-
-        /* Mobile Responsive */
-        @media (max-width: 768px) {
-            .sidebar {
-                transform: translateX(-100%);
+                font-size: 1.25rem;
             }
 
-            .sidebar.open {
-                transform: translateX(0);
+            .topbar-logo {
+                width: 34px;
+                height: 34px;
             }
 
-            .main-content {
-                margin-left: 0;
+            .welcome-banner {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
             }
 
-            .mobile-menu-btn {
-                display: block;
+            .welcome-meta {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.75rem;
             }
 
-            .welcome-title {
-                font-size: 2rem;
+            .dashboard-grid {
+                grid-template-columns: 1fr;
             }
 
             .stats-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 1rem;
+                grid-template-columns: 1fr;
             }
 
             .features-grid {
                 grid-template-columns: 1fr;
             }
 
-            .weather-main {
-                flex-direction: column;
-                text-align: center;
-                gap: 1rem;
-            }
-
             .content-area {
                 padding: 1rem;
             }
 
-            .top-bar {
-                padding: 1rem;
+            .weather-details-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 0.75rem;
             }
         }
 
         @media (max-width: 480px) {
-            .stats-grid {
-                grid-template-columns: 1fr;
+            .stat-value {
+                font-size: 1.75rem;
             }
 
-            .welcome-section {
-                padding: 2rem;
+            .stat-icon-box {
+                width: 48px;
+                height: 48px;
+                font-size: 1.5rem;
             }
 
-            .weather-widget {
-                padding: 1.5rem;
+            .weather-temp-large {
+                font-size: 2.75rem;
             }
 
-            .feature-card {
-                padding: 1.5rem;
+            .weather-icon-large {
+                width: 60px;
+                height: 60px;
             }
         }
 
-        /* Animation classes */
+        /* Animation */
         .animate-fade-in {
             animation: fadeIn 0.6s ease-out;
         }
@@ -847,6 +942,10 @@
                 transform: translateY(0);
             }
         }
+
+        html {
+            scroll-behavior: smooth;
+        }
     </style>
 </head>
 
@@ -855,14 +954,17 @@
     <nav class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <div class="logo">
-                <i class="fas fa-leaf"></i>
-                <span>Kerala Farmer</span>
+                <img src="images/krishimitr-logo.svg" alt="KrishiMitr logo" class="logo-icon">
+                <div class="logo-brand">
+                    <span class="logo-text-krishi">Krishi</span>
+                    <span class="logo-text-mitr">Mitr</span>
+                </div>
             </div>
         </div>
         <div class="nav-menu">
             <div class="nav-section">
                 <div class="nav-section-title">Main Menu</div>
-                <a href="dashboard.html" class="nav-item">
+                <a href="dashboard.html" class="nav-item active">
                     <i class="fas fa-home"></i>
                     <span>Dashboard</span>
                 </a>
@@ -882,6 +984,14 @@
                     <i class="fas fa-cloud-sun"></i>
                     <span>Weather & Alerts</span>
                 </a>
+                <a href="Schemes.html" class="nav-item">
+                    <i class="fa-solid fa-binoculars"></i>
+                    <span>Govt Schemes</span>
+                </a>
+                <a href="smart-farming.html" class="nav-item">
+                    <i class="fa-solid fa-briefcase"></i>
+                    <span>Agri Swasthya</span>
+                </a>
                 <a href="market-prices.html" class="nav-item">
                     <i class="fas fa-chart-line"></i>
                     <span>Market Prices</span>
@@ -894,268 +1004,247 @@
                     <i class="fas fa-users"></i>
                     <span>Community</span>
                 </a>
-
                 <a href="profile.html" class="nav-item">
-                    <i class="fas fa-users"></i>
+                    <i class="fas fa-user"></i>
                     <span>Profile</span>
                 </a>
             </div>
-            <div class="sidebar-footer">
-                <div id="userInfo" class="user-info">Loading user...</div>
-                <button class="theme-toggle-sidebar" onclick="toggleTheme()">
-                    <i class="fas fa-sun"></i>
-                    <span>Toggle Theme</span>
-                </button>
-                <button id="logoutBtn" class="logout-btn">
-                    <i class="fas fa-sign-out-alt"></i>
-                    <span>Logout</span>
-                </button>
-            </div>
+        </div>
+        <div class="sidebar-footer">
+            <div id="userInfo" class="user-info" style="display:none;"></div>
+            <button class="theme-toggle-sidebar" onclick="toggleTheme()">
+                <i class="fas fa-sun"></i>
+                <span>Toggle Theme</span>
+            </button>
+            <button id="logoutBtn" class="logout-btn">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </button>
+        </div>
     </nav>
 
     <!-- Main Content -->
     <main class="main-content">
-        <!-- Simple Top Bar -->
+        <!-- Top Bar -->
         <div class="simple-topbar">
             <div class="topbar-left">
                 <button class="mobile-menu-btn" onclick="toggleSidebar()">
                     <i class="fas fa-bars"></i>
                 </button>
-                <h1 class="simple-title">🤖 AI Farming Assistant</h1>
+                <img src="images/krishimitr-logo.svg" alt="KrishiMitr logo" class="topbar-logo" />
+                <h1 class="simple-title">Digital Krishi Officer</h1>
             </div>
             <div class="topbar-right">
-                <span class="status-badge">🟢 Online</span>
+                <span class="status-badge">
+                    <span class="status-dot"></span>
+                    <span>System Online</span>
+                </span>
             </div>
         </div>
 
-
         <div class="content-area">
-            <!-- Welcome Section -->
-            <section class="welcome-section animate-fade-in">
-                <div class="welcome-content">
-                    <h1 class="welcome-title">Welcome to Smart Farming</h1>
-                    <p class="welcome-subtitle">AI-powered agricultural solutions for Kerala farmers</p>
-                    <div class="welcome-time">
+            <!-- Welcome Banner -->
+            <div class="welcome-banner animate-fade-in">
+                <div class="welcome-text">
+                    <h1>Welcome Back, Farmer</h1>
+                    <p>Here's what's happening with your farm today</p>
+                </div>
+                <div class="welcome-meta">
+                    <div class="meta-item">
                         <i class="fas fa-map-marker-alt"></i>
-                        <span>Kochi, Kerala • <span id="welcomeTime"></span></span>
+                        <span>Kochi, Kerala</span>
                     </div>
-                </div>
-            </section>
-
-            <!-- Stats Cards -->
-            <div class="stats-grid animate-fade-in">
-                <div class="stat-card">
-                    <div class="stat-header">
-                        <div class="stat-icon">
-                            <i class="fas fa-question-circle"></i>
-                        </div>
-                        <div class="stat-trend">
-                            <i class="fas fa-arrow-up"></i>
-                            <span id="queryTrend">+12%</span>
-                        </div>
+                    <div class="meta-item">
+                        <i class="fas fa-clock"></i>
+                        <span id="currentTime">--:--</span>
                     </div>
-                    <div class="stat-number" id="queryCount">0</div>
-                    <div class="stat-label">Queries Answered</div>
-                </div>
-
-                <div class="stat-card">
-                    <div class="stat-header">
-                        <div class="stat-icon">
-                            <i class="fas fa-sun"></i>
-                        </div>
-                        <div class="stat-trend">
-                            <i class="fas fa-thermometer-half"></i>
-                            <span id="tempTrend">Perfect</span>
-                        </div>
+                    <div class="meta-item">
+                        <i class="fas fa-temperature-high"></i>
+                        <span id="bannerTemp">--°C</span>
                     </div>
-                    <div class="stat-number" id="currentTemp">--°C</div>
-                    <div class="stat-label">Current Temperature</div>
-                </div>
-
-                <div class="stat-card">
-                    <div class="stat-header">
-                        <div class="stat-icon">
-                            <i class="fas fa-seedling"></i>
-                        </div>
-                        <div class="stat-trend">
-                            <i class="fas fa-arrow-up"></i>
-                            <span id="cropsTrend">+2</span>
-                        </div>
+                    <div class="meta-item">
+                        <i class="fas fa-wind"></i>
+                        <span id="bannerWind">-- km/h</span>
                     </div>
-                    <div class="stat-number" id="cropsCount">18</div>
-                    <div class="stat-label">Crops Monitored</div>
-                </div>
-
-                <div class="stat-card">
-                    <div class="stat-header">
-                        <div class="stat-icon">
-                            <i class="fas fa-bell"></i>
-                        </div>
-                        <div class="stat-trend">
-                            <i class="fas fa-exclamation-triangle"></i>
-                            <span id="alertsStatus">Active</span>
-                        </div>
-                    </div>
-                    <div class="stat-number" id="alertsCount">0</div>
-                    <div class="stat-label">Active Alerts</div>
                 </div>
             </div>
 
-            <!-- Weather Widget -->
-            <div class="weather-widget animate-fade-in" onclick="window.location.href='weather-alerts.html'"
-                style="cursor: pointer; transition: transform 0.3s ease;">
-                <div class="weather-main">
-                    <div>
-                        <div class="weather-temp" id="dashboardWeatherTemp">--°</div>
-                        <div class="weather-condition" id="dashboardWeatherCondition">Loading weather...</div>
-                        <div class="weather-details">
-                            <div class="weather-detail">
-                                <div id="dashboardHumidity">Humidity: <strong>--%</strong></div>
+            <!-- Dashboard Grid -->
+            <div class="dashboard-grid animate-fade-in">
+                <!-- Stats Cards -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-card-header">
+                            <div class="stat-info">
+                                <h3>Total Queries</h3>
+                                <div class="stat-value" id="queryCount">0</div>
+                                <div class="stat-trend">
+                                    <i class="fas fa-arrow-up"></i>
+                                    <span id="queryTrend">+12%</span>
+                                </div>
                             </div>
-                            <div class="weather-detail">
-                                <div id="dashboardWind">Wind: <strong>-- km/h</strong></div>
-                            </div>
-                            <div class="weather-detail">
-                                <div id="dashboardRain">Rain: <strong>--%</strong></div>
+                            <div class="stat-icon-box">
+                                <img src="images/crop-diagnosis.png" alt="Queries">
                             </div>
                         </div>
                     </div>
-                    <div class="weather-icon">
-                        <i class="fas fa-cloud" id="dashboardWeatherIcon"></i>
+
+                    <div class="stat-card">
+                        <div class="stat-card-header">
+                            <div class="stat-info">
+                                <h3>Temperature</h3>
+                                <div class="stat-value" id="currentTemp">--</div>
+                                <div class="stat-trend" id="tempTrend">
+                                    <i class="fas fa-check-circle"></i>
+                                    <span>Perfect for crops</span>
+                                </div>
+                            </div>
+                            <div class="stat-icon-box">
+                                <img src="images/weather.png" alt="Temperature">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-card-header">
+                            <div class="stat-info">
+                                <h3>Crops Monitored</h3>
+                                <div class="stat-value" id="cropsCount">0</div>
+                                <div class="stat-trend">
+                                    <i class="fas fa-arrow-up"></i>
+                                    <span>2 new this week</span>
+                                </div>
+                            </div>
+                            <div class="stat-icon-box">
+                                <img src="images/market-prices.png" alt="Crops">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-card-header">
+                            <div class="stat-info">
+                                <h3>Active Alerts</h3>
+                                <div class="stat-value" id="alertsCount">0</div>
+                                <div class="stat-trend">
+                                    <i class="fas fa-info-circle"></i>
+                                    <span id="alertsStatus">All systems normal</span>
+                                </div>
+                            </div>
+                            <div class="stat-icon-box">
+                                <img src="images/alerts.png" alt="Alerts">
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div style="text-align: center; margin-top: 1rem; opacity: 0.8; font-size: 0.9rem;">
-                    🌤️ Click for detailed weather & alerts
+
+                <!-- Weather Card -->
+                <div class="weather-card" onclick="window.location.href='weather-alerts.html'">
+                    <div class="weather-content">
+                        <div class="weather-header">
+                            <div>
+                                <div class="weather-temp-large" id="weatherTemp">--°</div>
+                                <div class="weather-condition" id="weatherCondition">Loading...</div>
+                            </div>
+                            <div>
+                                <img src="images/weather.png" alt="Weather" class="weather-icon-large">
+                            </div>
+                        </div>
+
+                        <div class="weather-details-grid">
+                            <div class="weather-detail-item">
+                                <i class="fas fa-tint"></i>
+                                <div class="weather-detail-value" id="humidity">--%</div>
+                                <div class="weather-detail-label">Humidity</div>
+                            </div>
+                            <div class="weather-detail-item">
+                                <i class="fas fa-wind"></i>
+                                <div class="weather-detail-value" id="windSpeed">-- km/h</div>
+                                <div class="weather-detail-label">Wind Speed</div>
+                            </div>
+                            <div class="weather-detail-item">
+                                <i class="fas fa-cloud-rain"></i>
+                                <div class="weather-detail-value" id="rainfall">--%</div>
+                                <div class="weather-detail-label">Rain Chance</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
+            <!-- Features Section -->
+            <div class="features-section animate-fade-in">
+                <div class="section-header">
+                    <h2 class="section-title">Quick Actions</h2>
+                </div>
 
-            <!-- Feature Sections -->
-            <div class="features-grid animate-fade-in">
-                <!-- AI Query Section -->
-                <div class="feature-card">
-                    <div class="feature-header">
-                        <div class="feature-icon"><i class="fas fa-robot"></i></div>
-                        <div>
-                            <div class="feature-title">AI Farming Assistant</div>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon-wrapper">
+                            <img src="images/ai-assistant.png" alt="AI Assistant">
                         </div>
+                        <h3 class="feature-title">AI Farming Assistant</h3>
+                        <p class="feature-description">
+                            Get instant answers to your farming questions. Ask about pest control, crop diseases,
+                            fertilizers, and best practices.
+                        </p>
+                        <button class="feature-btn" onclick="window.location.href='ask-query.html'">
+                            <span>Ask Question</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
                     </div>
-                    <p class="feature-description">
-                        Get instant answers to your farming questions. Ask about pest control, crop diseases,
-                        fertilizers, irrigation, and best practices tailored for Kerala agriculture.
-                    </p>
-                    <button class="feature-button" onclick="window.location.href='ask-query.html'">
-                        <i class="fas fa-comment-dots"></i>
-                        Ask a Question
-                    </button>
-                </div>
 
-                <!-- Crop Diagnosis Section -->
-                <div class="feature-card">
-                    <div class="feature-header">
-                        <div class="feature-icon"><i class="fas fa-camera"></i></div>
-                        <div>
-                            <div class="feature-title">Crop Diagnosis</div>
+                    <div class="feature-card">
+                        <div class="feature-icon-wrapper">
+                            <img src="images/crop-diagnosis.png" alt="Crop Diagnosis">
                         </div>
+                        <h3 class="feature-title">Crop Diagnosis</h3>
+                        <p class="feature-description">
+                            Upload crop images to detect diseases, pests, and nutrient deficiencies using advanced AI
+                            technology.
+                        </p>
+                        <button class="feature-btn" onclick="window.location.href='crop-diagnosis.html'">
+                            <span>Upload Image</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
                     </div>
-                    <p class="feature-description">
-                        Upload images of your crops to detect diseases, pests, and nutrient deficiencies using advanced
-                        AI image recognition technology.
-                    </p>
-                    <button class="feature-button coming-soon" onclick="showComingSoon()">
-                        <i class="fas fa-upload"></i>
-                        Upload Image
-                    </button>
-                </div>
-                <!-- FIXED: Market Prices Card matching your exact structure -->
-                <div class="feature-card">
-                    <div class="feature-header">
-                        <div class="feature-icon"><i class="fas fa-chart-line"></i></div>
-                        <div>
-                            <div class="feature-title">Live Market Prices</div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon-wrapper">
+                            <img src="images/market-prices.png" alt="Market Prices">
                         </div>
+                        <h3 class="feature-title">Market Prices</h3>
+                        <p class="feature-description">
+                            Access real-time vegetable prices with AI-powered recommendations and market analysis for
+                            better decisions.
+                        </p>
+                        <button class="feature-btn" onclick="window.location.href='market-prices.html'">
+                            <span>View Prices</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
                     </div>
-                    <p class="feature-description">
-                        Get real-time vegetable prices from government APIs with AI-powered selling recommendations
-                        and market analysis tailored for Kerala farmers.
-                    </p>
-                    <button class="feature-button" onclick="window.location.href='market-prices.html'">
-                        <i class="fas fa-chart-line"></i>
-                        View Market Prices
-                    </button>
-                </div>
 
-
-                <!-- Weather Section -->
-                <div class="feature-card">
-                    <div class="feature-header">
-                        <div class="feature-icon"><i class="fas fa-cloud-sun"></i></div>
-                        <div>
-                            <div class="feature-title">Weather & Alerts</div>
+                    <div class="feature-card">
+                        <div class="feature-icon-wrapper">
+                            <img src="images/weather-alert.png" alt="Weather Alerts">
                         </div>
-                    </div>
-                    <p class="feature-description">
-                        Get detailed weather forecasts, rainfall predictions, and farming-specific alerts tailored to
-                        your location and crop requirements.
-                    </p>
-                    <button class="feature-button" onclick="window.location.href='weather-alerts.html'">
-                        <i class="fas fa-cloud-sun"></i>
-                        View Weather & Alerts
-                    </button>
-                </div>
-            </div>
-
-            <!-- Recent Activity -->
-            <div class="activity-section animate-fade-in">
-                <h3 class="section-title">
-                    <i class="fas fa-clock"></i>
-                    Recent Activity
-                </h3>
-
-                <div class="activity-item">
-                    <div class="activity-icon"><i class="fas fa-question"></i></div>
-                    <div class="activity-content">
-                        <div class="activity-text">Asked about tomato pest control</div>
-                        <div class="activity-time">2 hours ago</div>
-                    </div>
-                </div>
-
-                <div class="activity-item">
-                    <div class="activity-icon"><i class="fas fa-camera"></i></div>
-                    <div class="activity-content">
-                        <div class="activity-text">Diagnosed leaf spot disease</div>
-                        <div class="activity-time">1 day ago</div>
-                    </div>
-                </div>
-
-                <div class="activity-item">
-                    <div class="activity-icon"><i class="fas fa-bell"></i></div>
-                    <div class="activity-content">
-                        <div class="activity-text">Weather alert received</div>
-                        <div class="activity-time">2 days ago</div>
-                    </div>
-                </div>
-
-                <div class="activity-item">
-                    <div class="activity-icon"><i class="fas fa-seedling"></i></div>
-                    <div class="activity-content">
-                        <div class="activity-text">Added new rice crop field</div>
-                        <div class="activity-time">3 days ago</div>
-                    </div>
-                </div>
-
-                <div class="activity-item">
-                    <div class="activity-icon"><i class="fas fa-chart-line"></i></div>
-                    <div class="activity-content">
-                        <div class="activity-text">Market price alert for coconut</div>
-                        <div class="activity-time">5 days ago</div>
+                        <h3 class="feature-title">Weather Alerts</h3>
+                        <p class="feature-description">
+                            Get detailed forecasts, rainfall predictions, and farming-specific alerts for your location
+                            and crops.
+                        </p>
+                        <button class="feature-btn" onclick="window.location.href='weather-alerts.html'">
+                            <span>View Alerts</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
     </main>
 
-    <script>// Add this function to your dashboard JavaScript
+    <script>
+        // MARKET PREVIEW
         async function loadMarketPreview() {
             try {
                 const response = await fetch('/api/market/live-prices', {
@@ -1165,7 +1254,6 @@
                 if (response.ok) {
                     const data = await response.json();
 
-                    // Update market stats on dashboard
                     const vegetableCountElement = document.getElementById('marketVegetableCount');
                     const marketCountElement = document.getElementById('marketCount');
 
@@ -1181,33 +1269,14 @@
                 }
             } catch (error) {
                 console.log('Market preview not available:', error.message);
-                // Keep default values if API fails
             }
         }
 
-        // Add this to your existing DOMContentLoaded event listener
-        document.addEventListener('DOMContentLoaded', function () {
-            // Your existing initialization code...
-            initializeTheme();
-            loadProfile();
-            updateTime();
-            setActiveNavigation();
-            initializeQueryCounter();
-            loadLiveDashboardWeather();
-
-            // ADD THIS LINE:
-            loadMarketPreview();
-
-            // Your existing intervals...
-            setInterval(updateTime, 60000);
-            setInterval(loadLiveDashboardWeather, 10 * 60 * 1000);
-        });
-
-        // Global variables
+        // GLOBAL STATE
         let isDarkMode = localStorage.getItem('darkMode') === 'true';
         let dashboardQueryCount = parseInt(localStorage.getItem('farmerQueryCount')) || 0;
 
-        // Initialize theme
+        // THEME
         function initializeTheme() {
             if (isDarkMode) {
                 document.body.classList.add('dark');
@@ -1218,7 +1287,6 @@
             }
         }
 
-        // Toggle theme
         function toggleTheme() {
             isDarkMode = !isDarkMode;
             document.body.classList.toggle('dark');
@@ -1237,18 +1305,22 @@
             localStorage.setItem('darkMode', isDarkMode);
         }
 
-        // Update time
+        // TIME
         function updateTime() {
             const now = new Date();
             const timeString = now.toLocaleTimeString('en-IN', {
                 hour: '2-digit',
                 minute: '2-digit'
             });
+
             const dateString = now.toLocaleDateString('en-IN', {
                 weekday: 'short',
                 month: 'short',
                 day: 'numeric'
             });
+
+            const timeElement = document.getElementById('currentTime');
+            if (timeElement) timeElement.textContent = timeString;
 
             const dateTimeElement = document.getElementById('currentDateTime');
             const welcomeTimeElement = document.getElementById('welcomeTime');
@@ -1257,7 +1329,7 @@
             if (welcomeTimeElement) welcomeTimeElement.textContent = timeString;
         }
 
-        // Load user profile
+        // PROFILE
         async function loadProfile() {
             try {
                 const res = await fetch('/api/user/profile', {
@@ -1270,34 +1342,29 @@
                 const user = await res.json();
                 const userInfoElement = document.getElementById('userInfo');
                 if (userInfoElement) {
+                    userInfoElement.style.display = 'block';
                     userInfoElement.innerHTML = `
-                <div style="font-weight: 500;">${user.username}</div>
-                <div style="font-size: 0.8rem; opacity: 0.8;">${user.email}</div>
-            `;
+                        <div style="font-weight: 500;">${user.username}</div>
+                        <div style="font-size: 0.8rem; opacity: 0.8;">${user.email}</div>
+                    `;
                 }
             } catch (error) {
-                // For demo purposes, show sample user
                 const userInfoElement = document.getElementById('userInfo');
                 if (userInfoElement) {
+                    userInfoElement.style.display = 'block';
                     userInfoElement.innerHTML = `
-                <div style="font-weight: 500;">Kerala Farmer</div>
-                <div style="font-size: 0.8rem; opacity: 0.8;">farmer@kerala.gov.in</div>
-            `;
+                        <div style="font-weight: 500;">KrishiMitr User</div>
+                        <div style="font-size: 0.8rem; opacity: 0.8;">farmer@example.com</div>
+                    `;
                 }
             }
         }
 
-        // ENHANCED QUERY COUNTER SYSTEM - Database + Animation
-        dashboardQueryCount = 0; // Changed from let to var to avoid redeclaration issues
-
+        // QUERY COUNTER (DB + local)
         function initializeQueryCounter() {
-            // Load initial count from database
             loadDatabaseQueryStats();
-
-            // Update display with current count
             updateQueryCountDisplay(dashboardQueryCount);
 
-            // Listen for changes from other pages
             window.addEventListener('storage', function (e) {
                 if (e.key === 'farmerQueryCount') {
                     const newCount = parseInt(e.newValue) || 0;
@@ -1306,7 +1373,6 @@
                 }
             });
 
-            // Check for updates every 30 seconds
             setInterval(() => {
                 loadDatabaseQueryStats();
 
@@ -1318,7 +1384,6 @@
             }, 30000);
         }
 
-        // NEW: Load query stats from database
         async function loadDatabaseQueryStats() {
             try {
                 const response = await fetch('/api/query/stats', {
@@ -1338,7 +1403,6 @@
 
                     console.log('✅ Database query stats loaded:', stats);
                 }
-
             } catch (error) {
                 console.error('Error loading database query stats:', error);
                 const localCount = parseInt(localStorage.getItem('farmerQueryCount')) || 0;
@@ -1347,13 +1411,12 @@
             }
         }
 
-        // Keep your existing functions exactly the same
         function updateQueryCountDisplay(count) {
             const queryCountElement = document.getElementById('queryCount');
             const queryTrendElement = document.getElementById('queryTrend');
 
             if (queryCountElement) {
-                animateNumber(queryCountElement, parseInt(queryCountElement.textContent) || 0, count);
+                animateNumber(queryCountElement, parseInt(queryCountElement.textContent) || 0, count, true);
             }
 
             if (queryTrendElement) {
@@ -1362,7 +1425,7 @@
             }
         }
 
-        function animateNumber(element, start, end) {
+        function animateNumber(element, start, end, addSuffixCelsius = false) {
             const duration = 1000;
             const startTime = performance.now();
 
@@ -1372,7 +1435,7 @@
                 const easeOut = 1 - Math.pow(1 - progress, 3);
                 const current = Math.round(start + (end - start) * easeOut);
 
-                element.textContent = current;
+                element.textContent = addSuffixCelsius ? current : current;
 
                 if (progress < 1) {
                     requestAnimationFrame(updateNumber);
@@ -1382,8 +1445,7 @@
             requestAnimationFrame(updateNumber);
         }
 
-
-        // LIVE WEATHER SYSTEM - FIXED
+        // WEATHER (live)
         async function loadLiveDashboardWeather() {
             try {
                 console.log('Loading live weather for dashboard...');
@@ -1422,28 +1484,27 @@
         function updateDashboardWeatherDisplay(data) {
             const current = data.current;
 
-            // Update weather widget using the NEW IDs
-            const tempElement = document.getElementById('dashboardWeatherTemp');
-            const conditionElement = document.getElementById('dashboardWeatherCondition');
-            const humidityElement = document.getElementById('dashboardHumidity');
-            const windElement = document.getElementById('dashboardWind');
-            const rainElement = document.getElementById('dashboardRain');
-            const iconElement = document.getElementById('dashboardWeatherIcon');
+            const tempElement = document.getElementById('weatherTemp');
+            const conditionElement = document.getElementById('weatherCondition');
+            const humidityElement = document.getElementById('humidity');
+            const windElement = document.getElementById('windSpeed');
+            const rainElement = document.getElementById('rainfall');
 
             if (tempElement) tempElement.textContent = `${current.temp}°`;
             if (conditionElement) conditionElement.textContent = getWeatherDescription(current.weather_code);
-            if (humidityElement) humidityElement.innerHTML = `Humidity: <strong>${current.humidity}%</strong>`;
-            if (windElement) windElement.innerHTML = `Wind: <strong>${current.wind_speed} km/h</strong>`;
+            if (humidityElement) humidityElement.textContent = `${current.humidity}%`;
+            if (windElement) windElement.textContent = `${current.wind_speed} km/h`;
             if (rainElement) {
                 const rainChance = current.humidity > 80 ? Math.min(current.humidity - 20, 90) : Math.max(0, current.humidity - 40);
-                rainElement.innerHTML = `Rain: <strong>${Math.round(rainChance)}%</strong>`;
+                rainElement.textContent = `${Math.round(rainChance)}%`;
             }
-            if (iconElement) iconElement.className = getWeatherIcon(current.weather_code);
 
-            // Update temperature stat card using NEW IDs
+            const bannerTemp = document.getElementById('bannerTemp');
+            const bannerWind = document.getElementById('bannerWind');
+            if (bannerTemp) bannerTemp.textContent = `${current.temp}°C`;
+            if (bannerWind) bannerWind.textContent = `${current.wind_speed} km/h`;
+
             updateTemperatureStatCard(current.temp);
-
-            // Update alerts count based on weather
             updateAlertsCount(current);
         }
 
@@ -1453,10 +1514,9 @@
 
             if (tempStatElement) {
                 animateNumber(tempStatElement, parseInt(tempStatElement.textContent) || 0, temp);
-                // Add °C after animation
                 setTimeout(() => {
                     if (tempStatElement.textContent && !tempStatElement.textContent.includes('°C')) {
-                        tempStatElement.textContent += '°C';
+                        tempStatElement.textContent = temp + '°C';
                     }
                 }, 1100);
             }
@@ -1501,26 +1561,22 @@
             }
         }
 
-        // Weather helper functions
         function getWeatherDescription(code) {
             const descriptions = {
-                0: 'Clear sky', 1: 'Mainly clear', 2: 'Partly cloudy', 3: 'Overcast',
-                45: 'Foggy', 61: 'Light rain', 63: 'Moderate rain', 65: 'Heavy rain',
+                0: 'Clear sky',
+                1: 'Mainly clear',
+                2: 'Partly cloudy',
+                3: 'Overcast',
+                45: 'Foggy',
+                61: 'Light rain',
+                63: 'Moderate rain',
+                65: 'Heavy rain',
                 95: 'Thunderstorm'
             };
             return descriptions[code] || 'Partly cloudy';
         }
 
-        function getWeatherIcon(code) {
-            const icons = {
-                0: 'fas fa-sun', 1: 'fas fa-sun', 2: 'fas fa-cloud-sun', 3: 'fas fa-cloud',
-                45: 'fas fa-smog', 61: 'fas fa-cloud-rain', 63: 'fas fa-cloud-rain',
-                65: 'fas fa-cloud-showers-heavy', 95: 'fas fa-bolt'
-            };
-            return icons[code] || 'fas fa-cloud-sun';
-        }
-
-        // Update this function in ALL pages (dashboard.html, weather-alerts.html, ask-query.html, crop-diagnosis.html)
+        // NAV ACTIVE STATE
         function setActiveNavigation() {
             const currentPage = window.location.pathname.split('/').pop() || 'dashboard.html';
             const navItems = document.querySelectorAll('.nav-item');
@@ -1538,7 +1594,6 @@
             } else if (currentPage === 'crop-diagnosis.html') {
                 activeSelector = 'a[href="crop-diagnosis.html"]';
             } else if (currentPage === 'market-prices.html') {
-                // ADD THIS LINE:
                 activeSelector = 'a[href="market-prices.html"]';
             }
 
@@ -1550,8 +1605,7 @@
             }
         }
 
-
-        // Logout function
+        // LOGOUT
         function setupLogout() {
             const logoutBtn = document.getElementById('logoutBtn');
             if (logoutBtn) {
@@ -1571,57 +1625,51 @@
             }
         }
 
-        // Coming soon notification
-        function showComingSoon() {
-            alert('🚀 This feature is coming soon! We\'re working hard to bring you the best farming tools.');
-        }
-
-        // Mobile sidebar toggle
+        // SIDEBAR (mobile)
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
             if (sidebar) {
-                sidebar.classList.toggle('open');
+                sidebar.classList.toggle('active');
             }
         }
 
-        // Close sidebar on outside click (mobile)
         function setupMobileNavigation() {
             document.addEventListener('click', function (event) {
                 const sidebar = document.getElementById('sidebar');
                 const menuBtn = document.querySelector('.mobile-menu-btn');
 
                 if (window.innerWidth <= 768 &&
-                    sidebar && sidebar.classList.contains('open') &&
+                    sidebar && sidebar.classList.contains('active') &&
                     !sidebar.contains(event.target) &&
                     (!menuBtn || !menuBtn.contains(event.target))) {
-                    sidebar.classList.remove('open');
+                    sidebar.classList.remove('active');
                 }
             });
         }
 
-        // Add notification system
+        // NOTIFICATION
         function showNotification(message, type = 'info') {
             const notification = document.createElement('div');
             notification.style.cssText = `
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        background: ${type === 'success' ? 'var(--success)' : 'var(--primary)'};
-        color: white;
-        padding: 1rem 1.5rem;
-        border-radius: 8px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        z-index: 10000;
-        animation: slideIn 0.3s ease;
-        max-width: 300px;
-        font-size: 0.9rem;
-    `;
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${type === 'success' ? 'var(--success)' : 'var(--primary)'};
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+                z-index: 10000;
+                animation: slideIn 0.3s ease;
+                max-width: 300px;
+                font-size: 0.9rem;
+            `;
             notification.innerHTML = `
-        <div style="display: flex; align-items: center; gap: 0.5rem;">
-            <i class="fas fa-${type === 'success' ? 'check-circle' : 'info-circle'}"></i>
-            <span>${message}</span>
-        </div>
-    `;
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <i class="fas fa-${type === 'success' ? 'check-circle' : 'info-circle'}"></i>
+                    <span>${message}</span>
+                </div>
+            `;
             document.body.appendChild(notification);
 
             setTimeout(() => {
@@ -1629,7 +1677,7 @@
             }, 4000);
         }
 
-        // Add enhanced card hover effects
+        // CARD HOVER ANIMATIONS
         function setupCardAnimations() {
             document.querySelectorAll('.stat-card, .feature-card').forEach(card => {
                 card.addEventListener('mouseenter', function () {
@@ -1641,183 +1689,37 @@
                 });
             });
 
-            // Add stagger animation to cards
             const animatedElements = document.querySelectorAll('.animate-fade-in');
             animatedElements.forEach((el, index) => {
                 el.style.animationDelay = `${index * 0.1}s`;
             });
         }
 
-        // MAIN INITIALIZATION
+        // MAIN INIT
         document.addEventListener('DOMContentLoaded', function () {
             console.log('Dashboard initializing...');
 
-            // Initialize core systems
             initializeTheme();
             loadProfile();
             updateTime();
             setActiveNavigation();
-
-            // Initialize live data systems
             initializeQueryCounter();
             loadLiveDashboardWeather();
-
-            // Setup interactions
+            loadMarketPreview();
             setupLogout();
             setupMobileNavigation();
             setupCardAnimations();
 
-            // Set up intervals
-            setInterval(updateTime, 60000); // Update time every minute
-            setInterval(loadLiveDashboardWeather, 10 * 60 * 1000); // Update weather every 10 minutes
+            setInterval(updateTime, 60000);
+            setInterval(loadLiveDashboardWeather, 10 * 60 * 1000);
 
-            // Welcome notification
             setTimeout(() => {
-                showNotification('Welcome to Kerala Smart Farming! 🌱', 'success');
+                showNotification('Welcome to KrishiMitr Smart Farming! 🌱', 'success');
             }, 1500);
 
             console.log('Dashboard initialized successfully');
         });
     </script>
-
-    <style>
-        @keyframes slideIn {
-            from {
-                transform: translateX(100%);
-                opacity: 0;
-            }
-
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-
-        /* Enhanced stat numbers */
-        .stat-number {
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            background-clip: text;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        /* Pulse animation for active alerts */
-        .stat-card:nth-child(4) .stat-icon {
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-
-            0%,
-            100% {
-                transform: scale(1);
-            }
-
-            50% {
-                transform: scale(1.05);
-            }
-        }
-
-        /* Smooth scrolling */
-        html {
-            scroll-behavior: smooth;
-        }
-
-        /* Custom scrollbar for sidebar */
-        .sidebar::-webkit-scrollbar {
-            width: 4px;
-        }
-
-        .sidebar::-webkit-scrollbar-track {
-            background: transparent;
-        }
-
-        .sidebar::-webkit-scrollbar-thumb {
-            background: rgba(16, 185, 129, 0.3);
-            border-radius: 2px;
-        }
-
-        .sidebar::-webkit-scrollbar-thumb:hover {
-            background: rgba(16, 185, 129, 0.5);
-        }
-
-        /* Enhanced mobile experience */
-        @media (max-width: 768px) {
-            .sidebar.open {
-                box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
-            }
-        }
-    </style>
-
-
-    <style>
-        @keyframes slideIn {
-            from {
-                transform: translateX(100%);
-                opacity: 0;
-            }
-
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-
-        /* Additional enhancements */
-        .stat-number {
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            background-clip: text;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        /* Pulse animation for active alerts */
-        .stat-card:nth-child(4) .stat-icon {
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-
-            0%,
-            100% {
-                transform: scale(1);
-            }
-
-            50% {
-                transform: scale(1.05);
-            }
-        }
-
-        /* Smooth scrolling */
-        html {
-            scroll-behavior: smooth;
-        }
-
-        /* Custom scrollbar for sidebar */
-        .sidebar::-webkit-scrollbar {
-            width: 4px;
-        }
-
-        .sidebar::-webkit-scrollbar-track {
-            background: transparent;
-        }
-
-        .sidebar::-webkit-scrollbar-thumb {
-            background: rgba(16, 185, 129, 0.3);
-            border-radius: 2px;
-        }
-
-        .sidebar::-webkit-scrollbar-thumb:hover {
-            background: rgba(16, 185, 129, 0.5);
-        }
-
-        /* Enhanced mobile experience */
-        @media (max-width: 768px) {
-            .sidebar.open {
-                box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
-            }
-        }
-    </style>
 </body>
 
 </html>
