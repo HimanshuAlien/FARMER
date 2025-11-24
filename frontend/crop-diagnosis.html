@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Crop Diagnosis - Kerala Farmer Advisory</title>
+    <title>Crop Diagnosis - KrishiMitr</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
@@ -31,8 +31,8 @@
             --sidebar-dark: #1e293b;
             --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            --gradient-4: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            --gradient-3: linear-gradient(135deg, #023f74 0%, #00f2fe 100%);
+            --gradient-4: linear-gradient(135deg, #000000 0%, #38f9d7 100%);
         }
 
         * {
@@ -55,7 +55,7 @@
             color: var(--text-dark);
         }
 
-        /* Enhanced Sidebar Navigation */
+        /* =============== SIDEBAR (same as query page) =============== */
         .sidebar {
             position: fixed;
             left: 0;
@@ -64,45 +64,76 @@
             width: 280px;
             background: var(--sidebar-light);
             z-index: 1000;
-            transition: transform 0.3s ease;
-            box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, background 0.3s ease;
+            box-shadow: 4px 0 15px rgba(15, 23, 42, 0.12);
             border-right: 1px solid var(--border-light);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
         }
 
         body.dark .sidebar {
             background: var(--sidebar-dark);
             border-right-color: var(--border-dark);
+            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.6);
         }
 
         .sidebar-header {
-            padding: 2rem 1.5rem;
-            border-bottom: 1px solid var(--border-light);
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-        }
-
-        body.dark .sidebar-header {
-            border-bottom-color: var(--border-dark);
+            padding: 1.6rem 1.5rem;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.35);
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(59, 130, 246, 0.08));
         }
 
         .logo {
-            color: white;
-            font-size: 1.4rem;
-            font-weight: 700;
             display: flex;
             align-items: center;
             gap: 0.8rem;
         }
 
-        .logo i {
-            font-size: 1.8rem;
+        .logo-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 0.9rem;
+            object-fit: contain;
+            background: #ecfdf5;
+            padding: 4px;
+        }
+
+        body.dark .logo-icon {
+            background: #022c22;
+        }
+
+        .logo-brand {
+            display: flex;
+            gap: 0.2rem;
+            align-items: baseline;
+            letter-spacing: 0.02em;
+        }
+
+        .logo-text-krishi {
+            color: var(--primary);
+            font-weight: 800;
+            font-size: 1.25rem;
+        }
+
+        .logo-text-mitr {
+            color: #020617;
+            font-weight: 800;
+            font-size: 1.25rem;
+        }
+
+        body.dark .logo-text-mitr {
+            color: #f9fafb;
         }
 
         .nav-menu {
-            padding: 2rem 0;
+            flex: 1;
+            overflow-y: auto;
+            padding: 1.5rem 0;
         }
 
         .nav-section {
-            margin-bottom: 2rem;
+            margin-bottom: 1rem;
         }
 
         .nav-section-title {
@@ -110,9 +141,9 @@
             font-size: 0.75rem;
             font-weight: 600;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: var(--text-secondary-light);
-            margin-bottom: 0.75rem;
+            letter-spacing: 0.06em;
+            color: #4b5563;
+            margin-bottom: 0.6rem;
         }
 
         body.dark .nav-section-title {
@@ -120,123 +151,145 @@
         }
 
         .nav-item {
-            display: block;
-            color: inherit;
-            text-decoration: none;
-            padding: 1rem 1.5rem;
             display: flex;
             align-items: center;
-            gap: 1rem;
-            transition: all 0.3s ease;
+            gap: 0.9rem;
+            text-decoration: none;
+            padding: 0.75rem 1.5rem;
+            color: #111827;
+            font-weight: 500;
+            transition: all 0.2s ease;
             border-left: 3px solid transparent;
-            position: relative;
+            font-size: 0.95rem;
         }
 
-        .nav-item:hover {
-            background: rgba(16, 185, 129, 0.1);
-            color: var(--primary);
-            border-left-color: var(--primary);
-        }
-
-        .nav-item.active {
-            background: rgba(16, 185, 129, 0.15);
-            color: var(--primary);
-            border-left-color: var(--primary);
-            font-weight: 600;
+        body.dark .nav-item {
+            color: #e5e7eb;
         }
 
         .nav-item i {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             width: 20px;
         }
 
+        .nav-item:hover {
+            color: var(--primary);
+            border-left-color: var(--primary);
+            background: rgba(16, 185, 129, 0.06);
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+            font-weight: 600;
+            border-left-color: var(--primary);
+            background: rgba(16, 185, 129, 0.08);
+        }
+
         .sidebar-footer {
-            position: absolute;
-            bottom: 0;
+            flex-shrink: 0;
             width: 100%;
-            padding: 1.5rem;
+            padding: 1.2rem 1.5rem 1.5rem;
             border-top: 1px solid var(--border-light);
+            background: var(--sidebar-light);
+            display: flex;
+            flex-direction: column;
+            gap: 0.7rem;
         }
 
         body.dark .sidebar-footer {
+            background: var(--sidebar-dark);
             border-top-color: var(--border-dark);
         }
 
         .user-info {
             color: var(--text-secondary-light);
-            font-size: 0.9rem;
-            margin-bottom: 1rem;
+            font-size: 0.85rem;
         }
 
         body.dark .user-info {
             color: var(--text-secondary-dark);
         }
 
-        .theme-toggle-sidebar {
+        .theme-toggle-sidebar,
+        .logout-btn {
             width: 100%;
-            background: rgba(16, 185, 129, 0.1);
-            color: var(--primary);
-            border: 1px solid rgba(16, 185, 129, 0.2);
-            padding: 0.8rem;
-            border-radius: 8px;
-            font-size: 0.9rem;
+            border-radius: 999px;
+            padding: 0.65rem 0.8rem;
+            font-size: 0.8rem;
             cursor: pointer;
-            transition: all 0.3s ease;
+            border: 1px solid transparent;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 0.5rem;
-            margin-bottom: 1rem;
+            gap: 0.45rem;
+            transition: all 0.2s ease;
+            font-weight: 500;
+        }
+
+        .theme-toggle-sidebar {
+            background: rgba(16, 185, 129, 0.06);
+            color: var(--primary);
+            border-color: rgba(16, 185, 129, 0.25);
         }
 
         .theme-toggle-sidebar:hover {
-            background: rgba(16, 185, 129, 0.2);
+            background: rgba(16, 185, 129, 0.12);
         }
 
         .logout-btn {
-            width: 100%;
-            background: rgba(239, 68, 68, 0.1);
+            background: rgba(239, 68, 68, 0.06);
             color: var(--danger);
-            border: 1px solid rgba(239, 68, 68, 0.2);
-            padding: 0.8rem;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
+            border-color: rgba(239, 68, 68, 0.25);
         }
 
         .logout-btn:hover {
-            background: rgba(239, 68, 68, 0.2);
+            background: rgba(239, 68, 68, 0.12);
         }
 
-        /* Main Content */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 260px;
+                transform: translateX(-100%);
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0 !important;
+                width: 100% !important;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .sidebar {
+                width: 240px;
+            }
+        }
+
+        /* =============== MAIN CONTENT + TOPBAR (same as query page) =============== */
         .main-content {
             margin-left: 280px;
             min-height: 100vh;
-            background: var(--bg-light);
             transition: margin-left 0.3s ease;
+            background: var(--bg-light);
         }
 
         body.dark .main-content {
             background: var(--bg-dark);
         }
 
-        /* Simple Top Bar */
         .simple-topbar {
             background: var(--card-light);
-            padding: 1rem 2rem;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            padding: 1rem 2.2rem;
             border-bottom: 1px solid var(--border-light);
             display: flex;
             justify-content: space-between;
             align-items: center;
             position: sticky;
             top: 0;
-            z-index: 100;
+            z-index: 50;
         }
 
         body.dark .simple-topbar {
@@ -247,14 +300,29 @@
         .topbar-left {
             display: flex;
             align-items: center;
-            gap: 1rem;
+            gap: 0.9rem;
+        }
+
+        .topbar-logo {
+            width: 30px;
+            height: 30px;
+            border-radius: 0.7rem;
+            object-fit: contain;
+            background: #ecfdf5;
+            padding: 3px;
+        }
+
+        body.dark .topbar-logo {
+            background: #022c22;
         }
 
         .simple-title {
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             font-weight: 700;
             color: var(--text-light);
-            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
         }
 
         body.dark .simple-title {
@@ -264,17 +332,26 @@
         .topbar-right {
             display: flex;
             align-items: center;
-            gap: 1rem;
+            gap: 0.75rem;
         }
 
         .status-badge {
-            background: rgba(16, 185, 129, 0.1);
-            color: var(--primary);
-            padding: 0.4rem 0.8rem;
-            border-radius: 20px;
+            background: rgba(22, 163, 74, 0.08);
+            color: #16a34a;
+            padding: 0.35rem 0.9rem;
+            border-radius: 999px;
             font-size: 0.8rem;
             font-weight: 600;
-            border: 1px solid rgba(16, 185, 129, 0.2);
+            border: 1px solid rgba(22, 163, 74, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 0.45rem;
+        }
+
+        body.dark .status-badge {
+            background: rgba(22, 163, 74, 0.18);
+            color: #bbf7d0;
+            border-color: rgba(22, 163, 74, 0.4);
         }
 
         .mobile-menu-btn {
@@ -282,79 +359,370 @@
             background: var(--primary);
             color: white;
             border: none;
-            padding: 0.5rem;
-            border-radius: 8px;
+            padding: 0.5rem 0.7rem;
+            border-radius: 0.6rem;
             cursor: pointer;
-            font-size: 1.1rem;
+            font-size: 1rem;
         }
 
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: #22c55e;
+            box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.25);
+            animation: pulse 1.8s infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+
+            50% {
+                transform: scale(0.9);
+                opacity: 0.7;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .simple-topbar {
+                padding: 0.9rem 1rem;
+            }
+
+            .simple-title {
+                font-size: 1.1rem;
+            }
+
+            .mobile-menu-btn {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+            }
+        }
+
+        /* =============== PAGE CONTENT (same as before) =============== */
         .content-area {
-            padding: 3rem 2rem;
+            padding: 2rem 2.25rem 3rem;
             max-width: 1200px;
             margin: 0 auto;
         }
 
-        /* Upload Section */
+        /* =============== HERO STRIP (NEW DESIGN) =============== */
+        .diagnosis-hero {
+            margin-bottom: 1.8rem;
+            display: flex;
+            justify-content: space-between;
+            gap: 1.5rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .diagnosis-hero-main {
+            flex: 1;
+            min-width: 240px;
+        }
+
+        .diagnosis-hero-title {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .diagnosis-hero-title h2 {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--text-light);
+        }
+
+        body.dark .diagnosis-hero-title h2 {
+            color: var(--text-dark);
+        }
+
+        .hero-badge {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.6rem;
+            border-radius: 999px;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.25);
+            color: var(--primary-dark);
+            font-weight: 600;
+        }
+
+        body.dark .hero-badge {
+            background: rgba(16, 185, 129, 0.2);
+            color: #bbf7d0;
+            border-color: rgba(16, 185, 129, 0.5);
+        }
+
+        .diagnosis-hero-subtitle {
+            margin-top: 0.25rem;
+            color: var(--text-secondary-light);
+            font-size: 0.9rem;
+        }
+
+        body.dark .diagnosis-hero-subtitle {
+            color: var(--text-secondary-dark);
+        }
+
+        .hero-langs {
+            margin-top: 0.5rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+        }
+
+        .hero-lang-pill {
+            font-size: 0.75rem;
+            padding: 0.2rem 0.55rem;
+            border-radius: 999px;
+            border: 1px dashed var(--border-light);
+            color: var(--text-secondary-light);
+            background: rgba(248, 250, 252, 0.8);
+        }
+
+        body.dark .hero-lang-pill {
+            border-color: var(--border-dark);
+            color: var(--text-secondary-dark);
+            background: rgba(15, 23, 42, 0.9);
+        }
+
+        .diagnosis-steps-card {
+            min-width: 240px;
+            max-width: 320px;
+            background: var(--card-light);
+            border-radius: 16px;
+            padding: 0.9rem 1rem;
+            border: 1px solid var(--border-light);
+            box-shadow: 0 10px 25px rgba(15, 23, 42, 0.08);
+        }
+
+        body.dark .diagnosis-steps-card {
+            background: var(--card-dark);
+            border-color: var(--border-dark);
+            box-shadow: 0 10px 25px rgba(15, 23, 42, 0.4);
+        }
+
+        .steps-title {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--text-secondary-light);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+
+        body.dark .steps-title {
+            color: var(--text-secondary-dark);
+        }
+
+        .steps-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .step-row {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary-light);
+        }
+
+        body.dark .step-row {
+            color: var(--text-secondary-dark);
+        }
+
+        .step-icon {
+            width: 22px;
+            height: 22px;
+            border-radius: 999px;
+            background: rgba(16, 185, 129, 0.12);
+            border: 1px solid rgba(16, 185, 129, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            color: var(--primary-dark);
+        }
+
+        /* =============== MAIN DIAGNOSIS LAYOUT =============== */
         .upload-section {
             background: var(--card-light);
             border-radius: 24px;
-            padding: 3rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 1.8rem;
             border: 1px solid var(--border-light);
-            margin-bottom: 3rem;
+            box-shadow: 0 18px 45px rgba(15, 23, 42, 0.08);
         }
 
         body.dark .upload-section {
             background: var(--card-dark);
             border-color: var(--border-dark);
+            box-shadow: 0 18px 45px rgba(15, 23, 42, 0.6);
         }
 
-        .upload-header {
-            text-align: center;
-            margin-bottom: 3rem;
+        .diagnosis-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.2fr);
+            gap: 1.7rem;
+            align-items: stretch;
         }
 
-        .upload-header h2 {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--text-light);
-            margin-bottom: 1rem;
+        /* LEFT: 9:16 image + tips */
+        .diagnosis-left {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
         }
 
-        body.dark .upload-header h2 {
-            color: var(--text-dark);
+        .hero-image-card {
+            border-radius: 18px;
+            overflow: hidden;
+            background: #020617;
+            position: relative;
+            min-height: 360px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        .upload-header p {
+        body.dark .hero-image-card {
+            background: #020617;
+        }
+
+        .hero-image-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            aspect-ratio: 9/16;
+            display: block;
+        }
+
+        .hero-image-label {
+            position: absolute;
+            bottom: 0.85rem;
+            left: 0.85rem;
+            padding: 0.45rem 0.7rem;
+            border-radius: 999px;
+            background: rgba(15, 23, 42, 0.8);
+            color: #e5e7eb;
+            font-size: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .hero-image-label i {
+            color: var(--primary);
+        }
+
+        .hero-tips-card {
+            border-radius: 16px;
+            padding: 0.9rem 1rem;
+            background: var(--card-light);
+            border: 1px dashed var(--border-light);
             color: var(--text-secondary-light);
-            font-size: 1.1rem;
+            font-size: 0.8rem;
         }
 
-        body.dark .upload-header p {
+        body.dark .hero-tips-card {
+            background: var(--card-dark);
+            border-color: var(--border-dark);
             color: var(--text-secondary-dark);
         }
 
-        .upload-form {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 3rem;
-            align-items: start;
+        .hero-tips-card strong {
+            color: var(--primary-dark);
+            font-weight: 700;
         }
 
-        /* Image Upload Area */
+        .hero-tips-card ul {
+            list-style: none;
+            margin-top: 0.35rem;
+        }
+
+        .hero-tips-card li {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            margin-top: 0.15rem;
+        }
+
+        .hero-tips-card li i {
+            color: var(--primary);
+            font-size: 0.75rem;
+        }
+
+        /* RIGHT: upload + form cards */
+        .diagnosis-right {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .panel-card {
+            border-radius: 18px;
+            padding: 1.1rem 1.2rem;
+            border: 1px solid var(--border-light);
+            background: var(--card-light);
+        }
+
+        body.dark .panel-card {
+            background: var(--card-dark);
+            border-color: var(--border-dark);
+        }
+
+        .panel-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 0.75rem;
+        }
+
+        .panel-header h3 {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--text-light);
+        }
+
+        body.dark .panel-header h3 {
+            color: var(--text-dark);
+        }
+
+        .panel-tag {
+            font-size: 0.7rem;
+            padding: 0.2rem 0.55rem;
+            border-radius: 999px;
+            background: rgba(248, 250, 252, 0.9);
+            border: 1px solid var(--border-light);
+            color: var(--text-secondary-light);
+        }
+
+        body.dark .panel-tag {
+            background: rgba(15, 23, 42, 0.95);
+            border-color: var(--border-dark);
+            color: var(--text-secondary-dark);
+        }
+
+        /* Upload zone inside panel */
         .image-upload-area {
             position: relative;
         }
 
         .upload-zone {
-            border: 3px dashed var(--border-light);
-            border-radius: 20px;
-            padding: 3rem 2rem;
+            border: 2px dashed var(--border-light);
+            border-radius: 14px;
+            padding: 1.4rem 1.2rem;
             text-align: center;
             cursor: pointer;
-            transition: all 0.3s ease;
-            background: var(--bg-light);
-            min-height: 300px;
+            transition: all 0.25s ease;
+            background: rgba(248, 250, 252, 0.9);
+            min-height: 165px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -362,49 +730,40 @@
         }
 
         body.dark .upload-zone {
+            background: rgba(15, 23, 42, 0.95);
             border-color: var(--border-dark);
-            background: var(--bg-dark);
         }
 
         .upload-zone:hover,
         .upload-zone.drag-over {
             border-color: var(--primary);
             background: rgba(16, 185, 129, 0.05);
-            transform: translateY(-2px);
-        }
-
-        .upload-zone.has-image {
-            padding: 1rem;
-            min-height: auto;
+            transform: translateY(-1px);
         }
 
         .upload-icon {
-            font-size: 4rem;
+            font-size: 2.1rem;
             color: var(--text-secondary-light);
-            margin-bottom: 1rem;
+            margin-bottom: 0.4rem;
         }
 
         body.dark .upload-icon {
             color: var(--text-secondary-dark);
         }
 
-        .upload-zone.drag-over .upload-icon {
-            color: var(--primary);
-        }
-
         .upload-text {
-            color: var(--text-secondary-light);
-            font-size: 1.1rem;
-            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            color: var(--text-light);
+            margin-bottom: 0.15rem;
         }
 
         body.dark .upload-text {
-            color: var(--text-secondary-dark);
+            color: var(--text-dark);
         }
 
         .upload-subtext {
+            font-size: 0.75rem;
             color: var(--text-secondary-light);
-            font-size: 0.9rem;
         }
 
         body.dark .upload-subtext {
@@ -417,46 +776,54 @@
 
         .preview-image {
             max-width: 100%;
-            max-height: 400px;
-            border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            max-height: 270px;
+            border-radius: 12px;
             display: none;
+        }
+
+        .upload-zone.has-image {
+            padding: 0.8rem;
         }
 
         .remove-image {
             position: absolute;
-            top: 10px;
-            right: 10px;
-            background: var(--danger);
-            color: white;
+            top: 8px;
+            right: 8px;
+            width: 32px;
+            height: 32px;
+            border-radius: 999px;
             border: none;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
+            background: var(--danger);
+            color: #f9fafb;
             cursor: pointer;
             display: none;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+            font-size: 0.9rem;
+            box-shadow: 0 8px 22px rgba(239, 68, 68, 0.6);
         }
 
-        /* Form Fields */
         .form-fields {
-            display: flex;
-            flex-direction: column;
-            gap: 2rem;
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 0.9rem 0.9rem;
+            margin-top: 0.5rem;
         }
 
         .field-group {
             display: flex;
             flex-direction: column;
-            gap: 0.5rem;
+            gap: 0.35rem;
+        }
+
+        .field-group.full {
+            grid-column: 1 / -1;
         }
 
         .field-label {
+            font-size: 0.85rem;
             font-weight: 600;
             color: var(--text-light);
-            font-size: 1rem;
         }
 
         body.dark .field-label {
@@ -466,14 +833,14 @@
         .field-input,
         .field-select,
         .field-textarea {
-            padding: 1rem;
-            border: 2px solid var(--border-light);
-            border-radius: 12px;
-            font-size: 1rem;
-            transition: all 0.2s ease;
-            font-family: 'Inter', sans-serif;
+            padding: 0.7rem 0.75rem;
+            border-radius: 10px;
+            border: 1px solid var(--border-light);
             background: var(--card-light);
             color: var(--text-light);
+            font-size: 0.85rem;
+            font-family: 'Inter', sans-serif;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
         }
 
         body.dark .field-input,
@@ -484,70 +851,129 @@
             color: var(--text-dark);
         }
 
+        .field-textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+
+        .field-input::placeholder,
+        .field-textarea::placeholder {
+            color: var(--text-secondary-light);
+        }
+
+        body.dark .field-input::placeholder,
+        body.dark .field-textarea::placeholder {
+            color: var(--text-secondary-dark);
+        }
+
         .field-input:focus,
         .field-select:focus,
         .field-textarea:focus {
             outline: none;
             border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
-        }
-
-        .field-textarea {
-            resize: vertical;
-            min-height: 100px;
+            box-shadow: 0 0 0 1px rgba(16, 185, 129, 0.6);
         }
 
         .analyze-btn {
-            background: var(--gradient-4);
-            color: white;
+            margin-top: 0.6rem;
+            width: 100%;
+            border-radius: 999px;
             border: none;
-            padding: 1.2rem 2rem;
-            border-radius: 16px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
+            padding: 0.8rem 1.2rem;
+            background: var(--gradient-4);
+            color: #f9fafb;
+            font-size: 0.95rem;
+            font-weight: 700;
+            display: inline-flex;
             align-items: center;
             justify-content: center;
             gap: 0.5rem;
-            box-shadow: 0 10px 30px rgba(67, 233, 123, 0.3);
+            cursor: pointer;
+            box-shadow: 0 12px 28px rgba(16, 185, 129, 0.35);
+            transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.2s ease;
+        }
+
+        .analyze-btn i {
+            font-size: 1rem;
         }
 
         .analyze-btn:hover:not(:disabled) {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 40px rgba(67, 233, 123, 0.4);
+            transform: translateY(-1px);
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+        }
+
+        .analyze-btn:active:not(:disabled) {
+            transform: translateY(0);
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
         }
 
         .analyze-btn:disabled {
-            background: #94a3b8;
-            cursor: not-allowed;
-            transform: none;
+            background: #16181d;
             box-shadow: none;
+            cursor: not-allowed;
         }
 
-        /* Enhanced Results Section */
-        .results-section {
-            background: var(--card-light);
-            border-radius: 24px;
-            padding: 3rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-            border: 1px solid var(--border-light);
+        /* =============== LOADING & RESULTS =============== */
+        .loading {
             display: none;
+            text-align: center;
+            padding: 2.4rem 1.4rem;
+            background: var(--card-light);
+            border-radius: 20px;
+            border: 1px solid var(--border-light);
+            margin-top: 1.8rem;
+            color: var(--text-light);
+            box-shadow: 0 10px 25px rgba(15, 23, 42, 0.08);
+        }
+
+        body.dark .loading {
+            background: var(--card-dark);
+            border-color: var(--border-dark);
+            color: var(--text-dark);
+            box-shadow: 0 10px 25px rgba(15, 23, 42, 0.5);
+        }
+
+        .loading-spinner {
+            width: 44px;
+            height: 44px;
+            border-radius: 999px;
+            border: 4px solid rgba(148, 163, 184, 0.6);
+            border-top-color: var(--primary);
+            margin: 0 auto 1rem;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .results-section {
+            display: none;
+            background: var(--card-light);
+            border-radius: 22px;
+            border: 1px solid var(--border-light);
+            margin-top: 1.9rem;
+            padding: 1.8rem 1.6rem 2rem;
+            color: var(--text-light);
+            box-shadow: 0 16px 40px rgba(15, 23, 42, 0.1);
         }
 
         body.dark .results-section {
             background: var(--card-dark);
             border-color: var(--border-dark);
+            color: var(--text-dark);
+            box-shadow: 0 16px 40px rgba(15, 23, 42, 0.6);
         }
 
         .results-header {
             display: flex;
             align-items: center;
-            gap: 1rem;
-            margin-bottom: 3rem;
-            padding-bottom: 1rem;
-            border-bottom: 2px solid var(--border-light);
+            gap: 0.9rem;
+            padding-bottom: 0.9rem;
+            border-bottom: 1px solid var(--border-light);
+            margin-bottom: 1.4rem;
         }
 
         body.dark .results-header {
@@ -555,57 +981,85 @@
         }
 
         .result-icon {
-            width: 60px;
-            height: 60px;
-            background: var(--gradient-4);
+            width: 50px;
+            height: 50px;
             border-radius: 16px;
+            background: var(--gradient-4);
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
-            font-size: 1.8rem;
+            color: #f9fafb;
+            font-size: 1.4rem;
+            box-shadow: 0 12px 30px rgba(16, 185, 129, 0.45);
+        }
+
+        .results-header h3 {
+            font-size: 1.2rem;
+            font-weight: 800;
+        }
+
+        .results-header p {
+            font-size: 0.85rem;
+            color: var(--text-secondary-light);
+        }
+
+        body.dark .results-header p {
+            color: var(--text-secondary-dark);
         }
 
         .results-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 2rem;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 1rem;
+        }
+
+        @media (max-width: 1024px) {
+            .results-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 720px) {
+            .results-grid {
+                grid-template-columns: 1fr;
+            }
         }
 
         .result-card {
-            background: var(--bg-light);
             border-radius: 16px;
-            padding: 2rem;
+            padding: 1.1rem 1.1rem 1.2rem;
+            background: var(--card-light);
             border: 1px solid var(--border-light);
-            transition: all 0.3s ease;
+            transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
         }
 
         body.dark .result-card {
-            background: var(--bg-dark);
+            background: var(--card-dark);
             border-color: var(--border-dark);
         }
 
         .result-card:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 14px 35px rgba(15, 23, 42, 0.16);
+            border-color: var(--primary);
         }
 
         .result-card-header {
             display: flex;
             align-items: center;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
+            gap: 0.7rem;
+            margin-bottom: 0.7rem;
         }
 
         .result-card-icon {
-            width: 40px;
-            height: 40px;
+            width: 32px;
+            height: 32px;
             border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.2rem;
-            color: white;
+            color: #f9fafb;
+            font-size: 1rem;
         }
 
         .diagnosis-icon {
@@ -621,62 +1075,41 @@
         }
 
         .result-card-title {
-            font-size: 1.2rem;
+            font-size: 0.95rem;
             font-weight: 700;
-            color: var(--text-light);
-        }
-
-        body.dark .result-card-title {
-            color: var(--text-dark);
         }
 
         .result-card-content {
-            color: var(--text-light);
-            line-height: 1.8;
-        }
-
-        body.dark .result-card-content {
-            color: var(--text-dark);
-        }
-
-        .result-card-content h4 {
-            font-weight: 700;
-            color: var(--primary);
-            margin: 1rem 0 0.5rem 0;
-            font-size: 1rem;
+            font-size: 0.85rem;
         }
 
         .result-card-content ul {
             margin-left: 1rem;
-            margin-top: 0.5rem;
+            margin-top: 0.35rem;
         }
 
         .result-card-content li {
-            margin-bottom: 0.5rem;
-        }
-
-        .result-card-content strong {
-            color: var(--primary);
-            font-weight: 700;
+            margin-bottom: 0.35rem;
         }
 
         .severity-badge {
             display: inline-block;
-            padding: 0.3rem 0.8rem;
-            border-radius: 15px;
-            font-size: 0.8rem;
+            margin-top: 0.6rem;
+            padding: 0.25rem 0.65rem;
+            border-radius: 999px;
+            font-size: 0.7rem;
             font-weight: 700;
             text-transform: uppercase;
-            margin-top: 1rem;
+            letter-spacing: 0.06em;
         }
 
         .severity-mild {
-            background: rgba(34, 197, 94, 0.2);
+            background: rgba(34, 197, 94, 0.18);
             color: #16a34a;
         }
 
         .severity-moderate {
-            background: rgba(245, 158, 11, 0.2);
+            background: rgba(245, 158, 11, 0.18);
             color: #d97706;
         }
 
@@ -685,97 +1118,43 @@
             color: #dc2626;
         }
 
-        /* Loading Animation */
-        .loading {
-            display: none;
-            text-align: center;
-            padding: 3rem;
-            background: var(--card-light);
-            border-radius: 24px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-            border: 1px solid var(--border-light);
-        }
-
-        body.dark .loading {
-            background: var(--card-dark);
-            border-color: var(--border-dark);
-        }
-
-        .loading-spinner {
-            width: 50px;
-            height: 50px;
-            border: 4px solid var(--border-light);
-            border-top: 4px solid var(--primary);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 1rem;
-        }
-
-        body.dark .loading-spinner {
-            border-color: var(--border-dark);
-            border-top-color: var(--primary);
-        }
-
-        @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-
-            100% {
-                transform: rotate(360deg);
+        /* =============== RESPONSIVE =============== */
+        @media (max-width: 1024px) {
+            .diagnosis-grid {
+                grid-template-columns: minmax(0, 1fr);
             }
         }
 
-        /* Mobile Responsive */
         @media (max-width: 768px) {
-            .sidebar {
-                transform: translateX(-100%);
+            .content-area {
+                padding: 1.3rem 1rem 2.2rem;
             }
 
-            .sidebar.open {
-                transform: translateX(0);
+            .diagnosis-hero {
+                align-items: flex-start;
             }
+        }
 
-            .main-content {
-                margin-left: 0;
-            }
-
-            .mobile-menu-btn {
-                display: inline-flex;
-                align-items: center;
-                justify-content: center;
-            }
-
-            .upload-form {
-                grid-template-columns: 1fr;
-                gap: 2rem;
-            }
-
-            .results-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .simple-topbar {
-                padding: 1rem;
-            }
-
-            .simple-title {
-                font-size: 1.2rem;
+        @media (max-width: 480px) {
+            .diagnosis-grid {
+                gap: 1.2rem;
             }
         }
     </style>
 </head>
 
 <body>
-    <!-- Enhanced Sidebar Navigation -->
+    <!-- Sidebar Navigation -->
     <nav class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <div class="logo">
-                <i class="fas fa-leaf"></i>
-                <span>Kerala Farmer</span>
+                <img src="images/logo.png" alt="KrishiMitr Logo" class="logo-icon" />
+                <div class="logo-brand">
+                    <span class="logo-text-krishi">Krishi</span>
+                    <span class="logo-text-mitr">Mitr</span>
+                </div>
             </div>
         </div>
-
         <div class="nav-menu">
             <div class="nav-section">
                 <div class="nav-section-title">Main Menu</div>
@@ -791,13 +1170,21 @@
 
             <div class="nav-section">
                 <div class="nav-section-title">Tools</div>
-                <a href="crop-diagnosis.html" class="nav-item">
+                <a href="crop-diagnosis.html" class="nav-item active">
                     <i class="fas fa-camera"></i>
                     <span>Crop Diagnosis</span>
                 </a>
                 <a href="weather-alerts.html" class="nav-item">
                     <i class="fas fa-cloud-sun"></i>
                     <span>Weather & Alerts</span>
+                </a>
+                <a href="Schemes.html" class="nav-item">
+                    <i class="fa-solid fa-binoculars"></i>
+                    <span>Govt Schemes</span>
+                </a>
+                <a href="smart-farming.html" class="nav-item">
+                    <i class="fa-solid fa-briefcase"></i>
+                    <span>Agri Swasthya</span>
                 </a>
                 <a href="market-prices.html" class="nav-item">
                     <i class="fas fa-chart-line"></i>
@@ -811,17 +1198,14 @@
                     <i class="fas fa-users"></i>
                     <span>Community</span>
                 </a>
-
                 <a href="profile.html" class="nav-item">
-                    <i class="fas fa-users"></i>
+                    <i class="fas fa-user"></i>
                     <span>Profile</span>
                 </a>
             </div>
         </div>
-
-
         <div class="sidebar-footer">
-            <div id="userInfo" class="user-info">Loading user...</div>
+            <div id="userInfo" class="user-info"></div>
             <button class="theme-toggle-sidebar" onclick="toggleTheme()">
                 <i class="fas fa-sun"></i>
                 <span>Toggle Theme</span>
@@ -835,83 +1219,158 @@
 
     <!-- Main Content -->
     <main class="main-content">
-        <!-- Simple Top Bar -->
+        <!-- Top Bar -->
         <div class="simple-topbar">
             <div class="topbar-left">
                 <button class="mobile-menu-btn" onclick="toggleSidebar()">
                     <i class="fas fa-bars"></i>
                 </button>
-                <h1 class="simple-title">📸 Crop Diagnosis</h1>
+                <h1 class="simple-title">
+                    <img src="images/crop-diagnosis.png" alt="Crop Diagnosis" class="topbar-logo">
+                    <span>Crop Diagnosis</span>
+                </h1>
             </div>
             <div class="topbar-right">
-                <span class="status-badge">🟢 AI Ready</span>
+                <span class="status-badge">
+                    <span class="status-dot"></span>
+                    <span>AI ready for your field</span>
+                </span>
             </div>
         </div>
 
         <div class="content-area">
-            <!-- Upload Section -->
-            <div class="upload-section">
-                <div class="upload-header">
-                    <h2>Upload Crop Image for AI Analysis</h2>
-                    <p>Take a clear photo of the affected crop part and get instant AI-powered diagnosis with treatment
-                        recommendations</p>
+            <!-- NEW hero strip -->
+            <div class="diagnosis-hero">
+                <div class="diagnosis-hero-main">
+                    <div class="diagnosis-hero-title">
+                        <h2>Crop Diagnosis</h2>
+                        <span class="hero-badge">For Kerala farmers</span>
+                    </div>
+                    <p class="diagnosis-hero-subtitle">
+                        Upload a clear image of the affected plant part, add a few details and get AI-guided diagnosis.
+                    </p>
+                    <div class="hero-langs">
+                        <div class="hero-lang-pill">English</div>
+                        <div class="hero-lang-pill">മലയാളം (Malayalam)</div>
+                        <div class="hero-lang-pill">हिन्दी (Hindi)</div>
+                    </div>
                 </div>
 
-                <form id="diagnosisForm" class="upload-form">
-                    <!-- Image Upload Area -->
-                    <div class="image-upload-area">
-                        <div class="upload-zone" id="uploadZone">
-                            <div class="upload-icon">
-                                <i class="fas fa-cloud-upload-alt"></i>
-                            </div>
-                            <div class="upload-text">
-                                Drop your crop image here or click to browse
-                            </div>
-                            <div class="upload-subtext">
-                                Supports JPEG, PNG, WebP (Max 10MB)
+                <div class="diagnosis-steps-card">
+                    <div class="steps-title">How this works</div>
+                    <div class="steps-list">
+                        <div class="step-row">
+                            <div class="step-icon"><i class="fas fa-image"></i></div>
+                            <span>Upload clear photo of leaf / fruit / stem</span>
+                        </div>
+                        <div class="step-row">
+                            <div class="step-icon"><i class="fas fa-clipboard-list"></i></div>
+                            <span>Fill crop, location & short symptom notes</span>
+                        </div>
+                        <div class="step-row">
+                            <div class="step-icon"><i class="fas fa-seedling"></i></div>
+                            <span>Get diagnosis, field actions & prevention</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Diagnosis Shell -->
+            <div class="upload-section">
+                <form id="diagnosisForm" class="diagnosis-grid">
+                    <!-- LEFT: 9:16 image from folder -->
+                    <div class="diagnosis-left">
+                        <div class="hero-image-card">
+                            <!-- Replace with your 9:16 showcase image -->
+                            <img src="images/doctor.png" alt="Crop health showcase">
+                            <div class="hero-image-label">
+                                <i class="fas fa-circle-info"></i>
+                                <span>Sample view – farmer’s field image</span>
                             </div>
                         </div>
-                        <input type="file" id="fileInput" class="file-input" accept="image/*" required>
-                        <img id="previewImage" class="preview-image" alt="Preview">
-                        <button type="button" id="removeImage" class="remove-image">
-                            <i class="fas fa-times"></i>
-                        </button>
+
+                        <div class="hero-tips-card">
+                            <strong>For best AI diagnosis:</strong>
+                            <ul>
+                                <li><i class="fas fa-check"></i> Take photo in daylight (no harsh flash glare)</li>
+                                <li><i class="fas fa-check"></i> Keep 1–3 affected leaves or fruits clearly visible</li>
+                                <li><i class="fas fa-check"></i> Avoid very far / blurred images</li>
+                            </ul>
+                        </div>
                     </div>
 
-                    <!-- Form Fields -->
-                    <div class="form-fields">
-                        <div class="field-group">
-                            <label class="field-label">Crop Type</label>
-                            <select id="cropType" class="field-select">
-                                <option value="">Select crop type</option>
-                                <option value="rice">Rice</option>
-                                <option value="tomato">Tomato</option>
-                                <option value="pepper">Pepper</option>
-                                <option value="coconut">Coconut</option>
-                                <option value="banana">Banana</option>
-                                <option value="cardamom">Cardamom</option>
-                                <option value="rubber">Rubber</option>
-                                <option value="tea">Tea</option>
-                                <option value="coffee">Coffee</option>
-                                <option value="other">Other</option>
-                            </select>
+                    <!-- RIGHT: upload + inputs -->
+                    <div class="diagnosis-right">
+                        <!-- Upload Panel -->
+                        <div class="panel-card">
+                            <div class="panel-header">
+                                <h3>1. Upload affected crop image</h3>
+                                <span class="panel-tag">Image required</span>
+                            </div>
+
+                            <div class="image-upload-area">
+                                <div class="upload-zone" id="uploadZone">
+                                    <div class="upload-icon">
+                                        <i class="fas fa-cloud-upload-alt"></i>
+                                    </div>
+                                    <div class="upload-text">
+                                        Click to select or drop image here
+                                    </div>
+                                    <div class="upload-subtext">
+                                        Supports JPEG, PNG, WebP • Max 10 MB
+                                    </div>
+                                </div>
+                                <input type="file" id="fileInput" class="file-input" accept="image/*" required>
+                                <img id="previewImage" class="preview-image" alt="Preview">
+                                <button type="button" id="removeImage" class="remove-image">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
                         </div>
 
-                        <div class="field-group">
-                            <label class="field-label">Location</label>
-                            <input type="text" id="location" class="field-input" placeholder="e.g., Wayanad, Kerala">
-                        </div>
+                        <!-- Details Panel -->
+                        <div class="panel-card">
+                            <div class="panel-header">
+                                <h3>2. Field details</h3>
+                                <span class="panel-tag">Improves accuracy</span>
+                            </div>
 
-                        <div class="field-group">
-                            <label class="field-label">Observed Symptoms</label>
-                            <textarea id="symptoms" class="field-textarea"
-                                placeholder="Describe what you see: yellowing leaves, spots, wilting, etc."></textarea>
-                        </div>
+                            <div class="form-fields">
+                                <div class="field-group">
+                                    <label class="field-label">Crop type</label>
+                                    <select id="cropType" class="field-select">
+                                        <option value="">Select crop</option>
+                                        <option value="rice">Rice</option>
+                                        <option value="tomato">Tomato</option>
+                                        <option value="pepper">Chilli / Capsicum</option>
+                                        <option value="coconut">Coconut</option>
+                                        <option value="banana">Banana</option>
+                                        <option value="cardamom">Cardamom</option>
+                                        <option value="rubber">Rubber</option>
+                                        <option value="tea">Tea</option>
+                                        <option value="coffee">Coffee</option>
+                                        <option value="other">Other</option>
+                                    </select>
+                                </div>
 
-                        <button type="submit" id="analyzeBtn" class="analyze-btn">
-                            <i class="fas fa-microscope"></i>
-                            Analyze Crop with AI
-                        </button>
+                                <div class="field-group">
+                                    <label class="field-label">Location</label>
+                                    <input type="text" id="location" class="field-input"
+                                        placeholder="e.g., Wayanad, Kerala">
+                                </div>
+
+                                <div class="field-group full">
+                                    <label class="field-label">Observed symptoms</label>
+                                    <textarea id="symptoms" class="field-textarea"
+                                        placeholder="Short notes: yellowing, brown spots, dry tips, wilting, insects visible, etc."></textarea>
+                                </div>
+                            </div>
+
+                            <button type="submit" id="analyzeBtn" class="analyze-btn">
+                                <i class="fas fa-microscope"></i>
+                                <span>Analyze with AI</span>
+                            </button>
+                        </div>
                     </div>
                 </form>
             </div>
@@ -919,23 +1378,23 @@
             <!-- Loading Section -->
             <div class="loading" id="loadingSection">
                 <div class="loading-spinner"></div>
-                <h3 style="color: var(--text-light); margin-bottom: 1rem;">🔬 AI Analysis in Progress</h3>
-                <p style="color: var(--text-secondary-light);">Our advanced AI is examining your crop image to provide
-                    accurate diagnosis and treatment recommendations</p>
+                <h3 style="margin-bottom: 0.4rem;">Analyzing your crop image…</h3>
+                <p style="font-size: 0.85rem; color: var(--text-secondary-light);">
+                    KrishiMitr is checking patterns on leaves / fruits and matching them with known diseases and
+                    deficiencies.
+                </p>
             </div>
 
-            <!-- Enhanced Results Section -->
+            <!-- Results Section -->
             <div class="results-section" id="resultsSection">
                 <div class="results-header">
                     <div class="result-icon">
                         <i class="fas fa-clipboard-check"></i>
                     </div>
                     <div>
-                        <h3
-                            style="font-size: 1.8rem; color: var(--text-light); margin-bottom: 0.5rem; font-weight: 800;">
-                            AI Diagnosis Results</h3>
-                        <p style="color: var(--text-secondary-light); font-size: 1.1rem;">Comprehensive analysis and
-                            treatment recommendations</p>
+                        <h3>AI Diagnosis Report</h3>
+                        <p>Structured summary of diagnosis, actions you can take now, and how to prevent it in future.
+                        </p>
                     </div>
                 </div>
 
@@ -946,7 +1405,7 @@
                             <div class="result-card-icon diagnosis-icon">
                                 <i class="fas fa-stethoscope"></i>
                             </div>
-                            <h4 class="result-card-title">🔍 Diagnosis</h4>
+                            <h4 class="result-card-title">Diagnosis</h4>
                         </div>
                         <div id="diagnosisContent" class="result-card-content">
                             <!-- AI diagnosis will be inserted here -->
@@ -957,9 +1416,9 @@
                     <div class="result-card">
                         <div class="result-card-header">
                             <div class="result-card-icon treatment-icon">
-                                <i class="fas fa-pills"></i>
+                                <i class="fas fa-syringe"></i>
                             </div>
-                            <h4 class="result-card-title">💊 Treatment</h4>
+                            <h4 class="result-card-title">Treatment</h4>
                         </div>
                         <div id="treatmentContent" class="result-card-content">
                             <!-- Treatment recommendations will be inserted here -->
@@ -972,7 +1431,7 @@
                             <div class="result-card-icon prevention-icon">
                                 <i class="fas fa-shield-alt"></i>
                             </div>
-                            <h4 class="result-card-title">🛡️ Prevention</h4>
+                            <h4 class="result-card-title">Prevention & future care</h4>
                         </div>
                         <div id="preventionContent" class="result-card-content">
                             <!-- Prevention tips will be inserted here -->
@@ -983,8 +1442,7 @@
         </div>
     </main>
 
-    <script>// NAVIGATION ACTIVE STATE MANAGER
-        // Update this function in ALL pages (dashboard.html, weather-alerts.html, ask-query.html, crop-diagnosis.html)
+    <script>
         function setActiveNavigation() {
             const currentPage = window.location.pathname.split('/').pop() || 'dashboard.html';
             const navItems = document.querySelectorAll('.nav-item');
@@ -1180,7 +1638,6 @@
             uploadZone.querySelector('.upload-subtext').style.display = 'block';
         });
 
-        // Parse AI response into structured sections
         function parseAIResponse(response) {
             const sections = {
                 diagnosis: '',
@@ -1189,49 +1646,70 @@
                 severity: 'moderate'
             };
 
-            // Split response into sections based on common patterns
             const lines = response.split('\n').filter(line => line.trim());
-            let currentSection = 'diagnosis';
-            let sectionContent = [];
+            let currentSection = null;
+
+            const buffers = {
+                diagnosis: [],
+                treatment: [],
+                prevention: []
+            };
 
             lines.forEach(line => {
-                const lowerLine = line.toLowerCase();
+                const trimmed = line.trim();
+                const lower = trimmed.toLowerCase();
 
-                if (lowerLine.includes('treatment') || lowerLine.includes('recommendation') || lowerLine.includes('action')) {
-                    if (sectionContent.length > 0) {
-                        sections[currentSection] = sectionContent.join('\n');
-                        sectionContent = [];
-                    }
-                    currentSection = 'treatment';
-                } else if (lowerLine.includes('prevent') || lowerLine.includes('future') || lowerLine.includes('avoid')) {
-                    if (sectionContent.length > 0) {
-                        sections[currentSection] = sectionContent.join('\n');
-                        sectionContent = [];
-                    }
-                    currentSection = 'prevention';
-                } else if (lowerLine.includes('severe')) {
-                    sections.severity = 'severe';
-                    sectionContent.push(line);
-                } else if (lowerLine.includes('mild')) {
-                    sections.severity = 'mild';
-                    sectionContent.push(line);
-                } else {
-                    sectionContent.push(line);
+                // Detect section headers
+                if (lower.startsWith('diagnosis:')) {
+                    currentSection = 'diagnosis';
+                    return; // skip the header line itself
                 }
+                if (lower.startsWith('treatment:')) {
+                    currentSection = 'treatment';
+                    return;
+                }
+                if (lower.startsWith('prevention:')) {
+                    currentSection = 'prevention';
+                    return;
+                }
+                if (lower.startsWith('severity')) {
+                    // Parse severity
+                    if (/severe/i.test(trimmed)) {
+                        sections.severity = 'severe';
+                    } else if (/mild/i.test(trimmed)) {
+                        sections.severity = 'mild';
+                    } else {
+                        sections.severity = 'moderate';
+                    }
+                    return;
+                }
+
+                // If no section has been set yet, default to diagnosis
+                if (!currentSection) {
+                    currentSection = 'diagnosis';
+                }
+
+                buffers[currentSection].push(trimmed);
             });
 
-            // Add remaining content to current section
-            if (sectionContent.length > 0) {
-                sections[currentSection] = sectionContent.join('\n');
-            }
+            sections.diagnosis = buffers.diagnosis.join('\n').trim();
+            sections.treatment = buffers.treatment.join('\n').trim();
+            sections.prevention = buffers.prevention.join('\n').trim();
 
-            // Ensure each section has content
-            if (!sections.diagnosis) sections.diagnosis = response.substring(0, response.length / 3);
-            if (!sections.treatment) sections.treatment = "Consult with local agricultural extension officer for specific treatment recommendations.";
-            if (!sections.prevention) sections.prevention = "Follow good agricultural practices and regular monitoring to prevent future issues.";
+            // Fallbacks (just in case model misbehaves)
+            if (!sections.diagnosis) {
+                sections.diagnosis = response.substring(0, response.length / 3).trim();
+            }
+            if (!sections.treatment) {
+                sections.treatment = 'Consult with a local agricultural extension officer for specific treatment recommendations.';
+            }
+            if (!sections.prevention) {
+                sections.prevention = 'Follow good agricultural practices and regular monitoring to prevent future issues.';
+            }
 
             return sections;
         }
+
 
         // Format content with better styling
         function formatContent(content, type) {
