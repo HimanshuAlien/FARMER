@@ -55,7 +55,7 @@
             color: var(--text-dark);
         }
 
-        /* =============== SIDEBAR (same as query page) =============== */
+        /* =============== SIDEBAR =============== */
         .sidebar {
             position: fixed;
             left: 0;
@@ -268,7 +268,7 @@
             }
         }
 
-        /* =============== MAIN CONTENT + TOPBAR (same as query page) =============== */
+        /* =============== MAIN CONTENT + TOPBAR =============== */
         .main-content {
             margin-left: 280px;
             min-height: 100vh;
@@ -404,14 +404,14 @@
             }
         }
 
-        /* =============== PAGE CONTENT (same as before) =============== */
+        /* =============== PAGE CONTENT =============== */
         .content-area {
             padding: 2rem 2.25rem 3rem;
             max-width: 1200px;
             margin: 0 auto;
         }
 
-        /* =============== HERO STRIP (NEW DESIGN) =============== */
+        /* =============== HERO STRIP =============== */
         .diagnosis-hero {
             margin-bottom: 1.8rem;
             display: flex;
@@ -572,7 +572,7 @@
             align-items: stretch;
         }
 
-        /* LEFT: 9:16 image + tips */
+        /* LEFT */
         .diagnosis-left {
             display: flex;
             flex-direction: column;
@@ -658,7 +658,7 @@
             font-size: 0.75rem;
         }
 
-        /* RIGHT: upload + form cards */
+        /* RIGHT */
         .diagnosis-right {
             display: flex;
             flex-direction: column;
@@ -709,7 +709,6 @@
             color: var(--text-secondary-dark);
         }
 
-        /* Upload zone inside panel */
         .image-upload-area {
             position: relative;
         }
@@ -1140,6 +1139,24 @@
                 gap: 1.2rem;
             }
         }
+
+        /* Malayalam font scaling */
+        body.lang-ml {
+            font-size: 0.9rem;
+            line-height: 1.3;
+        }
+
+        body.lang-ml .sidebar .nav-item span {
+            font-size: 0.85rem;
+        }
+
+        body.lang-ml .simple-title span {
+            font-size: 1.1rem;
+        }
+
+        body.lang-ml .diagnosis-hero-title h2 {
+            font-size: 1.4rem;
+        }
     </style>
 </head>
 
@@ -1157,62 +1174,71 @@
         </div>
         <div class="nav-menu">
             <div class="nav-section">
-                <div class="nav-section-title">Main Menu</div>
+                <div class="nav-section-title" data-i18n="sidebar.mainMenu">Main Menu</div>
                 <a href="dashboard.html" class="nav-item">
                     <i class="fas fa-home"></i>
-                    <span>Dashboard</span>
+                    <span data-i18n="sidebar.dashboard">Dashboard</span>
                 </a>
                 <a href="ask-query.html" class="nav-item">
                     <i class="fas fa-robot"></i>
-                    <span>Ask Query</span>
+                    <span data-i18n="sidebar.askQuery">Ask Query</span>
                 </a>
             </div>
 
             <div class="nav-section">
-                <div class="nav-section-title">Tools</div>
+                <div class="nav-section-title" data-i18n="sidebar.tools">Tools</div>
                 <a href="crop-diagnosis.html" class="nav-item active">
-                    <i class="fas fa-camera"></i>
-                    <span>Crop Diagnosis</span>
+                    <i class="fa-solid fa-briefcase-medical"></i>
+                    <span data-i18n="sidebar.cropDiagnosis">Crop Diagnosis</span>
                 </a>
                 <a href="weather-alerts.html" class="nav-item">
                     <i class="fas fa-cloud-sun"></i>
-                    <span>Weather & Alerts</span>
+                    <span data-i18n="sidebar.weatherAlerts">Weather & Alerts</span>
                 </a>
                 <a href="Schemes.html" class="nav-item">
-                    <i class="fa-solid fa-binoculars"></i>
-                    <span>Govt Schemes</span>
+                    <i class="fa-solid fa-building-ngo"></i>
+                    <span data-i18n="sidebar.schemes">Govt Schemes</span>
+                </a>
+                <a href="helpline.html" class="nav-item">
+                    <i class="fa-solid fa-phone"></i>
+                    <span data-i18n="sidebar.helpline">Helpline Number</span>
                 </a>
                 <a href="smart-farming.html" class="nav-item">
                     <i class="fa-solid fa-briefcase"></i>
-                    <span>Agri Swasthya</span>
+                    <span data-i18n="sidebar.agriSwasthya">Agri Swasthya</span>
                 </a>
                 <a href="market-prices.html" class="nav-item">
-                    <i class="fas fa-chart-line"></i>
-                    <span>Market Prices</span>
+                    <i class="fa-solid fa-dollar-sign"></i>
+                    <span data-i18n="sidebar.marketPrices">Market Prices</span>
                 </a>
             </div>
 
             <div class="nav-section">
-                <div class="nav-section-title">Community</div>
+                <div class="nav-section-title" data-i18n="sidebar.communitySection">Community</div>
                 <a href="farmer-community.html" class="nav-item">
                     <i class="fas fa-users"></i>
-                    <span>Community</span>
+                    <span data-i18n="sidebar.community">Community</span>
                 </a>
                 <a href="profile.html" class="nav-item">
                     <i class="fas fa-user"></i>
-                    <span>Profile</span>
+                    <span data-i18n="sidebar.profile">Profile</span>
                 </a>
             </div>
         </div>
         <div class="sidebar-footer">
-            <div id="userInfo" class="user-info"></div>
+            <div id="userInfo" class="user-info">
+                <div style="font-weight:600;" data-i18n="sidebar.user.loadingTitle">Loading...</div>
+                <div style="font-size:0.8rem;opacity:0.8;" data-i18n="sidebar.user.loadingSubtitle">
+                    Fetching profile
+                </div>
+            </div>
             <button class="theme-toggle-sidebar" onclick="toggleTheme()">
                 <i class="fas fa-sun"></i>
-                <span>Toggle Theme</span>
+                <span data-i18n="sidebar.toggleTheme">Toggle Theme</span>
             </button>
             <button id="logoutBtn" class="logout-btn">
                 <i class="fas fa-sign-out-alt"></i>
-                <span>Logout</span>
+                <span data-i18n="sidebar.logout">Logout</span>
             </button>
         </div>
     </nav>
@@ -1227,85 +1253,94 @@
                 </button>
                 <h1 class="simple-title">
                     <img src="images/crop-diagnosis.png" alt="Crop Diagnosis" class="topbar-logo">
-                    <span>Crop Diagnosis</span>
+                    <span data-i18n="crop.title">Crop Diagnosis</span>
                 </h1>
             </div>
             <div class="topbar-right">
                 <span class="status-badge">
                     <span class="status-dot"></span>
-                    <span>AI ready for your field</span>
+                    <span data-i18n="crop.status.ready">AI ready for your field</span>
                 </span>
             </div>
         </div>
 
         <div class="content-area">
-            <!-- NEW hero strip -->
+            <!-- Hero -->
             <div class="diagnosis-hero">
                 <div class="diagnosis-hero-main">
                     <div class="diagnosis-hero-title">
-                        <h2>Crop Diagnosis</h2>
-                        <span class="hero-badge">For Kerala farmers</span>
+                        <h2 data-i18n="crop.hero.title">Crop Diagnosis</h2>
+                        <span class="hero-badge" data-i18n="crop.hero.badge">For Kerala farmers</span>
                     </div>
-                    <p class="diagnosis-hero-subtitle">
+                    <p class="diagnosis-hero-subtitle" data-i18n="crop.hero.subtitle">
                         Upload a clear image of the affected plant part, add a few details and get AI-guided diagnosis.
                     </p>
                     <div class="hero-langs">
-                        <div class="hero-lang-pill">English</div>
-                        <div class="hero-lang-pill">മലയാളം (Malayalam)</div>
-                        <div class="hero-lang-pill">हिन्दी (Hindi)</div>
+                        <div class="hero-lang-pill" data-i18n="langs.en">English</div>
+                        <div class="hero-lang-pill" data-i18n="langs.ml">മലയാളം (Malayalam)</div>
+                        <div class="hero-lang-pill" data-i18n="langs.hi">हिन्दी (Hindi)</div>
                     </div>
                 </div>
 
                 <div class="diagnosis-steps-card">
-                    <div class="steps-title">How this works</div>
+                    <div class="steps-title" data-i18n="crop.steps.title">How this works</div>
                     <div class="steps-list">
                         <div class="step-row">
                             <div class="step-icon"><i class="fas fa-image"></i></div>
-                            <span>Upload clear photo of leaf / fruit / stem</span>
+                            <span data-i18n="crop.steps.1">Upload clear photo of leaf / fruit / stem</span>
                         </div>
                         <div class="step-row">
                             <div class="step-icon"><i class="fas fa-clipboard-list"></i></div>
-                            <span>Fill crop, location & short symptom notes</span>
+                            <span data-i18n="crop.steps.2">Fill crop, location & short symptom notes</span>
                         </div>
                         <div class="step-row">
                             <div class="step-icon"><i class="fas fa-seedling"></i></div>
-                            <span>Get diagnosis, field actions & prevention</span>
+                            <span data-i18n="crop.steps.3">Get diagnosis, field actions & prevention</span>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Main Diagnosis Shell -->
+            <!-- Main Diagnosis -->
             <div class="upload-section">
                 <form id="diagnosisForm" class="diagnosis-grid">
-                    <!-- LEFT: 9:16 image from folder -->
+                    <!-- LEFT -->
                     <div class="diagnosis-left">
                         <div class="hero-image-card">
-                            <!-- Replace with your 9:16 showcase image -->
                             <img src="images/doctor.png" alt="Crop health showcase">
                             <div class="hero-image-label">
                                 <i class="fas fa-circle-info"></i>
-                                <span>Sample view – farmer’s field image</span>
+                                <span data-i18n="crop.hero.imageLabel">Sample view – farmer’s field image</span>
                             </div>
                         </div>
 
                         <div class="hero-tips-card">
-                            <strong>For best AI diagnosis:</strong>
+                            <strong data-i18n="crop.tips.title">For best AI diagnosis:</strong>
                             <ul>
-                                <li><i class="fas fa-check"></i> Take photo in daylight (no harsh flash glare)</li>
-                                <li><i class="fas fa-check"></i> Keep 1–3 affected leaves or fruits clearly visible</li>
-                                <li><i class="fas fa-check"></i> Avoid very far / blurred images</li>
+                                <li>
+                                    <i class="fas fa-check"></i>
+                                    <span data-i18n="crop.tips.1">Take photo in daylight (no harsh flash glare)</span>
+                                </li>
+                                <li>
+                                    <i class="fas fa-check"></i>
+                                    <span data-i18n="crop.tips.2">Keep 1–3 affected leaves or fruits clearly
+                                        visible</span>
+                                </li>
+                                <li>
+                                    <i class="fas fa-check"></i>
+                                    <span data-i18n="crop.tips.3">Avoid very far / blurred images</span>
+                                </li>
                             </ul>
                         </div>
                     </div>
 
-                    <!-- RIGHT: upload + inputs -->
+                    <!-- RIGHT -->
                     <div class="diagnosis-right">
                         <!-- Upload Panel -->
                         <div class="panel-card">
                             <div class="panel-header">
-                                <h3>1. Upload affected crop image</h3>
-                                <span class="panel-tag">Image required</span>
+                                <h3 data-i18n="crop.panel.upload.title">1. Upload affected crop image</h3>
+                                <span class="panel-tag" data-i18n="crop.panel.upload.tag">Image required</span>
                             </div>
 
                             <div class="image-upload-area">
@@ -1313,10 +1348,10 @@
                                     <div class="upload-icon">
                                         <i class="fas fa-cloud-upload-alt"></i>
                                     </div>
-                                    <div class="upload-text">
+                                    <div class="upload-text" data-i18n="crop.upload.text">
                                         Click to select or drop image here
                                     </div>
-                                    <div class="upload-subtext">
+                                    <div class="upload-subtext" data-i18n="crop.upload.subtext">
                                         Supports JPEG, PNG, WebP • Max 10 MB
                                     </div>
                                 </div>
@@ -1331,44 +1366,49 @@
                         <!-- Details Panel -->
                         <div class="panel-card">
                             <div class="panel-header">
-                                <h3>2. Field details</h3>
-                                <span class="panel-tag">Improves accuracy</span>
+                                <h3 data-i18n="crop.panel.details.title">2. Field details</h3>
+                                <span class="panel-tag" data-i18n="crop.panel.details.tag">Improves accuracy</span>
                             </div>
 
                             <div class="form-fields">
                                 <div class="field-group">
-                                    <label class="field-label">Crop type</label>
+                                    <label class="field-label" data-i18n="crop.form.cropType.label">Crop type</label>
                                     <select id="cropType" class="field-select">
-                                        <option value="">Select crop</option>
-                                        <option value="rice">Rice</option>
-                                        <option value="tomato">Tomato</option>
-                                        <option value="pepper">Chilli / Capsicum</option>
-                                        <option value="coconut">Coconut</option>
-                                        <option value="banana">Banana</option>
-                                        <option value="cardamom">Cardamom</option>
-                                        <option value="rubber">Rubber</option>
-                                        <option value="tea">Tea</option>
-                                        <option value="coffee">Coffee</option>
-                                        <option value="other">Other</option>
+                                        <option value="" data-i18n="crop.form.cropType.placeholder">Select crop</option>
+                                        <option value="rice" data-i18n="crop.form.cropType.rice">Rice</option>
+                                        <option value="tomato" data-i18n="crop.form.cropType.tomato">Tomato</option>
+                                        <option value="pepper" data-i18n="crop.form.cropType.pepper">Chilli / Capsicum
+                                        </option>
+                                        <option value="coconut" data-i18n="crop.form.cropType.coconut">Coconut</option>
+                                        <option value="banana" data-i18n="crop.form.cropType.banana">Banana</option>
+                                        <option value="cardamom" data-i18n="crop.form.cropType.cardamom">Cardamom
+                                        </option>
+                                        <option value="rubber" data-i18n="crop.form.cropType.rubber">Rubber</option>
+                                        <option value="tea" data-i18n="crop.form.cropType.tea">Tea</option>
+                                        <option value="coffee" data-i18n="crop.form.cropType.coffee">Coffee</option>
+                                        <option value="other" data-i18n="crop.form.cropType.other">Other</option>
                                     </select>
                                 </div>
 
                                 <div class="field-group">
-                                    <label class="field-label">Location</label>
+                                    <label class="field-label" data-i18n="crop.form.location.label">Location</label>
                                     <input type="text" id="location" class="field-input"
-                                        placeholder="e.g., Wayanad, Kerala">
+                                        placeholder="e.g., Wayanad, Kerala"
+                                        data-i18n-placeholder="crop.form.location.placeholder">
                                 </div>
 
                                 <div class="field-group full">
-                                    <label class="field-label">Observed symptoms</label>
+                                    <label class="field-label" data-i18n="crop.form.symptoms.label">Observed
+                                        symptoms</label>
                                     <textarea id="symptoms" class="field-textarea"
-                                        placeholder="Short notes: yellowing, brown spots, dry tips, wilting, insects visible, etc."></textarea>
+                                        placeholder="Short notes: yellowing, brown spots, dry tips, wilting, insects visible, etc."
+                                        data-i18n-placeholder="crop.form.symptoms.placeholder"></textarea>
                                 </div>
                             </div>
 
                             <button type="submit" id="analyzeBtn" class="analyze-btn">
                                 <i class="fas fa-microscope"></i>
-                                <span>Analyze with AI</span>
+                                <span data-i18n="crop.button.analyze">Analyze with AI</span>
                             </button>
                         </div>
                     </div>
@@ -1378,8 +1418,10 @@
             <!-- Loading Section -->
             <div class="loading" id="loadingSection">
                 <div class="loading-spinner"></div>
-                <h3 style="margin-bottom: 0.4rem;">Analyzing your crop image…</h3>
-                <p style="font-size: 0.85rem; color: var(--text-secondary-light);">
+                <h3 style="margin-bottom: 0.4rem;" data-i18n="crop.loading.title">
+                    Analyzing your crop image…
+                </h3>
+                <p style="font-size: 0.85rem; color: var(--text-secondary-light);" data-i18n="crop.loading.subtitle">
                     KrishiMitr is checking patterns on leaves / fruits and matching them with known diseases and
                     deficiencies.
                 </p>
@@ -1392,8 +1434,9 @@
                         <i class="fas fa-clipboard-check"></i>
                     </div>
                     <div>
-                        <h3>AI Diagnosis Report</h3>
-                        <p>Structured summary of diagnosis, actions you can take now, and how to prevent it in future.
+                        <h3 data-i18n="crop.results.title">AI Diagnosis Report</h3>
+                        <p data-i18n="crop.results.subtitle">
+                            Structured summary of diagnosis, actions you can take now, and how to prevent it in future.
                         </p>
                     </div>
                 </div>
@@ -1405,7 +1448,7 @@
                             <div class="result-card-icon diagnosis-icon">
                                 <i class="fas fa-stethoscope"></i>
                             </div>
-                            <h4 class="result-card-title">Diagnosis</h4>
+                            <h4 class="result-card-title" data-i18n="crop.results.diagnosis.title">Diagnosis</h4>
                         </div>
                         <div id="diagnosisContent" class="result-card-content">
                             <!-- AI diagnosis will be inserted here -->
@@ -1418,7 +1461,7 @@
                             <div class="result-card-icon treatment-icon">
                                 <i class="fas fa-syringe"></i>
                             </div>
-                            <h4 class="result-card-title">Treatment</h4>
+                            <h4 class="result-card-title" data-i18n="crop.results.treatment.title">Treatment</h4>
                         </div>
                         <div id="treatmentContent" class="result-card-content">
                             <!-- Treatment recommendations will be inserted here -->
@@ -1431,7 +1474,8 @@
                             <div class="result-card-icon prevention-icon">
                                 <i class="fas fa-shield-alt"></i>
                             </div>
-                            <h4 class="result-card-title">Prevention & future care</h4>
+                            <h4 class="result-card-title" data-i18n="crop.results.prevention.title">Prevention & future
+                                care</h4>
                         </div>
                         <div id="preventionContent" class="result-card-content">
                             <!-- Prevention tips will be inserted here -->
@@ -1442,398 +1486,575 @@
         </div>
     </main>
 
+    <!-- Language sync script (same pattern as Ask Query) -->
     <script>
-        function setActiveNavigation() {
-            const currentPage = window.location.pathname.split('/').pop() || 'dashboard.html';
-            const navItems = document.querySelectorAll('.nav-item');
+        const translations = {
+            en: {
+                // Sidebar / global
+                "sidebar.mainMenu": "Main Menu",
+                "sidebar.dashboard": "Dashboard",
+                "sidebar.askQuery": "Ask Query",
+                "sidebar.tools": "Tools",
+                "sidebar.cropDiagnosis": "Crop Diagnosis",
+                "sidebar.weatherAlerts": "Weather & Alerts",
+                "sidebar.schemes": "Govt Schemes",
+                "sidebar.helpline": "Helpline Number",
+                "sidebar.agriSwasthya": "Agri Swasthya",
+                "sidebar.marketPrices": "Market Prices",
+                "sidebar.communitySection": "Community",
+                "sidebar.community": "Community",
+                "sidebar.profile": "Profile",
+                "sidebar.toggleTheme": "Toggle Theme",
+                "sidebar.logout": "Logout",
+                "sidebar.user.loadingTitle": "Loading...",
+                "sidebar.user.loadingSubtitle": "Fetching profile",
 
-            navItems.forEach(item => item.classList.remove('active'));
+                // Hero language pills
+                "langs.en": "English",
+                "langs.ml": "മലയാളം (Malayalam)",
+                "langs.hi": "हिन्दी (Hindi)",
 
-            let activeSelector = '';
+                // Crop page
+                "crop.title": "Crop Diagnosis",
+                "crop.status.ready": "AI ready for your field",
+                "crop.hero.title": "Crop Diagnosis",
+                "crop.hero.badge": "For Kerala farmers",
+                "crop.hero.subtitle": "Upload a clear image of the affected plant part, add a few details and get AI-guided diagnosis.",
+                "crop.hero.imageLabel": "Sample view – farmer’s field image",
 
-            if (currentPage === 'dashboard.html' || currentPage === '' || currentPage === '/') {
-                activeSelector = 'a[href="dashboard.html"]';
-            } else if (currentPage === 'weather-alerts.html') {
-                activeSelector = 'a[href="weather-alerts.html"]';
-            } else if (currentPage === 'ask-query.html') {
-                activeSelector = 'a[href="ask-query.html"]';
-            } else if (currentPage === 'crop-diagnosis.html') {
-                activeSelector = 'a[href="crop-diagnosis.html"]';
-            } else if (currentPage === 'market-prices.html') {
-                // ADD THIS LINE:
-                activeSelector = 'a[href="market-prices.html"]';
+                "crop.steps.title": "How this works",
+                "crop.steps.1": "Upload clear photo of leaf / fruit / stem",
+                "crop.steps.2": "Fill crop, location & short symptom notes",
+                "crop.steps.3": "Get diagnosis, field actions & prevention",
+
+                "crop.tips.title": "For best AI diagnosis:",
+                "crop.tips.1": "Take photo in daylight (no harsh flash glare)",
+                "crop.tips.2": "Keep 1–3 affected leaves or fruits clearly visible",
+                "crop.tips.3": "Avoid very far / blurred images",
+
+                "crop.panel.upload.title": "1. Upload affected crop image",
+                "crop.panel.upload.tag": "Image required",
+                "crop.upload.text": "Click to select or drop image here",
+                "crop.upload.subtext": "Supports JPEG, PNG, WebP • Max 10 MB",
+
+                "crop.panel.details.title": "2. Field details",
+                "crop.panel.details.tag": "Improves accuracy",
+
+                "crop.form.cropType.label": "Crop type",
+                "crop.form.cropType.placeholder": "Select crop",
+                "crop.form.cropType.rice": "Rice",
+                "crop.form.cropType.tomato": "Tomato",
+                "crop.form.cropType.pepper": "Chilli / Capsicum",
+                "crop.form.cropType.coconut": "Coconut",
+                "crop.form.cropType.banana": "Banana",
+                "crop.form.cropType.cardamom": "Cardamom",
+                "crop.form.cropType.rubber": "Rubber",
+                "crop.form.cropType.tea": "Tea",
+                "crop.form.cropType.coffee": "Coffee",
+                "crop.form.cropType.other": "Other",
+
+                "crop.form.location.label": "Location",
+                "crop.form.location.placeholder": "e.g., Wayanad, Kerala",
+
+                "crop.form.symptoms.label": "Observed symptoms",
+                "crop.form.symptoms.placeholder": "Short notes: yellowing, brown spots, dry tips, wilting, insects visible, etc.",
+
+                "crop.button.analyze": "Analyze with AI",
+
+                "crop.loading.title": "Analyzing your crop image…",
+                "crop.loading.subtitle": "KrishiMitr is checking patterns on leaves / fruits and matching them with known diseases and deficiencies.",
+
+                "crop.results.title": "AI Diagnosis Report",
+                "crop.results.subtitle": "Structured summary of diagnosis, actions you can take now, and how to prevent it in future.",
+                "crop.results.diagnosis.title": "Diagnosis",
+                "crop.results.treatment.title": "Treatment",
+                "crop.results.prevention.title": "Prevention & future care"
+            },
+            ml: {
+                // Sidebar / global
+                "sidebar.mainMenu": "പ്രധാന മെനു",
+                "sidebar.dashboard": "ഡാഷ്ബോർഡ്",
+                "sidebar.askQuery": "ചോദ്യം ചോദിക്കുക",
+                "sidebar.tools": "ഉപകരണങ്ങൾ",
+                "sidebar.cropDiagnosis": "വിള രോഗനിർണയം",
+                "sidebar.weatherAlerts": "കാലാവസ്ഥ & മുന്നറിയിപ്പുകൾ",
+                "sidebar.schemes": "സർക്കാർ പദ്ധതികൾ",
+                "sidebar.helpline": "ഹെൽപ്‌ലൈൻ നമ്പർ",
+                "sidebar.agriSwasthya": "അഗ്രീ ആരോഗ്യം",
+                "sidebar.marketPrices": "ചന്ത വിലകൾ",
+                "sidebar.communitySection": "കമ്മ്യൂണിറ്റി",
+                "sidebar.community": "കർഷക സമുദായം",
+                "sidebar.profile": "പ്രൊഫൈൽ",
+                "sidebar.toggleTheme": "തീം മാറ്റുക",
+                "sidebar.logout": "ലോഗൗട്ട്",
+                "sidebar.user.loadingTitle": "ലോഡ് ചെയ്യുന്നു...",
+                "sidebar.user.loadingSubtitle": "പ്രൊഫൈൽ വിവരങ്ങൾ ലഭ്യമാക്കുന്നു",
+
+                "langs.en": "English",
+                "langs.ml": "മലയാളം (Malayalam)",
+                "langs.hi": "ഹിന്ദി (Hindi)",
+
+                "crop.title": "വിള രോഗനിർണയം",
+                "crop.status.ready": "നിങ്ങളുടെ വയലിനായി എ.ഐ തയ്യാറാണ്",
+                "crop.hero.title": "വിള രോഗനിർണയം",
+                "crop.hero.badge": "കേരളത്തിലെ കർഷകർക്ക് വേണ്ടി",
+                "crop.hero.subtitle": "ബാധിച്ചിരിക്കുന്ന ചെടിയുടെ ഭാഗത്തിന്റെ വ്യക്തമായ ചിത്രം അപ്‌ലോഡ് ചെയ്യൂ, കുറച്ച് വിവരങ്ങൾ ചേർത്ത് എ.ഐ നിർണയവും നിർദ്ദേശങ്ങളും നേടൂ.",
+                "crop.hero.imageLabel": "ഉദാഹരണ ദൃശ്യം – കർഷകന്റെ വയലിലെ ചിത്രം",
+
+                "crop.steps.title": "ഇത് എങ്ങനെ പ്രവർത്തിക്കുന്നു",
+                "crop.steps.1": "ഇല / കായ / തണ്ട് എന്നിവയുടെ വ്യക്തമായ ചിത്രം അപ്‌ലോഡ് ചെയ്യുക",
+                "crop.steps.2": "വിള, സ്ഥലം, രോഗലക്ഷണങ്ങൾ തുടങ്ങിയ കുറച്ച് വിവരങ്ങൾ നൽകുക",
+                "crop.steps.3": "രോഗനിർണയം, വയലിൽ ചെയ്യേണ്ട നടപടികൾ, മുൻകരുതലുകൾ എന്നിവ ലഭിക്കും",
+
+                "crop.tips.title": "മികച്ച എ.ഐ നിർണയത്തിനായി:",
+                "crop.tips.1": "ദിവസത്തിൽ, പ്രകൃതിദീപത്തിൽ ചിത്രം എടുക്കുക (തീവ്ര ഫ്‌ളാഷ് ഒഴിവാക്കൂ)",
+                "crop.tips.2": "1–3 ബാധിച്ച ഇലകൾ / കായകൾ വ്യക്തമായി കാണുന്ന പോലെ എടുക്കുക",
+                "crop.tips.3": "വളരെ ദൂരത്തുനിന്നുള്ളതോ മങ്ങലുള്ളതോ ആയ ചിത്രങ്ങൾ ഒഴിവാക്കുക",
+
+                "crop.panel.upload.title": "1. ബാധിച്ച വിളയുടെ ചിത്രം അപ്‌ലോഡ് ചെയ്യുക",
+                "crop.panel.upload.tag": "ചിത്രം ആവശ്യമാണ്",
+                "crop.upload.text": "ഇവിടേക്ക് ക്ലിക്ക് ചെയ്ത് ചിത്രം തെരഞ്ഞെടുക്കുക അല്ലെങ്കിൽ വലിച്ചിട്ട് ഇടുക",
+                "crop.upload.subtext": "JPEG, PNG, WebP ഫോർമാറ്റുകൾ • പരമാവധി 10 MB",
+
+                "crop.panel.details.title": "2. വയൽ വിവരം",
+                "crop.panel.details.tag": "കൃത്യത വർധിപ്പിക്കും",
+
+                "crop.form.cropType.label": "വിള തരം",
+                "crop.form.cropType.placeholder": "വിള തിരഞ്ഞെടുക്കുക",
+                "crop.form.cropType.rice": "നേൽ / അരി",
+                "crop.form.cropType.tomato": "തക്കാളി",
+                "crop.form.cropType.pepper": "മുളക് / ക്യാപ്സികം",
+                "crop.form.cropType.coconut": "തേങ്ങ",
+                "crop.form.cropType.banana": "വാഴ",
+                "crop.form.cropType.cardamom": "ഏലക്ക",
+                "crop.form.cropType.rubber": "റബർ",
+                "crop.form.cropType.tea": "ചായ",
+                "crop.form.cropType.coffee": "കാപ്പി",
+                "crop.form.cropType.other": "മറ്റുള്ളവ",
+
+                "crop.form.location.label": "സ്ഥലം",
+                "crop.form.location.placeholder": "ഉദാ: വയനാട്, കേരളം",
+
+                "crop.form.symptoms.label": "കാണുന്ന രോഗലക്ഷണങ്ങൾ",
+                "crop.form.symptoms.placeholder": "ചുരുക്കത്തിൽ: ഇല മങ്ങിയിരിക്കുന്നത്, തവിട്ടു പാടുകൾ, ഉണങ്ങൽ, മുടിഞ്ഞതോ, കീടങ്ങൾ കാണുന്നതോ മുതലായവ.",
+
+                "crop.button.analyze": "എ.ഐ ഉപയോഗിച്ച് വിശകലനം ചെയ്യുക",
+
+                "crop.loading.title": "നിങ്ങളുടെ വിളയുടെ ചിത്രം വിശകലനം ചെയ്തു കൊണ്ടിരിക്കുന്നു…",
+                "crop.loading.subtitle": "ഇലകളിലും കായകളിലും കാണുന്ന പാറ്റേണുകളും നിറങ്ങളും പരിശോധിച്ച്, അറിയപ്പെടുന്ന രോഗങ്ങളുമായി താരതമ്യം ചെയ്യുന്നു.",
+
+                "crop.results.title": "എ.ഐ രോഗനിർണയ റിപ്പോർട്ട്",
+                "crop.results.subtitle": "രോഗനിർണയം, ഉടൻ ചെയ്യാവുന്ന വയൽ നടപടികൾ, ഭാവിയിൽ എങ്ങനെ മുൻകരുതൽ എടുക്കാം എന്നതിന്റെ സമഗ്ര സംഗ്രഹം.",
+                "crop.results.diagnosis.title": "രോഗനിർണയം",
+                "crop.results.treatment.title": "ചികിത്സയും തൽക്ഷണ നടപടി ക്രമങ്ങളും",
+                "crop.results.prevention.title": "മുൻകരുതലുകളും ഭാവിയിലെ പരിപാലനവും"
             }
-
-            if (activeSelector) {
-                const activeItem = document.querySelector(activeSelector);
-                if (activeItem) {
-                    activeItem.classList.add('active');
-                }
-            }
-        }
-
-
-        // Call this function when page loads
-        document.addEventListener('DOMContentLoaded', function () {
-            setActiveNavigation();
-        });
-
-        // Also call it in your existing window.onload
-        window.onload = () => {
-            console.log('Page loaded, initializing...');
-            checkAuth();
-            loadUserInfo();
-            initializeTheme();
-            setActiveNavigation(); // ADD THIS LINE
-
-            // Your existing code...
-            setTimeout(() => {
-                loadWeatherData();
-            }, 500);
         };
 
-        // Dark mode state
-        let isDarkMode = localStorage.getItem('darkMode') === 'true';
+        function applyTranslations(lang) {
+            // normal texts
+            document.querySelectorAll("[data-i18n]").forEach(el => {
+                const key = el.getAttribute("data-i18n");
+                const t = translations[lang] && translations[lang][key];
+                if (t) el.textContent = t;
+            });
 
-        // Initialize theme on load
-        function initializeTheme() {
-            if (isDarkMode) {
-                document.body.classList.add('dark');
-                const themeIcon = document.querySelector('.theme-toggle-sidebar i');
-                const themeText = document.querySelector('.theme-toggle-sidebar span');
-                if (themeIcon) themeIcon.className = 'fas fa-moon';
-                if (themeText) themeText.textContent = 'Light Mode';
-            }
+            // placeholders
+            document.querySelectorAll("[data-i18n-placeholder]").forEach(el => {
+                const key = el.getAttribute("data-i18n-placeholder");
+                const t = translations[lang] && translations[lang][key];
+                if (t) el.placeholder = t;
+            });
         }
 
-        // Toggle theme
-        function toggleTheme() {
-            isDarkMode = !isDarkMode;
-            document.body.classList.toggle('dark');
+        function updateLangButtons(lang) {
+            // Only affects pages that actually have .lang-btn (dashboard etc.)
+            document.querySelectorAll(".lang-btn").forEach(btn => {
+                btn.classList.toggle("active", btn.dataset.lang === lang);
+            });
+        }
 
+        function setLanguage(lang) {
+            localStorage.setItem("appLanguage", lang);
+            applyTranslations(lang);
+            updateLangButtons(lang);
+            document.body.classList.toggle("lang-ml", lang === "ml");
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const savedLang = localStorage.getItem("appLanguage") || "en";
+            setLanguage(savedLang);
+        });
+    </script>
+</body>
+
+</html>
+
+<script>
+    function setActiveNavigation() {
+        const currentPage = window.location.pathname.split('/').pop() || 'dashboard.html';
+        const navItems = document.querySelectorAll('.nav-item');
+
+        // Remove previous active state from nav items
+        navItems.forEach(item => item.classList.remove('active'));
+
+        let activeSelector = '';
+
+        if (currentPage === 'dashboard.html' || currentPage === '' || currentPage === '/') {
+            activeSelector = 'a[href="dashboard.html"]';
+        } else if (currentPage === 'weather-alerts.html') {
+            activeSelector = 'a[href="weather-alerts.html"]';
+        } else if (currentPage === 'ask-query.html') {
+            activeSelector = 'a[href="ask-query.html"]';
+        } else if (currentPage === 'crop-diagnosis.html') {
+            activeSelector = 'a[href="crop-diagnosis.html"]';
+        } else if (currentPage === 'market-prices.html') {
+            activeSelector = 'a[href="market-prices.html"]';
+        }
+
+        if (activeSelector) {
+            const activeItem = document.querySelector(activeSelector);
+            if (activeItem) {
+                activeItem.classList.add('active');
+            }
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        setActiveNavigation();
+    });
+
+    // Dark mode state
+    let isDarkMode = localStorage.getItem('darkMode') === 'true';
+
+    // Initialize theme on load
+    function initializeTheme() {
+        if (isDarkMode) {
+            document.body.classList.add('dark');
             const themeIcon = document.querySelector('.theme-toggle-sidebar i');
             const themeText = document.querySelector('.theme-toggle-sidebar span');
+            if (themeIcon) themeIcon.className = 'fas fa-moon';
+            if (themeText) themeText.textContent = 'Light Mode';
+        }
+    }
 
-            if (isDarkMode) {
-                if (themeIcon) themeIcon.className = 'fas fa-moon';
-                if (themeText) themeText.textContent = 'Light Mode';
-            } else {
-                if (themeIcon) themeIcon.className = 'fas fa-sun';
-                if (themeText) themeText.textContent = 'Toggle Theme';
-            }
+    // Toggle theme
+    function toggleTheme() {
+        isDarkMode = !isDarkMode;
+        document.body.classList.toggle('dark');
 
-            localStorage.setItem('darkMode', isDarkMode);
+        const themeIcon = document.querySelector('.theme-toggle-sidebar i');
+        const themeText = document.querySelector('.theme-toggle-sidebar span');
+
+        if (isDarkMode) {
+            if (themeIcon) themeIcon.className = 'fas fa-moon';
+            if (themeText) themeText.textContent = 'Light Mode';
+        } else {
+            if (themeIcon) themeIcon.className = 'fas fa-sun';
+            if (themeText) themeText.textContent = 'Toggle Theme';
         }
 
-        // Global variables
-        const uploadZone = document.getElementById('uploadZone');
-        const fileInput = document.getElementById('fileInput');
-        const previewImage = document.getElementById('previewImage');
-        const removeImageBtn = document.getElementById('removeImage');
-        const diagnosisForm = document.getElementById('diagnosisForm');
-        const analyzeBtn = document.getElementById('analyzeBtn');
-        const loadingSection = document.getElementById('loadingSection');
-        const resultsSection = document.getElementById('resultsSection');
+        localStorage.setItem('darkMode', isDarkMode);
+    }
 
-        let selectedFile = null;
+    // Global variables
+    const uploadZone = document.getElementById('uploadZone');
+    const fileInput = document.getElementById('fileInput');
+    const previewImage = document.getElementById('previewImage');
+    const removeImageBtn = document.getElementById('removeImage');
+    const diagnosisForm = document.getElementById('diagnosisForm');
+    const analyzeBtn = document.getElementById('analyzeBtn');
+    const loadingSection = document.getElementById('loadingSection');
+    const resultsSection = document.getElementById('resultsSection');
 
-        // Authentication check
-        async function checkAuth() {
-            try {
-                const res = await fetch('/api/user/check-auth', { credentials: 'include' });
-                if (!res.ok) throw new Error('Unauthorized');
-            } catch {
-                alert('Please login to access this page');
-                window.location.href = 'index.html';
-            }
+    let selectedFile = null;
+
+    // Authentication check
+    async function checkAuth() {
+        try {
+            const res = await fetch('/api/user/check-auth', { credentials: 'include' });
+            if (!res.ok) throw new Error('Unauthorized');
+        } catch {
+            alert('Please login to access this page');
+            window.location.href = 'index.html';
         }
+    }
 
-        // Load user info
-        async function loadUserInfo() {
-            try {
-                const res = await fetch('/api/user/profile', { credentials: 'include' });
-                if (res.ok) {
-                    const user = await res.json();
-                    document.getElementById('userInfo').innerHTML = `
+    // Load user info
+    async function loadUserInfo() {
+        try {
+            const res = await fetch('/api/user/profile', { credentials: 'include' });
+            if (res.ok) {
+                const user = await res.json();
+                document.getElementById('userInfo').innerHTML = `
             <div style="font-weight: 600;">${user.username}</div>
             <div style="font-size: 0.8rem; opacity: 0.8;">${user.email}</div>
           `;
-                }
-            } catch (error) {
-                console.error('Failed to load user info');
             }
+        } catch (error) {
+            console.error('Failed to load user info');
+        }
+    }
+
+    // File upload handling
+    uploadZone.addEventListener('click', () => fileInput.click());
+
+    uploadZone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        uploadZone.classList.add('drag-over');
+    });
+
+    uploadZone.addEventListener('dragleave', (e) => {
+        e.preventDefault();
+        uploadZone.classList.remove('drag-over');
+    });
+
+    uploadZone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        uploadZone.classList.remove('drag-over');
+        const files = e.dataTransfer.files;
+        if (files.length > 0) {
+            handleFileSelect(files[0]);
+        }
+    });
+
+    fileInput.addEventListener('change', (e) => {
+        if (e.target.files.length > 0) {
+            handleFileSelect(e.target.files[0]);
+        }
+    });
+
+    function handleFileSelect(file) {
+        const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+        if (!allowedTypes.includes(file.type)) {
+            alert('Please select a JPEG, PNG, or WebP image file');
+            return;
         }
 
-        // File upload handling
-        uploadZone.addEventListener('click', () => fileInput.click());
+        if (file.size > 10 * 1024 * 1024) {
+            alert('File size must be less than 10MB');
+            return;
+        }
 
-        uploadZone.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            uploadZone.classList.add('drag-over');
-        });
+        selectedFile = file;
 
-        uploadZone.addEventListener('dragleave', (e) => {
-            e.preventDefault();
-            uploadZone.classList.remove('drag-over');
-        });
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            previewImage.src = e.target.result;
+            previewImage.style.display = 'block';
+            removeImageBtn.style.display = 'flex';
+            uploadZone.classList.add('has-image');
 
-        uploadZone.addEventListener('drop', (e) => {
-            e.preventDefault();
-            uploadZone.classList.remove('drag-over');
-            const files = e.dataTransfer.files;
-            if (files.length > 0) {
-                handleFileSelect(files[0]);
+            uploadZone.querySelector('.upload-icon').style.display = 'none';
+            uploadZone.querySelector('.upload-text').style.display = 'none';
+            uploadZone.querySelector('.upload-subtext').style.display = 'none';
+        };
+        reader.readAsDataURL(file);
+    }
+
+    removeImageBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        selectedFile = null;
+        fileInput.value = '';
+        previewImage.style.display = 'none';
+        removeImageBtn.style.display = 'none';
+        uploadZone.classList.remove('has-image');
+
+        uploadZone.querySelector('.upload-icon').style.display = 'block';
+        uploadZone.querySelector('.upload-text').style.display = 'block';
+        uploadZone.querySelector('.upload-subtext').style.display = 'block';
+    });
+
+    function parseAIResponse(response) {
+        const sections = {
+            diagnosis: '',
+            treatment: '',
+            prevention: '',
+            severity: 'moderate'
+        };
+
+        const lines = response.split('\n').filter(line => line.trim());
+        let currentSection = null;
+
+        const buffers = {
+            diagnosis: [],
+            treatment: [],
+            prevention: []
+        };
+
+        lines.forEach(line => {
+            const trimmed = line.trim();
+            const lower = trimmed.toLowerCase();
+
+            if (lower.startsWith('diagnosis:')) {
+                currentSection = 'diagnosis';
+                return;
             }
-        });
-
-        fileInput.addEventListener('change', (e) => {
-            if (e.target.files.length > 0) {
-                handleFileSelect(e.target.files[0]);
+            if (lower.startsWith('treatment:')) {
+                currentSection = 'treatment';
+                return;
             }
-        });
-
-        function handleFileSelect(file) {
-            // Validate file type
-            const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
-            if (!allowedTypes.includes(file.type)) {
-                alert('Please select a JPEG, PNG, or WebP image file');
+            if (lower.startsWith('prevention:')) {
+                currentSection = 'prevention';
+                return;
+            }
+            if (lower.startsWith('severity')) {
+                if (/severe/i.test(trimmed)) {
+                    sections.severity = 'severe';
+                } else if (/mild/i.test(trimmed)) {
+                    sections.severity = 'mild';
+                } else {
+                    sections.severity = 'moderate';
+                }
                 return;
             }
 
-            // Validate file size (10MB)
-            if (file.size > 10 * 1024 * 1024) {
-                alert('File size must be less than 10MB');
-                return;
+            if (!currentSection) {
+                currentSection = 'diagnosis';
             }
 
-            selectedFile = file;
-
-            // Show preview
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                previewImage.src = e.target.result;
-                previewImage.style.display = 'block';
-                removeImageBtn.style.display = 'flex';
-                uploadZone.classList.add('has-image');
-
-                // Hide upload text
-                uploadZone.querySelector('.upload-icon').style.display = 'none';
-                uploadZone.querySelector('.upload-text').style.display = 'none';
-                uploadZone.querySelector('.upload-subtext').style.display = 'none';
-            };
-            reader.readAsDataURL(file);
-        }
-
-        removeImageBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            selectedFile = null;
-            fileInput.value = '';
-            previewImage.style.display = 'none';
-            removeImageBtn.style.display = 'none';
-            uploadZone.classList.remove('has-image');
-
-            // Show upload text
-            uploadZone.querySelector('.upload-icon').style.display = 'block';
-            uploadZone.querySelector('.upload-text').style.display = 'block';
-            uploadZone.querySelector('.upload-subtext').style.display = 'block';
+            buffers[currentSection].push(trimmed);
         });
 
-        function parseAIResponse(response) {
-            const sections = {
-                diagnosis: '',
-                treatment: '',
-                prevention: '',
-                severity: 'moderate'
-            };
+        sections.diagnosis = buffers.diagnosis.join('\n').trim();
+        sections.treatment = buffers.treatment.join('\n').trim();
+        sections.prevention = buffers.prevention.join('\n').trim();
 
-            const lines = response.split('\n').filter(line => line.trim());
-            let currentSection = null;
+        if (!sections.diagnosis) {
+            sections.diagnosis = response.substring(0, response.length / 3).trim();
+        }
+        if (!sections.treatment) {
+            sections.treatment = 'Consult with a local agricultural extension officer for specific treatment recommendations.';
+        }
+        if (!sections.prevention) {
+            sections.prevention = 'Follow good agricultural practices and regular monitoring to prevent future issues.';
+        }
 
-            const buffers = {
-                diagnosis: [],
-                treatment: [],
-                prevention: []
-            };
+        return sections;
+    }
 
-            lines.forEach(line => {
-                const trimmed = line.trim();
-                const lower = trimmed.toLowerCase();
+    function formatContent(content, type) {
+        if (!content) return '';
 
-                // Detect section headers
-                if (lower.startsWith('diagnosis:')) {
-                    currentSection = 'diagnosis';
-                    return; // skip the header line itself
-                }
-                if (lower.startsWith('treatment:')) {
-                    currentSection = 'treatment';
-                    return;
-                }
-                if (lower.startsWith('prevention:')) {
-                    currentSection = 'prevention';
-                    return;
-                }
-                if (lower.startsWith('severity')) {
-                    // Parse severity
-                    if (/severe/i.test(trimmed)) {
-                        sections.severity = 'severe';
-                    } else if (/mild/i.test(trimmed)) {
-                        sections.severity = 'mild';
-                    } else {
-                        sections.severity = 'moderate';
-                    }
-                    return;
-                }
+        let formatted = content
+            .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+            .replace(/\*(.*?)\*/g, '<em>$1</em>')
+            .replace(/(\d+\.\s)/g, '<br><strong>$1</strong>')
+            .replace(/(-\s)/g, '<br>• ');
 
-                // If no section has been set yet, default to diagnosis
-                if (!currentSection) {
-                    currentSection = 'diagnosis';
-                }
+        if (type === 'diagnosis') {
+            const severity = content.toLowerCase().includes('severe') ? 'severe' :
+                content.toLowerCase().includes('mild') ? 'mild' : 'moderate';
+            formatted += `<div class="severity-badge severity-${severity}">Severity: ${severity}</div>`;
+        }
 
-                buffers[currentSection].push(trimmed);
+        return formatted;
+    }
+
+    diagnosisForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        if (!selectedFile) {
+            alert('Please select an image to analyze');
+            return;
+        }
+
+        loadingSection.style.display = 'block';
+        resultsSection.style.display = 'none';
+        analyzeBtn.disabled = true;
+        analyzeBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Analyzing...';
+
+        loadingSection.scrollIntoView({ behavior: 'smooth' });
+
+        try {
+            const formData = new FormData();
+            formData.append('cropImage', selectedFile);
+            formData.append('cropType', document.getElementById('cropType').value);
+            formData.append('location', document.getElementById('location').value);
+            formData.append('symptoms', document.getElementById('symptoms').value);
+
+            const response = await fetch('/api/diagnosis/analyze', {
+                method: 'POST',
+                credentials: 'include',
+                body: formData
             });
 
-            sections.diagnosis = buffers.diagnosis.join('\n').trim();
-            sections.treatment = buffers.treatment.join('\n').trim();
-            sections.prevention = buffers.prevention.join('\n').trim();
+            const data = await response.json();
 
-            // Fallbacks (just in case model misbehaves)
-            if (!sections.diagnosis) {
-                sections.diagnosis = response.substring(0, response.length / 3).trim();
-            }
-            if (!sections.treatment) {
-                sections.treatment = 'Consult with a local agricultural extension officer for specific treatment recommendations.';
-            }
-            if (!sections.prevention) {
-                sections.prevention = 'Follow good agricultural practices and regular monitoring to prevent future issues.';
+            if (!response.ok) {
+                throw new Error(data.message || 'Analysis failed');
             }
 
-            return sections;
+            const parsedResults = parseAIResponse(data.diagnosis);
+
+            document.getElementById('diagnosisContent').innerHTML = formatContent(parsedResults.diagnosis, 'diagnosis');
+            document.getElementById('treatmentContent').innerHTML = formatContent(parsedResults.treatment, 'treatment');
+            document.getElementById('preventionContent').innerHTML = formatContent(parsedResults.prevention, 'prevention');
+
+            loadingSection.style.display = 'none';
+            resultsSection.style.display = 'block';
+
+            resultsSection.scrollIntoView({ behavior: 'smooth' });
+
+        } catch (error) {
+            console.error('Analysis error:', error);
+            alert('Failed to analyze crop image: ' + error.message);
+            loadingSection.style.display = 'none';
+        } finally {
+            analyzeBtn.disabled = false;
+            analyzeBtn.innerHTML = '<i class="fas fa-microscope"></i> Analyze Crop with AI';
         }
+    });
 
-
-        // Format content with better styling
-        function formatContent(content, type) {
-            if (!content) return '';
-
-            let formatted = content
-                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                .replace(/\*(.*?)\*/g, '<em>$1</em>')
-                .replace(/(\d+\.\s)/g, '<br><strong>$1</strong>')
-                .replace(/(-\s)/g, '<br>• ');
-
-            // Add severity badge for diagnosis
-            if (type === 'diagnosis') {
-                const severity = content.toLowerCase().includes('severe') ? 'severe' :
-                    content.toLowerCase().includes('mild') ? 'mild' : 'moderate';
-                formatted += `<div class="severity-badge severity-${severity}">Severity: ${severity}</div>`;
-            }
-
-            return formatted;
-        }
-
-        // Form submission
-        diagnosisForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-
-            if (!selectedFile) {
-                alert('Please select an image to analyze');
-                return;
-            }
-
-            // Show loading
-            loadingSection.style.display = 'block';
-            resultsSection.style.display = 'none';
-            analyzeBtn.disabled = true;
-            analyzeBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Analyzing...';
-
-            // Scroll to loading section
-            loadingSection.scrollIntoView({ behavior: 'smooth' });
-
+    document.getElementById('logoutBtn').addEventListener('click', async () => {
+        if (confirm('Are you sure you want to logout?')) {
             try {
-                const formData = new FormData();
-                formData.append('cropImage', selectedFile);
-                formData.append('cropType', document.getElementById('cropType').value);
-                formData.append('location', document.getElementById('location').value);
-                formData.append('symptoms', document.getElementById('symptoms').value);
-
-                const response = await fetch('/api/diagnosis/analyze', {
-                    method: 'POST',
-                    credentials: 'include',
-                    body: formData
-                });
-
-                const data = await response.json();
-
-                if (!response.ok) {
-                    throw new Error(data.message || 'Analysis failed');
-                }
-
-                // Parse and display results
-                const parsedResults = parseAIResponse(data.diagnosis);
-
-                document.getElementById('diagnosisContent').innerHTML = formatContent(parsedResults.diagnosis, 'diagnosis');
-                document.getElementById('treatmentContent').innerHTML = formatContent(parsedResults.treatment, 'treatment');
-                document.getElementById('preventionContent').innerHTML = formatContent(parsedResults.prevention, 'prevention');
-
-                // Show results
-                loadingSection.style.display = 'none';
-                resultsSection.style.display = 'block';
-
-                // Scroll to results
-                resultsSection.scrollIntoView({ behavior: 'smooth' });
-
-            } catch (error) {
-                console.error('Analysis error:', error);
-                alert('Failed to analyze crop image: ' + error.message);
-                loadingSection.style.display = 'none';
-            } finally {
-                analyzeBtn.disabled = false;
-                analyzeBtn.innerHTML = '<i class="fas fa-microscope"></i> Analyze Crop with AI';
+                await fetch('/api/auth/logout', { method: 'POST', credentials: 'include' });
+                window.location.href = 'index.html';
+            } catch {
+                window.location.href = 'index.html';
             }
-        });
-
-        // Logout function
-        document.getElementById('logoutBtn').addEventListener('click', async () => {
-            if (confirm('Are you sure you want to logout?')) {
-                try {
-                    await fetch('/api/auth/logout', { method: 'POST', credentials: 'include' });
-                    window.location.href = 'index.html';
-                } catch {
-                    window.location.href = 'index.html';
-                }
-            }
-        });
-
-        // Coming soon notification
-        function showComingSoon() {
-            alert('🚀 This feature is coming soon! We\'re working hard to bring you the best farming tools.');
         }
+    });
 
-        // Mobile sidebar toggle
-        function toggleSidebar() {
-            document.getElementById('sidebar').classList.toggle('open');
+    function showComingSoon() {
+        alert('🚀 This feature is coming soon! We\'re working hard to bring you the best farming tools.');
+    }
+
+    // Mobile sidebar toggle
+    function toggleSidebar() {
+        document.getElementById('sidebar').classList.toggle('active');
+    }
+
+    // Close sidebar on outside click (mobile)
+    document.addEventListener('click', function (event) {
+        const sidebar = document.getElementById('sidebar');
+        const menuBtn = document.querySelector('.mobile-menu-btn');
+
+        if (window.innerWidth <= 768 &&
+            sidebar.classList.contains('active') &&
+            !sidebar.contains(event.target) &&
+            !menuBtn.contains(event.target)) {
+            sidebar.classList.remove('active');
         }
+    });
 
-        // Close sidebar on outside click (mobile)
-        document.addEventListener('click', function (event) {
-            const sidebar = document.getElementById('sidebar');
-            const menuBtn = document.querySelector('.mobile-menu-btn');
+    // Single, unified onload
+    window.onload = () => {
+        console.log('Page loaded, initializing...');
+        checkAuth();
+        loadUserInfo();
+        initializeTheme();
+        setActiveNavigation();
 
-            if (window.innerWidth <= 768 &&
-                sidebar.classList.contains('open') &&
-                !sidebar.contains(event.target) &&
-                !menuBtn.contains(event.target)) {
-                sidebar.classList.remove('open');
-            }
-        });
-
-        // Initialize
-        window.onload = () => {
-            checkAuth();
-            loadUserInfo();
-            initializeTheme();
-        };
-    </script>
+        // Only call if defined elsewhere
+        if (typeof loadWeatherData === 'function') {
+            setTimeout(() => {
+                loadWeatherData();
+            }, 500);
+        }
+    };
+</script>
 </body>
 
 </html>
