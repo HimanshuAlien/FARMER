@@ -1239,6 +1239,28 @@
             opacity: 0.6;
             cursor: default;
         }
+
+        /* Malayalam font scaling so things don't blow up */
+        body.lang-ml {
+            font-size: 0.9rem;
+            line-height: 1.35;
+        }
+
+        body.lang-ml .sidebar .nav-item span {
+            font-size: 0.85rem;
+        }
+
+        body.lang-ml .simple-title span {
+            font-size: 1.1rem;
+        }
+
+        body.lang-ml .today-title-row h2 {
+            font-size: 0.95rem;
+        }
+
+        body.lang-ml .section-title-row h2 {
+            font-size: 0.95rem;
+        }
     </style>
 </head>
 
@@ -1256,62 +1278,71 @@
         </div>
         <div class="nav-menu">
             <div class="nav-section">
-                <div class="nav-section-title">Main Menu</div>
+                <div class="nav-section-title" data-i18n="sidebar.mainMenu">Main Menu</div>
                 <a href="dashboard.html" class="nav-item">
                     <i class="fas fa-home"></i>
-                    <span>Dashboard</span>
+                    <span data-i18n="sidebar.dashboard">Dashboard</span>
                 </a>
                 <a href="ask-query.html" class="nav-item">
                     <i class="fas fa-robot"></i>
-                    <span>Ask Query</span>
+                    <span data-i18n="sidebar.askQuery">Ask Query</span>
                 </a>
             </div>
 
             <div class="nav-section">
-                <div class="nav-section-title">Tools</div>
+                <div class="nav-section-title" data-i18n="sidebar.tools">Tools</div>
                 <a href="crop-diagnosis.html" class="nav-item">
-                    <i class="fas fa-camera"></i>
-                    <span>Crop Diagnosis</span>
+                    <i class="fa-solid fa-briefcase-medical"></i>
+                    <span data-i18n="sidebar.cropDiagnosis">Crop Diagnosis</span>
                 </a>
                 <a href="weather-alerts.html" class="nav-item active">
                     <i class="fas fa-cloud-sun"></i>
-                    <span>Weather & Alerts</span>
+                    <span data-i18n="sidebar.weatherAlerts">Weather & Alerts</span>
                 </a>
                 <a href="Schemes.html" class="nav-item">
-                    <i class="fa-solid fa-binoculars"></i>
-                    <span>Govt Schemes</span>
+                    <i class="fa-solid fa-building-ngo"></i>
+                    <span data-i18n="sidebar.schemes">Govt Schemes</span>
+                </a>
+                <a href="helpline.html" class="nav-item">
+                    <i class="fa-solid fa-phone"></i>
+                    <span data-i18n="sidebar.helpline">Helpline Number</span>
                 </a>
                 <a href="smart-farming.html" class="nav-item">
                     <i class="fa-solid fa-briefcase"></i>
-                    <span>Agri Swasthya</span>
+                    <span data-i18n="sidebar.agriSwasthya">Agri Swasthya</span>
                 </a>
                 <a href="market-prices.html" class="nav-item">
-                    <i class="fas fa-chart-line"></i>
-                    <span>Market Prices</span>
+                    <i class="fa-solid fa-dollar-sign"></i>
+                    <span data-i18n="sidebar.marketPrices">Market Prices</span>
                 </a>
             </div>
 
             <div class="nav-section">
-                <div class="nav-section-title">Community</div>
+                <div class="nav-section-title" data-i18n="sidebar.communitySection">Community</div>
                 <a href="farmer-community.html" class="nav-item">
                     <i class="fas fa-users"></i>
-                    <span>Community</span>
+                    <span data-i18n="sidebar.community">Community</span>
                 </a>
                 <a href="profile.html" class="nav-item">
                     <i class="fas fa-user"></i>
-                    <span>Profile</span>
+                    <span data-i18n="sidebar.profile">Profile</span>
                 </a>
             </div>
         </div>
         <div class="sidebar-footer">
-            <div id="userInfo" class="user-info"></div>
+            <div id="userInfo" class="user-info">
+                <div style="font-weight:600;" data-i18n="sidebar.user.loadingTitle">Loading...</div>
+                <div style="font-size:0.8rem;opacity:0.8;" data-i18n="sidebar.user.loadingSubtitle">
+                    Fetching profile
+                </div>
+            </div>
             <button class="theme-toggle-sidebar" onclick="toggleTheme()">
                 <i class="fas fa-sun"></i>
-                <span>Toggle Theme</span>
+                <span data-i18n="sidebar.toggleTheme">Toggle Theme</span>
             </button>
             <button id="logoutBtn" class="logout-btn">
                 <i class="fas fa-sign-out-alt"></i>
-                <span>Logout</span>
+                <span data-i18n="sidebar.logout">Logout</span>
             </button>
         </div>
     </nav>
@@ -1325,12 +1356,13 @@
                 </button>
                 <h1 class="simple-title">
                     <img src="images/weather-alerts.png" alt="Weather & Alerts" class="topbar-logo">
-                    <span>Weather & Alerts</span>
+                    <span data-i18n="weather.title">Weather & Alerts</span>
                 </h1>
             </div>
             <div class="topbar-right">
                 <input type="text" id="locationInput" class="location-selector"
-                    placeholder="Enter location (e.g., Kochi, Kerala)" value="Kochi, Kerala">
+                    placeholder="Enter location (e.g., Kochi, Kerala)" value="Kochi, Kerala"
+                    data-i18n-placeholder="weather.location.placeholder">
                 <button onclick="refreshWeather()"
                     style="background: var(--primary); color: white; border: none; padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer;">
                     <i class="fas fa-sync-alt"></i>
@@ -1342,16 +1374,17 @@
             <!-- Loading State -->
             <div id="loadingState" class="loading">
                 <i class="fas fa-spinner fa-spin" style="font-size: 2rem; margin-bottom: 1rem;"></i>
-                <p>Loading weather data...</p>
+                <p data-i18n="weather.loading.text">Loading weather data...</p>
             </div>
 
             <!-- Error State -->
             <div id="errorState" class="error" style="display: none;">
                 <i class="fas fa-exclamation-triangle" style="font-size: 2rem; margin-bottom: 0.7rem;"></i>
-                <h3 style="margin-bottom:0.3rem;">Failed to load weather data</h3>
+                <h3 style="margin-bottom:0.3rem;" data-i18n="weather.error.title">Failed to load weather data</h3>
                 <p id="errorMessage" style="font-size:0.85rem;"></p>
                 <button onclick="refreshWeather()"
-                    style="margin-top: 1rem; background: var(--primary); color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 8px; cursor: pointer; font-size:0.85rem;">
+                    style="margin-top: 1rem; background: var(--primary); color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 8px; cursor: pointer; font-size:0.85rem;"
+                    data-i18n="weather.error.retry">
                     Try Again
                 </button>
             </div>
@@ -1369,35 +1402,35 @@
                         </div>
                         <div class="today-meta">
                             <div class="today-title-row">
-                                <h2>Today in your village</h2>
+                                <h2 data-i18n="weather.today.title">Today in your village</h2>
                                 <span class="today-badge">
                                     <i class="fas fa-circle" style="font-size:0.5rem; color:#22c55e;"></i>
-                                    Live from KrishiMitr
+                                    <span data-i18n="weather.today.badge">Live from KrishiMitr</span>
                                 </span>
                             </div>
                             <div class="today-stats-row">
                                 <div class="mini-stat">
-                                    <span class="mini-label">Humidity</span>
+                                    <span class="mini-label" data-i18n="weather.today.humidity">Humidity</span>
                                     <span class="mini-value" id="humidity">--%</span>
                                 </div>
                                 <div class="mini-stat">
-                                    <span class="mini-label">Wind</span>
+                                    <span class="mini-label" data-i18n="weather.today.wind">Wind</span>
                                     <span class="mini-value" id="windSpeed">-- km/h</span>
                                 </div>
                                 <div class="mini-stat">
-                                    <span class="mini-label">Feels like</span>
+                                    <span class="mini-label" data-i18n="weather.today.feelsLike">Feels like</span>
                                     <span class="mini-value" id="feelsLike">--°C</span>
                                 </div>
                                 <div class="mini-stat">
-                                    <span class="mini-label">Visibility</span>
+                                    <span class="mini-label" data-i18n="weather.today.visibility">Visibility</span>
                                     <span class="mini-value" id="visibility">-- km</span>
                                 </div>
                                 <div class="mini-stat">
-                                    <span class="mini-label">Pressure</span>
+                                    <span class="mini-label" data-i18n="weather.today.pressure">Pressure</span>
                                     <span class="mini-value" id="pressure">-- hPa</span>
                                 </div>
                                 <div class="mini-stat">
-                                    <span class="mini-label">Sky</span>
+                                    <span class="mini-label" data-i18n="weather.today.sky">Sky</span>
                                     <span class="mini-value"><i id="mainWeatherIcon" class="fas fa-sun"></i></span>
                                 </div>
                             </div>
@@ -1407,17 +1440,17 @@
                     <!-- Today advice -->
                     <div class="today-advice-card">
                         <div class="today-advice-header">
-                            <h3>Today's weather-based advice</h3>
+                            <h3 data-i18n="weather.todayAdvice.title">Today's weather-based advice</h3>
                             <span id="todayAdviceTag" class="today-advice-tag-chip tag-normal">
                                 <i class="fas fa-seedling"></i>
-                                Normal farming day
+                                <span data-i18n="weather.todayAdvice.tag.normal">Normal farming day</span>
                             </span>
                         </div>
                         <div class="today-advice-body">
                             <div class="today-advice-image">
                                 <img id="todayFarmerImage" src="images/farmer-normal.png" alt="Farmer"
                                     class="today-farmer-img">
-                                <div class="today-advice-note">
+                                <div class="today-advice-note" data-i18n="weather.todayAdvice.note">
                                     Generated automatically from live weather & forecast.
                                 </div>
                             </div>
@@ -1434,8 +1467,10 @@
                     <div class="forecast-section">
                         <div class="section-title-row">
                             <div>
-                                <h2>Next 5 days forecast</h2>
-                                <div class="section-sub">Use colours: green = good, yellow = average, red = risky</div>
+                                <h2 data-i18n="weather.forecast.title">Next 5 days forecast</h2>
+                                <div class="section-sub" data-i18n="weather.forecast.sub">
+                                    Use colours: green = good, yellow = average, red = risky
+                                </div>
                             </div>
                         </div>
                         <div id="forecastGrid" class="forecast-grid"></div>
@@ -1445,11 +1480,15 @@
                     <div class="alerts-section">
                         <div class="alerts-header">
                             <div>
-                                <h2 style="font-size:1rem; font-weight:700;">Weather alerts</h2>
-                                <div class="section-sub">We highlight risky days for your crop</div>
+                                <h2 style="font-size:1rem; font-weight:700;" data-i18n="weather.alerts.title">
+                                    Weather alerts
+                                </h2>
+                                <div class="section-sub" data-i18n="weather.alerts.sub">
+                                    We highlight risky days for your crop
+                                </div>
                             </div>
                             <div class="alerts-toggle" onclick="toggleAlerts()">
-                                <span>SMS alerts</span>
+                                <span data-i18n="weather.alerts.sms">SMS alerts</span>
                                 <div id="alertsToggle" class="toggle-switch"></div>
                             </div>
                         </div>
@@ -1465,14 +1504,19 @@
                                 <i class="fas fa-map-marked-alt"></i>
                             </div>
                             <div>
-                                <div style="font-size:0.9rem; font-weight:600;">Kerala weather on map</div>
-                                <span>Pan, zoom & click on map to get AI-based advice for that spot</span>
+                                <div style="font-size:0.9rem; font-weight:600;" data-i18n="weather.map.title">
+                                    Kerala weather on map
+                                </div>
+                                <span data-i18n="weather.map.subtitle">
+                                    Pan, zoom & click on map to get AI-based advice for that spot
+                                </span>
                             </div>
                         </div>
                         <div class="map-controls-right">
                             <div class="map-search-box">
                                 <input type="text" id="mapSearchInput" class="map-search-input"
-                                    placeholder="Search village / town" />
+                                    placeholder="Search village / town"
+                                    data-i18n-placeholder="weather.map.searchPlaceholder" />
                                 <button class="map-search-btn" onclick="searchOnMap()">
                                     <i class="fas fa-search"></i>
                                 </button>
@@ -1480,27 +1524,33 @@
                             <div style="display:flex; gap:0.4rem; flex-wrap:wrap; justify-content:flex-end;">
                                 <button type="button" class="map-chip map-layer-chip active" data-layer="rain"
                                     onclick="toggleMapLayer('rain')">
-                                    <i class="fas fa-cloud-rain"></i> Rain
+                                    <i class="fas fa-cloud-rain"></i>
+                                    <span data-i18n="weather.map.layer.rain">Rain</span>
                                 </button>
                                 <button type="button" class="map-chip map-layer-chip active" data-layer="clouds"
                                     onclick="toggleMapLayer('clouds')">
-                                    <i class="fas fa-cloud"></i> Clouds
+                                    <i class="fas fa-cloud"></i>
+                                    <span data-i18n="weather.map.layer.clouds">Clouds</span>
                                 </button>
                                 <button type="button" class="map-chip map-layer-chip" data-layer="temp"
                                     onclick="toggleMapLayer('temp')">
-                                    <i class="fas fa-temperature-high"></i> Temp
+                                    <i class="fas fa-temperature-high"></i>
+                                    <span data-i18n="weather.map.layer.temp">Temp</span>
                                 </button>
                                 <button type="button" class="map-chip map-layer-chip" data-layer="storm"
                                     onclick="toggleMapLayer('storm')">
-                                    <i class="fas fa-bolt"></i> Storm / Pressure
+                                    <i class="fas fa-bolt"></i>
+                                    <span data-i18n="weather.map.layer.storm">Storm / Pressure</span>
                                 </button>
                                 <button type="button" class="map-chip map-layer-chip" data-layer="soil"
                                     onclick="toggleMapLayer('soil')">
-                                    <i class="fas fa-seedling"></i> Soil (0–10 cm)
+                                    <i class="fas fa-seedling"></i>
+                                    <span data-i18n="weather.map.layer.soil">Soil (0–10 cm)</span>
                                 </button>
                                 <button type="button" class="map-chip map-layer-chip" data-layer="wind"
                                     onclick="toggleMapLayer('wind')">
-                                    <i class="fas fa-wind"></i> Wind
+                                    <i class="fas fa-wind"></i>
+                                    <span data-i18n="weather.map.layer.wind">Wind</span>
                                 </button>
                             </div>
 
@@ -1513,16 +1563,22 @@
                         <div class="map-legend-left">
                             <span class="map-chip">
                                 <i class="fas fa-circle"></i>
-                                Circle = today's temperature at your village
+                                <span data-i18n="weather.map.legend.temp">
+                                    Circle = today's temperature at your village
+                                </span>
                             </span>
                             <span class="map-chip">
                                 <i class="fas fa-cloud-rain"></i>
-                                Darker blue = heavier rainfall
+                                <span data-i18n="weather.map.legend.rain">
+                                    Darker blue = heavier rainfall
+                                </span>
                             </span>
                         </div>
                         <span class="map-chip">
                             <i class="fas fa-hand-pointer"></i>
-                            Drag, zoom & click on map to ask AI about that area
+                            <span data-i18n="weather.map.legend.action">
+                                Drag, zoom & click on map to ask AI about that area
+                            </span>
                         </span>
                     </div>
                 </section>
@@ -1534,8 +1590,10 @@
     <div id="aiAdvicePanel" class="ai-advice-panel hidden">
         <div class="ai-advice-header">
             <div>
-                <div style="font-weight:600; font-size:0.95rem;">AI Farming Assistant</div>
-                <div id="aiLocationLabel" style="font-size:0.8rem; opacity:0.8;">
+                <div style="font-weight:600; font-size:0.95rem;" data-i18n="weather.ai.title">
+                    AI Farming Assistant
+                </div>
+                <div id="aiLocationLabel" style="font-size:0.8rem; opacity:0.8;" data-i18n="weather.ai.locationLabel">
                     Click on the map to select a location
                 </div>
             </div>
@@ -1547,210 +1605,388 @@
         </div>
 
         <div class="ai-advice-input-row">
-            <input type="text" id="aiAdviceInput" placeholder="Ask about irrigation, spraying, sowing, etc..." />
-            <button id="aiAdviceSendBtn">Ask</button>
+            <input type="text" id="aiAdviceInput" placeholder="Ask about irrigation, spraying, sowing, etc..."
+                data-i18n-placeholder="weather.ai.inputPlaceholder" />
+            <button id="aiAdviceSendBtn" data-i18n="weather.ai.button">Ask</button>
         </div>
     </div>
 
-    <!-- Leaflet JS -->
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
+    <!-- Language sync script -->
     <script>
-        // ---------- NAVIGATION ACTIVE ----------
-        function setActiveNavigation() {
-            const currentPage = window.location.pathname.split('/').pop() || 'dashboard.html';
-            const navItems = document.querySelectorAll('.nav-item');
+        const translations = {
+            en: {
+                // Sidebar / global
+                "sidebar.mainMenu": "Main Menu",
+                "sidebar.dashboard": "Dashboard",
+                "sidebar.askQuery": "Ask Query",
+                "sidebar.tools": "Tools",
+                "sidebar.cropDiagnosis": "Crop Diagnosis",
+                "sidebar.weatherAlerts": "Weather & Alerts",
+                "sidebar.schemes": "Govt Schemes",
+                "sidebar.helpline": "Helpline Number",
+                "sidebar.agriSwasthya": "Agri Swasthya",
+                "sidebar.marketPrices": "Market Prices",
+                "sidebar.communitySection": "Community",
+                "sidebar.community": "Community",
+                "sidebar.profile": "Profile",
+                "sidebar.toggleTheme": "Toggle Theme",
+                "sidebar.logout": "Logout",
+                "sidebar.user.loadingTitle": "Loading...",
+                "sidebar.user.loadingSubtitle": "Fetching profile",
 
-            navItems.forEach(item => item.classList.remove('active'));
+                // Weather page
+                "weather.title": "Weather & Alerts",
+                "weather.location.placeholder": "Enter location (e.g., Kochi, Kerala)",
+                "weather.loading.text": "Loading weather data...",
+                "weather.error.title": "Failed to load weather data",
+                "weather.error.retry": "Try Again",
 
-            let activeSelector = '';
-            if (currentPage === 'dashboard.html' || currentPage === '' || currentPage === '/') {
-                activeSelector = 'a[href="dashboard.html"]';
-            } else if (currentPage === 'weather-alerts.html') {
-                activeSelector = 'a[href="weather-alerts.html"]';
-            } else if (currentPage === 'ask-query.html') {
-                activeSelector = 'a[href="ask-query.html"]';
-            } else if (currentPage === 'crop-diagnosis.html') {
-                activeSelector = 'a[href="crop-diagnosis.html"]';
-            } else if (currentPage === 'market-prices.html') {
-                activeSelector = 'a[href="market-prices.html"]';
+                "weather.today.title": "Today in your village",
+                "weather.today.badge": "Live from KrishiMitr",
+                "weather.today.humidity": "Humidity",
+                "weather.today.wind": "Wind",
+                "weather.today.feelsLike": "Feels like",
+                "weather.today.visibility": "Visibility",
+                "weather.today.pressure": "Pressure",
+                "weather.today.sky": "Sky",
+
+                "weather.todayAdvice.title": "Today's weather-based advice",
+                "weather.todayAdvice.tag.normal": "Normal farming day",
+                "weather.todayAdvice.tag.good": "Very good conditions",
+                "weather.todayAdvice.tag.bad": "Risky for field work",
+                "weather.todayAdvice.note": "Generated automatically from live weather & forecast.",
+
+                "weather.forecast.title": "Next 5 days forecast",
+                "weather.forecast.sub": "Use colours: green = good, yellow = average, red = risky",
+
+                "weather.alerts.title": "Weather alerts",
+                "weather.alerts.sub": "We highlight risky days for your crop",
+                "weather.alerts.sms": "SMS alerts",
+
+                "weather.map.title": "Kerala weather on map",
+                "weather.map.subtitle": "Pan, zoom & click on map to get AI-based advice for that spot",
+                "weather.map.searchPlaceholder": "Search village / town",
+                "weather.map.layer.rain": "Rain",
+                "weather.map.layer.clouds": "Clouds",
+                "weather.map.layer.temp": "Temp",
+                "weather.map.layer.storm": "Storm / Pressure",
+                "weather.map.layer.soil": "Soil (0–10 cm)",
+                "weather.map.layer.wind": "Wind",
+                "weather.map.legend.temp": "Circle = today's temperature at your village",
+                "weather.map.legend.rain": "Darker blue = heavier rainfall",
+                "weather.map.legend.action": "Drag, zoom & click on map to ask AI about that area",
+
+                "weather.ai.title": "AI Farming Assistant",
+                "weather.ai.locationLabel": "Click on the map to select a location",
+                "weather.ai.inputPlaceholder": "Ask about irrigation, spraying, sowing, etc...",
+                "weather.ai.button": "Ask"
+            },
+            ml: {
+                // Sidebar / global
+                "sidebar.mainMenu": "പ്രധാന മെനു",
+                "sidebar.dashboard": "ഡാഷ്ബോർഡ്",
+                "sidebar.askQuery": "ചോദ്യം ചോദിക്കുക",
+                "sidebar.tools": "ഉപകരണങ്ങൾ",
+                "sidebar.cropDiagnosis": "വിള രോഗനിർണയം",
+                "sidebar.weatherAlerts": "കാലാവസ്ഥ & മുന്നറിയിപ്പുകൾ",
+                "sidebar.schemes": "സർക്കാർ പദ്ധതികൾ",
+                "sidebar.helpline": "ഹെൽപ്‌ലൈൻ നമ്പർ",
+                "sidebar.agriSwasthya": "അഗ്രീ ആരോഗ്യം",
+                "sidebar.marketPrices": "ചന്ത വിലകൾ",
+                "sidebar.communitySection": "കമ്മ്യൂണിറ്റി",
+                "sidebar.community": "കർഷക സമുദായം",
+                "sidebar.profile": "പ്രൊഫൈൽ",
+                "sidebar.toggleTheme": "തീം മാറ്റുക",
+                "sidebar.logout": "ലോഗൗട്ട്",
+                "sidebar.user.loadingTitle": "ലോഡ് ചെയ്യുന്നു...",
+                "sidebar.user.loadingSubtitle": "പ്രൊഫൈൽ വിവരങ്ങൾ ലഭ്യമാക്കുന്നു",
+
+                // Weather page
+                "weather.title": "കാലാവസ്ഥ & മുന്നറിയിപ്പുകൾ",
+                "weather.location.placeholder": "സ്ഥലം ചേർക്കുക (ഉദാ: കൊച്ചി, കേരളം)",
+                "weather.loading.text": "കാലാവസ്ഥാ വിവരങ്ങൾ ലോഡ് ചെയ്യുന്നു...",
+                "weather.error.title": "കാലാവസ്ഥാ ഡാറ്റ ലഭ്യമാക്കാൻ കഴിഞ്ഞില്ല",
+                "weather.error.retry": "വീണ്ടും ശ്രമിക്കുക",
+
+                "weather.today.title": "ഇന്നത്തെ നിങ്ങളുടെ പ്രദേശത്തെ കാലാവസ്ഥ",
+                "weather.today.badge": "ക്രിഷിമിത്രയിൽ നിന്നും തത്സമയ ഡാറ്റ",
+                "weather.today.humidity": "നനവ് (Humidity)",
+                "weather.today.wind": "കാറ്റ് (Wind)",
+                "weather.today.feelsLike": "തോന്നുന്ന താപനില",
+                "weather.today.visibility": "കാണുന്ന ദൂരം",
+                "weather.today.pressure": "മർദ്ദം",
+                "weather.today.sky": "ആകാശം",
+
+                "weather.todayAdvice.title": "ഇന്നത്തെ കാലാവസ്ഥയെ അടിസ്ഥാനമാക്കി കർഷക നിർദ്ദേശങ്ങൾ",
+                "weather.todayAdvice.tag.normal": "സാധാരണ കൃഷി ദിവസം",
+                "weather.todayAdvice.tag.good": "വളരെ നല്ല കൃഷി സാഹചര്യങ്ങൾ",
+                "weather.todayAdvice.tag.bad": "വയലിൽ ജോലിക്ക് അപകടസാധ്യത",
+                "weather.todayAdvice.note": "തത്സമയ കാലാവസ്ഥയും പ്രവചനവും ചേർത്ത് ഓട്ടോമാറ്റിക് ആയി തയ്യാറാക്കിയ നിർദ്ദേശങ്ങൾ.",
+
+                "weather.forecast.title": "അടുത്ത 5 ദിവസത്തെ കാലാവസ്ഥാ പ്രവചനം",
+                "weather.forecast.sub": "നിറങ്ങൾ ഉപയോഗിച്ച് മനസിലാക്കാം: പച്ച = നല്ലത്, മഞ്ഞ = ശരാശരി, ചുവപ്പ് = അപകടസാധ്യത",
+
+                "weather.alerts.title": "കാലാവസ്ഥ മുന്നറിയിപ്പുകൾ",
+                "weather.alerts.sub": "നിങ്ങളുടെ വിളയ്ക്കു അപകടസാധ്യമുള്ള ദിവസങ്ങൾ ഞങ്ങൾ ഹൈലൈറ്റ് ചെയ്യും",
+                "weather.alerts.sms": "എസ്സെംഎസ് അലർട്ടുകൾ",
+
+                "weather.map.title": "കേരളത്തിന്റെ കാലാവസ്ഥ – മാപ്പിലൂടെ",
+                "weather.map.subtitle": "മാപ്പിൽ പാൻ, സൂം, ക്ലിക്ക് ചെയ്ത് ആ ഭാഗത്തേക്കുള്ള എ.ഐ നിർദ്ദേശം നേടുക",
+                "weather.map.searchPlaceholder": "ഗ്രാമം / പട്ടണം തിരയുക",
+                "weather.map.layer.rain": "മഴ",
+                "weather.map.layer.clouds": "മേഘം",
+                "weather.map.layer.temp": "താപനില",
+                "weather.map.layer.storm": "ഇടിമിന്നൽ / മർദ്ദം",
+                "weather.map.layer.soil": "മണ്ണ് (0–10 സെം)",
+                "weather.map.layer.wind": "കാറ്റ്",
+                "weather.map.legend.temp": "ചക്രം = ഇന്ന് നിങ്ങളുടെ പഞ്ചായത്തിലെ താപനില",
+                "weather.map.legend.rain": "കൂടുതൽ ഇരുണ്ട നീല = കൂടുതൽ മഴ",
+                "weather.map.legend.action": "മാപ്പിൽ ഡ്രാഗ്, സൂം, ക്ലിക്ക് ചെയ്ത് ആ പ്രദേശത്തെ കുറിച്ച് എ.ഐയെ ചോദിക്കാം",
+
+                "weather.ai.title": "എ.ഐ കർഷക സഹായി",
+                "weather.ai.locationLabel": "മാപ്പിൽ ഒരു സ്ഥലം ക്ലിക്ക് ചെയ്ത് തെരഞ്ഞെടുക്കുക",
+                "weather.ai.inputPlaceholder": "നനവ്, പായൽ, വിത്ത് വിതയ്‌ക്കൽ, സ്പ്രേയിംഗ് എന്നിവയെ കുറിച്ച് ചോദിക്കൂ...",
+                "weather.ai.button": "ചോദിക്കുക"
             }
+        };
 
-            if (activeSelector) {
-                const activeItem = document.querySelector(activeSelector);
-                if (activeItem) activeItem.classList.add('active');
-            }
+        function applyTranslations(lang) {
+            document.querySelectorAll("[data-i18n]").forEach(el => {
+                const key = el.getAttribute("data-i18n");
+                const val = translations[lang] && translations[lang][key];
+                if (val) el.textContent = val;
+            });
+
+            document.querySelectorAll("[data-i18n-placeholder]").forEach(el => {
+                const key = el.getAttribute("data-i18n-placeholder");
+                const val = translations[lang] && translations[lang][key];
+                if (val) el.placeholder = val;
+            });
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
-            setActiveNavigation();
+        function updateLangButtons(lang) {
+            // In case any shared header has .lang-btn
+            document.querySelectorAll(".lang-btn").forEach(btn => {
+                btn.classList.toggle("active", btn.dataset.lang === lang);
+            });
+        }
+
+        function setLanguage(lang) {
+            localStorage.setItem("appLanguage", lang);
+            applyTranslations(lang);
+            updateLangButtons(lang);
+            document.body.classList.toggle("lang-ml", lang === "ml");
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const savedLang = localStorage.getItem("appLanguage") || "en";
+            setLanguage(savedLang);
         });
+    </script>
+</body>
 
-        // ---------- THEME / AUTH / USER ----------
-        let isDarkMode = localStorage.getItem('darkMode') === 'true';
-        let alertsEnabled = false;
+</html>
 
-        function initializeTheme() {
-            if (isDarkMode) {
-                document.body.classList.add('dark');
-                const themeIcon = document.querySelector('.theme-toggle-sidebar i');
-                const themeText = document.querySelector('.theme-toggle-sidebar span');
-                if (themeIcon) themeIcon.className = 'fas fa-moon';
-                if (themeText) themeText.textContent = 'Light Mode';
-            }
+
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+    // ---------- NAVIGATION ACTIVE ----------
+    function setActiveNavigation() {
+        const currentPage = window.location.pathname.split('/').pop() || 'dashboard.html';
+        const navItems = document.querySelectorAll('.nav-item');
+
+        navItems.forEach(item => item.classList.remove('active'));
+
+        let activeSelector = '';
+        if (currentPage === 'dashboard.html' || currentPage === '' || currentPage === '/') {
+            activeSelector = 'a[href="dashboard.html"]';
+        } else if (currentPage === 'weather-alerts.html') {
+            activeSelector = 'a[href="weather-alerts.html"]';
+        } else if (currentPage === 'ask-query.html') {
+            activeSelector = 'a[href="ask-query.html"]';
+        } else if (currentPage === 'crop-diagnosis.html') {
+            activeSelector = 'a[href="crop-diagnosis.html"]';
+        } else if (currentPage === 'market-prices.html') {
+            activeSelector = 'a[href="market-prices.html"]';
         }
 
-        function toggleTheme() {
-            isDarkMode = !isDarkMode;
-            document.body.classList.toggle('dark');
+        if (activeSelector) {
+            const activeItem = document.querySelector(activeSelector);
+            if (activeItem) activeItem.classList.add('active');
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        setActiveNavigation();
+    });
+
+    // ---------- THEME / AUTH / USER ----------
+    let isDarkMode = localStorage.getItem('darkMode') === 'true';
+    let alertsEnabled = false;
+
+    function initializeTheme() {
+        if (isDarkMode) {
+            document.body.classList.add('dark');
             const themeIcon = document.querySelector('.theme-toggle-sidebar i');
             const themeText = document.querySelector('.theme-toggle-sidebar span');
-            if (isDarkMode) {
-                if (themeIcon) themeIcon.className = 'fas fa-moon';
-                if (themeText) themeText.textContent = 'Light Mode';
-            } else {
-                if (themeIcon) themeIcon.className = 'fas fa-sun';
-                if (themeText) themeText.textContent = 'Toggle Theme';
-            }
-            localStorage.setItem('darkMode', isDarkMode);
+            if (themeIcon) themeIcon.className = 'fas fa-moon';
+            if (themeText) themeText.textContent = 'Light Mode';
         }
+    }
 
-        async function checkAuth() {
-            try {
-                const res = await fetch('/api/user/check-auth', { credentials: 'include' });
-                if (!res.ok) throw new Error('Unauthorized');
-            } catch {
-                console.log('Demo mode - auth skipped');
-            }
+    function toggleTheme() {
+        isDarkMode = !isDarkMode;
+        document.body.classList.toggle('dark');
+        const themeIcon = document.querySelector('.theme-toggle-sidebar i');
+        const themeText = document.querySelector('.theme-toggle-sidebar span');
+        if (isDarkMode) {
+            if (themeIcon) themeIcon.className = 'fas fa-moon';
+            if (themeText) themeText.textContent = 'Light Mode';
+        } else {
+            if (themeIcon) themeIcon.className = 'fas fa-sun';
+            if (themeText) themeText.textContent = 'Toggle Theme';
         }
+        localStorage.setItem('darkMode', isDarkMode);
+    }
 
-        async function loadUserInfo() {
-            try {
-                const res = await fetch('/api/user/profile', { credentials: 'include' });
-                if (res.ok) {
-                    const user = await res.json();
-                    document.getElementById('userInfo').innerHTML = `
+    async function checkAuth() {
+        try {
+            const res = await fetch('/api/user/check-auth', { credentials: 'include' });
+            if (!res.ok) throw new Error('Unauthorized');
+        } catch {
+            console.log('Demo mode - auth skipped');
+        }
+    }
+
+    async function loadUserInfo() {
+        try {
+            const res = await fetch('/api/user/profile', { credentials: 'include' });
+            if (res.ok) {
+                const user = await res.json();
+                document.getElementById('userInfo').innerHTML = `
             <div style="font-weight: 600;">${user.username}</div>
             <div style="font-size: 0.8rem; opacity: 0.8;">${user.email}</div>
           `;
-                    return;
-                }
-            } catch (error) {
+                return;
             }
-            document.getElementById('userInfo').innerHTML = `
+        } catch (error) {
+        }
+        document.getElementById('userInfo').innerHTML = `
         <div style="font-weight: 600;">Demo User</div>
         <div style="font-size: 0.8rem; opacity: 0.8;">farmer@kerala.gov.in</div>
       `;
-        }
+    }
 
-        // ---------- WEATHER CONDITION HELPER ----------
-        function getWeatherCondition(code) {
-            const conditions = {
-                0: { desc: 'Clear sky', icon: 'sun' },
-                1: { desc: 'Mainly clear', icon: 'sun' },
-                2: { desc: 'Partly cloudy', icon: 'cloud-sun' },
-                3: { desc: 'Overcast', icon: 'cloud' },
-                61: { desc: 'Light rain', icon: 'cloud-rain' },
-                63: { desc: 'Moderate rain', icon: 'cloud-rain' },
-                65: { desc: 'Heavy rain', icon: 'cloud-showers-heavy' },
-                95: { desc: 'Thunderstorm', icon: 'bolt' }
-            };
-            return conditions[code] || { desc: 'Partly cloudy', icon: 'cloud-sun' };
-        }
+    // ---------- WEATHER CONDITION HELPER ----------
+    function getWeatherCondition(code) {
+        const conditions = {
+            0: { desc: 'Clear sky', icon: 'sun' },
+            1: { desc: 'Mainly clear', icon: 'sun' },
+            2: { desc: 'Partly cloudy', icon: 'cloud-sun' },
+            3: { desc: 'Overcast', icon: 'cloud' },
+            61: { desc: 'Light rain', icon: 'cloud-rain' },
+            63: { desc: 'Moderate rain', icon: 'cloud-rain' },
+            65: { desc: 'Heavy rain', icon: 'cloud-showers-heavy' },
+            95: { desc: 'Thunderstorm', icon: 'bolt' }
+        };
+        return conditions[code] || { desc: 'Partly cloudy', icon: 'cloud-sun' };
+    }
 
-        // ---------- LOAD WEATHER DATA ----------
-        async function loadWeatherData() {
-            const location = document.getElementById('locationInput').value || 'Kochi, Kerala';
+    // ---------- LOAD WEATHER DATA ----------
+    async function loadWeatherData() {
+        const location = document.getElementById('locationInput').value || 'Kochi, Kerala';
 
-            try {
-                console.log(`Loading weather for: ${location}`);
-                document.getElementById('loadingState').style.display = 'block';
-                document.getElementById('errorState').style.display = 'none';
-                document.getElementById('weatherContent').style.display = 'none';
+        try {
+            console.log(`Loading weather for: ${location}`);
+            document.getElementById('loadingState').style.display = 'block';
+            document.getElementById('errorState').style.display = 'none';
+            document.getElementById('weatherContent').style.display = 'none';
 
-                const response = await fetch(`/api/weather/current/${encodeURIComponent(location)}`, {
-                    credentials: 'include'
-                });
+            const response = await fetch(`/api/weather/current/${encodeURIComponent(location)}`, {
+                credentials: 'include'
+            });
 
-                if (!response.ok) {
-                    const errorText = await response.text();
-                    throw new Error(`HTTP ${response.status}: ${errorText}`);
-                }
-
-                const weatherData = await response.json();
-                console.log('Weather data received:', weatherData);
-
-                displayWeatherData(weatherData);
-
-                document.getElementById('loadingState').style.display = 'none';
-                document.getElementById('weatherContent').style.display = 'flex';
-
-            } catch (error) {
-                console.error('Weather loading error:', error);
-                document.getElementById('loadingState').style.display = 'none';
-                document.getElementById('errorState').style.display = 'block';
-                document.getElementById('errorMessage').textContent = error.message;
-            }
-        }
-
-        function displayWeatherData(data) {
-            console.log('Displaying weather data:', data);
-
-            const current = data.current;
-            const condition = getWeatherCondition(current.weather_code);
-
-            document.getElementById('weatherTemp').textContent = `${current.temp}°C`;
-            document.getElementById('weatherCondition').textContent = condition.desc;
-            document.getElementById('weatherLocation').textContent = `${data.location.name}, ${data.location.country}`;
-
-            document.getElementById('humidity').textContent = `${current.humidity}%`;
-            document.getElementById('windSpeed').textContent = `${current.wind_speed} km/h`;
-            document.getElementById('visibility').textContent = `${current.visibility} km`;
-            document.getElementById('feelsLike').textContent = `${current.feels_like}°C`;
-            document.getElementById('pressure').textContent = `${current.pressure} hPa`;
-            document.getElementById('mainWeatherIcon').className = `fas fa-${condition.icon}`;
-
-            displayForecast(data.forecast);
-            displayAlerts(data.alerts, data.forecast);
-            displayAiFarmingAdvice(data.forecast, current);
-            initWeatherMap(data);
-        }
-
-        // ---------- FORECAST (NEXT 5 REAL DAYS) ----------
-        function displayForecast(forecast) {
-            const forecastGrid = document.getElementById('forecastGrid');
-
-            if (!forecast || !forecast.temperature_2m_max || forecast.temperature_2m_max.length === 0) {
-                forecastGrid.innerHTML = '<p style="font-size:0.8rem; color:var(--text-secondary-light);">Forecast not available.</p>';
-                return;
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(`HTTP ${response.status}: ${errorText}`);
             }
 
-            const today = new Date();
-            const cards = [];
-            const totalDays = Math.min(6, forecast.temperature_2m_max.length); // we'll show indices 1..5
+            const weatherData = await response.json();
+            console.log('Weather data received:', weatherData);
 
-            for (let i = 1; i < totalDays; i++) {
-                const labelDate = new Date();
-                labelDate.setDate(today.getDate() + i); // always future days from now
+            displayWeatherData(weatherData);
 
-                const dayName = labelDate.toLocaleDateString('en-IN', { weekday: 'short' });
-                const monthDay = labelDate.toLocaleDateString('en-IN', { month: 'short', day: 'numeric' });
+            document.getElementById('loadingState').style.display = 'none';
+            document.getElementById('weatherContent').style.display = 'flex';
 
-                const maxT = Math.round(forecast.temperature_2m_max[i]);
-                const minT = Math.round(forecast.temperature_2m_min[i]);
-                const code = forecast.weather_code[i];
-                const cond = getWeatherCondition(code);
-                const rain = forecast.precipitation_sum ? Math.round(forecast.precipitation_sum[i] || 0) : 0;
+        } catch (error) {
+            console.error('Weather loading error:', error);
+            document.getElementById('loadingState').style.display = 'none';
+            document.getElementById('errorState').style.display = 'block';
+            document.getElementById('errorMessage').textContent = error.message;
+        }
+    }
 
-                // Severity: red / yellow / green
-                let severityClass = 'forecast-good'; // green
-                if (maxT > 34 || rain > 20 || code >= 63) {
-                    severityClass = 'forecast-bad';    // red
-                } else if (maxT > 32 || rain > 5 || code >= 61) {
-                    severityClass = 'forecast-warn';   // yellow
-                }
+    function displayWeatherData(data) {
+        console.log('Displaying weather data:', data);
 
-                cards.push(`
+        const current = data.current;
+        const condition = getWeatherCondition(current.weather_code);
+
+        document.getElementById('weatherTemp').textContent = `${current.temp}°C`;
+        document.getElementById('weatherCondition').textContent = condition.desc;
+        document.getElementById('weatherLocation').textContent = `${data.location.name}, ${data.location.country}`;
+
+        document.getElementById('humidity').textContent = `${current.humidity}%`;
+        document.getElementById('windSpeed').textContent = `${current.wind_speed} km/h`;
+        document.getElementById('visibility').textContent = `${current.visibility} km`;
+        document.getElementById('feelsLike').textContent = `${current.feels_like}°C`;
+        document.getElementById('pressure').textContent = `${current.pressure} hPa`;
+        document.getElementById('mainWeatherIcon').className = `fas fa-${condition.icon}`;
+
+        displayForecast(data.forecast);
+        displayAlerts(data.alerts, data.forecast);
+        displayAiFarmingAdvice(data.forecast, current);
+        initWeatherMap(data);
+    }
+
+    // ---------- FORECAST (NEXT 5 REAL DAYS) ----------
+    function displayForecast(forecast) {
+        const forecastGrid = document.getElementById('forecastGrid');
+
+        if (!forecast || !forecast.temperature_2m_max || forecast.temperature_2m_max.length === 0) {
+            forecastGrid.innerHTML = '<p style="font-size:0.8rem; color:var(--text-secondary-light);">Forecast not available.</p>';
+            return;
+        }
+
+        const today = new Date();
+        const cards = [];
+        const totalDays = Math.min(6, forecast.temperature_2m_max.length); // we'll show indices 1..5
+
+        for (let i = 1; i < totalDays; i++) {
+            const labelDate = new Date();
+            labelDate.setDate(today.getDate() + i); // always future days from now
+
+            const dayName = labelDate.toLocaleDateString('en-IN', { weekday: 'short' });
+            const monthDay = labelDate.toLocaleDateString('en-IN', { month: 'short', day: 'numeric' });
+
+            const maxT = Math.round(forecast.temperature_2m_max[i]);
+            const minT = Math.round(forecast.temperature_2m_min[i]);
+            const code = forecast.weather_code[i];
+            const cond = getWeatherCondition(code);
+            const rain = forecast.precipitation_sum ? Math.round(forecast.precipitation_sum[i] || 0) : 0;
+
+            // Severity: red / yellow / green
+            let severityClass = 'forecast-good'; // green
+            if (maxT > 34 || rain > 20 || code >= 63) {
+                severityClass = 'forecast-bad';    // red
+            } else if (maxT > 32 || rain > 5 || code >= 61) {
+                severityClass = 'forecast-warn';   // yellow
+            }
+
+            cards.push(`
           <div class="forecast-card ${severityClass}">
             <div class="forecast-day">${dayName}</div>
             <div class="forecast-date">${monthDay}</div>
@@ -1762,18 +1998,18 @@
             ${rain > 0 ? `<div class="forecast-extra"><i class="fas fa-droplet"></i>${rain} mm rain</div>` : ''}
           </div>
         `);
-            }
-
-            forecastGrid.innerHTML = cards.join('');
         }
 
-        // ---------- ALERTS + HEAVY RAIN FROM FORECAST ----------
-        function displayAlerts(alerts, forecast) {
-            const alertsGrid = document.getElementById('alertsGrid');
-            let html = '';
+        forecastGrid.innerHTML = cards.join('');
+    }
 
-            if (!alerts || alerts.length === 0) {
-                html += `
+    // ---------- ALERTS + HEAVY RAIN FROM FORECAST ----------
+    function displayAlerts(alerts, forecast) {
+        const alertsGrid = document.getElementById('alertsGrid');
+        let html = '';
+
+        if (!alerts || alerts.length === 0) {
+            html += `
           <div class="alert-card low">
             <div class="alert-icon">✅</div>
             <div class="alert-content">
@@ -1782,8 +2018,8 @@
             </div>
           </div>
         `;
-            } else {
-                html += alerts.map(alert => `
+        } else {
+            html += alerts.map(alert => `
           <div class="alert-card ${alert.severity || 'medium'}">
             <div class="alert-icon">${alert.icon || '⚠️'}</div>
             <div class="alert-content">
@@ -1792,26 +2028,26 @@
             </div>
           </div>
         `).join('');
+        }
+
+        // EXTRA: auto heavy rainfall alert from forecast (next 5 days)
+        if (forecast && forecast.temperature_2m_max && forecast.precipitation_sum) {
+            let heavy = null;
+            const today = new Date();
+            const totalDays = Math.min(6, forecast.temperature_2m_max.length);
+            for (let i = 1; i < totalDays; i++) {
+                const rain = forecast.precipitation_sum[i] || 0;
+                if (rain >= 20) {
+                    const d = new Date();
+                    d.setDate(today.getDate() + i);
+                    const label = d.toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short' });
+                    heavy = { label, rain };
+                    break;
+                }
             }
 
-            // EXTRA: auto heavy rainfall alert from forecast (next 5 days)
-            if (forecast && forecast.temperature_2m_max && forecast.precipitation_sum) {
-                let heavy = null;
-                const today = new Date();
-                const totalDays = Math.min(6, forecast.temperature_2m_max.length);
-                for (let i = 1; i < totalDays; i++) {
-                    const rain = forecast.precipitation_sum[i] || 0;
-                    if (rain >= 20) {
-                        const d = new Date();
-                        d.setDate(today.getDate() + i);
-                        const label = d.toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short' });
-                        heavy = { label, rain };
-                        break;
-                    }
-                }
-
-                if (heavy) {
-                    const heavyHtml = `
+            if (heavy) {
+                const heavyHtml = `
             <div class="alert-card high">
               <div class="alert-icon">🚨</div>
               <div class="alert-content">
@@ -1822,524 +2058,524 @@
               </div>
             </div>
           `;
-                    html = heavyHtml + html;
-                }
+                html = heavyHtml + html;
             }
-
-            alertsGrid.innerHTML = html;
         }
 
-        // ---------- AI-LIKE TODAY ADVICE (from current + forecast) ----------
-        function displayAiFarmingAdvice(forecast, current) {
-            const container = document.getElementById('todayAdvice');
-            const tagEl = document.getElementById('todayAdviceTag');
-            const imgEl = document.getElementById('todayFarmerImage');
+        alertsGrid.innerHTML = html;
+    }
 
-            const temp = current?.temp ?? 30;
-            const humidity = current?.humidity ?? 70;
-            const wind = current?.wind_speed ?? 5;
+    // ---------- AI-LIKE TODAY ADVICE (from current + forecast) ----------
+    function displayAiFarmingAdvice(forecast, current) {
+        const container = document.getElementById('todayAdvice');
+        const tagEl = document.getElementById('todayAdviceTag');
+        const imgEl = document.getElementById('todayFarmerImage');
 
-            const rainToday = forecast?.precipitation_sum ? (forecast.precipitation_sum[0] || 0) : 0;
-            const codeToday = forecast?.weather_code ? forecast.weather_code[0] : current?.weather_code;
-            const cond = getWeatherCondition(codeToday || 2);
+        const temp = current?.temp ?? 30;
+        const humidity = current?.humidity ?? 70;
+        const wind = current?.wind_speed ?? 5;
 
-            const items = [];
-            let riskScore = 0;
+        const rainToday = forecast?.precipitation_sum ? (forecast.precipitation_sum[0] || 0) : 0;
+        const codeToday = forecast?.weather_code ? forecast.weather_code[0] : current?.weather_code;
+        const cond = getWeatherCondition(codeToday || 2);
 
-            // Temperature rules
-            if (temp <= 30 && rainToday === 0) {
-                items.push("Good day for routine field work like weeding, basin cleaning and light intercultivation.");
-            }
-            if (temp > 34) {
-                items.push("Avoid spraying sensitive pesticides in afternoon heat; if needed, spray only early morning or late evening.");
-                riskScore += 2;
-            } else if (temp > 32) {
-                items.push("Prefer morning hours for transplanting or pruning to reduce plant stress from heat.");
-                riskScore += 1;
-            }
+        const items = [];
+        let riskScore = 0;
 
-            // Rainfall rules
-            if (rainToday >= 20) {
-                items.push("Heavy rain expected — keep drainage channels clear and avoid fresh fertilizer application today.");
-                riskScore += 3;
-            } else if (rainToday >= 5) {
-                items.push("Moderate rain likely — postpone spraying and keep seedlings on slightly higher ground.");
-                riskScore += 2;
-            } else if (rainToday === 0 && humidity > 60) {
-                items.push("No rain today but humidity is high — watch for fungal diseases on leaves and check lower canopy.");
-            }
+        // Temperature rules
+        if (temp <= 30 && rainToday === 0) {
+            items.push("Good day for routine field work like weeding, basin cleaning and light intercultivation.");
+        }
+        if (temp > 34) {
+            items.push("Avoid spraying sensitive pesticides in afternoon heat; if needed, spray only early morning or late evening.");
+            riskScore += 2;
+        } else if (temp > 32) {
+            items.push("Prefer morning hours for transplanting or pruning to reduce plant stress from heat.");
+            riskScore += 1;
+        }
 
-            // Wind rules
-            if (wind >= 20) {
-                items.push("Winds are strong — avoid light mulching sheets or loose covers that can fly away; support weak plants.");
-                riskScore += 2;
-            } else if (wind >= 10) {
-                items.push("Mild breeze helps drying after rain; you can use this time for field inspection and pest scouting.");
-            }
+        // Rainfall rules
+        if (rainToday >= 20) {
+            items.push("Heavy rain expected — keep drainage channels clear and avoid fresh fertilizer application today.");
+            riskScore += 3;
+        } else if (rainToday >= 5) {
+            items.push("Moderate rain likely — postpone spraying and keep seedlings on slightly higher ground.");
+            riskScore += 2;
+        } else if (rainToday === 0 && humidity > 60) {
+            items.push("No rain today but humidity is high — watch for fungal diseases on leaves and check lower canopy.");
+        }
 
-            // Condition rule
-            if (cond.icon === 'cloud-rain' || cond.icon === 'cloud-showers-heavy') {
-                items.push("Keep harvest produce covered with tarpaulin and avoid sun-drying today due to rain chances.");
-            }
+        // Wind rules
+        if (wind >= 20) {
+            items.push("Winds are strong — avoid light mulching sheets or loose covers that can fly away; support weak plants.");
+            riskScore += 2;
+        } else if (wind >= 10) {
+            items.push("Mild breeze helps drying after rain; you can use this time for field inspection and pest scouting.");
+        }
 
-            if (items.length === 0) {
-                items.push("Conditions are normal — continue regular irrigation schedule and keep an eye on forecast colours for coming days.");
-            }
+        // Condition rule
+        if (cond.icon === 'cloud-rain' || cond.icon === 'cloud-showers-heavy') {
+            items.push("Keep harvest produce covered with tarpaulin and avoid sun-drying today due to rain chances.");
+        }
 
-            let severity = 'normal';
-            if (riskScore >= 4) severity = 'bad';
-            else if (riskScore <= 1) severity = 'good';
+        if (items.length === 0) {
+            items.push("Conditions are normal — continue regular irrigation schedule and keep an eye on forecast colours for coming days.");
+        }
 
-            if (severity === 'good') {
-                tagEl.textContent = 'Good day for field work';
-                tagEl.className = 'today-advice-tag-chip tag-good';
-                imgEl.src = 'images/farmer-good.png';
-            } else if (severity === 'bad') {
-                tagEl.textContent = 'Be cautious today';
-                tagEl.className = 'today-advice-tag-chip tag-bad';
-                imgEl.src = 'images/farmer-bad.png';
-            } else {
-                tagEl.textContent = 'Normal farming day';
-                tagEl.className = 'today-advice-tag-chip tag-normal';
-                imgEl.src = 'images/farmer-normal.png';
-            }
+        let severity = 'normal';
+        if (riskScore >= 4) severity = 'bad';
+        else if (riskScore <= 1) severity = 'good';
 
-            container.innerHTML = items.map(text => `
+        if (severity === 'good') {
+            tagEl.textContent = 'Good day for field work';
+            tagEl.className = 'today-advice-tag-chip tag-good';
+            imgEl.src = 'images/farmer-good.png';
+        } else if (severity === 'bad') {
+            tagEl.textContent = 'Be cautious today';
+            tagEl.className = 'today-advice-tag-chip tag-bad';
+            imgEl.src = 'images/farmer-bad.png';
+        } else {
+            tagEl.textContent = 'Normal farming day';
+            tagEl.className = 'today-advice-tag-chip tag-normal';
+            imgEl.src = 'images/farmer-normal.png';
+        }
+
+        container.innerHTML = items.map(text => `
         <div class="today-advice-item">
           <i class="fas fa-check-circle"></i>
           <span>${text}</span>
         </div>
       `).join('');
+    }
+
+    // ---------- MAP (KERALA-FOCUS, WEATHER LAYERS + EXTRA) ----------
+    let weatherMap;
+    let baseLayer;
+    const OPENWEATHER_API_KEY = '7818f281fdd41baf85033a1c73b31085'; // <-- PUT YOUR REAL KEY
+
+    function initWeatherMap(data) {
+        const mapContainer = document.getElementById('weatherMap');
+        if (!mapContainer) {
+            console.warn('weatherMap container not found');
+            return;
         }
 
-        // ---------- MAP (KERALA-FOCUS, WEATHER LAYERS + EXTRA) ----------
-        let weatherMap;
-        let baseLayer;
-        const OPENWEATHER_API_KEY = '7818f281fdd41baf85033a1c73b31085'; // <-- PUT YOUR REAL KEY
+        // ---- 1) Get center from API or fallback to Kerala ----
+        const loc = data.location || {};
+        let lat = null;
+        let lon = null;
 
-        function initWeatherMap(data) {
-            const mapContainer = document.getElementById('weatherMap');
-            if (!mapContainer) {
-                console.warn('weatherMap container not found');
-                return;
-            }
+        if (typeof loc.lat === 'number' && typeof loc.lon === 'number') {
+            lat = loc.lat;
+            lon = loc.lon;
+        } else if (typeof loc.latitude === 'number' && typeof loc.longitude === 'number') {
+            lat = loc.latitude;
+            lon = loc.longitude;
+        }
 
-            // ---- 1) Get center from API or fallback to Kerala ----
-            const loc = data.location || {};
-            let lat = null;
-            let lon = null;
+        if (lat == null || lon == null) {
+            console.log('Using Kerala center fallback for map');
+            lat = 10.352874;   // Kerala approx center
+            lon = 76.512039;
+        }
 
-            if (typeof loc.lat === 'number' && typeof loc.lon === 'number') {
-                lat = loc.lat;
-                lon = loc.lon;
-            } else if (typeof loc.latitude === 'number' && typeof loc.longitude === 'number') {
-                lat = loc.latitude;
-                lon = loc.longitude;
-            }
+        const center = [lat, lon];
 
-            if (lat == null || lon == null) {
-                console.log('Using Kerala center fallback for map');
-                lat = 10.352874;   // Kerala approx center
-                lon = 76.512039;
-            }
+        if (typeof L === 'undefined') {
+            console.error('Leaflet (L) is not defined. Make sure leaflet.js is loaded correctly.');
+            return;
+        }
 
-            const center = [lat, lon];
+        // ---- 2) Create or reuse map safely ----
+        const hasValidMap =
+            window.weatherMap &&
+            typeof window.weatherMap.setView === 'function' &&
+            typeof window.weatherMap.addLayer === 'function';
 
-            if (typeof L === 'undefined') {
-                console.error('Leaflet (L) is not defined. Make sure leaflet.js is loaded correctly.');
-                return;
-            }
+        if (!hasValidMap) {
+            // Create a fresh map instance
+            window.weatherMap = L.map('weatherMap', {
+                center,
+                zoom: 8,
+                minZoom: 6,
+                maxZoom: 12
+            });
 
-            // ---- 2) Create or reuse map safely ----
-            const hasValidMap =
-                window.weatherMap &&
-                typeof window.weatherMap.setView === 'function' &&
-                typeof window.weatherMap.addLayer === 'function';
+            // also keep in normal variable if you use it
+            weatherMap = window.weatherMap;
 
-            if (!hasValidMap) {
-                // Create a fresh map instance
-                window.weatherMap = L.map('weatherMap', {
-                    center,
-                    zoom: 8,
-                    minZoom: 6,
-                    maxZoom: 12
-                });
-
-                // also keep in normal variable if you use it
-                weatherMap = window.weatherMap;
-
-                // Base OSM layer
-                window.baseLayer = L.tileLayer(
-                    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-                    {
-                        attribution: '&copy; OpenStreetMap contributors'
-                    }
-                ).addTo(window.weatherMap);
-
-                // Rough Kerala bounds
-                const keralaBounds = L.latLngBounds(
-                    [8.17, 74.85],   // South-West
-                    [12.97, 77.70]   // North-East
-                );
-                window.weatherMap.fitBounds(keralaBounds, { padding: [20, 20] });
-
-                // 🔗 Attach AI click handler (for AI panel) ONCE
-                if (typeof handleMapClickForAi === 'function' && !window._aiMapClickBound) {
-                    window.weatherMap.on('click', handleMapClickForAi);
-                    window._aiMapClickBound = true;
+            // Base OSM layer
+            window.baseLayer = L.tileLayer(
+                'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                {
+                    attribution: '&copy; OpenStreetMap contributors'
                 }
-            } else {
-                // Reuse existing map
-                window.weatherMap.setView(center, 8);
-                weatherMap = window.weatherMap;
+            ).addTo(window.weatherMap);
 
-                if (typeof handleMapClickForAi === 'function' && !window._aiMapClickBound) {
-                    window.weatherMap.on('click', handleMapClickForAi);
-                    window._aiMapClickBound = true;
-                }
-            }
-
-            // ---- 3) Marker / circle for farmer location ----
-            if (window.locationMarker && typeof window.weatherMap.removeLayer === 'function') {
-                window.weatherMap.removeLayer(window.locationMarker);
-            }
-            if (window.locationCircle && typeof window.weatherMap.removeLayer === 'function') {
-                window.weatherMap.removeLayer(window.locationCircle);
-            }
-
-            window.locationMarker = L.marker(center).addTo(window.weatherMap);
-            window.locationCircle = L.circle(center, {
-                radius: 15000, // 15 km
-                color: '#10b981',
-                weight: 1.2,
-                fillColor: '#10b981',
-                fillOpacity: 0.18
-            }).addTo(window.weatherMap);
-
-            const tempLabel = data.current ? `${data.current.temp}°C` : '--°C';
-            const placeLabel = `${loc.name || 'Your area'}, ${loc.country || ''}`.trim();
-
-            window.locationMarker.bindPopup(
-                `<strong>${placeLabel}</strong><br/>Current: ${tempLabel}`
+            // Rough Kerala bounds
+            const keralaBounds = L.latLngBounds(
+                [8.17, 74.85],   // South-West
+                [12.97, 77.70]   // North-East
             );
+            window.weatherMap.fitBounds(keralaBounds, { padding: [20, 20] });
 
-            // ---- 4) Weather overlays (Rain / Clouds / Temp / Storm / Soil / Wind) ----
-            if (!window.mapLayers) {
-                window.mapLayers = {
-                    rain: null,
-                    clouds: null,
-                    temp: null,
-                    storm: null,
-                    soil: null,
-                    wind: null
-                };
+            // 🔗 Attach AI click handler (for AI panel) ONCE
+            if (typeof handleMapClickForAi === 'function' && !window._aiMapClickBound) {
+                window.weatherMap.on('click', handleMapClickForAi);
+                window._aiMapClickBound = true;
             }
+        } else {
+            // Reuse existing map
+            window.weatherMap.setView(center, 8);
+            weatherMap = window.weatherMap;
 
-            if (typeof OPENWEATHER_API_KEY !== 'undefined' && OPENWEATHER_API_KEY) {
-                const key = OPENWEATHER_API_KEY;
-                window.OPENWEATHER_API_KEY = key;
-
-                // --- 1.0 classic layers (free plan friendly) ---
-                if (!window.mapLayers.rain) {
-                    window.mapLayers.rain = L.tileLayer(
-                        `https://tile.openweathermap.org/map/precipitation_new/{z}/{x}/{y}.png?appid=${key}`,
-                        { opacity: 0.8 }
-                    );
-                }
-                if (!window.mapLayers.clouds) {
-                    window.mapLayers.clouds = L.tileLayer(
-                        `https://tile.openweathermap.org/map/clouds_new/{z}/{x}/{y}.png?appid=${key}`,
-                        { opacity: 0.75 }
-                    );
-                }
-                if (!window.mapLayers.temp) {
-                    window.mapLayers.temp = L.tileLayer(
-                        `https://tile.openweathermap.org/map/temp_new/{z}/{x}/{y}.png?appid=${key}`,
-                        { opacity: 0.7 }
-                    );
-                }
-
-                // ✅ Storm = pressure map (1.0)
-                if (!window.mapLayers.storm) {
-                    window.mapLayers.storm = L.tileLayer(
-                        `https://tile.openweathermap.org/map/pressure_new/{z}/{x}/{y}.png?appid=${key}`,
-                        { opacity: 0.6 }
-                    );
-                }
-
-                // ✅ Wind = wind map (1.0)
-                if (!window.mapLayers.wind) {
-                    window.mapLayers.wind = L.tileLayer(
-                        `https://tile.openweathermap.org/map/wind_new/{z}/{x}/{y}.png?appid=${key}`,
-                        { opacity: 0.8 }
-                    );
-                }
-
-                // 🌱 Soil 0–10 cm = TS0 (2.0) – might require higher plan; if blank, that's why
-                if (!window.mapLayers.soil) {
-                    window.mapLayers.soil = L.tileLayer(
-                        `https://maps.openweathermap.org/maps/2.0/weather/TS0/{z}/{x}/{y}?appid=${key}`,
-                        { opacity: 0.7 }
-                    );
-                }
-
-                // ---- Default ON: Rain + Clouds, others OFF ----
-                Object.values(window.mapLayers).forEach(layer => {
-                    if (layer && window.weatherMap.hasLayer(layer)) {
-                        window.weatherMap.removeLayer(layer);
-                    }
-                });
-
-                window.mapLayers.rain.addTo(window.weatherMap);
-                window.mapLayers.clouds.addTo(window.weatherMap);
-
-                // Sync chips
-                document
-                    .querySelectorAll('.map-layer-chip')
-                    .forEach((chip) => chip.classList.remove('active'));
-
-                const rainChip = document.querySelector('.map-layer-chip[data-layer="rain"]');
-                const cloudsChip = document.querySelector('.map-layer-chip[data-layer="clouds"]');
-
-                if (rainChip) rainChip.classList.add('active');
-                if (cloudsChip) cloudsChip.classList.add('active');
-            } else {
-                console.warn(
-                    'OpenWeatherMap API key missing. Only base map will be visible, no weather overlays.'
-                );
+            if (typeof handleMapClickForAi === 'function' && !window._aiMapClickBound) {
+                window.weatherMap.on('click', handleMapClickForAi);
+                window._aiMapClickBound = true;
             }
         }
 
+        // ---- 3) Marker / circle for farmer location ----
+        if (window.locationMarker && typeof window.weatherMap.removeLayer === 'function') {
+            window.weatherMap.removeLayer(window.locationMarker);
+        }
+        if (window.locationCircle && typeof window.weatherMap.removeLayer === 'function') {
+            window.weatherMap.removeLayer(window.locationCircle);
+        }
 
-        function toggleMapLayer(type) {
-            if (!window.weatherMap || !window.mapLayers || !window.mapLayers[type]) return;
+        window.locationMarker = L.marker(center).addTo(window.weatherMap);
+        window.locationCircle = L.circle(center, {
+            radius: 15000, // 15 km
+            color: '#10b981',
+            weight: 1.2,
+            fillColor: '#10b981',
+            fillOpacity: 0.18
+        }).addTo(window.weatherMap);
 
-            const chip = document.querySelector(`.map-layer-chip[data-layer="${type}"]`);
-            if (!chip) return;
+        const tempLabel = data.current ? `${data.current.temp}°C` : '--°C';
+        const placeLabel = `${loc.name || 'Your area'}, ${loc.country || ''}`.trim();
 
-            const layer = window.mapLayers[type];
-            const isActive = chip.classList.contains('active');
+        window.locationMarker.bindPopup(
+            `<strong>${placeLabel}</strong><br/>Current: ${tempLabel}`
+        );
 
-            if (isActive) {
-                // Turn OFF
-                if (window.weatherMap.hasLayer(layer)) {
+        // ---- 4) Weather overlays (Rain / Clouds / Temp / Storm / Soil / Wind) ----
+        if (!window.mapLayers) {
+            window.mapLayers = {
+                rain: null,
+                clouds: null,
+                temp: null,
+                storm: null,
+                soil: null,
+                wind: null
+            };
+        }
+
+        if (typeof OPENWEATHER_API_KEY !== 'undefined' && OPENWEATHER_API_KEY) {
+            const key = OPENWEATHER_API_KEY;
+            window.OPENWEATHER_API_KEY = key;
+
+            // --- 1.0 classic layers (free plan friendly) ---
+            if (!window.mapLayers.rain) {
+                window.mapLayers.rain = L.tileLayer(
+                    `https://tile.openweathermap.org/map/precipitation_new/{z}/{x}/{y}.png?appid=${key}`,
+                    { opacity: 0.8 }
+                );
+            }
+            if (!window.mapLayers.clouds) {
+                window.mapLayers.clouds = L.tileLayer(
+                    `https://tile.openweathermap.org/map/clouds_new/{z}/{x}/{y}.png?appid=${key}`,
+                    { opacity: 0.75 }
+                );
+            }
+            if (!window.mapLayers.temp) {
+                window.mapLayers.temp = L.tileLayer(
+                    `https://tile.openweathermap.org/map/temp_new/{z}/{x}/{y}.png?appid=${key}`,
+                    { opacity: 0.7 }
+                );
+            }
+
+            // ✅ Storm = pressure map (1.0)
+            if (!window.mapLayers.storm) {
+                window.mapLayers.storm = L.tileLayer(
+                    `https://tile.openweathermap.org/map/pressure_new/{z}/{x}/{y}.png?appid=${key}`,
+                    { opacity: 0.6 }
+                );
+            }
+
+            // ✅ Wind = wind map (1.0)
+            if (!window.mapLayers.wind) {
+                window.mapLayers.wind = L.tileLayer(
+                    `https://tile.openweathermap.org/map/wind_new/{z}/{x}/{y}.png?appid=${key}`,
+                    { opacity: 0.8 }
+                );
+            }
+
+            // 🌱 Soil 0–10 cm = TS0 (2.0) – might require higher plan; if blank, that's why
+            if (!window.mapLayers.soil) {
+                window.mapLayers.soil = L.tileLayer(
+                    `https://maps.openweathermap.org/maps/2.0/weather/TS0/{z}/{x}/{y}?appid=${key}`,
+                    { opacity: 0.7 }
+                );
+            }
+
+            // ---- Default ON: Rain + Clouds, others OFF ----
+            Object.values(window.mapLayers).forEach(layer => {
+                if (layer && window.weatherMap.hasLayer(layer)) {
                     window.weatherMap.removeLayer(layer);
                 }
-                chip.classList.remove('active');
+            });
+
+            window.mapLayers.rain.addTo(window.weatherMap);
+            window.mapLayers.clouds.addTo(window.weatherMap);
+
+            // Sync chips
+            document
+                .querySelectorAll('.map-layer-chip')
+                .forEach((chip) => chip.classList.remove('active'));
+
+            const rainChip = document.querySelector('.map-layer-chip[data-layer="rain"]');
+            const cloudsChip = document.querySelector('.map-layer-chip[data-layer="clouds"]');
+
+            if (rainChip) rainChip.classList.add('active');
+            if (cloudsChip) cloudsChip.classList.add('active');
+        } else {
+            console.warn(
+                'OpenWeatherMap API key missing. Only base map will be visible, no weather overlays.'
+            );
+        }
+    }
+
+
+    function toggleMapLayer(type) {
+        if (!window.weatherMap || !window.mapLayers || !window.mapLayers[type]) return;
+
+        const chip = document.querySelector(`.map-layer-chip[data-layer="${type}"]`);
+        if (!chip) return;
+
+        const layer = window.mapLayers[type];
+        const isActive = chip.classList.contains('active');
+
+        if (isActive) {
+            // Turn OFF
+            if (window.weatherMap.hasLayer(layer)) {
+                window.weatherMap.removeLayer(layer);
+            }
+            chip.classList.remove('active');
+        } else {
+            // Turn ON
+            layer.addTo(window.weatherMap);
+            chip.classList.add('active');
+        }
+    }
+
+    // Small search on map using Nominatim (no extra library)
+    async function searchOnMap() {
+        const input = document.getElementById('mapSearchInput');
+        const q = input.value.trim();
+        if (!q || !window.weatherMap) return;
+
+        try {
+            const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(q + ', Kerala, India')}`);
+            const data = await res.json();
+            if (data && data.length > 0) {
+                const place = data[0];
+                const lat = parseFloat(place.lat);
+                const lon = parseFloat(place.lon);
+                const latLng = [lat, lon];
+
+                window.weatherMap.flyTo(latLng, 10, { duration: 0.8 });
+
+                if (window.weatherMap._searchMarker) {
+                    window.weatherMap.removeLayer(window.weatherMap._searchMarker);
+                }
+                window.weatherMap._searchMarker = L.marker(latLng).addTo(window.weatherMap)
+                    .bindPopup(`<strong>${place.display_name.split(',')[0]}</strong><br/>Tap coloured layers to see weather.`)
+                    .openPopup();
             } else {
-                // Turn ON
-                layer.addTo(window.weatherMap);
-                chip.classList.add('active');
+                alert('Location not found. Try nearby town / village name.');
             }
+        } catch (err) {
+            console.error('Map search error:', err);
+        }
+    }
+
+    // ---------- AI ADVICE PANEL (MAP + CHAT) ----------
+    let lastAiLocation = null; // { lat, lon }
+
+    function showAiPanel() {
+        const panel = document.getElementById('aiAdvicePanel');
+        if (panel) panel.classList.remove('hidden');
+    }
+
+    function hideAiPanel() {
+        const panel = document.getElementById('aiAdvicePanel');
+        if (panel) panel.classList.add('hidden');
+    }
+
+    function appendAiMessage(text, who = 'bot') {
+        const container = document.getElementById('aiAdviceMessages');
+        if (!container) return;
+
+        const div = document.createElement('div');
+        div.classList.add('ai-msg');
+        div.classList.add(who === 'user' ? 'ai-msg-user' : 'ai-msg-bot');
+        div.textContent = text;
+
+        container.appendChild(div);
+        container.scrollTop = container.scrollHeight;
+    }
+
+    async function sendAiQuestion() {
+        const input = document.getElementById('aiAdviceInput');
+        const btn = document.getElementById('aiAdviceSendBtn');
+        if (!input || !btn) return;
+
+        const question = input.value.trim();
+        if (!question) return;
+
+        if (!lastAiLocation) {
+            appendAiMessage('Please click somewhere on the map first to select your farm location.', 'bot');
+            return;
         }
 
-        // Small search on map using Nominatim (no extra library)
-        async function searchOnMap() {
-            const input = document.getElementById('mapSearchInput');
-            const q = input.value.trim();
-            if (!q || !window.weatherMap) return;
+        appendAiMessage(question, 'user');
+        input.value = '';
 
-            try {
-                const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(q + ', Kerala, India')}`);
-                const data = await res.json();
-                if (data && data.length > 0) {
-                    const place = data[0];
-                    const lat = parseFloat(place.lat);
-                    const lon = parseFloat(place.lon);
-                    const latLng = [lat, lon];
+        btn.disabled = true;
+        appendAiMessage('Thinking about conditions in your area...', 'bot');
 
-                    window.weatherMap.flyTo(latLng, 10, { duration: 0.8 });
+        try {
+            const res = await fetch('/api/weather/ai/farm-advice', {   // 👈 FIXED URL
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
+                body: JSON.stringify({
+                    lat: lastAiLocation.lat,
+                    lon: lastAiLocation.lon,
+                    question
+                })
+            });
 
-                    if (window.weatherMap._searchMarker) {
-                        window.weatherMap.removeLayer(window.weatherMap._searchMarker);
-                    }
-                    window.weatherMap._searchMarker = L.marker(latLng).addTo(window.weatherMap)
-                        .bindPopup(`<strong>${place.display_name.split(',')[0]}</strong><br/>Tap coloured layers to see weather.`)
-                        .openPopup();
-                } else {
-                    alert('Location not found. Try nearby town / village name.');
+            if (!res.ok) {
+                throw new Error('AI server error');
+            }
+
+            const data = await res.json();
+            const reply = data.answer || 'I could not generate advice right now. Please try again later.';
+            appendAiMessage(reply, 'bot');
+        } catch (err) {
+            console.error(err);
+            appendAiMessage('Unable to contact AI server. Please try again later.', 'bot');
+        } finally {
+            btn.disabled = false;
+        }
+    }
+
+
+    // Called when user clicks on map
+    function handleMapClickForAi(e) {
+        const lat = e.latlng.lat;
+        const lon = e.latlng.lng;
+        lastAiLocation = { lat, lon };
+
+        showAiPanel();
+
+        const labelEl = document.getElementById('aiLocationLabel');
+        if (labelEl) {
+            labelEl.textContent = `Location selected: ${lat.toFixed(3)}, ${lon.toFixed(3)}`;
+        }
+
+        // Optional: add a temporary marker for selected location
+        if (window.aiClickMarker && window.weatherMap) {
+            window.weatherMap.removeLayer(window.aiClickMarker);
+        }
+        if (window.weatherMap) {
+            window.aiClickMarker = L.marker([lat, lon], {
+                opacity: 0.9
+            }).addTo(window.weatherMap);
+        }
+    }
+
+    // ---------- ALERTS TOGGLE ----------
+    async function toggleAlerts() {
+        try {
+            alertsEnabled = !alertsEnabled;
+            const toggle = document.getElementById('alertsToggle');
+            toggle.classList.toggle('active', alertsEnabled);
+
+            if (alertsEnabled && 'Notification' in window) {
+                const permission = await Notification.requestPermission();
+                if (permission === 'granted') {
+                    new Notification('✅ Weather Alerts Enabled', {
+                        body: 'You will receive notifications for severe weather.',
+                        icon: '/favicon.ico'
+                    });
                 }
-            } catch (err) {
-                console.error('Map search error:', err);
-            }
-        }
-
-        // ---------- AI ADVICE PANEL (MAP + CHAT) ----------
-        let lastAiLocation = null; // { lat, lon }
-
-        function showAiPanel() {
-            const panel = document.getElementById('aiAdvicePanel');
-            if (panel) panel.classList.remove('hidden');
-        }
-
-        function hideAiPanel() {
-            const panel = document.getElementById('aiAdvicePanel');
-            if (panel) panel.classList.add('hidden');
-        }
-
-        function appendAiMessage(text, who = 'bot') {
-            const container = document.getElementById('aiAdviceMessages');
-            if (!container) return;
-
-            const div = document.createElement('div');
-            div.classList.add('ai-msg');
-            div.classList.add(who === 'user' ? 'ai-msg-user' : 'ai-msg-bot');
-            div.textContent = text;
-
-            container.appendChild(div);
-            container.scrollTop = container.scrollHeight;
-        }
-
-        async function sendAiQuestion() {
-            const input = document.getElementById('aiAdviceInput');
-            const btn = document.getElementById('aiAdviceSendBtn');
-            if (!input || !btn) return;
-
-            const question = input.value.trim();
-            if (!question) return;
-
-            if (!lastAiLocation) {
-                appendAiMessage('Please click somewhere on the map first to select your farm location.', 'bot');
-                return;
             }
 
-            appendAiMessage(question, 'user');
-            input.value = '';
-
-            btn.disabled = true;
-            appendAiMessage('Thinking about conditions in your area...', 'bot');
-
-            try {
-                const res = await fetch('/api/weather/ai/farm-advice', {   // 👈 FIXED URL
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    credentials: 'include',
-                    body: JSON.stringify({
-                        lat: lastAiLocation.lat,
-                        lon: lastAiLocation.lon,
-                        question
-                    })
-                });
-
-                if (!res.ok) {
-                    throw new Error('AI server error');
-                }
-
-                const data = await res.json();
-                const reply = data.answer || 'I could not generate advice right now. Please try again later.';
-                appendAiMessage(reply, 'bot');
-            } catch (err) {
-                console.error(err);
-                appendAiMessage('Unable to contact AI server. Please try again later.', 'bot');
-            } finally {
-                btn.disabled = false;
-            }
+            await fetch('/api/weather/alerts/toggle', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
+                body: JSON.stringify({ enabled: alertsEnabled })
+            });
+        } catch (error) {
+            console.error('Failed to toggle alerts:', error);
         }
+    }
 
+    function refreshWeather() {
+        loadWeatherData();
+    }
 
-        // Called when user clicks on map
-        function handleMapClickForAi(e) {
-            const lat = e.latlng.lat;
-            const lon = e.latlng.lng;
-            lastAiLocation = { lat, lon };
-
-            showAiPanel();
-
-            const labelEl = document.getElementById('aiLocationLabel');
-            if (labelEl) {
-                labelEl.textContent = `Location selected: ${lat.toFixed(3)}, ${lon.toFixed(3)}`;
-            }
-
-            // Optional: add a temporary marker for selected location
-            if (window.aiClickMarker && window.weatherMap) {
-                window.weatherMap.removeLayer(window.aiClickMarker);
-            }
-            if (window.weatherMap) {
-                window.aiClickMarker = L.marker([lat, lon], {
-                    opacity: 0.9
-                }).addTo(window.weatherMap);
-            }
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+        if (confirm('Logout?')) {
+            window.location.href = 'index.html';
         }
+    });
 
-        // ---------- ALERTS TOGGLE ----------
-        async function toggleAlerts() {
-            try {
-                alertsEnabled = !alertsEnabled;
-                const toggle = document.getElementById('alertsToggle');
-                toggle.classList.toggle('active', alertsEnabled);
+    function toggleSidebar() {
+        document.getElementById('sidebar').classList.toggle('active');
+    }
 
-                if (alertsEnabled && 'Notification' in window) {
-                    const permission = await Notification.requestPermission();
-                    if (permission === 'granted') {
-                        new Notification('✅ Weather Alerts Enabled', {
-                            body: 'You will receive notifications for severe weather.',
-                            icon: '/favicon.ico'
-                        });
-                    }
-                }
-
-                await fetch('/api/weather/alerts/toggle', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    credentials: 'include',
-                    body: JSON.stringify({ enabled: alertsEnabled })
-                });
-            } catch (error) {
-                console.error('Failed to toggle alerts:', error);
-            }
-        }
-
-        function refreshWeather() {
+    document.getElementById('locationInput').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
             loadWeatherData();
         }
+    });
 
-        document.getElementById('logoutBtn').addEventListener('click', () => {
-            if (confirm('Logout?')) {
-                window.location.href = 'index.html';
-            }
-        });
-
-        function toggleSidebar() {
-            document.getElementById('sidebar').classList.toggle('active');
-        }
-
-        document.getElementById('locationInput').addEventListener('keypress', (e) => {
+    // AI panel events
+    const aiCloseBtn = document.getElementById('aiPanelCloseBtn');
+    if (aiCloseBtn) {
+        aiCloseBtn.addEventListener('click', hideAiPanel);
+    }
+    const aiSendBtn = document.getElementById('aiAdviceSendBtn');
+    if (aiSendBtn) {
+        aiSendBtn.addEventListener('click', sendAiQuestion);
+    }
+    const aiInput = document.getElementById('aiAdviceInput');
+    if (aiInput) {
+        aiInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
-                loadWeatherData();
+                sendAiQuestion();
             }
         });
+    }
 
-        // AI panel events
-        const aiCloseBtn = document.getElementById('aiPanelCloseBtn');
-        if (aiCloseBtn) {
-            aiCloseBtn.addEventListener('click', hideAiPanel);
-        }
-        const aiSendBtn = document.getElementById('aiAdviceSendBtn');
-        if (aiSendBtn) {
-            aiSendBtn.addEventListener('click', sendAiQuestion);
-        }
-        const aiInput = document.getElementById('aiAdviceInput');
-        if (aiInput) {
-            aiInput.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') {
-                    sendAiQuestion();
-                }
-            });
-        }
+    // ---------- INIT ----------
+    window.onload = () => {
+        console.log('Weather Alerts page loaded');
+        checkAuth();
+        loadUserInfo();
+        initializeTheme();
+        setActiveNavigation();
 
-        // ---------- INIT ----------
-        window.onload = () => {
-            console.log('Weather Alerts page loaded');
-            checkAuth();
-            loadUserInfo();
-            initializeTheme();
-            setActiveNavigation();
-
-            setTimeout(() => {
-                loadWeatherData();
-            }, 400);
-        };
-    </script>
+        setTimeout(() => {
+            loadWeatherData();
+        }, 400);
+    };
+</script>
 </body>
 
 </html>
