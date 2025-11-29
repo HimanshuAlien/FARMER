@@ -3,751 +3,573 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Live Market Prices - Kerala Farmer Advisory</title>
+    <title>Kerala Govt Mandi Prices – AI Advisory</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
-        rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
     <style>
         :root {
-            --primary: #10b981;
-            --primary-dark: #047857;
-            --primary-light: #34d399;
-            --secondary: #6366f1;
-            --accent: #3b82f6;
-            --success: #22c55e;
-            --warning: #f59e0b;
-            --danger: #ef4444;
-            --bg-light: #ffffff;
-            --bg-dark: #0f172a;
-            --card-light: #ffffff;
-            --card-dark: #1e293b;
-            --text-light: #1f2937;
-            --text-dark: #f1f5f9;
-            --border-light: #e2e8f0;
-            --border-dark: #475569;
-            --glass-light: rgba(255, 255, 255, 0.25);
-            --glass-dark: rgba(30, 41, 59, 0.25);
+            --primary: #1d4ed8;
+            --primary-dark: #0b39b3;
+            --primary-soft: #e0ebff;
+            --accent: #16a34a;
+            --accent-soft: #dcfce7;
+            --bg-main: #f3f4ff;
+            --card-bg: #ffffff;
+            --border-soft: #dde3f2;
+            --text-main: #0f172a;
+            --text-muted: #6b7280;
+            --danger: #dc2626;
+            --shadow-soft: 0 18px 35px rgba(15, 35, 90, 0.16);
         }
 
         * {
-            margin: 0;
-            padding: 0;
             box-sizing: border-box;
         }
 
-        /* FIXED: Consistent background like other pages */
         body {
-            font-family: 'Inter', sans-serif;
-            background: var(--bg-light);
-            /* Simple solid background in light mode */
-            min-height: 100vh;
-            color: var(--text-light);
-            overflow-x: hidden;
-            transition: all 0.3s ease;
+            margin: 0;
+            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+            background: radial-gradient(circle at top left, #f5f7ff 0, #eef3ff 40%, #e7f3ff 100%);
+            color: var(--text-main);
         }
 
-        body.dark {
-            background: linear-gradient(135deg, var(--bg-dark) 0%, #1e293b 100%);
-            /* Keep gradient for dark */
-            color: var(--text-dark);
+        .page-shell {
+            padding: 1.5rem 1.4rem 2rem;
         }
 
-        /* Animated Background - Only show in dark mode */
-        .bg-animation {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            opacity: 0;
-            /* Hidden in light mode */
-            transition: opacity 0.3s ease;
-        }
+        /* ---------- HEADER ---------- */
 
-        body.dark .bg-animation {
-            opacity: 0.1;
-            /* Show in dark mode */
-        }
-
-        .floating-shape {
-            position: absolute;
-            background: linear-gradient(45deg, var(--primary), var(--secondary));
-            border-radius: 50%;
-            animation: float 6s ease-in-out infinite;
-        }
-
-        .shape-1 {
-            width: 80px;
-            height: 80px;
-            top: 20%;
-            left: 10%;
-            animation-delay: 0s;
-        }
-
-        .shape-2 {
-            width: 60px;
-            height: 60px;
-            top: 60%;
-            right: 20%;
-            animation-delay: 2s;
-        }
-
-        .shape-3 {
-            width: 100px;
-            height: 100px;
-            bottom: 20%;
-            left: 30%;
-            animation-delay: 4s;
-        }
-
-        @keyframes float {
-
-            0%,
-            100% {
-                transform: translateY(0px) rotate(0deg);
-            }
-
-            50% {
-                transform: translateY(-20px) rotate(180deg);
-            }
-        }
-
-        /* FIXED: Header - Solid background in light mode */
-        .header {
-            background: var(--card-light);
-            /* Solid white in light mode */
-            border-bottom: 1px solid var(--border-light);
-            margin: 2rem 2rem 0;
-            padding: 2rem;
-            border-radius: 20px;
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
-            /* Subtle shadow in light mode */
-            transition: all 0.3s ease;
-        }
-
-        body.dark .header {
-            background: rgba(30, 41, 59, 0.3);
-            backdrop-filter: blur(20px);
-            border-color: rgba(71, 85, 105, 0.3);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-        }
-
-        .header-content {
+        .header-card {
+            border-radius: 22px;
+            background: linear-gradient(120deg, #020617 0%, #032a81 28%, #1457ff 55%, #22c55e 100%);
+            box-shadow: var(--shadow-soft);
+            color: #f9fafb;
+            padding: 1.15rem 1.5rem;
             display: flex;
+            align-items: center;
             justify-content: space-between;
-            align-items: center;
+            gap: 1.4rem;
         }
 
-        .header-title {
+        .header-left {
             display: flex;
             align-items: center;
             gap: 1rem;
         }
 
-        /* FIXED: Header title gradient - More subtle in light mode */
-        .header-title h1 {
-            font-size: 2.5rem;
-            font-weight: 800;
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            /* Keep gradient but more subtle */
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .header-icon {
+        .logo-box {
             width: 60px;
             height: 60px;
-            background: linear-gradient(135deg, var(--primary), var(--primary-light));
-            border-radius: 16px;
+            border-radius: 18px;
+            background: radial-gradient(circle at 30% 20%, rgba(248, 250, 252, 0.22), transparent 60%);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.8rem;
-            color: white;
-            box-shadow: 0 4px 20px rgba(16, 185, 129, 0.3);
+            flex-shrink: 0;
+            border: 1px solid rgba(248, 250, 252, 0.2);
         }
 
-        .header-actions {
-            display: flex;
-            gap: 1rem;
+        .logo-box img {
+            max-width: 46px;
+            max-height: 46px;
         }
 
-        /* FIXED: Button styles */
-        .btn-glass {
-            background: var(--primary);
-            /* Solid button in light mode */
-            color: white;
-            border: 1px solid var(--primary);
-            padding: 0.8rem 1.5rem;
-            border-radius: 12px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        body.dark .btn-glass {
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            color: white;
-        }
-
-        .btn-glass:hover {
-            background: var(--primary-dark);
-            color: white;
-            text-decoration: none;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
-        }
-
-        body.dark .btn-glass:hover {
-            background: rgba(255, 255, 255, 0.3);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-        }
-
-        /* FIXED: Theme toggle */
-        .theme-toggle {
-            background: var(--secondary);
-            border: none;
-            padding: 0.8rem;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            color: white;
-        }
-
-        body.dark .theme-toggle {
-            background: var(--border-dark);
-            color: var(--text-dark);
-        }
-
-        .theme-toggle:hover {
-            transform: translateY(-1px);
-        }
-
-        /* FIXED: Search Section - Solid in light mode */
-        .search-section {
-            margin: 2rem;
-            background: var(--card-light);
-            /* Solid white in light mode */
-            border: 1px solid var(--border-light);
-            border-radius: 20px;
-            padding: 3rem 2rem;
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
-            transition: all 0.3s ease;
-            text-align: center;
-        }
-
-        body.dark .search-section {
-            background: rgba(30, 41, 59, 0.3);
-            backdrop-filter: blur(20px);
-            border-color: rgba(71, 85, 105, 0.3);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-        }
-
-        .search-container {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        /* FIXED: Search title - Different colors for light/dark */
-        .search-title {
-            font-size: 2.2rem;
-            font-weight: 800;
-            color: var(--text-light);
-            /* Dark text in light mode */
-            margin-bottom: 0.8rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 1rem;
-        }
-
-        body.dark .search-title {
-            color: white;
-            /* White text in dark mode */
-        }
-
-        .search-emoji {
-            font-size: 2.5rem;
-            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
-        }
-
-        .search-subtitle {
-            color: var(--text-light);
-            /* Dark text in light mode */
-            opacity: 0.7;
-            font-size: 1.1rem;
-            margin-bottom: 2.5rem;
-            font-weight: 500;
-        }
-
-        body.dark .search-subtitle {
-            color: rgba(255, 255, 255, 0.8);
-        }
-
-        .modern-search-box {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 2rem;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        .search-input-wrapper {
-            position: relative;
-            flex: 1;
-            max-width: 500px;
-            min-width: 300px;
-        }
-
-        .modern-search-input {
-            width: 100%;
-            padding: 1.2rem 1.5rem 1.2rem 3.5rem;
-            font-size: 1.1rem;
-            border: 2px solid var(--border-light);
-            border-radius: 16px;
-            background: var(--bg-light);
-            color: var(--text-light);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            transition: all 0.3s ease;
-            font-weight: 500;
-        }
-
-        body.dark .modern-search-input {
-            background: rgba(255, 255, 255, 0.95);
-            border-color: rgba(255, 255, 255, 0.2);
-            color: var(--text-light);
-        }
-
-        .modern-search-input:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 4px 20px rgba(16, 185, 129, 0.2);
-            transform: translateY(-2px);
-        }
-
-        body.dark .modern-search-input:focus {
-            background: white;
-            box-shadow: 0 8px 40px rgba(16, 185, 129, 0.2);
-        }
-
-        .modern-search-input::placeholder {
-            color: rgba(31, 41, 55, 0.6);
-            font-weight: 400;
-        }
-
-        .search-input-icon {
-            position: absolute;
-            left: 1.2rem;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--primary);
-            font-size: 1.2rem;
-            z-index: 10;
-        }
-
-        .search-loader {
-            position: absolute;
-            right: 1.2rem;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--primary);
-            font-size: 1.1rem;
-            display: none;
-        }
-
-        .modern-search-btn {
-            background: linear-gradient(135deg, var(--primary), var(--success));
-            color: white;
-            border: none;
-            padding: 1.2rem 2rem;
-            border-radius: 16px;
-            font-weight: 700;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 0.8rem;
-            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+        .header-text small {
+            display: block;
+            font-size: 0.74rem;
+            letter-spacing: 0.12em;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            opacity: 0.9;
         }
 
-        .modern-search-btn:hover {
-            background: linear-gradient(135deg, var(--success), var(--primary));
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
+        .header-text h1 {
+            margin: 0.18rem 0 0.15rem;
+            font-size: 1.5rem;
+            font-weight: 700;
         }
 
-        .modern-search-btn:active {
-            transform: translateY(-1px);
+        .header-text p {
+            margin: 0;
+            font-size: 0.9rem;
+            opacity: 0.96;
+            max-width: 500px;
         }
 
-        /* Quick Search Tags */
-        .quick-search-tags {
+        .header-right {
+            text-align: right;
+            font-size: 0.8rem;
+            opacity: 0.98;
+        }
+
+        .source-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            padding: 0.3rem 0.8rem;
+            border-radius: 999px;
+            background: rgba(15, 23, 42, 0.35);
+            font-size: 0.78rem;
+        }
+
+        #dataTimestamp {
+            margin-top: 0.45rem;
+            font-size: 0.8rem;
+            opacity: 0.9;
+        }
+
+        @media (max-width: 900px) {
+            .header-card {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .header-right {
+                text-align: left;
+            }
+
+            .page-shell {
+                padding-inline: 1rem;
+            }
+        }
+
+        /* ---------- MAIN LAYOUT ---------- */
+
+        .layout-grid {
+            margin-top: 1rem;
+            display: grid;
+            grid-template-columns: minmax(0, 2.3fr) minmax(0, 1.5fr);
+            gap: 1.2rem;
+            align-items: flex-start;
+        }
+
+        @media (max-width: 992px) {
+            .layout-grid {
+                grid-template-columns: minmax(0, 1fr);
+            }
+        }
+
+        .card-shell {
+            background: var(--card-bg);
+            border-radius: 18px;
+            border: 1px solid var(--border-soft);
+            box-shadow: 0 14px 30px rgba(15, 23, 42, 0.06);
+            padding: 0.95rem 1.05rem 1.05rem;
+        }
+
+        .card-head {
             display: flex;
-            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.6rem;
+        }
+
+        .card-title-block {
+            display: flex;
+            flex-direction: column;
+            gap: 0.1rem;
+        }
+
+        .card-title {
+            font-size: 0.98rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.45rem;
+        }
+
+        .card-title-icon {
+            width: 26px;
+            height: 26px;
+            border-radius: 999px;
+            background: var(--primary-soft);
+            color: var(--primary-dark);
+            display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 1rem;
+            font-size: 0.86rem;
         }
 
-        /* FIXED: Quick search label */
-        .quick-search-label {
-            color: var(--text-light);
-            /* Dark text in light mode */
-            opacity: 0.7;
-            font-weight: 600;
-            font-size: 1rem;
+        .card-subtitle {
+            font-size: 0.78rem;
+            color: var(--text-muted);
         }
 
-        body.dark .quick-search-label {
-            color: rgba(255, 255, 255, 0.8);
+        .chip-small {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.6rem;
+            border-radius: 999px;
+            background: #eef2ff;
+            color: #111827;
+            border: 1px solid #d4ddff;
         }
 
-        .tags-container {
+        /* ---------- FILTERS + STATS ---------- */
+
+        .filters-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 0.6rem;
+            margin-bottom: 0.55rem;
+        }
+
+        @media (max-width: 1100px) {
+            .filters-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 650px) {
+            .filters-grid {
+                grid-template-columns: minmax(0, 1fr);
+            }
+        }
+
+        .filter-label {
+            font-size: 0.74rem;
+            color: var(--text-muted);
+            margin-bottom: 0.1rem;
+        }
+
+        .filters-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.45rem;
+            margin-bottom: 0.4rem;
+        }
+
+        .btn-gov {
+            font-size: 0.78rem;
+            border-radius: 999px;
+            padding: 0.35rem 0.9rem;
+            border-width: 1px;
+        }
+
+        .btn-gov-primary {
+            background: linear-gradient(135deg, #1d4ed8, #16a34a);
+            border-color: #1d4ed8;
+            color: #fff;
+        }
+
+        .btn-gov-secondary {
+            background: #f3f4ff;
+            border-color: #d5dcff;
+            color: #111827;
+        }
+
+        .stats-row {
             display: flex;
             flex-wrap: wrap;
             gap: 0.8rem;
-            justify-content: center;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            margin-bottom: 0.45rem;
         }
 
-        /* FIXED: Search tags - Different appearance for light mode */
-        .search-tag {
-            background: var(--primary);
-            /* Solid primary color in light mode */
-            color: white;
-            padding: 0.6rem 1.2rem;
-            border-radius: 25px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 0.9rem;
+        .stats-row span.value {
             font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            border: none;
+            color: var(--primary-dark);
+            margin-left: 0.2rem;
         }
 
-        body.dark .search-tag {
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
+        /* ---------- TABLE ---------- */
 
-        .search-tag:hover {
-            background: var(--primary-dark);
-            /* Darker primary in light mode */
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
-        }
-
-        body.dark .search-tag:hover {
-            background: rgba(255, 255, 255, 0.25);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-        }
-
-        .tag-emoji {
-            font-size: 1.1rem;
-        }
-
-        /* Search Results */
-        .search-results {
-            margin-top: 2rem;
-            text-align: left;
-        }
-
-        /* FIXED: Market Stats - Solid in light mode */
-        .market-stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1.5rem;
-            margin: 2rem;
-        }
-
-        .stat-card {
-            background: var(--card-light);
-            /* Solid white in light mode */
-            border: 1px solid var(--border-light);
-            border-radius: 20px;
-            padding: 2rem;
-            text-align: center;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
-        }
-
-        body.dark .stat-card {
-            background: rgba(30, 41, 59, 0.3);
-            backdrop-filter: blur(20px);
-            border-color: rgba(71, 85, 105, 0.3);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-        }
-
-        .stat-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-        }
-
-        body.dark .stat-card:hover {
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
-        }
-
-        .stat-icon {
-            width: 70px;
-            height: 70px;
-            margin: 0 auto 1rem;
-            background: linear-gradient(135deg, var(--primary), var(--success));
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            color: white;
-            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.3);
-        }
-
-        .stat-number {
-            font-size: 2.5rem;
-            font-weight: 800;
-            color: var(--text-light);
-            /* Dark text in light mode */
-            margin-bottom: 0.5rem;
-        }
-
-        body.dark .stat-number {
-            color: white;
-        }
-
-        .stat-label {
-            font-size: 1.1rem;
-            color: var(--text-light);
-            /* Dark text in light mode */
-            opacity: 0.7;
-            font-weight: 500;
-        }
-
-        body.dark .stat-label {
-            color: rgba(255, 255, 255, 0.8);
-        }
-
-        .stat-trend {
-            margin-top: 1rem;
-            padding: 0.5rem 1rem;
-            border-radius: 25px;
-            font-size: 0.9rem;
-            font-weight: 600;
-        }
-
-        .trend-up {
-            background: rgba(34, 197, 94, 0.2);
-            color: var(--success);
-        }
-
-        .trend-down {
-            background: rgba(239, 68, 68, 0.2);
-            color: var(--danger);
-        }
-
-        /* FIXED: Vegetables Section - Solid in light mode */
-        .vegetables-section {
-            margin: 2rem;
-            background: var(--card-light);
-            /* Solid white in light mode */
-            border: 1px solid var(--border-light);
-            border-radius: 20px;
-            padding: 2rem;
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
-        }
-
-        body.dark .vegetables-section {
-            background: rgba(30, 41, 59, 0.3);
-            backdrop-filter: blur(20px);
-            border-color: rgba(71, 85, 105, 0.3);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-        }
-
-        .section-title {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--text-light);
-            /* Dark text in light mode */
-            margin-bottom: 2rem;
-            text-align: center;
-        }
-
-        body.dark .section-title {
-            color: white;
-        }
-
-        .vegetables-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 2rem;
-        }
-
-        .vegetable-card {
-            background: var(--card-light);
-            border: 1px solid var(--border-light);
-            border-radius: 24px;
+        .table-shell {
+            border-radius: 14px;
+            border: 1px solid var(--border-soft);
             overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-            transition: all 0.4s ease;
-            cursor: pointer;
-            position: relative;
         }
 
-        body.dark .vegetable-card {
-            background: rgba(30, 41, 59, 0.9);
-            border-color: var(--border-dark);
-        }
-
-        .vegetable-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
-        }
-
-        body.dark .vegetable-card:hover {
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
-        }
-
-        .vegetable-image {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-            transition: all 0.3s ease;
-        }
-
-        .vegetable-card:hover .vegetable-image {
-            transform: scale(1.05);
-        }
-
-        .vegetable-info {
-            padding: 1.5rem;
-        }
-
-        .vegetable-header {
+        .table-header-strip {
+            background: #eff4ff;
+            padding: 0.4rem 0.7rem;
+            font-size: 0.78rem;
+            color: var(--text-muted);
             display: flex;
             justify-content: space-between;
-            align-items: start;
-            margin-bottom: 1rem;
-        }
-
-        .vegetable-name {
-            font-size: 1.4rem;
-            font-weight: 700;
-            color: var(--text-light);
-        }
-
-        body.dark .vegetable-name {
-            color: var(--text-dark);
-        }
-
-        .price-badge {
-            background: linear-gradient(135deg, var(--primary), var(--success));
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 25px;
-            font-weight: 700;
-            font-size: 1.1rem;
-            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
-        }
-
-        .vegetable-details {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-            margin-bottom: 1rem;
-        }
-
-        .detail-item {
-            display: flex;
             align-items: center;
-            gap: 0.5rem;
-            font-size: 0.9rem;
-            color: var(--text-light);
         }
 
-        body.dark .detail-item {
-            color: var(--text-dark);
+        .table-scroll {
+            max-height: 470px;
+            overflow: auto;
+            background: #ffffff;
         }
 
-        .detail-icon {
-            color: var(--primary);
-        }
-
-        .price-trend-indicator {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin-top: 1rem;
-            padding: 0.8rem;
-            border-radius: 12px;
-            font-weight: 600;
-        }
-
-        .trend-positive {
-            background: rgba(34, 197, 94, 0.1);
-            color: var(--success);
-        }
-
-        .trend-negative {
-            background: rgba(239, 68, 68, 0.1);
-            color: var(--danger);
-        }
-
-        /* Click indicator */
-        .click-indicator {
-            position: absolute;
-            bottom: 1rem;
-            left: 50%;
-            transform: translateX(-50%);
-            background: linear-gradient(135deg, var(--primary), var(--success));
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
+        table.market-table {
+            width: 100%;
+            border-collapse: collapse;
             font-size: 0.8rem;
+        }
+
+        table.market-table thead {
+            position: sticky;
+            top: 0;
+            background: #eff4ff;
+            z-index: 2;
+        }
+
+        table.market-table th,
+        table.market-table td {
+            padding: 0.48rem 0.55rem;
+            border-bottom: 1px solid #e2e6f1;
+            white-space: nowrap;
+        }
+
+        table.market-table th {
+            font-size: 0.78rem;
             font-weight: 600;
+            color: #6b7280;
+        }
+
+        table.market-table tbody tr {
+            cursor: pointer;
+            transition: background 0.12s ease, transform 0.04s ease;
+        }
+
+        table.market-table tbody tr:nth-child(even) {
+            background: #f9fafb;
+        }
+
+        table.market-table tbody tr:hover {
+            background: #e0edff;
+        }
+
+        table.market-table tbody tr.selected {
+            background: #dbeafe;
+            transform: translateY(-1px);
+        }
+
+        .pill-range {
+            border-radius: 999px;
+            padding: 0.16rem 0.55rem;
+            font-size: 0.72rem;
+            font-weight: 600;
+        }
+
+        .pill-high {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
+        .pill-low {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .pill-mid {
+            background: #e0f2fe;
+            color: #075985;
+        }
+
+        /* ---------- AI PANEL (clean) ---------- */
+
+        .ai-shell {
+            position: relative;
+            overflow: hidden;
+            background: #ffffff;
+        }
+
+        .ai-inner {
+            position: relative;
+            z-index: 1;
+        }
+
+        .ai-status-strip {
+            border-radius: 14px;
+            padding: 0.55rem 0.8rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.55rem;
+            font-size: 0.8rem;
+            color: #0b1120;
+        }
+
+        /* ========= MODERN GOVT HEADER ========= */
+
+        .govt-header {
+            width: 100%;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid var(--border-strong);
+            background: #ffffff;
+            box-shadow: var(--shadow-soft);
+        }
+
+        /* Top emblem bar */
+        .govt-topbar {
+            background: linear-gradient(90deg, #0f172a, #1d4ed8);
+            padding: 16px 26px;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
-            opacity: 0;
-            transition: all 0.3s ease;
-            pointer-events: none;
-            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+            gap: 16px;
+            color: #e5e7eb;
         }
 
-        .vegetable-card:hover .click-indicator {
-            opacity: 1;
-            transform: translateX(-50%) translateY(-5px);
+        .govt-emblem {
+            width: 44px;
+            height: 44px;
+            background: url('https://upload.wikimedia.org/wikipedia/commons/5/55/Emblem_of_India.svg') center/contain no-repeat;
+            filter: brightness(100%) invert(1);
+            flex-shrink: 0;
         }
 
-        /* Loading States */
-        .loading-container {
+        .india-title strong {
+            font-size: 19px;
+            font-weight: 600;
+            letter-spacing: 0.32px;
+        }
+
+        .india-title .sub {
+            font-size: 13px;
+            opacity: 0.96;
+            display: block;
+            margin-bottom: 3px;
+        }
+
+        /* Lower portal banner */
+        .portal-banner {
+            padding: 22px 26px 22px;
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
-            padding: 4rem;
-            flex-direction: column;
-            gap: 1rem;
-            grid-column: 1 / -1;
+            flex-wrap: wrap;
+            gap: 14px;
+            background:
+                radial-gradient(circle at top left, #e0f2fe 0, transparent 55%),
+                radial-gradient(circle at bottom right, #e0fbff 0, #ffffff 65%);
         }
 
-        .spinner {
-            width: 50px;
-            height: 50px;
-            border: 4px solid rgba(16, 185, 129, 0.3);
-            border-left-color: var(--primary);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
+        .portal-left h1 {
+            margin: 0 0 6px;
+            font-size: 26px;
+            font-weight: 700;
+            color: #0f172a;
+            letter-spacing: 0.02em;
+        }
+
+        .portal-left p {
+            margin: 0;
+            color: #4b5563;
+            font-size: 15px;
+        }
+
+        .portal-right {
+            text-align: right;
+            font-size: 13px;
+            color: #6b7280;
+        }
+
+        .portal-right .meta {
+            display: block;
+            margin-top: 4px;
+        }
+
+        @media (max-width: 720px) {
+            .portal-banner {
+                align-items: flex-start;
+            }
+
+            .portal-right {
+                text-align: left;
+            }
+        }
+
+        .ai-status-label {
+            font-size: 0.74rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            opacity: 0.85;
+        }
+
+        .ai-status-main {
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .ai-status-sub {
+            font-size: 0.78rem;
+            opacity: 0.9;
+        }
+
+        .ai-status-chip {
+            font-size: 0.78rem;
+            padding: 0.25rem 0.65rem;
+            border-radius: 999px;
+            background: rgba(15, 23, 42, 0.08);
+        }
+
+        .ai-mini-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 0.4rem 0.75rem;
+            margin-top: 0.4rem;
+            font-size: 0.8rem;
+        }
+
+        .ai-mini-label {
+            font-size: 0.74rem;
+            color: var(--text-muted);
+        }
+
+        .ai-mini-value {
+            font-size: 0.86rem;
+            font-weight: 600;
+        }
+
+        .ai-quick {
+            margin-top: 0.7rem;
+            border-radius: 12px;
+            padding: 0.55rem 0.65rem;
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            font-size: 0.8rem;
+        }
+
+        .ai-quick-title {
+            font-weight: 600;
+            margin-bottom: 0.2rem;
+        }
+
+        .ai-body {
+            margin-top: 0.65rem;
+            font-size: 0.83rem;
+            line-height: 1.5;
+            min-height: 96px;
+        }
+
+        .ai-body p {
+            margin-bottom: 0.45rem;
+        }
+
+        .ai-body strong {
+            font-weight: 650;
+        }
+
+        .ai-placeholder {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .ai-loading {
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            padding: 1rem 0.2rem;
+        }
+
+        .ai-spinner {
+            width: 28px;
+            height: 28px;
+            border-radius: 999px;
+            border: 3px solid rgba(20, 87, 255, 0.2);
+            border-top-color: #1457ff;
+            margin: 0 auto 0.4rem;
+            animation: spin 0.8s linear infinite;
         }
 
         @keyframes spin {
@@ -756,1066 +578,779 @@
             }
         }
 
-        .loading-text {
-            color: var(--text-light);
-            font-size: 1.2rem;
-            font-weight: 500;
-        }
+        /* ALERTS */
 
-        body.dark .loading-text {
-            color: white;
-        }
-
-        /* Search Results Styling */
-        .search-results-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-            padding: 1rem;
-            background: var(--card-light);
-            border: 1px solid var(--border-light);
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-        }
-
-        body.dark .search-results-header {
-            background: rgba(30, 41, 59, 0.3);
-            border-color: var(--border-dark);
-        }
-
-        .search-info {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            color: var(--text-light);
-            font-weight: 600;
-        }
-
-        body.dark .search-info {
-            color: white;
-        }
-
-        .clear-search-btn {
-            background: rgba(239, 68, 68, 0.1);
-            color: var(--danger);
-            border: 1px solid rgba(239, 68, 68, 0.2);
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: 600;
-        }
-
-        .clear-search-btn:hover {
-            background: rgba(239, 68, 68, 0.2);
-            transform: translateY(-1px);
-        }
-
-        .suggestion-tag {
-            background: var(--primary);
-            color: white;
-            padding: 0.4rem 0.8rem;
-            border-radius: 20px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 0.85rem;
-            font-weight: 500;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.3rem;
-        }
-
-        body.dark .suggestion-tag {
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .suggestion-tag:hover {
-            background: var(--primary-dark);
-            transform: translateY(-1px);
-        }
-
-        body.dark .suggestion-tag:hover {
-            background: rgba(255, 255, 255, 0.25);
-        }
-
-        /* Modal Styles */
-        .modal-content {
-            background: var(--card-light);
-            border: none;
-            border-radius: 24px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
-        }
-
-        body.dark .modal-content {
-            background: rgba(30, 41, 59, 0.95);
-            color: var(--text-dark);
-        }
-
-        .modal-header {
-            border: none;
-            padding: 2rem 2rem 0;
-        }
-
-        .modal-body {
-            padding: 1rem 2rem 2rem;
-        }
-
-        .ai-recommendation {
-            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(34, 197, 94, 0.05));
-            border: 1px solid rgba(16, 185, 129, 0.2);
-            border-radius: 16px;
-            padding: 1.5rem;
-            margin-top: 1.5rem;
-            line-height: 1.6;
-        }
-
-        .recommendation-title {
-            display: flex;
-            align-items: center;
-            gap: 0.8rem;
-            font-weight: 700;
-            font-size: 1.1rem;
-            margin-bottom: 1.2rem;
-            color: var(--primary);
-        }
-
-        .recommendation-title i {
-            font-size: 1.3rem;
-        }
-
-        .recommendation-content {
-            color: var(--text-light);
-        }
-
-        body.dark .recommendation-content {
-            color: var(--text-dark);
-        }
-
-        /* AI Text Formatting */
-        .ai-heading {
-            font-weight: 700;
-            font-size: 1rem;
-            color: var(--primary);
-            margin: 1rem 0 0.5rem 0;
-            text-transform: capitalize;
-        }
-
-        .ai-paragraph {
-            margin-bottom: 0.8rem;
-            line-height: 1.6;
-        }
-
-        .ai-point {
-            display: flex;
-            gap: 0.8rem;
-            margin-bottom: 0.8rem;
-            align-items: flex-start;
-        }
-
-        .point-number {
-            background: var(--primary);
-            color: white;
-            border-radius: 50%;
-            width: 24px;
-            height: 24px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .alert-strip {
+            margin-top: 0.75rem;
             font-size: 0.8rem;
-            font-weight: 700;
-            flex-shrink: 0;
-        }
-
-        .point-content {
-            flex: 1;
-            line-height: 1.5;
-        }
-
-        .ai-bullet {
-            display: flex;
-            gap: 0.8rem;
-            margin-bottom: 0.6rem;
-            align-items: flex-start;
-        }
-
-        .bullet-icon {
-            color: var(--primary);
-            font-weight: 700;
-            flex-shrink: 0;
-            margin-top: 0.1rem;
-        }
-
-        .bullet-content {
-            flex: 1;
-            line-height: 1.5;
-        }
-
-        /* Clean spacing */
-        .ai-paragraph:last-child,
-        .ai-point:last-child,
-        .ai-bullet:last-child {
-            margin-bottom: 0;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .header {
-                margin: 1rem;
-                padding: 1.5rem;
-            }
-
-            .header-content {
-                flex-direction: column;
-                gap: 1rem;
-                text-align: center;
-            }
-
-            .header-title h1 {
-                font-size: 2rem;
-            }
-
-            .search-section,
-            .vegetables-section {
-                margin: 1rem;
-                padding: 1.5rem;
-            }
-
-            .search-title {
-                font-size: 1.8rem;
-            }
-
-            .modern-search-box {
-                flex-direction: column;
-            }
-
-            .search-input-wrapper {
-                max-width: 100%;
-                min-width: auto;
-            }
-
-            .modern-search-btn {
-                align-self: stretch;
-                justify-content: center;
-            }
-
-            .quick-search-tags {
-                flex-direction: column;
-                gap: 1rem;
-            }
-
-            .tags-container {
-                gap: 0.5rem;
-            }
-
-            .search-tag {
-                font-size: 0.8rem;
-                padding: 0.5rem 1rem;
-            }
-
-            .market-stats {
-                margin: 1rem;
-                grid-template-columns: 1fr;
-            }
-
-            .vegetables-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .vegetable-details {
-                grid-template-columns: 1fr;
-                gap: 0.5rem;
-            }
-
-            .search-results-header {
-                flex-direction: column;
-                gap: 1rem;
-                text-align: center;
-            }
         }
     </style>
 </head>
 
 <body>
-    <!-- Animated Background -->
-    <div class="bg-animation">
-        <div class="floating-shape shape-1"></div>
-        <div class="floating-shape shape-2"></div>
-        <div class="floating-shape shape-3"></div>
-    </div>
-
-    <!-- Header -->
-    <div class="header">
-        <div class="header-content">
-            <div class="header-title">
-                <div class="header-icon">
-                    <i class="fas fa-chart-line"></i>
+    <div class="page-shell">
+        <!-- MODERN GOVT HEADER (without SIH text) -->
+        <header class="govt-header">
+            <div class="govt-topbar">
+                <div class="govt-emblem"></div>
+                <div class="india-title">
+                    <span class="sub">Government of Kerala</span>
+                    <strong>Department of Agriculture Development &amp; Farmers' Welfare</strong>
                 </div>
-                <h1>Live Market Prices</h1>
             </div>
-            <div class="header-actions">
-                <a href="dashboard.html" class="btn-glass">
-                    <i class="fas fa-arrow-left me-2"></i>Dashboard
-                </a>
-                <button class="btn-glass" onclick="toggleTheme()">
-                    <i class="fas fa-moon"></i>
-                </button>
+
+            <div class="portal-banner">
+                <div class="portal-left">
+                    <h1>Kerala Agriculture Mandi Portal</h1>
+                    <p>City , Districts , AI advisory</p>
+                </div>
+
+                <div class="portal-right">
+                    <strong>Agriculture Mandir &amp; AI Advisory</strong>
+                    <span class="meta">Updated every week</span>
+                </div>
             </div>
-        </div>
-    </div>
+        </header>
 
-    <!-- MODERN SEARCH SECTION -->
-    <div class="search-section">
-        <div class="search-container">
-            <h2 class="search-title">
-                <span class="search-emoji">🔍</span>
-                Find Vegetable Prices
-            </h2>
-            <p class="search-subtitle">Search from 50+ vegetables across Kerala markets</p>
+        <!-- ALERTS -->
+        <div id="alertContainer" class="alert-strip"></div>
 
-            <div class="modern-search-box">
-                <div class="search-input-wrapper">
-                    <i class="fas fa-search search-input-icon"></i>
-                    <input type="text" class="modern-search-input" id="searchInput"
-                        placeholder="Type vegetable name... (tomato, onion, potato)">
-                    <div class="search-loader" id="searchLoader" style="display: none;">
-                        <i class="fas fa-spinner fa-spin"></i>
+        <!-- MAIN GRID -->
+        <main class="layout-grid">
+            <!-- LEFT: TABLE -->
+            <section class="card-shell">
+                <div class="card-head">
+                    <div class="card-title-block">
+                        <div class="card-title">
+                            <span class="card-title-icon"><i class="fas fa-store"></i></span>
+                            <span id="tableTitle">Kerala Market Prices (Live)</span>
+                        </div>
+                        <div class="card-subtitle" id="tableSubtitle">
+                            Filter by commodity, district or market. Select a row to view AI advice on the right.
+                        </div>
+                    </div>
+                    <span class="chip-small" id="tableSource"></span>
+                </div>
+
+                <!-- Filters -->
+                <div class="filters-grid">
+                    <div>
+                        <div class="filter-label" id="lblCommodity">Commodity</div>
+                        <select id="filterCommodity" class="form-select form-select-sm">
+                            <option value="">All commodities</option>
+                        </select>
+                    </div>
+                    <div>
+                        <div class="filter-label" id="lblDistrict">District</div>
+                        <select id="filterDistrict" class="form-select form-select-sm">
+                            <option value="">All districts</option>
+                        </select>
+                    </div>
+                    <div>
+                        <div class="filter-label" id="lblMarket">Market</div>
+                        <select id="filterMarket" class="form-select form-select-sm">
+                            <option value="">All markets</option>
+                        </select>
+                    </div>
+                    <div>
+                        <div class="filter-label" id="lblSearch">Search</div>
+                        <div class="input-group input-group-sm">
+                            <input id="searchInput" type="text" class="form-control"
+                                placeholder="Bhindi, Harippad, Ernakulam…">
+                            <button id="btnSearch" class="btn btn-outline-secondary" type="button">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
-                <button class="modern-search-btn" onclick="handleSearch()">
-                    <i class="fas fa-search"></i>
-                    <span>Search</span>
-                </button>
-            </div>
 
-            <!-- Quick Search Tags -->
-            <div class="quick-search-tags">
-                <span class="quick-search-label">Quick Search:</span>
-                <div class="tags-container">
-                    <span class="search-tag" onclick="quickSearch('tomato')">
-                        <span class="tag-emoji">🍅</span>
-                        <span>Tomato</span>
-                    </span>
-                    <span class="search-tag" onclick="quickSearch('onion')">
-                        <span class="tag-emoji">🧅</span>
-                        <span>Onion</span>
-                    </span>
-                    <span class="search-tag" onclick="quickSearch('potato')">
-                        <span class="tag-emoji">🥔</span>
-                        <span>Potato</span>
-                    </span>
-                    <span class="search-tag" onclick="quickSearch('carrot')">
-                        <span class="tag-emoji">🥕</span>
-                        <span>Carrot</span>
-                    </span>
-                    <span class="search-tag" onclick="quickSearch('cabbage')">
-                        <span class="tag-emoji">🥬</span>
-                        <span>Cabbage</span>
-                    </span>
+                <div class="filters-actions">
+                    <button id="btnApplyFilters" class="btn btn-gov btn-gov-primary" type="button">
+                        <i class="fas fa-filter me-1"></i><span id="btnApplyText">Apply filters</span>
+                    </button>
+                    <button id="btnResetFilters" class="btn btn-gov btn-gov-secondary" type="button">
+                        <i class="fas fa-rotate-left me-1"></i><span id="btnResetText">Reset</span>
+                    </button>
                 </div>
-            </div>
-        </div>
 
-        <!-- Search Results -->
-        <div id="searchResults" class="search-results"></div>
-    </div>
-
-
-    <!-- Market Statistics -->
-    <div class="market-stats">
-        <div class="stat-card">
-            <div class="stat-icon">
-                <i class="fas fa-chart-bar"></i>
-            </div>
-            <div class="stat-number" id="totalMarkets">--</div>
-            <div class="stat-label">Active Markets</div>
-            <div class="stat-trend trend-up">
-                <i class="fas fa-arrow-up me-1"></i>Live Data
-            </div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-icon">
-                <i class="fas fa-leaf"></i>
-            </div>
-            <div class="stat-number" id="totalVegetables">--</div>
-            <div class="stat-label">Vegetables Listed</div>
-            <div class="stat-trend trend-up">
-                <i class="fas fa-sync-alt me-1"></i>Updated
-            </div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-icon">
-                <i class="fas fa-rupee-sign"></i>
-            </div>
-            <div class="stat-number" id="avgPrice">--</div>
-            <div class="stat-label">Average Price/kg</div>
-            <div class="stat-trend trend-up" id="priceTrend">
-                <i class="fas fa-arrow-up me-1"></i>+5.2%
-            </div>
-        </div>
-    </div>
-
-    <!-- Vegetables Section -->
-    <div class="vegetables-section">
-        <h2 class="section-title">🥬 Today's Fresh Prices</h2>
-        <div class="vegetables-grid" id="vegetablesGrid">
-            <div class="loading-container">
-                <div class="spinner"></div>
-                <div class="loading-text">Loading fresh market data...</div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Detailed View Modal -->
-    <div class="modal fade" id="vegetableModal" tabindex="-1">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalTitle">Vegetable Details</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                <!-- Mini stats -->
+                <div class="stats-row">
+                    <div><span id="statMarketsLabel">Markets:</span><span class="value" id="statMarkets">–</span></div>
+                    <div><span id="statCommoditiesLabel">Commodities:</span><span class="value"
+                            id="statCommodities">–</span></div>
+                    <div><span id="statAvgLabel">Average modal price:</span><span class="value"
+                            id="statAvgModal">–</span></div>
                 </div>
-                <div class="modal-body" id="modalBody">
-                    <!-- Dynamic content will be loaded here -->
+
+                <!-- Table -->
+                <div class="table-shell">
+                    <div class="table-header-strip">
+                        <span><span id="thShowing">Showing</span> <strong id="tableCount">0</strong> <span
+                                id="thRecords">records</span></span>
+                    </div>
+                    <div class="table-scroll">
+                        <table class="market-table">
+                            <thead>
+                                <tr>
+                                    <th id="thCommodity">Commodity</th>
+                                    <th id="thDistrict">District</th>
+                                    <th id="thMarket">Market</th>
+                                    <th id="thMin">Min (₹)</th>
+                                    <th id="thModal">Modal (₹)</th>
+                                    <th id="thMax">Max (₹)</th>
+                                    <th id="thRange">Range</th>
+                                </tr>
+                            </thead>
+                            <tbody id="marketTableBody">
+                                <tr>
+                                    <td colspan="7" class="text-center py-3 small">
+                                        <i class="fas fa-spinner fa-spin me-2"></i>
+                                        <span id="tblLoading">Loading live Kerala market data…</span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-            </div>
-        </div>
+            </section>
+
+            <!-- RIGHT: AI PANEL -->
+            <aside class="card-shell ai-shell">
+                <div class="ai-inner">
+                    <div class="card-head" style="margin-bottom:0.4rem;">
+                        <div class="card-title-block">
+                            <div class="card-title">
+                                <span class="card-title-icon"><i class="fas fa-chart-line"></i></span>
+                                <span id="aiTitle">AI Advisory – Today’s Action</span>
+                            </div>
+                            <div class="card-subtitle" id="aiSubtitle">
+                                Select a commodity row on the left to view what the system recommends for today.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Status strip -->
+                    <div id="aiStatusStrip" class="ai-status-strip" style="display:none;">
+                        <div>
+                            <div class="ai-status-label" id="aiStatusLabel">Recommendation</div>
+                            <div class="ai-status-main" id="aiStatusMain">Monitor</div>
+                            <div class="ai-status-sub" id="aiStatusSub">System will analyse once you select a row.
+                            </div>
+                        </div>
+                        <div class="ai-status-chip" id="aiStatusChip">–</div>
+                    </div>
+
+                    <!-- Quick metrics -->
+                    <div class="ai-mini-grid">
+                        <div>
+                            <div class="ai-mini-label" id="aiLblModal">Current modal price</div>
+                            <div class="ai-mini-value" id="aiCurrentPrice">–</div>
+                        </div>
+                        <div>
+                            <div class="ai-mini-label" id="aiLblRange">Today’s price range</div>
+                            <div class="ai-mini-value" id="aiRange">–</div>
+                        </div>
+                        <div>
+                            <div class="ai-mini-label" id="aiLblPos">Position in range</div>
+                            <div class="ai-mini-value" id="aiPosition">–</div>
+                        </div>
+                        <div>
+                            <div class="ai-mini-label" id="aiLblTrend">Trend</div>
+                            <div class="ai-mini-value" id="aiTrend">–</div>
+                        </div>
+                    </div>
+
+                    <!-- Quick summary -->
+                    <div id="aiQuick" class="ai-quick" style="display:none;">
+                        <div class="ai-quick-title" id="aiQuickTitle">Quick summary</div>
+                        <div id="aiQuickText"></div>
+                    </div>
+
+                    <!-- Detailed text -->
+                    <div id="aiBody" class="ai-body">
+                        <div class="ai-placeholder" id="aiPlaceholder">
+                            Namaskaram, Krishikan! This panel will tell you in simple language whether today looks like
+                            a
+                            good time to SELL, if you can HOLD for a few days, or if you should MONITOR the market.
+                            Start by selecting any row from the left table.
+                        </div>
+                    </div>
+                </div>
+            </aside>
+        </main>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Theme management
-        let isDarkMode = localStorage.getItem('darkMode') === 'true';
+        // ---------- LANGUAGE SYNC HELPERS ----------
 
-        function initializeTheme() {
-            if (isDarkMode) {
-                document.body.classList.add('dark');
-            }
+        function getStoredLang() {
+            const raw =
+                localStorage.getItem('appLanguage') || // primary key used by dashboard
+                localStorage.getItem('appLang') ||
+                localStorage.getItem('lang') ||
+                localStorage.getItem('language');
+
+            return raw === 'ml' ? 'ml' : 'en';
         }
 
-        function toggleTheme() {
-            isDarkMode = !isDarkMode;
-            document.body.classList.toggle('dark');
-            localStorage.setItem('darkMode', isDarkMode);
+        function setStoredLang(lang) {
+            const v = (lang === 'ml') ? 'ml' : 'en';
+
+            // Keep everything in sync:
+            localStorage.setItem('appLanguage', v); // dashboard uses this
+            localStorage.setItem('appLang', v);
+            localStorage.setItem('lang', v);
+            localStorage.setItem('language', v);
+
+            return v;
         }
 
-        // Global variables
-        let allVegetables = [];
-        let currentSearchResults = [];
 
-        // Initialize page
-        document.addEventListener('DOMContentLoaded', function () {
-            initializeTheme();
-            loadMarketData();
+        let currentLang = getStoredLang();
+        let allRecords = [];
+        let filteredRecords = [];
+        let selectedRecord = null;
 
-            // Search functionality
-            document.getElementById('searchInput').addEventListener('input', debounce(handleSearch, 500));
-            document.getElementById('searchInput').addEventListener('keypress', function (e) {
-                if (e.key === 'Enter') {
-                    handleSearch();
-                }
-            });
+        window.addEventListener('storage', (e) => {
+            if (!['appLanguage', 'lang', 'language', 'appLang'].includes(e.key)) return;
+            syncLanguageFromStorage();
         });
 
-        // Load real market data from government APIs
-        async function loadMarketData() {
-            try {
-                console.log('Loading live market data from government APIs...');
 
-                const response = await fetch('/api/market/live-prices', {
-                    credentials: 'include'
-                });
+        // Global functions so dashboard can call directly
+        function setLanguage(lang) {
+            currentLang = setStoredLang(lang);
+            applyLanguageTexts();
+            renderTable(filteredRecords);
+            if (selectedRecord) loadAiForRecord(selectedRecord);
+            else clearAiPanel();
+        }
+        window.setLanguage = setLanguage;
+        window.setMandiLanguage = setLanguage; // alias
 
-                if (response.ok) {
-                    const data = await response.json();
-                    allVegetables = data.vegetables || [];
-                    updateMarketStats(data.stats);
-                    displayVegetables(allVegetables);
-                } else {
-                    throw new Error('Failed to load market data');
+        // Polling fallback (same page SPA where storage event may not fire)
+        function syncLanguageFromStorage() {
+            const stored = getStoredLang();
+            if (stored !== currentLang) {
+                currentLang = stored;
+                applyLanguageTexts();
+                renderTable(filteredRecords);
+                if (selectedRecord) loadAiForRecord(selectedRecord);
+                else clearAiPanel();
+            }
+        }
+        setInterval(syncLanguageFromStorage, 1500);
+
+        // ---------------- LANGUAGE TEXT ----------------
+        function applyLanguageTexts() {
+            if (currentLang === 'ml') {
+                document.getElementById('tableTitle').textContent = 'കേരള മാർക്കറ്റ് വില – തത്സമയ ഡാറ്റ';
+                document.getElementById('tableSubtitle').textContent =
+                    'ഉത്പന്നം, ജില്ല, മാർക്കറ്റ് എന്നിവയിലൂടെ ഫിൽറ്റർ ചെയ്ത്, AI ഉപദേശം ലഭിക്കാൻ ഒരു നിര തിരഞ്ഞെടുക്കുക.';
+                document.getElementById('lblCommodity').textContent = 'ഉത്പന്നം';
+                document.getElementById('lblDistrict').textContent = 'ജില്ല';
+                document.getElementById('lblMarket').textContent = 'മാർക്കറ്റ്';
+                document.getElementById('lblSearch').textContent = 'ദ്രുത തിരയൽ';
+                document.getElementById('filterCommodity').options[0].textContent = 'എല്ലാ ഉത്പന്നങ്ങളും';
+                document.getElementById('filterDistrict').options[0].textContent = 'എല്ലാ ജില്ലകളും';
+                document.getElementById('filterMarket').options[0].textContent = 'എല്ലാ മാർക്കറ്റുകളും';
+                document.getElementById('btnApplyText').textContent = 'ഫിൽറ്റർ പ്രയോഗിക്കുക';
+                document.getElementById('btnResetText').textContent = 'പുതുക്കുക';
+                document.getElementById('statMarketsLabel').textContent = 'മാർക്കറ്റുകൾ:';
+                document.getElementById('statCommoditiesLabel').textContent = 'ഉത്പന്നങ്ങൾ:';
+                document.getElementById('statAvgLabel').textContent = 'ശരാശരി മോഡൽ വില:';
+                document.getElementById('thShowing').textContent = 'കാണിക്കുന്നത്';
+                document.getElementById('thRecords').textContent = 'റെക്കോർഡുകൾ';
+                document.getElementById('thCommodity').textContent = 'ഉത്പന്നം';
+                document.getElementById('thDistrict').textContent = 'ജില്ല';
+                document.getElementById('thMarket').textContent = 'മാർക്കറ്റ്';
+                document.getElementById('thMin').textContent = 'കുറഞ്ഞ (₹)';
+                document.getElementById('thModal').textContent = 'മോഡൽ (₹)';
+                document.getElementById('thMax').textContent = 'കൂടുതൽ (₹)';
+                document.getElementById('thRange').textContent = 'ശ്രേണി';
+                document.getElementById('tblLoading').textContent = 'കേരള സർക്കാർ മാർക്കറ്റ് ഡാറ്റ ലോഡ് ചെയ്യുന്നു…';
+
+                document.getElementById('aiTitle').textContent = 'AI ഉപദേശം – ഇന്നത്തെ നടപടി';
+                document.getElementById('aiSubtitle').textContent =
+                    'ഇന്നത്തെ ഉപദേശം കാണാൻ ഇടതു ഭാഗത്തെ പട്ടികയിൽ നിന്ന് ഒരു നിര തിരഞ്ഞെടുക്കുക.';
+                document.getElementById('aiLblModal').textContent = 'ഇന്നത്തെ മോഡൽ വില';
+                document.getElementById('aiLblRange').textContent = 'ഇന്നത്തെ കുറഞ്ഞ–കൂടുതൽ ശ്രേണി';
+                document.getElementById('aiLblPos').textContent = 'ശ്രേണിയിലെ സ്ഥാനം';
+                document.getElementById('aiLblTrend').textContent = 'ട്രെൻഡ്';
+                const ph = document.getElementById('aiPlaceholder');
+                if (ph) {
+                    ph.textContent =
+                        'നമസ്കാരം, കർഷകാ! തിരഞ്ഞെടുക്കുന്ന ഉത്പന്നത്തിനും മാർക്കറ്റിനും ഇന്ന് എന്ത് ചെയ്യണം എന്നതിൽ ഈ പാനൽ ലളിതമായ ഉപദേശം നൽകും.';
                 }
+            } else {
+                document.getElementById('tableTitle').textContent = 'Kerala Market Prices (Live)';
+                document.getElementById('tableSubtitle').textContent =
+                    'Filter by commodity, district or market. Select a row to view AI advice on the right.';
+                document.getElementById('lblCommodity').textContent = 'Commodity';
+                document.getElementById('lblDistrict').textContent = 'District';
+                document.getElementById('lblMarket').textContent = 'Market';
+                document.getElementById('lblSearch').textContent = 'Search';
+                document.getElementById('filterCommodity').options[0].textContent = 'All commodities';
+                document.getElementById('filterDistrict').options[0].textContent = 'All districts';
+                document.getElementById('filterMarket').options[0].textContent = 'All markets';
+                document.getElementById('btnApplyText').textContent = 'Apply filters';
+                document.getElementById('btnResetText').textContent = 'Reset';
+                document.getElementById('statMarketsLabel').textContent = 'Markets:';
+                document.getElementById('statCommoditiesLabel').textContent = 'Commodities:';
+                document.getElementById('statAvgLabel').textContent = 'Average modal price:';
+                document.getElementById('thShowing').textContent = 'Showing';
+                document.getElementById('thRecords').textContent = 'records';
+                document.getElementById('thCommodity').textContent = 'Commodity';
+                document.getElementById('thDistrict').textContent = 'District';
+                document.getElementById('thMarket').textContent = 'Market';
+                document.getElementById('thMin').textContent = 'Min (₹)';
+                document.getElementById('thModal').textContent = 'Modal (₹)';
+                document.getElementById('thMax').textContent = 'Max (₹)';
+                document.getElementById('thRange').textContent = 'Range';
+                document.getElementById('tblLoading').textContent = 'Loading live Kerala market data…';
 
-            } catch (error) {
-                console.error('Market data loading failed:', error);
-                showError('Unable to load live market data. Please try again later.');
-            }
-        }
-
-        // Update market statistics
-        function updateMarketStats(stats) {
-            if (stats) {
-                document.getElementById('totalMarkets').textContent = stats.totalMarkets || '--';
-                document.getElementById('totalVegetables').textContent = stats.totalVegetables || '--';
-                document.getElementById('avgPrice').textContent = stats.avgPrice ? `₹${stats.avgPrice}` : '--';
-
-                const trendElement = document.getElementById('priceTrend');
-                if (stats.priceChange) {
-                    const isPositive = stats.priceChange > 0;
-                    trendElement.className = `stat-trend ${isPositive ? 'trend-up' : 'trend-down'}`;
-                    trendElement.innerHTML = `
-                        <i class="fas fa-arrow-${isPositive ? 'up' : 'down'} me-1"></i>
-                        ${isPositive ? '+' : ''}${stats.priceChange}%
-                    `;
-                }
-            }
-        }
-
-        // Display vegetables in grid
-        function displayVegetables(vegetables) {
-            const grid = document.getElementById('vegetablesGrid');
-
-            if (!vegetables || vegetables.length === 0) {
-                grid.innerHTML = `
-                    <div class="loading-container">
-                        <i class="fas fa-exclamation-circle" style="font-size: 3rem; color: var(--warning); margin-bottom: 1rem;"></i>
-                        <div class="loading-text">No vegetables data available</div>
-                    </div>
-                `;
-                return;
-            }
-
-            const vegetablesHTML = vegetables.map(vegetable => `
-                <div class="vegetable-card" onclick="showVegetableDetails('${vegetable.commodity}', '${vegetable.market}')">
-                    <img src="${vegetable.image}" alt="${vegetable.commodity}" class="vegetable-image" 
-                         onerror="this.src='https://via.placeholder.com/320x200/10b981/white?text=${encodeURIComponent(vegetable.commodity)}'">
-                    
-                    <div class="vegetable-info">
-                        <div class="vegetable-header">
-                            <h3 class="vegetable-name">${vegetable.commodity}</h3>
-                            <div class="price-badge">₹${vegetable.modal_price}</div>
-                        </div>
-                        
-                        <div class="vegetable-details">
-                            <div class="detail-item">
-                                <i class="fas fa-map-marker-alt detail-icon"></i>
-                                <span>${vegetable.market}</span>
-                            </div>
-                            <div class="detail-item">
-                                <i class="fas fa-calendar detail-icon"></i>
-                                <span>${formatDate(vegetable.arrival_date)}</span>
-                            </div>
-                            <div class="detail-item">
-                                <i class="fas fa-weight detail-icon"></i>
-                                <span>Min: ₹${vegetable.min_price}</span>
-                            </div>
-                            <div class="detail-item">
-                                <i class="fas fa-chart-line detail-icon"></i>
-                                <span>Max: ₹${vegetable.max_price}</span>
-                            </div>
-                        </div>
-                        
-                        <div class="price-trend-indicator ${getPriceTrendClass(vegetable.min_price, vegetable.max_price, vegetable.modal_price)}">
-                            <i class="fas fa-${getPriceTrendIcon(vegetable.min_price, vegetable.max_price, vegetable.modal_price)}"></i>
-                            <span>${getPriceTrendText(vegetable.min_price, vegetable.max_price, vegetable.modal_price)}</span>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-
-            grid.innerHTML = vegetablesHTML;
-        }
-        // Update this function in ALL pages (dashboard.html, weather-alerts.html, ask-query.html, crop-diagnosis.html)
-        function setActiveNavigation() {
-            const currentPage = window.location.pathname.split('/').pop() || 'dashboard.html';
-            const navItems = document.querySelectorAll('.nav-item');
-
-            navItems.forEach(item => item.classList.remove('active'));
-
-            let activeSelector = '';
-
-            if (currentPage === 'dashboard.html' || currentPage === '' || currentPage === '/') {
-                activeSelector = 'a[href="dashboard.html"]';
-            } else if (currentPage === 'weather-alerts.html') {
-                activeSelector = 'a[href="weather-alerts.html"]';
-            } else if (currentPage === 'ask-query.html') {
-                activeSelector = 'a[href="ask-query.html"]';
-            } else if (currentPage === 'crop-diagnosis.html') {
-                activeSelector = 'a[href="crop-diagnosis.html"]';
-            } else if (currentPage === 'market-prices.html') {
-                // ADD THIS LINE:
-                activeSelector = 'a[href="market-prices.html"]';
-            }
-
-            if (activeSelector) {
-                const activeItem = document.querySelector(activeSelector);
-                if (activeItem) {
-                    activeItem.classList.add('active');
+                document.getElementById('aiTitle').textContent = 'AI Advisory – Today’s Action';
+                document.getElementById('aiSubtitle').textContent =
+                    'Select a commodity row on the left to view what the system recommends for today.';
+                document.getElementById('aiLblModal').textContent = 'Current modal price';
+                document.getElementById('aiLblRange').textContent = 'Today’s price range';
+                document.getElementById('aiLblPos').textContent = 'Position in range';
+                document.getElementById('aiLblTrend').textContent = 'Trend';
+                const ph = document.getElementById('aiPlaceholder');
+                if (ph) {
+                    ph.textContent =
+                        'Namaskaram, Krishikan! This panel will tell you whether today looks like a good time to SELL, if you can HOLD for a few days, or if you should MONITOR the market.';
                 }
             }
         }
 
-        // ADD THESE SEARCH FUNCTIONS TO YOUR EXISTING CODE
-
-        // API-BASED SEARCH - Fetches fresh data from government API
-        async function handleSearch() {
-            const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
-
-            if (!searchTerm) {
-                displayVegetables(allVegetables);
-                clearSearchResults();
-                return;
-            }
-
-            // Show loading
-            showSearchLoader();
-
-            try {
-                console.log(`Searching API for: ${searchTerm}`);
-
-                // Fetch fresh data from government API
-                const response = await fetch(`/api/market/search/${encodeURIComponent(searchTerm)}`, {
-                    method: 'GET',
-                    credentials: 'include'
-                });
-
-                if (response.ok) {
-                    const data = await response.json();
-                    console.log('API search response:', data);
-
-                    if (data.success && data.results && data.results.length > 0) {
-                        // Update section title
-                        const sectionTitle = document.querySelector('.section-title');
-                        if (sectionTitle) {
-                            sectionTitle.innerHTML = `🔍 API Results for "${searchTerm}" (${data.results.length} found)`;
-                        }
-
-                        // Display fresh API results
-                        displayVegetables(data.results);
-                        currentSearchResults = data.results;
-
-                        // Show clear search option
-                        showClearSearchOption(searchTerm, data.results.length);
-
-                    } else {
-                        console.log('No results from API search');
-                        showNoSearchResults(searchTerm);
-                    }
-                } else {
-                    console.error('API search failed with status:', response.status);
-                    showNoSearchResults(searchTerm);
-                }
-
-            } catch (error) {
-                console.error('API search error:', error);
-                showNoSearchResults(searchTerm);
-            }
-        }
-
-        // Show search loader
-        function showSearchLoader() {
-            const loader = document.getElementById('searchLoader');
-            if (loader) {
-                loader.style.display = 'block';
-
-                // Also show loading in main grid
-                const grid = document.getElementById('vegetablesGrid');
-                if (grid) {
-                    grid.innerHTML = `
-                <div class="loading-container">
-                    <div class="spinner"></div>
-                    <div class="loading-text">Searching government databases...</div>
-                </div>
-            `;
-                }
-
-                setTimeout(() => {
-                    loader.style.display = 'none';
-                }, 2000);
-            }
-        }
-
-        // Clear search and reload original data
-        async function clearSearchResults() {
-            const searchResults = document.getElementById('searchResults');
-            if (searchResults) {
-                searchResults.innerHTML = '';
-            }
-
-            document.getElementById('searchInput').value = '';
-            currentSearchResults = [];
-
-            // Restore original section title
-            const sectionTitle = document.querySelector('.section-title');
-            if (sectionTitle) {
-                sectionTitle.innerHTML = '🥬 Today\'s Fresh Prices';
-            }
-
-            // Reload fresh data from API
-            try {
-                console.log('Reloading fresh market data...');
-
-                const response = await fetch('/api/market/live-prices', {
-                    credentials: 'include'
-                });
-
-                if (response.ok) {
-                    const data = await response.json();
-                    allVegetables = data.vegetables || [];
-                    displayVegetables(allVegetables);
-                    updateMarketStats(data.stats);
-                } else {
-                    // If API fails, keep existing data
-                    displayVegetables(allVegetables);
-                }
-            } catch (error) {
-                console.error('Failed to reload data:', error);
-                displayVegetables(allVegetables);
-            }
-        }
-
-        // Quick search with API
-        function quickSearch(vegetableName) {
-            document.getElementById('searchInput').value = vegetableName;
-            handleSearch(); // This will now call the API
-        }
-
-        // Enhanced show no search results
-        function showNoSearchResults(searchTerm) {
-            const sectionTitle = document.querySelector('.section-title');
-            if (sectionTitle) {
-                sectionTitle.innerHTML = `🔍 No API results for "${searchTerm}"`;
-            }
-
-            const grid = document.getElementById('vegetablesGrid');
-            if (grid) {
-                grid.innerHTML = `
-            <div class="loading-container">
-                <i class="fas fa-search" style="font-size: 3rem; color: var(--warning); margin-bottom: 1rem;"></i>
-                <div class="loading-text">No vegetables found in government database for "${searchTerm}"</div>
-                <div style="margin-top: 2rem; color: white;">
-                    <p style="margin-bottom: 1rem;">Try searching for popular vegetables:</p>
-                    <div style="display: flex; flex-wrap: wrap; gap: 0.8rem; justify-content: center; margin-bottom: 2rem;">
-                        <span class="suggestion-tag" onclick="quickSearch('tomato')">🍅 Tomato</span>
-                        <span class="suggestion-tag" onclick="quickSearch('onion')">🧅 Onion</span>
-                        <span class="suggestion-tag" onclick="quickSearch('potato')">🥔 Potato</span>
-                        <span class="suggestion-tag" onclick="quickSearch('carrot')">🥕 Carrot</span>
-                        <span class="suggestion-tag" onclick="quickSearch('cabbage')">🥬 Cabbage</span>
-                        <span class="suggestion-tag" onclick="quickSearch('brinjal')">🍆 Brinjal</span>
-                    </div>
-                    <button onclick="clearSearchResults()" style="background: var(--primary); color: white; border: none; padding: 1rem 2rem; border-radius: 12px; cursor: pointer; font-weight: 600; font-size: 1rem;">
-                        <i class="fas fa-refresh me-2"></i>Load Fresh Market Data
-                    </button>
-                </div>
-            </div>
-        `;
-            }
-
-            const searchResults = document.getElementById('searchResults');
-            if (searchResults) {
-                searchResults.innerHTML = `
-            <div class="search-results-header">
-                <div class="search-info">
-                    <i class="fas fa-exclamation-circle"></i>
-                    <span>No government data found for "${searchTerm}"</span>
-                </div>
-                <button class="clear-search-btn" onclick="clearSearchResults()">
-                    <i class="fas fa-refresh"></i>
-                    Reload Fresh Data
-                </button>
-            </div>
-        `;
-            }
-        }
-
-        // Show clear search option
-        function showClearSearchOption(searchTerm, resultCount) {
-            const searchResults = document.getElementById('searchResults');
-            if (searchResults) {
-                searchResults.innerHTML = `
-            <div class="search-results-header">
-                <div class="search-info">
-                    <i class="fas fa-database"></i>
-                    <span>Government API: ${resultCount} results for "${searchTerm}"</span>
-                </div>
-                <button class="clear-search-btn" onclick="clearSearchResults()">
-                    <i class="fas fa-refresh"></i>
-                    Load Fresh Market Data
-                </button>
-            </div>
-        `;
-            }
-        }
-
-        // Enhanced showVegetableDetails to work with API search results
-        async function showVegetableDetails(commodity, market) {
-            // Find vegetable from current search results or all vegetables
-            let vegetable = currentSearchResults.length > 0
-                ? currentSearchResults.find(v => v.commodity === commodity && v.market === market)
-                : allVegetables.find(v => v.commodity === commodity && v.market === market);
-
-            if (!vegetable) {
-                console.log('Vegetable not found locally, fetching from API...');
-
-                // If not found locally, try to fetch fresh data
-                try {
-                    const response = await fetch(`/api/market/search/${encodeURIComponent(commodity)}`, {
-                        credentials: 'include'
-                    });
-
-                    if (response.ok) {
-                        const data = await response.json();
-                        if (data.results && data.results.length > 0) {
-                            vegetable = data.results.find(v => v.commodity === commodity && v.market === market) || data.results[0];
-                        }
-                    }
-                } catch (error) {
-                    console.error('Failed to fetch vegetable details:', error);
-                }
-            }
-
-            if (!vegetable) {
-                alert('Vegetable details not available. Please try again.');
-                return;
-            }
-
-            // REST OF YOUR EXISTING MODAL CODE STAYS EXACTLY THE SAME
-            document.getElementById('modalTitle').innerHTML = `
-        <div class="d-flex align-items-center gap-3">
-            <img src="${vegetable.image}" alt="${commodity}" 
-                 style="width: 60px; height: 60px; border-radius: 12px; object-fit: cover;"
-                 onerror="this.src='https://via.placeholder.com/60x60/10b981/white?text=${encodeURIComponent(commodity)}'">
-            <div>
-                <h4 class="mb-1">${commodity}</h4>
-                <small class="text-muted">${market}</small>
-            </div>
-        </div>
-    `;
-
-            // Show loading in modal
-            document.getElementById('modalBody').innerHTML = `
-        <div class="text-center py-4">
-            <div class="spinner mb-3"></div>
-            <p>Getting AI-powered farming recommendations...</p>
-        </div>
-    `;
-
-            // Show modal
-            new bootstrap.Modal(document.getElementById('vegetableModal')).show();
-
-            // Get AI recommendations
-            try {
-                const response = await fetch('/api/market/ai-recommendations', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    credentials: 'include',
-                    body: JSON.stringify({
-                        vegetable: commodity,
-                        currentPrice: vegetable.modal_price,
-                        minPrice: vegetable.min_price,
-                        maxPrice: vegetable.max_price,
-                        market: market,
-                        date: vegetable.arrival_date
-                    })
-                });
-
-                const aiData = await response.json();
-                displayDetailedView(vegetable, aiData.recommendation);
-
-            } catch (error) {
-                console.error('Failed to get AI recommendations:', error);
-                displayDetailedView(vegetable, 'Unable to load AI recommendations at the moment.');
-            }
-        }
-
-        // Display detailed view in modal
-        function displayDetailedView(vegetable, aiRecommendation) {
-            const priceAnalysis = analyzePriceRange(vegetable.min_price, vegetable.max_price, vegetable.modal_price);
-
-            document.getElementById('modalBody').innerHTML = `
-                <div class="row">
-                    <div class="col-md-6">
-                        <h6 class="fw-bold mb-3">📊 Price Analysis</h6>
-                        <div class="bg-light p-3 rounded-3 mb-3">
-                            <div class="d-flex justify-content-between mb-2">
-                                <span>Minimum Price:</span>
-                                <strong class="text-success">₹${vegetable.min_price}</strong>
-                            </div>
-                            <div class="d-flex justify-content-between mb-2">
-                                <span>Modal Price:</span>
-                                <strong class="text-primary">₹${vegetable.modal_price}</strong>
-                            </div>
-                            <div class="d-flex justify-content-between mb-2">
-                                <span>Maximum Price:</span>
-                                <strong class="text-danger">₹${vegetable.max_price}</strong>
-                            </div>
-                            <hr>
-                            <div class="d-flex justify-content-between">
-                                <span>Price Spread:</span>
-                                <strong>₹${vegetable.max_price - vegetable.min_price}</strong>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="col-md-6">
-                        <h6 class="fw-bold mb-3">📍 Market Information</h6>
-                        <div class="bg-light p-3 rounded-3 mb-3">
-                            <p class="mb-2"><strong>Market:</strong> ${vegetable.market}</p>
-                            <p class="mb-2"><strong>State:</strong> ${vegetable.state}</p>
-                            <p class="mb-2"><strong>District:</strong> ${vegetable.district}</p>
-                            <p class="mb-0"><strong>Arrival Date:</strong> ${formatDate(vegetable.arrival_date)}</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="ai-recommendation">
-                    <div class="recommendation-title">
-                        <i class="fas fa-robot"></i>
-                        <span>AI-Powered Farming Recommendation</span>
-                    </div>
-                    <div class="recommendation-content">
-                        ${formatAIRecommendation(aiRecommendation)}
-                    </div>
-                </div>
-                
-                <div class="mt-4">
-                    <h6 class="fw-bold mb-3">💡 Quick Insights</h6>
-                    <div class="row">
-                        <div class="col-md-4 text-center">
-                            <div class="p-3 bg-light rounded-3">
-                                <i class="fas fa-chart-line fs-2 text-primary mb-2"></i>
-                                <h6>${priceAnalysis.trend}</h6>
-                                <small class="text-muted">${priceAnalysis.trendDescription}</small>
-                            </div>
-                        </div>
-                        <div class="col-md-4 text-center">
-                            <div class="p-3 bg-light rounded-3">
-                                <i class="fas fa-seedling fs-2 text-success mb-2"></i>
-                                <h6>${priceAnalysis.recommendation}</h6>
-                                <small class="text-muted">Market Action</small>
-                            </div>
-                        </div>
-                        <div class="col-md-4 text-center">
-                            <div class="p-3 bg-light rounded-3">
-                                <i class="fas fa-clock fs-2 text-warning mb-2"></i>
-                                <h6>Fresh Data</h6>
-                                <small class="text-muted">Updated Today</small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `;
-        }
-
-        // Utility functions
-        function formatDate(dateString) {
-            const date = new Date(dateString);
-            return date.toLocaleDateString('en-IN', {
+        // ---------------- UTIL ----------------
+        function formatDateTime(ts) {
+            if (!ts) return '';
+            const d = new Date(ts);
+            return d.toLocaleString('en-IN', {
                 day: '2-digit',
                 month: 'short',
-                year: 'numeric'
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
             });
         }
 
-        function getPriceTrendClass(min, max, modal) {
-            const position = (modal - min) / (max - min);
-            return position > 0.6 ? 'trend-negative' : 'trend-positive';
+        function computePosition(min, max, modal) {
+            min = Number(min); max = Number(max); modal = Number(modal);
+            if (max <= min) return 50;
+            return ((modal - min) / (max - min)) * 100;
         }
 
-        function getPriceTrendIcon(min, max, modal) {
-            const position = (modal - min) / (max - min);
-            return position > 0.6 ? 'arrow-up' : 'arrow-down';
+        function getRangeTag(pos) {
+            if (pos >= 70) return { cls: 'pill-high', label: 'HIGH' };
+            if (pos <= 30) return { cls: 'pill-low', label: 'LOW' };
+            return { cls: 'pill-mid', label: 'MODERATE' };
         }
 
-        function getPriceTrendText(min, max, modal) {
-            const position = (modal - min) / (max - min);
-            if (position > 0.7) return 'High Price Range';
-            if (position < 0.3) return 'Low Price Range';
-            return 'Moderate Price';
+        function showAlert(type, msg) {
+            const wrap = document.getElementById('alertContainer');
+            wrap.innerHTML = `<div class="alert alert-${type} py-2 px-3" role="alert" style="border-radius:999px;">${msg}</div>`;
+            setTimeout(() => wrap.innerHTML = '', 4500);
         }
 
-        function analyzePriceRange(min, max, modal) {
-            const spread = max - min;
-            const position = (modal - min) / spread;
+        // ---------------- DATA ----------------
+        async function fetchJsonWithFallback(url1, url2) {
+            try {
+                const res = await fetch(url1, { credentials: 'include' });
+                if (res.ok) return res.json();
+                if (url2) {
+                    const res2 = await fetch(url2, { credentials: 'include' });
+                    if (res2.ok) return res2.json();
+                }
+                throw new Error('Both endpoints failed');
+            } catch (e) {
+                throw e;
+            }
+        }
 
-            let trend, trendDescription, recommendation;
+        async function loadLiveData() {
+            const tbody = document.getElementById('marketTableBody');
+            applyLanguageTexts();
+            tbody.innerHTML = `
+      <tr><td colspan="7" class="text-center py-3 small">
+        <i class="fas fa-spinner fa-spin me-2"></i>${document.getElementById('tblLoading').textContent}
+      </td></tr>`;
 
-            if (position > 0.7) {
-                trend = 'High Prices';
-                trendDescription = 'Prices are in upper range';
-                recommendation = 'Good to Sell';
-            } else if (position < 0.3) {
-                trend = 'Low Prices';
-                trendDescription = 'Prices are in lower range';
-                recommendation = 'Consider Holding';
+            try {
+                const data = await fetchJsonWithFallback('/api/market/live-prices', '/market/live-prices');
+                if (data.success === false) throw new Error(data.message || 'Failed');
+
+                allRecords = Array.isArray(data.vegetables) ? data.vegetables : [];
+                filteredRecords = [...allRecords];
+
+                const stats = data.stats || {};
+                const ts = data.timestamp;
+                const marketsCount = stats.totalMarkets ?? '–';
+                const commoditiesCount = stats.totalCommodities ?? stats.totalVegetables ?? '–';
+                const avgModal = stats.avgModalPrice ?? stats.avgPrice;
+
+                document.getElementById('statMarkets').textContent = marketsCount;
+                document.getElementById('statCommodities').textContent = commoditiesCount;
+                document.getElementById('statAvgModal').textContent =
+                    typeof avgModal === 'number' ? avgModal.toFixed(1) : '–';
+                document.getElementById('tableSource').textContent = data.source ? data.source : '';
+
+                const tsEl = document.getElementById('dataTimestamp');
+                if (tsEl) {
+                    tsEl.textContent =
+                        (currentLang === 'ml'
+                            ? `ഡാറ്റ: ${formatDateTime(ts)}`
+                            : `Data as on: ${formatDateTime(ts)}`);
+                }
+
+                populateFilters(allRecords);
+                renderTable(filteredRecords);
+            } catch (err) {
+                console.error('loadLiveData error', err);
+                const msg = currentLang === 'ml'
+                    ? 'കേരള മാർക്കറ്റ് ഡാറ്റ ലോഡുചെയ്യാൻ കഴിഞ്ഞില്ല.'
+                    : 'Unable to load Kerala market data.';
+                showAlert('danger', msg);
+                tbody.innerHTML = `
+        <tr><td colspan="7" class="text-center py-3 small text-danger">
+          ${currentLang === 'ml' ? 'വിവരങ്ങൾ ഇപ്പോൾ ലഭ്യമല്ല.' : 'Data currently unavailable.'}
+        </td></tr>`;
+            }
+        }
+
+        // --------- LOCAL FALLBACK SEARCH ----------
+        function performLocalSearch(term) {
+            const t = term.toLowerCase();
+            filteredRecords = allRecords.filter(r => {
+                return [r.commodity, r.district, r.market]
+                    .some(f => f && String(f).toLowerCase().includes(t));
+            });
+            renderTable(filteredRecords);
+            clearAiPanel();
+
+            if (!filteredRecords.length) {
+                const msg = currentLang === 'ml'
+                    ? 'നിലവിലുള്ള ഡാറ്റയിൽ തിരച്ചിൽ ഫലങ്ങൾ ഒന്നുമില്ല.'
+                    : 'No matching records found in currently loaded data.';
+                showAlert('warning', msg);
             } else {
-                trend = 'Stable Prices';
-                trendDescription = 'Prices are moderate';
-                recommendation = 'Monitor Market';
+                const msg = currentLang === 'ml'
+                    ? 'API തിരയൽ ലഭ്യമല്ല. ലോഡുചെയ്ത ഡാറ്റയിൽ നിന്നുള്ള ഫലങ്ങൾ മാത്രം കാണിക്കുന്നു.'
+                    : 'Search API unavailable. Showing matches only from loaded data.';
+                showAlert('info', msg);
+            }
+        }
+
+        async function performSearch() {
+            const term = document.getElementById('searchInput').value.trim();
+            if (!term) {
+                applyFilters();
+                return;
+            }
+            try {
+                const data = await fetchJsonWithFallback(
+                    `/api/market/search/${encodeURIComponent(term)}`,
+                    `/market/search/${encodeURIComponent(term)}`
+                );
+                if (data.success === false || !Array.isArray(data.results)) {
+                    performLocalSearch(term);
+                    return;
+                }
+                filteredRecords = data.results;
+                renderTable(filteredRecords);
+                clearAiPanel();
+            } catch (err) {
+                console.error('search error', err);
+                performLocalSearch(term);
+            }
+        }
+
+        // ---------------- FILTERS & TABLE ----------------
+        function populateFilters(records) {
+            const commoditySet = new Set();
+            const districtSet = new Set();
+            const marketSet = new Set();
+
+            records.forEach(r => {
+                if (r.commodity) commoditySet.add(r.commodity);
+                if (r.district) districtSet.add(r.district);
+                if (r.market) marketSet.add(r.market);
+            });
+
+            const commoditySel = document.getElementById('filterCommodity');
+            const districtSel = document.getElementById('filterDistrict');
+            const marketSel = document.getElementById('filterMarket');
+
+            commoditySel.length = 1;
+            districtSel.length = 1;
+            marketSel.length = 1;
+
+            Array.from(commoditySet).sort().forEach(c => {
+                const o = document.createElement('option');
+                o.value = o.textContent = c;
+                commoditySel.appendChild(o);
+            });
+            Array.from(districtSet).sort().forEach(d => {
+                const o = document.createElement('option');
+                o.value = o.textContent = d;
+                districtSel.appendChild(o);
+            });
+            Array.from(marketSet).sort().forEach(m => {
+                const o = document.createElement('option');
+                o.value = o.textContent = m;
+                marketSel.appendChild(o);
+            });
+        }
+
+        function applyFilters() {
+            const c = document.getElementById('filterCommodity').value;
+            const d = document.getElementById('filterDistrict').value;
+            const m = document.getElementById('filterMarket').value;
+            filteredRecords = allRecords.filter(r => {
+                if (c && r.commodity !== c) return false;
+                if (d && r.district !== d) return false;
+                if (m && r.market !== m) return false;
+                return true;
+            });
+            renderTable(filteredRecords);
+            clearAiPanel();
+        }
+
+        function resetFilters() {
+            document.getElementById('filterCommodity').value = '';
+            document.getElementById('filterDistrict').value = '';
+            document.getElementById('filterMarket').value = '';
+            document.getElementById('searchInput').value = '';
+            filteredRecords = [...allRecords];
+            renderTable(filteredRecords);
+            clearAiPanel();
+        }
+
+        function renderTable(records) {
+            const tbody = document.getElementById('marketTableBody');
+            if (!records.length) {
+                tbody.innerHTML = `
+        <tr><td colspan="7" class="text-center py-3 small">
+          ${currentLang === 'ml'
+                        ? 'തിരഞ്ഞെടുത്ത ഫിൽറ്ററുകൾക്ക് യാതൊരു വിവരവും ലഭ്യമല്ല.'
+                        : 'No records found for the selected filters.'}
+        </td></tr>`;
+                document.getElementById('tableCount').textContent = '0';
+                return;
             }
 
-            return { trend, trendDescription, recommendation };
+            const rows = records.map((r, idx) => {
+                const pos = computePosition(r.min_price, r.max_price, r.modal_price);
+                const tag = getRangeTag(pos);
+                return `
+        <tr data-index="${idx}">
+          <td>${r.commodity || '-'}</td>
+          <td>${r.district || '-'}</td>
+          <td>${r.market || '-'}</td>
+          <td>${Number(r.min_price || 0).toFixed(1)}</td>
+          <td>${Number(r.modal_price || 0).toFixed(1)}</td>
+          <td>${Number(r.max_price || 0).toFixed(1)}</td>
+          <td><span class="pill-range ${tag.cls}">${tag.label} (${pos.toFixed(1)}%)</span></td>
+        </tr>`;
+            }).join('');
+
+            tbody.innerHTML = rows;
+            document.getElementById('tableCount').textContent = String(records.length);
+
+            Array.from(tbody.querySelectorAll('tr')).forEach(tr => {
+                tr.addEventListener('click', () => {
+                    tbody.querySelectorAll('tr').forEach(row => row.classList.remove('selected'));
+                    tr.classList.add('selected');
+                    const idx = Number(tr.getAttribute('data-index'));
+                    selectedRecord = records[idx];
+                    loadAiForRecord(selectedRecord);
+                });
+            });
         }
 
-        // FIXED: Better formatting for AI recommendations
-        function formatAIRecommendation(recommendation) {
-            // Clean up the text first
-            let text = recommendation
-                .replace(/\*\*/g, '') // Remove ** markdown
-                .replace(/\*/g, '') // Remove single *
-                .trim();
+        // ---------------- AI PANEL ----------------
+        function clearAiPanel() {
+            selectedRecord = null;
+            document.getElementById('aiCurrentPrice').textContent = '–';
+            document.getElementById('aiRange').textContent = '–';
+            document.getElementById('aiPosition').textContent = '–';
+            document.getElementById('aiTrend').textContent = '–';
+            document.getElementById('aiStatusStrip').style.display = 'none';
+            document.getElementById('aiQuick').style.display = 'none';
+            document.getElementById('aiBody').innerHTML =
+                `<div class="ai-placeholder" id="aiPlaceholder">${currentLang === 'ml'
+                    ? 'നമസ്കാരം, കർഷകാ! തിരഞ്ഞെടുക്കുന്ന ഉത്പന്നത്തിനും മാർക്കറ്റിനും ഇന്ന് എന്ത് ചെയ്യണം എന്നതിൽ ഈ പാനൽ ലളിതമായ ഉപദേശം നൽകും.'
+                    : 'Namaskaram, Krishikan! This panel will tell you whether today looks like a good time to SELL, if you can HOLD for a few days, or if you should MONITOR the market.'}</div>`;
+        }
 
-            // Split into paragraphs and format properly
-            const paragraphs = text.split('\n').filter(para => para.trim().length > 0);
+        function setStatusStrip(decision, trend, pricePosition) {
+            const strip = document.getElementById('aiStatusStrip');
+            const main = document.getElementById('aiStatusMain');
+            const sub = document.getElementById('aiStatusSub');
+            const chip = document.getElementById('aiStatusChip');
 
-            let formattedText = '';
+            let bg, mainText, chipText, quickText;
 
-            for (let para of paragraphs) {
-                para = para.trim();
-
-                // Handle numbered points
-                if (/^\d+\./.test(para)) {
-                    const [number, ...content] = para.split('.');
-                    formattedText += `<div class="ai-point">
-                <span class="point-number">${number}.</span>
-                <span class="point-content">${content.join('.').trim()}</span>
-            </div>`;
+            if (currentLang === 'ml') {
+                if (decision === 'SELL') {
+                    mainText = 'ഇന്ന് വിൽക്കുക';
+                    chipText = 'SELL';
+                    quickText = 'ഇന്നത്തെ ശ്രേണിയിലെ ഉയർന്ന ഭാഗത്താണ് വില. സംഭരണം കുറവാണെങ്കിൽ കൂടുതലായി വിൽക്കുന്നത് നല്ലത്.';
+                } else if (decision === 'HOLD') {
+                    mainText = 'താമസിക്കാം';
+                    chipText = 'HOLD';
+                    quickText = 'വില ശ്രേണിയിലെ താഴ്ന്ന ഭാഗത്താണ്. സുരക്ഷിത സംഭരണം ഉണ്ടെങ്കിൽ കുറച്ച് ദിവസം കാത്തിരിക്കാം.';
+                } else {
+                    mainText = 'വിപണി ശ്രദ്ധിക്കുക';
+                    chipText = 'MONITOR';
+                    quickText = 'വില മിതമായ നിരക്കിലാണ്. പണം ആവശ്യമാണ് എങ്കിൽ കുറച്ച് വിൽക്കാം, അല്ലെങ്കിൽ അടുത്ത 1–2 ദിവസത്തെ ട്രെൻഡ് നോക്കുക.';
                 }
-                // Handle bullet points
-                else if (para.startsWith('•') || para.startsWith('-')) {
-                    const content = para.substring(1).trim();
-                    formattedText += `<div class="ai-bullet">
-                <span class="bullet-icon">•</span>
-                <span class="bullet-content">${content}</span>
-            </div>`;
-                }
-                // Handle headings (ALL CAPS or ending with :)
-                else if (para === para.toUpperCase() || para.endsWith(':')) {
-                    formattedText += `<div class="ai-heading">${para}</div>`;
-                }
-                // Regular paragraphs
-                else {
-                    formattedText += `<div class="ai-paragraph">${para}</div>`;
+            } else {
+                if (decision === 'SELL') {
+                    mainText = 'Sell today';
+                    chipText = 'SELL';
+                    quickText = 'Price is in the higher band of today’s range. If you are not planning long storage, selling most of your stock today is favourable.';
+                } else if (decision === 'HOLD') {
+                    mainText = 'You can hold';
+                    chipText = 'HOLD';
+                    quickText = 'Price is in the lower band of today’s range. If you have safe storage, waiting for a better price may help.';
+                } else {
+                    mainText = 'Monitor market';
+                    chipText = 'MONITOR';
+                    quickText = 'Price is around the middle range. Sell if you need cash flow, otherwise monitor the next 1–2 days.';
                 }
             }
 
-            return formattedText;
+            if (decision === 'SELL') bg = 'linear-gradient(120deg,#bbf7d0,#4ade80)';
+            else if (decision === 'HOLD') bg = 'linear-gradient(120deg,#fef9c3,#fde68a)';
+            else bg = 'linear-gradient(120deg,#e0f2fe,#bfdbfe)';
+
+            strip.style.background = bg;
+            strip.style.display = 'flex';
+            sub.textContent =
+                (currentLang === 'ml'
+                    ? `ഇന്നത്തെ ശ്രേണിയിൽ ~${pricePosition.toFixed(1)}% സ്ഥാനത്ത്.`
+                    : `Current price is at ~${pricePosition.toFixed(1)}% of today’s range.`);
+            main.textContent = mainText;
+            chip.textContent = chipText;
+
+            const trendEl = document.getElementById('aiTrend');
+            if (currentLang === 'ml') {
+                trendEl.textContent =
+                    trend === 'HIGH' ? 'ഇന്ന് ഉയർന്ന നില' :
+                        trend === 'LOW' ? 'ഇന്ന് കുറഞ്ഞ നില' :
+                            'ഇന്ന് മിതമായ നില';
+            } else {
+                trendEl.textContent =
+                    trend === 'HIGH' ? 'High today' :
+                        trend === 'LOW' ? 'Low today' :
+                            'Moderate today';
+            }
+
+            const quick = document.getElementById('aiQuick');
+            document.getElementById('aiQuickTitle').textContent =
+                currentLang === 'ml' ? 'സംക്ഷിപ്ത നിർദ്ദേശം' : 'Quick summary';
+            document.getElementById('aiQuickText').textContent = quickText;
+            quick.style.display = 'block';
         }
 
+        // --------- FORMAT AI TEXT: line by line, bold heading ----------
+        function formatRecommendationText(raw) {
+            if (!raw) return '';
+            const text = raw.replace(/\r\n/g, '\n').trim();
 
-        function showError(message) {
-            document.getElementById('vegetablesGrid').innerHTML = `
-                <div class="loading-container">
-                    <i class="fas fa-exclamation-triangle" style="font-size: 3rem; color: var(--danger); margin-bottom: 1rem;"></i>
-                    <div class="loading-text">${message}</div>
-                </div>
-            `;
+            const sections = [];
+            const regex = /(\d+)\.\s*([A-Z][A-Z\s]+?):\s*([\s\S]*?)(?=\n\d+\.\s*[A-Z][A-Z\s]+?:|$)/g;
+            let match;
+            while ((match = regex.exec(text)) !== null) {
+                sections.push({
+                    title: match[2].trim(),
+                    body: match[3].trim()
+                });
+            }
+
+            if (!sections.length) {
+                return `<p>${text.replace(/\n+/g, '<br>')}</p>`;
+            }
+
+            let html = '';
+            sections.forEach(sec => {
+                const bodyHtml = sec.body.replace(/\n+/g, '<br>');
+                html += `<p><strong>${sec.title}</strong><br>${bodyHtml}</p>`;
+            });
+            return html;
         }
 
-        function debounce(func, wait) {
-            let timeout;
-            return function executedFunction(...args) {
-                const later = () => {
-                    clearTimeout(timeout);
-                    func(...args);
-                };
-                clearTimeout(timeout);
-                timeout = setTimeout(later, wait);
-            };
+        async function loadAiForRecord(rec) {
+            const pos = computePosition(rec.min_price, rec.max_price, rec.modal_price);
+            const tag = getRangeTag(pos);
+
+            document.getElementById('aiCurrentPrice').textContent =
+                `₹${Number(rec.modal_price || 0).toFixed(1)}`;
+            document.getElementById('aiRange').textContent =
+                `₹${Number(rec.min_price || 0).toFixed(1)} – ₹${Number(rec.max_price || 0).toFixed(1)}`;
+            document.getElementById('aiPosition').textContent = `${pos.toFixed(1)}%`;
+            document.getElementById('aiBody').innerHTML = `
+      <div class="ai-loading">
+        <div class="ai-spinner"></div>
+        ${currentLang === 'ml'
+                    ? 'ഇന്നത്തെ വില വിശകലനം ചെയ്യുന്നു…'
+                    : 'Analysing today’s price and preparing advisory…'}
+      </div>`;
+
+            try {
+                const res = await fetch('/api/market/ai-recommendations', {
+                    method: 'POST',
+                    credentials: 'include',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        vegetable: rec.commodity,
+                        currentPrice: rec.modal_price,
+                        minPrice: rec.min_price,
+                        maxPrice: rec.max_price,
+                        market: rec.market,
+                        district: rec.district,
+                        date: rec.arrival_date,
+                        lang: currentLang
+                    })
+                });
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                const data = await res.json();
+                if (data.success === false) throw new Error(data.message || 'AI error');
+
+                const decision = data.decision?.label || 'MONITOR';
+                const trend = data.decision?.trend ||
+                    (tag.label === 'HIGH' ? 'HIGH' : tag.label === 'LOW' ? 'LOW' : 'MODERATE');
+                const pricePos = data.decision?.pricePosition ?? pos;
+
+                setStatusStrip(decision, trend, pricePos);
+
+                const formatted = formatRecommendationText(data.recommendation);
+                document.getElementById('aiBody').innerHTML = formatted;
+            } catch (err) {
+                console.error('AI error', err);
+                showAlert('warning',
+                    currentLang === 'ml' ? 'AI ഉപദേശം ലഭിച്ചില്ല. പിന്നീട് വീണ്ടും ശ്രമിക്കുക.' : 'AI advisory could not be generated. Please try again.');
+                clearAiPanel();
+            }
         }
 
-        console.log('Modern market prices page loaded');
+        // ---------------- INIT ----------------
+        document.addEventListener('DOMContentLoaded', () => {
+            currentLang = getStoredLang(); // ensure initial read
+            applyLanguageTexts();
+            loadLiveData();
+
+            document.getElementById('btnApplyFilters').addEventListener('click', applyFilters);
+            document.getElementById('btnResetFilters').addEventListener('click', resetFilters);
+            document.getElementById('btnSearch').addEventListener('click', performSearch);
+            document.getElementById('searchInput').addEventListener('keypress', e => {
+                if (e.key === 'Enter') performSearch();
+            });
+        });
     </script>
 </body>
 
