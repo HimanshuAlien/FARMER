@@ -34,7 +34,7 @@ router.post('/ask', auth, async (req, res) => {
         console.log('Language:', language);
 
         // Use Gemini 1.5 Flash
-        const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+        const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
 
         // Create language-specific prompt
         const languageInstruction = languages[language]?.prompt || languages['en'].prompt;
