@@ -78,33 +78,57 @@ router.get('/current/:location', auth, async (req, res) => {
             }
 
         } catch (apiError) {
-            console.log('API failed, using fallback data:', apiError.message);
+            console.log('Primary API failed, trying LIVE fallback for Kochi, Kerala:', apiError.message);
 
-            // Fallback weather data
-            weatherData = {
-                current: {
-                    temp: 28,
-                    humidity: 75,
-                    pressure: 1013,
-                    wind_speed: 12,
-                    feels_like: 32,
-                    weather_code: 2,
-                    visibility: 10
-                },
-                location: {
-                    name: location.split(',')[0] || 'Kochi',
-                    country: 'India',
-                    lat: null,
-                    lon: null
-                },
-                forecast: {
-                    time: ['2025-09-15', '2025-09-16', '2025-09-17', '2025-09-18', '2025-09-19'],
-                    weather_code: [2, 61, 1, 3, 2],
-                    temperature_2m_max: [32, 29, 34, 31, 30],
-                    temperature_2m_min: [24, 22, 25, 23, 24],
-                    precipitation_sum: [0, 15, 2, 0, 5]
-                }
-            };
+            // 🔁 NEW: LIVE fallback for Kochi, Kerala (no static mock data)
+            try {
+                const fallbackLat = 9.9312;
+                const fallbackLon = 76.2673;
+
+                const weatherResponse = await axios.get('https://api.open-meteo.com/v1/forecast', {
+                    params: {
+                        latitude: fallbackLat,
+                        longitude: fallbackLon,
+                        current: 'temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,surface_pressure,wind_speed_10m',
+                        daily: 'weather_code,temperature_2m_max,temperature_2m_min,precipitation_sum',
+                        timezone: 'auto',
+                        forecast_days: 5
+                    },
+                    timeout: 10000
+                });
+
+                const data = weatherResponse.data;
+
+                weatherData = {
+                    current: {
+                        temp: Math.round(data.current.temperature_2m),
+                        humidity: data.current.relative_humidity_2m,
+                        pressure: Math.round(data.current.surface_pressure),
+                        wind_speed: Math.round(data.current.wind_speed_10m * 3.6),
+                        feels_like: Math.round(data.current.apparent_temperature),
+                        weather_code: data.current.weather_code,
+                        visibility: 10
+                    },
+                    location: {
+                        name: 'Kochi',
+                        country: 'India',
+                        lat: fallbackLat,
+                        lon: fallbackLon
+                    },
+                    forecast: {
+                        time: data.daily.time,
+                        weather_code: data.daily.weather_code,
+                        temperature_2m_max: data.daily.temperature_2m_max,
+                        temperature_2m_min: data.daily.temperature_2m_min,
+                        precipitation_sum: data.daily.precipitation_sum
+                    }
+                };
+
+                console.log('Fallback LIVE weather for Kochi loaded successfully');
+            } catch (fallbackError) {
+                console.log('Fallback LIVE weather for Kochi also failed:', fallbackError.message);
+                throw fallbackError; // let outer catch handle & return 500
+            }
         }
 
         // Alerts + local advice
