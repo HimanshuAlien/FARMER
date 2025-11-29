@@ -124,7 +124,7 @@
 
         .nav-menu {
             flex: 1;
-            overflow-y: auto;
+
             padding: 1.5rem 0;
         }
 
@@ -156,7 +156,7 @@
             font-weight: 500;
             transition: all 0.2s ease;
             border-left: 3px solid transparent;
-            font-size: 0.95rem;
+            font-size: 0.90rem;
         }
 
         body.dark .nav-item {
@@ -548,7 +548,6 @@
         .welcome-hero img {
             width: 100%;
             height: 320px;
-            /* increased size */
             object-fit: cover;
             display: block;
         }
@@ -1094,7 +1093,6 @@
             margin: 0;
             font-weight: 500;
             max-height: 30px;
-            /* smaller preview */
             overflow: hidden;
             text-overflow: ellipsis;
         }
@@ -1117,7 +1115,6 @@
             font-size: 0.85rem;
             color: var(--text-light);
             max-height: 38px;
-            /* smaller preview */
             overflow: hidden;
             text-overflow: ellipsis;
         }
@@ -1200,6 +1197,10 @@
 
         .modal-overlay.show {
             display: flex;
+        }
+
+        body.lang-ml .question-input {
+            font-size: 0.55rem;
         }
 
         .modal {
@@ -1366,7 +1367,6 @@
     <nav class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <div class="logo">
-                <!-- Replace with your logo file -->
                 <img src="images/krishi-officer.png" alt="KrishiMitr logo" class="logo-icon" />
                 <div class="logo-brand">
                     <span class="logo-text-krishi">Krishi</span>
@@ -1376,50 +1376,54 @@
         </div>
         <div class="nav-menu">
             <div class="nav-section">
-                <div class="nav-section-title">Main Menu</div>
-                <a href="dashboard.html" class="nav-item">
+                <div class="nav-section-title" data-i18n="sidebar.mainMenu">Main Menu</div>
+                <a href="dashboard.html" class="nav-item active">
                     <i class="fas fa-home"></i>
-                    <span>Dashboard</span>
+                    <span data-i18n="sidebar.dashboard">Dashboard</span>
                 </a>
                 <a href="ask-query.html" class="nav-item">
                     <i class="fas fa-robot"></i>
-                    <span>Ask Query</span>
+                    <span data-i18n="sidebar.askQuery">Ask Query</span>
                 </a>
             </div>
 
             <div class="nav-section">
-                <div class="nav-section-title">Tools</div>
+                <div class="nav-section-title" data-i18n="sidebar.tools">Tools</div>
                 <a href="crop-diagnosis.html" class="nav-item">
-                    <i class="fas fa-camera"></i>
-                    <span>Crop Diagnosis</span>
+                    <i class="fa-solid fa-briefcase-medical"></i>
+                    <span data-i18n="sidebar.cropDiagnosis">Crop Diagnosis</span>
                 </a>
                 <a href="weather-alerts.html" class="nav-item">
                     <i class="fas fa-cloud-sun"></i>
-                    <span>Weather & Alerts</span>
+                    <span data-i18n="sidebar.weatherAlerts">Weather & Alerts</span>
                 </a>
                 <a href="Schemes.html" class="nav-item">
-                    <i class="fa-solid fa-binoculars"></i>
-                    <span>Govt Schemes</span>
+                    <i class="fa-solid fa-building-ngo"></i>
+                    <span data-i18n="sidebar.schemes">Govt Schemes</span>
+                </a>
+                <a href="helpline.html" class="nav-item">
+                    <i class="fa-solid fa-phone"></i>
+                    <span data-i18n="sidebar.helpline">Helpline Number</span>
                 </a>
                 <a href="smart-farming.html" class="nav-item">
                     <i class="fa-solid fa-briefcase"></i>
-                    <span>Agri Swasthya</span>
+                    <span data-i18n="sidebar.agriSwasthya">Agri Swasthya</span>
                 </a>
                 <a href="market-prices.html" class="nav-item">
-                    <i class="fas fa-chart-line"></i>
-                    <span>Market Prices</span>
+                    <i class="fa-solid fa-dollar-sign"></i>
+                    <span data-i18n="sidebar.marketPrices">Market Prices</span>
                 </a>
             </div>
 
             <div class="nav-section">
-                <div class="nav-section-title">Community</div>
+                <div class="nav-section-title" data-i18n="sidebar.communitySection">Community</div>
                 <a href="farmer-community.html" class="nav-item">
                     <i class="fas fa-users"></i>
-                    <span>Community</span>
+                    <span data-i18n="sidebar.community">Community</span>
                 </a>
                 <a href="profile.html" class="nav-item">
-                    <i class="fas fa-users"></i>
-                    <span>Profile</span>
+                    <i class="fas fa-user"></i>
+                    <span data-i18n="sidebar.profile">Profile</span>
                 </a>
             </div>
         </div>
@@ -1431,11 +1435,11 @@
             </div>
             <button class="theme-toggle-sidebar" onclick="toggleTheme()">
                 <i class="fas fa-sun"></i>
-                <span>Toggle Theme</span>
+                <span data-i18n="sidebar.toggleTheme">Toggle Theme</span>
             </button>
             <button id="logoutBtn" class="logout-btn">
                 <i class="fas fa-sign-out-alt"></i>
-                <span>Logout</span>
+                <span data-i18n="sidebar.logout">Logout</span>
             </button>
         </div>
     </nav>
@@ -1447,12 +1451,11 @@
                 <button class="mobile-menu-btn" onclick="toggleSidebar()">
                     <i class="fas fa-bars"></i>
                 </button>
-                <!-- Topbar logo -->
                 <img src="images/krishi-officer.png" alt="KrishiMitr logo" class="topbar-logo" />
-                <h1 class="simple-title">Digital Krishi Officer</h1>
+                <h1 class="simple-title" data-i18n="header.title">Digital Krishi Officer</h1>
             </div>
             <div class="topbar-right">
-                <span class="status-badge">Online</span>
+                <span class="status-badge" data-i18n="status.online">System Online</span>
             </div>
         </div>
 
@@ -1464,15 +1467,16 @@
                         <!-- Chat Header -->
                         <div class="chat-header">
                             <div class="chat-header-main">
-                                <!-- Replace with your own bot image -->
                                 <img src="images/ai-assistant.png" alt="AI Farming Expert" class="chat-bot-image" />
                                 <div class="chat-header-text">
-                                    <h3>Krishi AI Assistant</h3>
-                                    <p>Quick guidance for your crops and market doubts.</p>
+                                    <h3 data-i18n="ask.assistantTitle">Krishi AI Assistant</h3>
+                                    <p data-i18n="ask.assistantSubtitle">Quick guidance for your crops and market
+                                        doubts.</p>
                                 </div>
                             </div>
+                            <!-- AI RESPONSE LANGUAGE (ONLY) -->
                             <div class="language-selector">
-                                <button class="lang-btn active" data-lang="en">EN</button>
+                                <button class="lang-btn" data-lang="en">EN</button>
                                 <button class="lang-btn" data-lang="hi">हिं</button>
                                 <button class="lang-btn" data-lang="ml">മലയാളം</button>
                             </div>
@@ -1480,22 +1484,18 @@
 
                         <!-- Chat Messages -->
                         <div id="chatMessages" class="chat-messages">
-                            <!-- Hero image -->
                             <div class="welcome-hero">
-                                <!-- Replace with your banner image -->
                                 <img src="images/banner.png" alt="AI Farming Assistant Banner" />
                             </div>
-
-                            <!-- Two simple sample questions -->
                             <div class="sample-questions">
-                                <div class="sample-questions-title">Try asking:</div>
+                                <div class="sample-questions-title" data-i18n="ask.sampleTitle">Try asking:</div>
                                 <div class="sample-question">
                                     <i class="fas fa-circle"></i>
-                                    <span>How to control leaf curl in chilli?</span>
+                                    <span data-i18n="ask.sampleQ1">How to control leaf curl in chilli?</span>
                                 </div>
                                 <div class="sample-question">
                                     <i class="fas fa-circle"></i>
-                                    <span>What fertilizer schedule is best for paddy?</span>
+                                    <span data-i18n="ask.sampleQ2">What fertilizer schedule is best for paddy?</span>
                                 </div>
                             </div>
                         </div>
@@ -1505,7 +1505,8 @@
                             <div class="input-controls">
                                 <div class="status-indicator">
                                     <div class="status-dot"></div>
-                                    <span id="statusText" class="status-animated">Ready to help you</span>
+                                    <span id="statusText" class="status-animated" data-i18n="ask.statusReady">Ready to
+                                        help you</span>
                                 </div>
                                 <button id="speakBtn" class="speak-btn" title="Read last answer">
                                     <i class="fas fa-volume-high"></i>
@@ -1514,6 +1515,7 @@
 
                             <div class="input-row">
                                 <textarea id="questionInput" class="question-input"
+                                    data-i18n-placeholder="ask.questionPlaceholder"
                                     placeholder="Ask your farming question here... (e.g., How to control pests in tomato?)"
                                     rows="2"></textarea>
                                 <div class="input-actions">
@@ -1538,12 +1540,13 @@
                         <div class="section-header">
                             <div class="section-title">
                                 <i class="fas fa-history"></i>
-                                <h2>Past Queries</h2>
+                                <h2 data-i18n="ask.pastTitle">Past Queries</h2>
                             </div>
                             <div class="section-subtitle">
-                                <p>Your recent farming questions & AI replies</p>
+                                <p data-i18n="ask.pastSubtitle">Your recent farming questions & AI replies</p>
                                 <div class="queries-count">
-                                    <span id="queriesCount">0</span> questions
+                                    <span id="queriesCount">0</span>
+                                    <span data-i18n="ask.pastQuestionsLabel">questions</span>
                                 </div>
                             </div>
                         </div>
@@ -1553,7 +1556,7 @@
                                 <div class="loading-spinner">
                                     <i class="fas fa-spinner fa-spin"></i>
                                 </div>
-                                <p>Loading your past queries...</p>
+                                <p data-i18n="ask.loadingPastQueries">Loading your past queries...</p>
                             </div>
                         </div>
                     </div>
@@ -1566,40 +1569,40 @@
     <div id="queryModal" class="modal-overlay">
         <div class="modal">
             <div class="modal-header">
-                <h3>Query Details</h3>
+                <h3 data-i18n="ask.modalTitle">Query Details</h3>
                 <button class="modal-close-btn" onclick="closeQueryDetails()">
-                    <i class="fas fa-times"></i> Close
+                    <i class="fas fa-times"></i>
+                    <span data-i18n="ask.modalClose">Close</span>
                 </button>
             </div>
             <div class="modal-body">
                 <div class="modal-section question">
-                    <h4>Your Question</h4>
+                    <h4 data-i18n="ask.modalQuestionTitle">Your Question</h4>
                     <div id="modalQuestion"></div>
                 </div>
                 <div class="modal-section response">
-                    <h4>AI Response</h4>
+                    <h4 data-i18n="ask.modalResponseTitle">AI Response</h4>
                     <div id="modalResponse"></div>
                 </div>
             </div>
             <div class="modal-footer">
                 <button class="modal-close-btn" onclick="closeQueryDetails()">
-                    <i class="fas fa-check"></i> Done
+                    <i class="fas fa-check"></i>
+                    <span data-i18n="ask.modalDone">Done</span>
                 </button>
             </div>
         </div>
     </div>
 
     <script>
-        // GLOBAL: cache voices once
+        // ----------------- TTS helper (kept) -----------------
         let ttsVoices = [];
 
-        // Load voices (some browsers load them async)
         function initVoices() {
             if (!('speechSynthesis' in window)) return;
 
             function load() {
                 ttsVoices = window.speechSynthesis.getVoices();
-                // console.log('Available voices:', ttsVoices);
             }
 
             load();
@@ -1611,21 +1614,19 @@
 
         initVoices();
 
-        // Map UI language -> preferred TTS lang code
         const ttsLangCodes = {
             en: 'en-IN',
             hi: 'hi-IN',
             ml: 'ml-IN'
         };
 
-        // Clean HTML / markdown for speech
         function cleanTextForSpeech(htmlText) {
             let text = htmlText
-                .replace(/<br\s*\/?>/gi, '\n')  // br -> newline
-                .replace(/<[^>]+>/g, '')        // remove HTML tags
-                .replace(/\*\*/g, '')           // remove ** bold markers
-                .replace(/\*/g, '')             // remove stray *
-                .replace(/•/g, '')              // remove bullet symbol
+                .replace(/<br\s*\/?>/gi, '\n')
+                .replace(/<[^>]+>/g, '')
+                .replace(/\*\*/g, '')
+                .replace(/\*/g, '')
+                .replace(/•/g, '')
                 .replace(/\s+\n/g, '\n')
                 .trim();
             return text;
@@ -1644,11 +1645,8 @@
             const langBase = langCode.split('-')[0].toLowerCase();
 
             const utterance = new SpeechSynthesisUtterance(text);
-
-            // set lang (browser may ignore if unsupported)
             utterance.lang = langCode;
 
-            // Try to find a voice for that language (hi / ml / en)
             let voice =
                 ttsVoices.find(v => v.lang.toLowerCase() === langCode.toLowerCase()) ||
                 ttsVoices.find(v => v.lang.toLowerCase().startsWith(langBase)) ||
@@ -1657,25 +1655,358 @@
             if (voice) {
                 utterance.voice = voice;
             }
-            // else: no matching voice, browser will use default voice
-            // (so it still speaks instead of staying silent)
 
-            // Optional: a bit slower for Indian languages
             if (langKey === 'hi' || langKey === 'ml') {
                 utterance.rate = 0.9;
             }
 
-            window.speechSynthesis.cancel(); // stop previous speech
+            window.speechSynthesis.cancel();
             window.speechSynthesis.speak(utterance);
         }
 
-        // Called from the "Read" button on each AI message
         function readAloud(buttonEl) {
             const langKey = buttonEl.dataset.lang || 'en';
             const msgEl = buttonEl.closest('.message-content').querySelector('.message-text');
             if (!msgEl) return;
             const rawHtml = msgEl.innerHTML;
             speakText(rawHtml, langKey);
+        }
+
+        // ----------------- DOM refs -----------------
+        const chatMessages = document.getElementById('chatMessages');
+        const questionInput = document.getElementById('questionInput');
+        const sendBtn = document.getElementById('sendBtn');
+        const micBtn = document.getElementById('micBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        const statusText = document.getElementById('statusText');
+        const speakBtn = document.getElementById('speakBtn');
+        const langBtns = document.querySelectorAll('.language-selector .lang-btn');
+
+        let recognition = null;
+        let isRecording = false;
+        let lastBotResponseText = '';
+
+        // AI language (ONLY for AI responses + STT + TTS)
+        const languages = {
+            en: { code: 'en-US', tts: 'en-IN', name: 'English' },
+            hi: { code: 'hi-IN', tts: 'hi-IN', name: 'Hindi' },
+            ml: { code: 'ml-IN', tts: 'ml-IN', name: 'Malayalam' }
+        };
+
+        let uiLanguage = 'en'; // for page text
+        let aiLanguage = localStorage.getItem('aiLanguage') || 'en'; // for AI responses
+
+        // ----------------- UI TRANSLATIONS (like dashboard) -----------------
+        const translations = {
+            en: {
+                "sidebar.mainMenu": "Main Menu",
+                "sidebar.dashboard": "Dashboard",
+                "sidebar.askQuery": "Ask Query",
+                "sidebar.tools": "Tools",
+                "sidebar.cropDiagnosis": "Crop Diagnosis",
+                "sidebar.weatherAlerts": "Weather & Alerts",
+                "sidebar.schemes": "Govt Schemes",
+                "sidebar.helpline": "Helpline Number",
+                "sidebar.agriSwasthya": "Agri Swasthya",
+                "sidebar.marketPrices": "Market Prices",
+                "sidebar.communitySection": "Community",
+                "sidebar.community": "Community",
+                "sidebar.profile": "Profile",
+                "sidebar.toggleTheme": "Toggle Theme",
+                "sidebar.logout": "Logout",
+
+                "header.title": "Digital Krishi Officer",
+                "status.online": "System Online",
+
+                "ask.assistantTitle": "Krishi AI Assistant",
+                "ask.assistantSubtitle": "Quick guidance for your crops and market doubts.",
+                "ask.sampleTitle": "Try asking:",
+                "ask.sampleQ1": "How to control leaf curl in chilli?",
+                "ask.sampleQ2": "What fertilizer schedule is best for paddy?",
+                "ask.questionPlaceholder": "Ask your farming question here... (e.g., How to control pests in tomato?)",
+                "ask.statusReady": "Ready to help you",
+                "ask.pastTitle": "Past Queries",
+                "ask.pastSubtitle": "Your recent farming questions & AI replies",
+                "ask.pastQuestionsLabel": "questions",
+                "ask.loadingPastQueries": "Loading your past queries...",
+
+                "ask.noQueriesTitle": "No queries yet",
+                "ask.noQueriesDesc": "Start by asking your first farming question.",
+                "ask.unableLoadTitle": "Unable to load queries",
+                "ask.unableLoadDesc": "Please check your connection and refresh.",
+
+                "ask.modalTitle": "Query Details",
+                "ask.modalQuestionTitle": "Your Question",
+                "ask.modalResponseTitle": "AI Response",
+                "ask.modalClose": "Close",
+                "ask.modalDone": "Done"
+            },
+            hi: {
+                "sidebar.mainMenu": "मुख्य मेनू",
+                "sidebar.dashboard": "डैशबोर्ड",
+                "sidebar.askQuery": "प्रश्न पूछें",
+                "sidebar.tools": "साधन",
+                "sidebar.cropDiagnosis": "फसल रोग निदान",
+                "sidebar.weatherAlerts": "मौसम और अलर्ट",
+                "sidebar.schemes": "सरकारी योजनाएं",
+                "sidebar.helpline": "हेल्पलाइन नंबर",
+                "sidebar.agriSwasthya": "अग्री स्वास्थ्य",
+                "sidebar.marketPrices": "बाज़ार भाव",
+                "sidebar.communitySection": "समुदाय",
+                "sidebar.community": "किसान समुदाय",
+                "sidebar.profile": "प्रोफाइल",
+                "sidebar.toggleTheme": "थीम बदलें",
+                "sidebar.logout": "लॉगआउट",
+
+                "header.title": "डिजिटल कृषि अधिकारी",
+                "status.online": "सिस्टम ऑनलाइन",
+
+                "ask.assistantTitle": "कृषि AI सहायक",
+                "ask.assistantSubtitle": "आपकी फसल और बाज़ार से जुड़े सवालों के लिए झटपट मदद।",
+                "ask.sampleTitle": "यह पूछकर देखें:",
+                "ask.sampleQ1": "मिर्च में पत्ती मुड़ने की बीमारी कैसे रोकें?",
+                "ask.sampleQ2": "धान के लिए सबसे अच्छा खाद कार्यक्रम क्या है?",
+                "ask.questionPlaceholder": "अपना खेती से जुड़ा सवाल यहाँ लिखें... (जैसे, टमाटर में कीट नियंत्रण कैसे करें?)",
+                "ask.statusReady": "आपकी मदद के लिए तैयार",
+                "ask.pastTitle": "पुराने सवाल",
+                "ask.pastSubtitle": "आपके हाल के खेती से जुड़े सवाल और AI जवाब",
+                "ask.pastQuestionsLabel": "प्रश्न",
+                "ask.loadingPastQueries": "आपके पुराने सवाल लोड किए जा रहे हैं...",
+
+                "ask.noQueriesTitle": "अभी तक कोई सवाल नहीं",
+                "ask.noQueriesDesc": "अपना पहला खेती से जुड़ा सवाल पूछकर शुरू करें।",
+                "ask.unableLoadTitle": "सवाल लोड नहीं हो सके",
+                "ask.unableLoadDesc": "कृपया कनेक्शन जाँचें और पेज रीफ्रेश करें।",
+
+                "ask.modalTitle": "सवाल का विवरण",
+                "ask.modalQuestionTitle": "आपका सवाल",
+                "ask.modalResponseTitle": "AI जवाब",
+                "ask.modalClose": "बंद करें",
+                "ask.modalDone": "हो गया"
+            },
+            ml: {
+                "sidebar.mainMenu": "പ്രധാന മെനു",
+                "sidebar.dashboard": "ഡാഷ്ബോർഡ്",
+                "sidebar.askQuery": "ചോദ്യം ചോദിക്കുക",
+                "sidebar.tools": "ഉപകരണങ്ങൾ",
+                "sidebar.cropDiagnosis": "വിള രോഗനിർണയം",
+                "sidebar.weatherAlerts": "കാലാവസ്ഥ & മുന്നറിയിപ്പുകൾ",
+                "sidebar.schemes": "സർക്കാർ പദ്ധതികൾ",
+                "sidebar.helpline": "ഹെൽപ്‌ലൈൻ നമ്പർ",
+                "sidebar.agriSwasthya": "അഗ്രീ ആരോഗ്യ",
+                "sidebar.marketPrices": "ചന്ത വിലകൾ",
+                "sidebar.communitySection": "കമ്മ്യൂണിറ്റി",
+                "sidebar.community": "കർഷക സമുദായം",
+                "sidebar.profile": "പ്രൊഫൈൽ",
+                "sidebar.toggleTheme": "തീം മാറ്റുക",
+                "sidebar.logout": "ലോഗൗട്ട്",
+
+                "header.title": "ഡിജിറ്റൽ കൃഷി ഓഫീസർ",
+                "status.online": "സിസ്റ്റം ഓൺലൈൻ",
+
+                "ask.assistantTitle": "കൃഷി AI അസിസ്റ്റന്റ്",
+                "ask.assistantSubtitle": "നിങ്ങളുടെ വിളയും മാർക്കറ്റുമായി ബന്ധപ്പെട്ട സംശയങ്ങൾക്ക് വേഗത്തിൽ സഹായം.",
+                "ask.sampleTitle": "ഇങ്ങനെ ചോദിച്ച് നോക്കൂ:",
+                "ask.sampleQ1": "മുളക് ഇല വളയൽ രോഗം എങ്ങനെ നിയന്ത്രിക്കാം?",
+                "ask.sampleQ2": "നല്ല നെല്ല് വിളയ്ക്കു ഏത് വള പദ്ധതിയാണ് നല്ലത്?",
+                "ask.questionPlaceholder": "നിങ്ങളുടെ കൃഷി സംശയം ഇവിടെ എഴുതൂ... (ഉദാ: തക്കാളിയിൽ കീടങ്ങളെ എങ്ങനെ নিয়ന്ത്രിക്കാം?)",
+                "ask.statusReady": "സഹായിക്കാൻ തയാറാണ്",
+                "ask.pastTitle": "മുൻ ചോദ്യങ്ങൾ",
+                "ask.pastSubtitle": "നിങ്ങളുടെ പുതിയ കൃഷി ചോദ്യങ്ങളും AI മറുപടികളും",
+                "ask.pastQuestionsLabel": "ചോദ്യങ്ങൾ",
+                "ask.loadingPastQueries": "നിങ്ങളുടെ പഴയ ചോദ്യങ്ങൾ ലോഡ് ചെയ്യുന്നു...",
+
+                "ask.noQueriesTitle": "ഇനിയും ചോദ്യം ഒന്നുമില്ല",
+                "ask.noQueriesDesc": "ആദ്യ കൃഷി ചോദ്യം ചോദിച്ച് തുടങ്ങൂ.",
+                "ask.unableLoadTitle": "ചോദ്യങ്ങൾ ലോഡ് ചെയ്യാനായില്ല",
+                "ask.unableLoadDesc": "ദയവായി കണക്ഷൻ പരിശോധിച്ച് പേജ് റിഫ്രെഷ് ചെയ്യൂ.",
+
+                "ask.modalTitle": "ചോദ്യത്തിന്റെ വിശദാംശങ്ങൾ",
+                "ask.modalQuestionTitle": "നിങ്ങളുടെ ചോദ്യം",
+                "ask.modalResponseTitle": "AI മറുപടി",
+                "ask.modalClose": "അടയ്ക്കുക",
+                "ask.modalDone": "പൂർത്തിയായി"
+            }
+        };
+
+        function applyTranslations(lang) {
+            const dict = translations[lang] || translations.en;
+
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (dict[key]) el.textContent = dict[key];
+            });
+
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+                const key = el.getAttribute('data-i18n-placeholder');
+                if (dict[key]) el.placeholder = dict[key];
+            });
+        }
+
+        function initLanguageFromDashboard() {
+            const saved = localStorage.getItem('appLanguage');
+            if (saved && (saved === 'en' || saved === 'hi' || saved === 'ml')) {
+                uiLanguage = saved;
+            }
+
+            applyTranslations(uiLanguage);
+        }
+
+        // ----------------- Speech synthesis for "Read last answer" -----------------
+        let synth = window.speechSynthesis;
+        let availableVoices = [];
+
+        function loadVoicesMain() {
+            if (!synth) return;
+            availableVoices = synth.getVoices();
+        }
+
+        if (synth) {
+            loadVoicesMain();
+            synth.addEventListener('voiceschanged', loadVoicesMain);
+        }
+
+        function cleanForSpeech(text) {
+            if (!text) return '';
+            return text
+                .replace(/\*\*(.*?)\*\*/g, '$1')
+                .replace(/\*/g, '')
+                .replace(/•/g, ' ')
+                .replace(/\s+/g, ' ')
+                .trim();
+        }
+
+        if (speakBtn) {
+            speakBtn.addEventListener('click', () => {
+                if (!lastBotResponseText) {
+                    showToast('No recent answer to read.', 'info');
+                    return;
+                }
+                if (!('speechSynthesis' in window)) {
+                    showToast('Read aloud not supported on this browser.', 'error');
+                    return;
+                }
+
+                const cleanText = cleanForSpeech(lastBotResponseText);
+                if (!cleanText) return;
+
+                synth.cancel();
+                const utterance = new SpeechSynthesisUtterance(cleanText);
+
+                const langConfig = languages[aiLanguage] || languages.en;
+                const langCode = langConfig.tts;
+
+                utterance.lang = langCode;
+
+                const match = availableVoices.find(v =>
+                    v.lang && v.lang.toLowerCase().startsWith(langCode.toLowerCase())
+                );
+                if (match) utterance.voice = match;
+
+                if (aiLanguage === 'hi' || aiLanguage === 'ml') {
+                    utterance.rate = 0.9;
+                }
+
+                synth.speak(utterance);
+            });
+        }
+
+        // ----------------- Speech recognition -----------------
+        function updateStatus(messageKeyOrText, fromTranslations = true) {
+            if (!statusText) return;
+
+            if (fromTranslations) {
+                const dict = translations[uiLanguage] || translations.en;
+                const text = dict[messageKeyOrText] || messageKeyOrText;
+                statusText.textContent = text;
+            } else {
+                statusText.textContent = messageKeyOrText;
+            }
+        }
+
+        function initSpeechRecognition() {
+            if (!('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)) {
+                if (micBtn) micBtn.style.display = 'none';
+                console.log('Speech recognition not supported');
+                return;
+            }
+
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            recognition = new SpeechRecognition();
+
+            recognition.continuous = false;
+            recognition.interimResults = false;
+            recognition.lang = languages[aiLanguage].code;
+
+            recognition.onstart = () => {
+                isRecording = true;
+                micBtn.classList.add('recording');
+                updateStatus('Listening...', false);
+            };
+
+            recognition.onresult = (event) => {
+                const transcript = event.results[0][0].transcript;
+                questionInput.value = transcript;
+                updateStatus('Voice input received', false);
+            };
+
+            recognition.onerror = () => {
+                updateStatus('Voice input failed. Try again.', false);
+                resetMicButton();
+            };
+
+            recognition.onend = () => {
+                resetMicButton();
+            };
+        }
+
+        function resetMicButton() {
+            isRecording = false;
+            micBtn.classList.remove('recording');
+            const dict = translations[uiLanguage] || translations.en;
+            updateStatus('ask.statusReady', true);
+        }
+
+        // ----------------- AI language buttons (ONLY AI, not UI) -----------------
+        function initAiLanguageButtons() {
+            // Ensure stored aiLanguage is valid
+            if (!languages[aiLanguage]) aiLanguage = 'en';
+
+            langBtns.forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.lang === aiLanguage);
+
+                btn.addEventListener('click', () => {
+                    const newLang = btn.dataset.lang;
+                    if (!languages[newLang]) return;
+
+                    aiLanguage = newLang;
+                    localStorage.setItem('aiLanguage', aiLanguage);
+
+                    langBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+
+                    if (recognition) {
+                        recognition.lang = languages[aiLanguage].code;
+                    }
+
+                    showToast(`AI will reply in ${languages[aiLanguage].name}.`, 'info');
+                });
+            });
+        }
+
+        if (micBtn) {
+            micBtn.addEventListener('click', () => {
+                if (!recognition) {
+                    alert('Voice input not supported in your browser');
+                    return;
+                }
+
+                if (isRecording) {
+                    recognition.stop();
+                } else {
+                    recognition.start();
+                }
+            });
         }
 
         // ----------------- Past Queries & API -----------------
@@ -1691,27 +2022,26 @@
 
                     displayPastQueries(queries);
                     updateQueriesCount(queries.length);
-
-                    console.log('✅ Past queries loaded:', queries.length);
                 } else {
                     console.error('Failed to load past queries');
-                    showNoQueriesMessage();
+                    showNoQueriesMessage(true);
                 }
             } catch (error) {
                 console.error('Error loading past queries:', error);
-                showNoQueriesMessage();
+                showNoQueriesMessage(true);
             }
         }
 
         function displayPastQueries(queries) {
             const container = document.getElementById('pastQueriesContainer');
+            const dict = translations[uiLanguage] || translations.en;
 
             if (!queries || queries.length === 0) {
                 container.innerHTML = `
                 <div class="no-queries">
                     <i class="fas fa-robot"></i>
-                    <h3>No queries yet</h3>
-                    <p>Start by asking your first farming question.</p>
+                    <h3>${dict["ask.noQueriesTitle"] || "No queries yet"}</h3>
+                    <p>${dict["ask.noQueriesDesc"] || "Start by asking your first farming question."}</p>
                 </div>
             `;
                 return;
@@ -1732,12 +2062,12 @@
                     
                     <div class="query-content">
                         <div class="query-question">
-                            <h4>Your Question</h4>
+                            <h4>${dict["ask.modalQuestionTitle"] || "Your Question"}</h4>
                             <p>${query.question}</p>
                         </div>
                         
                         <div class="query-response">
-                            <h4>AI Response</h4>
+                            <h4>${dict["ask.modalResponseTitle"] || "AI Response"}</h4>
                             <div class="query-response-text">${formatAIResponse(query.response)}</div>
                         </div>
                     </div>
@@ -1768,12 +2098,11 @@
             `).join('');
         }
 
-        // SIMPLER formatting: only bold + line breaks, remove stray *
         function formatAIResponse(text) {
             if (!text) return '';
             return text
                 .replace(/\*\*(.*?)\*\*/g, '<strong class="highlight">$1</strong>')
-                .replace(/\*/g, '')           // remove leftover single asterisks
+                .replace(/\*/g, '')
                 .replace(/\n/g, '<br>');
         }
 
@@ -1799,15 +2128,27 @@
             requestAnimationFrame(update);
         }
 
-        function showNoQueriesMessage() {
+        function showNoQueriesMessage(isError = false) {
             const container = document.getElementById('pastQueriesContainer');
-            container.innerHTML = `
+            const dict = translations[uiLanguage] || translations.en;
+
+            if (isError) {
+                container.innerHTML = `
                 <div class="no-queries">
                     <i class="fas fa-exclamation-triangle"></i>
-                    <h3>Unable to load queries</h3>
-                    <p>Please check your connection and refresh.</p>
+                    <h3>${dict["ask.unableLoadTitle"] || "Unable to load queries"}</h3>
+                    <p>${dict["ask.unableLoadDesc"] || "Please check your connection and refresh."}</p>
                 </div>
             `;
+            } else {
+                container.innerHTML = `
+                <div class="no-queries">
+                    <i class="fas fa-robot"></i>
+                    <h3>${dict["ask.noQueriesTitle"] || "No queries yet"}</h3>
+                    <p>${dict["ask.noQueriesDesc"] || "Start by asking your first farming question."}</p>
+                </div>
+            `;
+            }
         }
 
         async function markAsResolved(queryId) {
@@ -1846,7 +2187,6 @@
             });
         }
 
-        // Modal
         function openQueryDetails(queryId) {
             const card = document.querySelector(`[data-query-id="${queryId}"]`);
             if (!card) return;
@@ -1914,7 +2254,6 @@
             sendQuery();
         }
 
-        // Detect crop param from market page
         document.addEventListener('DOMContentLoaded', function () {
             const urlParams = new URLSearchParams(window.location.search);
             const cropName = urlParams.get('crop');
@@ -1928,7 +2267,6 @@
             }
         });
 
-        // ----------------- Navigation active state -----------------
         function setActiveNavigation() {
             const currentPage = window.location.pathname.split('/').pop() || 'dashboard.html';
             const navItems = document.querySelectorAll('.nav-item');
@@ -1993,219 +2331,7 @@
             localStorage.setItem('darkMode', isDarkMode);
         }
 
-        // ----------------- Speech recognition & chat -----------------
-        const chatMessages = document.getElementById('chatMessages');
-        const questionInput = document.getElementById('questionInput');
-        const sendBtn = document.getElementById('sendBtn');
-        const micBtn = document.getElementById('micBtn');
-        const clearBtn = document.getElementById('clearBtn');
-        const statusText = document.getElementById('statusText');
-        const speakBtn = document.getElementById('speakBtn');
-        const langBtns = document.querySelectorAll('.lang-btn');
-
-        let currentLanguage = 'en';
-        let recognition = null;
-        let isRecording = false;
-        let lastBotResponseText = ''; // for read aloud
-
-        const languages = {
-            'en': { code: 'en-US', name: 'English' },
-            'hi': { code: 'hi-IN', name: 'Hindi' },
-            'ml': { code: 'ml-IN', name: 'Malayalam' }
-        };
-
-        // speech synthesis voices
-        let synth = window.speechSynthesis;
-        let availableVoices = [];
-
-        function loadVoices() {
-            if (!synth) return;
-            availableVoices = synth.getVoices();
-        }
-
-        if (synth) {
-            loadVoices();
-            synth.addEventListener('voiceschanged', loadVoices);
-        }
-
-        function initSpeechRecognition() {
-            if (!('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)) {
-                if (micBtn) micBtn.style.display = 'none';
-                console.log('Speech recognition not supported');
-                return;
-            }
-
-            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-            recognition = new SpeechRecognition();
-
-            recognition.continuous = false;
-            recognition.interimResults = false;
-            recognition.lang = languages[currentLanguage].code;
-
-            recognition.onstart = () => {
-                isRecording = true;
-                micBtn.classList.add('recording');
-                updateStatus('Listening...');
-            };
-
-            recognition.onresult = (event) => {
-                const transcript = event.results[0][0].transcript;
-                questionInput.value = transcript;
-                updateStatus('Voice input received');
-            };
-
-            recognition.onerror = () => {
-                updateStatus('Voice input failed. Try again.');
-                resetMicButton();
-            };
-
-            recognition.onend = () => {
-                resetMicButton();
-            };
-        }
-
-        function resetMicButton() {
-            isRecording = false;
-            micBtn.classList.remove('recording');
-            updateStatus('Ready to help you');
-        }
-
-        function updateStatus(message) {
-            if (statusText) statusText.textContent = message;
-        }
-
-        // Language switching
-        langBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                langBtns.forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                currentLanguage = btn.dataset.lang;
-
-                if (recognition) {
-                    recognition.lang = languages[currentLanguage].code;
-                }
-
-                updateStatus(`Language: ${languages[currentLanguage].name}`);
-            });
-        });
-
-        // Voice input
-        if (micBtn) {
-            micBtn.addEventListener('click', () => {
-                if (!recognition) {
-                    alert('Voice input not supported in your browser');
-                    return;
-                }
-
-                if (isRecording) {
-                    recognition.stop();
-                } else {
-                    recognition.start();
-                }
-            });
-        }
-
-        // Helper: clean text for speech (remove **, *, bullets etc.)
-        function cleanForSpeech(text) {
-            if (!text) return '';
-            return text
-                .replace(/\*\*(.*?)\*\*/g, '$1') // remove bold markers
-                .replace(/\*/g, '')              // remove any stray *
-                .replace(/•/g, ' ')              // keep bullet as small pause
-                .replace(/\s+/g, ' ')
-                .trim();
-        }
-
-        // Read aloud last bot response (supports hi/ml if browser has voices)
-        if (speakBtn) {
-            speakBtn.addEventListener('click', () => {
-                if (!lastBotResponseText) {
-                    showToast('No recent answer to read.', 'info');
-                    return;
-                }
-                if (!('speechSynthesis' in window)) {
-                    showToast('Read aloud not supported on this browser.', 'error');
-                    return;
-                }
-
-                const cleanText = cleanForSpeech(lastBotResponseText);
-                if (!cleanText) return;
-
-                synth.cancel();
-                const utterance = new SpeechSynthesisUtterance(cleanText);
-
-                const langCode = languages[currentLanguage].code;
-                utterance.lang = langCode;
-
-                // try to pick matching voice (hi-IN, ml-IN, etc.)
-                const matchingVoice = availableVoices.find(v =>
-                    v.lang && v.lang.toLowerCase().startsWith(langCode.toLowerCase())
-                );
-
-                if (matchingVoice) {
-                    utterance.voice = matchingVoice;
-                }
-
-                synth.speak(utterance);
-            });
-        }
-
-        // Clear chat
-        if (clearBtn) {
-            clearBtn.addEventListener('click', () => {
-                chatMessages.innerHTML = `
-                    <div class="welcome-hero">
-                        <img src="images/farming-hero-banner.jpg" alt="AI Farming Assistant Banner" />
-                    </div>
-                    <div class="sample-questions">
-                        <div class="sample-questions-title">Try asking:</div>
-                        <div class="sample-question">
-                            <i class="fas fa-circle"></i>
-                            <span>How to control leaf curl in chilli?</span>
-                        </div>
-                        <div class="sample-question">
-                            <i class="fas fa-circle"></i>
-                            <span>What fertilizer schedule is best for paddy?</span>
-                        </div>
-                    </div>
-                `;
-                questionInput.value = '';
-                updateStatus('Chat cleared. Ready for new questions');
-                lastBotResponseText = '';
-            });
-        }
-
-        // Auth check
-        async function checkAuth() {
-            try {
-                const res = await fetch('/api/user/check-auth', { credentials: 'include' });
-                if (!res.ok) throw new Error('Unauthorized');
-            } catch {
-                alert('Please login to access this page');
-                window.location.href = 'index.html';
-            }
-        }
-
-        // User info
-        async function loadUserInfo() {
-            try {
-                const res = await fetch('/api/user/profile', { credentials: 'include' });
-                if (res.ok) {
-                    const user = await res.json();
-                    const el = document.getElementById('userInfo');
-                    if (el) {
-                        el.innerHTML = `
-                            <div style="font-weight: 600;">${user.username}</div>
-                            <div style="font-size: 0.8rem; opacity: 0.8;">${user.email}</div>
-                        `;
-                    }
-                }
-            } catch {
-                console.error('Failed to load user info');
-            }
-        }
-
-        // Chat message rendering
+        // ----------------- Chat rendering -----------------
         function addMessage(message, isUser = false) {
             const messageDiv = document.createElement('div');
             messageDiv.className = `message ${isUser ? 'user-message' : 'bot-message'}`;
@@ -2237,18 +2363,17 @@
                 })}</div>
                     </div>
                 `;
-                lastBotResponseText = message; // store plain backend text for speaking
+                lastBotResponseText = message;
             }
 
             chatMessages.appendChild(messageDiv);
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }
 
-        // Send query
         async function sendQuery() {
             const question = questionInput.value.trim();
             if (!question) {
-                updateStatus('Please enter a question');
+                updateStatus('ask.statusReady', true);
                 return;
             }
 
@@ -2256,7 +2381,8 @@
             sendBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
             addMessage(question, true);
             questionInput.value = '';
-            updateStatus('Getting farming advice...');
+
+            updateStatus('Getting farming advice...', false);
 
             try {
                 const response = await fetch('/api/query/ask', {
@@ -2265,7 +2391,7 @@
                     credentials: 'include',
                     body: JSON.stringify({
                         question: question,
-                        language: currentLanguage || 'en'
+                        language: aiLanguage || 'en'
                     })
                 });
 
@@ -2275,14 +2401,13 @@
                     throw new Error(data.message || 'Failed to get response');
                 }
 
-                // Simple, raw answer
                 addMessage(data.response);
-                updateStatus('Answer received');
+                updateStatus('ask.statusReady', true);
                 incrementQueryCount();
                 refreshPastQueries();
             } catch (error) {
                 console.error('Query error:', error);
-                updateStatus('Please try again');
+                updateStatus('Please try again', false);
                 incrementQueryCount();
             } finally {
                 sendBtn.disabled = false;
@@ -2303,14 +2428,66 @@
                 }
             });
 
-            // Auto-resize textarea
             questionInput.addEventListener('input', function () {
                 this.style.height = 'auto';
                 this.style.height = Math.min(this.scrollHeight, 130) + 'px';
             });
         }
 
-        // Logout
+        if (clearBtn) {
+            clearBtn.addEventListener('click', () => {
+                const dict = translations[uiLanguage] || translations.en;
+                chatMessages.innerHTML = `
+                    <div class="welcome-hero">
+                        <img src="images/banner.png" alt="AI Farming Assistant Banner" />
+                    </div>
+                    <div class="sample-questions">
+                        <div class="sample-questions-title">${dict["ask.sampleTitle"] || "Try asking:"}</div>
+                        <div class="sample-question">
+                            <i class="fas fa-circle"></i>
+                            <span>${dict["ask.sampleQ1"] || "How to control leaf curl in chilli?"}</span>
+                        </div>
+                        <div class="sample-question">
+                            <i class="fas fa-circle"></i>
+                            <span>${dict["ask.sampleQ2"] || "What fertilizer schedule is best for paddy?"}</span>
+                        </div>
+                    </div>
+                `;
+                questionInput.value = '';
+                updateStatus('ask.statusReady', true);
+                lastBotResponseText = '';
+            });
+        }
+
+        // ----------------- Auth & user info -----------------
+        async function checkAuth() {
+            try {
+                const res = await fetch('/api/user/check-auth', { credentials: 'include' });
+                if (!res.ok) throw new Error('Unauthorized');
+            } catch {
+                alert('Please login to access this page');
+                window.location.href = 'index.html';
+            }
+        }
+
+        async function loadUserInfo() {
+            try {
+                const res = await fetch('/api/user/profile', { credentials: 'include' });
+                if (res.ok) {
+                    const user = await res.json();
+                    const el = document.getElementById('userInfo');
+                    if (el) {
+                        el.innerHTML = `
+                            <div style="font-weight: 600;">${user.username}</div>
+                            <div style="font-size: 0.8rem; opacity: 0.8;">${user.email}</div>
+                        `;
+                    }
+                }
+            } catch {
+                console.error('Failed to load user info');
+            }
+        }
+
         const logoutBtn = document.getElementById('logoutBtn');
         if (logoutBtn) {
             logoutBtn.addEventListener('click', async () => {
@@ -2324,7 +2501,6 @@
             });
         }
 
-        // Mobile sidebar
         function toggleSidebar() {
             document.getElementById('sidebar').classList.toggle('open');
         }
@@ -2341,7 +2517,6 @@
             }
         });
 
-        // Query count for dashboard sync
         function incrementQueryCount() {
             const current = parseInt(localStorage.getItem('farmerQueryCount')) || 0;
             const next = current + 1;
@@ -2352,24 +2527,23 @@
                 newValue: next.toString(),
                 oldValue: current.toString()
             }));
-
-            console.log('✅ Query counter updated:', next);
         }
 
-        // Expose functions
         window.toggleSidebar = toggleSidebar;
         window.openQueryDetails = openQueryDetails;
         window.closeQueryDetails = closeQueryDetails;
 
         // ----------------- Page init -----------------
         window.addEventListener('load', () => {
-            console.log('Page loaded, initializing...');
             checkAuth();
             loadUserInfo();
             initializeTheme();
-            initSpeechRecognition();
+            initLanguageFromDashboard();      // UI text from dashboard selection
+            initSpeechRecognition();          // Voice input
+            initAiLanguageButtons();          // AI language selector
             setActiveNavigation();
-            questionInput && questionInput.focus();
+
+            if (questionInput) questionInput.focus();
             loadPastQueries();
         });
     </script>
