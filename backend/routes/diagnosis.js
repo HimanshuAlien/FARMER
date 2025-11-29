@@ -41,7 +41,7 @@ const upload = multer({
 // AI-powered crop analysis using Gemini Vision
 async function analyzeCropImage(imagePath) {
     try {
-        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+        const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
         // Read and process image
         const imageBuffer = await fs.readFile(imagePath);
@@ -54,33 +54,36 @@ async function analyzeCropImage(imagePath) {
         const base64Image = processedImage.toString('base64');
 
         // Create the analysis prompt
-        const prompt = `You are an expert agricultural pathologist specializing in crop diseases and plant health analysis. Analyze this crop/plant image and provide a detailed diagnosis.
+        const prompt = `
+You are an expert agricultural pathologist specializing in crop diseases and plant health analysis. Analyze this crop/plant image and provide a clear, structured report.
 
-Please provide:
+Return your answer ONLY in the following format (use these exact headings):
 
-1. **Plant/Crop Identification**: What type of plant/crop is this?
+Diagnosis:
+- Plant/Crop Identification: <short name>
+- Health Status: <healthy / unhealthy with short reason>
+- Disease/Problem Identification: <disease name / pest / deficiency / stress, or "None clearly visible">
+- Symptoms: <short description of visible symptoms>
 
-2. **Health Status**: Is the plant healthy or showing signs of disease/stress?
+Treatment:
+- Immediate Actions:
+- Recommended Treatments/Chemicals:
+- Organic/Natural Options:
+- Expected Time to See Improvement:
 
-3. **Disease/Problem Identification**: If there are issues, identify:
-   - Disease name (if applicable)
-   - Pest infestation (if applicable)
-   - Nutrient deficiencies (if applicable)
-   - Environmental stress factors
+Prevention:
+- Cultural/Field Practices:
+- Monitoring & Early Detection:
+- Long-term Soil/Plant Health Tips:
 
-4. **Symptoms Description**: Describe the visible symptoms you can observe
+Severity: Mild / Moderate / Severe
 
-5. **Treatment Recommendations**: Provide specific, actionable treatment suggestions including:
-   - Immediate actions to take
-   - Recommended treatments/chemicals
-   - Preventive measures
-   - Organic/natural treatment options
+Guidelines:
+- Keep language simple and farmer-friendly.
+- Make Diagnosis, Treatment, and Prevention roughly similar in length.
+- Do NOT add extra sections or headings outside the format above.
+`;
 
-6. **Severity Level**: Rate the severity (Mild/Moderate/Severe)
-
-7. **Prognosis**: What is the expected outcome with proper treatment?
-
-Format your response in a clear, structured manner that a farmer can easily understand and act upon.`;
 
         const result = await model.generateContent([
             prompt,
