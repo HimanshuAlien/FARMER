@@ -53,6 +53,25 @@
             color: var(--text-dark);
         }
 
+        body.lang-ml {
+            font-size: 0.9rem !important;
+            /* reduce overall size slightly */
+            line-height: 1.3 !important;
+            /* tighten spacing */
+        }
+
+        body.lang-ml .sidebar .nav-item span {
+            font-size: 0.85rem !important;
+            /* specifically fix sidebar */
+        }
+
+        body.lang-ml .section-title,
+        body.lang-ml .ds-title,
+        body.lang-ml .feature-title {
+            font-size: 1.1rem !important;
+            /* headings slightly reduced */
+        }
+
         /* Sidebar */
         .sidebar {
             position: fixed;
@@ -382,6 +401,37 @@
             font-size: 1.1rem;
         }
 
+        /* 🔤 Language switcher styles */
+        .language-switcher {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            border-radius: 999px;
+            border: 1px solid var(--border-light);
+            padding: 2px;
+            background: var(--card-light);
+        }
+
+        body.dark .language-switcher {
+            background: var(--card-dark);
+            border-color: var(--border-dark);
+        }
+
+        .lang-btn {
+            border: none;
+            padding: 0.25rem 0.6rem;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            background: transparent;
+            font-weight: 500;
+        }
+
+        .lang-btn.active {
+            background: var(--primary);
+            color: #ffffff;
+        }
+
         /* Compact Welcome Banner */
         .welcome-banner {
             background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
@@ -588,45 +638,55 @@
             margin-top: 0.5rem;
         }
 
-        /* Weather Card */
+        /* Modern Govt Schemes Card (reused weather-card class) */
         .weather-card {
-            background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+            background: var(--card-light);
             border-radius: 16px;
-            padding: 2rem;
-            color: white;
+            padding: 1.75rem;
+            color: var(--text-light);
             cursor: pointer;
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
             height: 100%;
-            box-shadow: 0 4px 20px rgba(14, 165, 233, 0.3);
+            box-shadow: 0 4px 18px rgba(15, 23, 42, 0.06);
+            border: 1px solid rgba(148, 163, 184, 0.6);
+        }
+
+        body.dark .weather-card {
+            background: var(--card-dark);
+            color: var(--text-dark);
+            border-color: var(--border-dark);
         }
 
         .weather-card::before {
             content: '';
             position: absolute;
-            top: -50%;
-            right: -20%;
-            width: 350px;
-            height: 350px;
-            background: rgba(255, 255, 255, 0.08);
-            border-radius: 50%;
+            top: -30px;
+            right: -30px;
+            width: 120px;
+            height: 120px;
+            background: radial-gradient(circle, rgba(22, 163, 74, 0.18), transparent 65%);
+            opacity: 1;
+            border-radius: 999px;
         }
 
         .weather-card::after {
             content: '';
             position: absolute;
-            bottom: -30%;
-            left: -10%;
-            width: 250px;
-            height: 250px;
-            background: rgba(255, 255, 255, 0.06);
-            border-radius: 50%;
+            bottom: -40px;
+            left: -40px;
+            width: 140px;
+            height: 140px;
+            background: radial-gradient(circle, rgba(234, 179, 8, 0.18), transparent 65%);
+            opacity: 1;
+            border-radius: 999px;
         }
 
         .weather-card:hover {
             transform: translateY(-4px);
-            box-shadow: 0 12px 35px rgba(14, 165, 233, 0.4);
+            box-shadow: 0 10px 26px rgba(15, 23, 42, 0.12);
+            border-color: var(--primary);
         }
 
         .weather-content {
@@ -634,59 +694,154 @@
             z-index: 2;
         }
 
-        .weather-header {
+        /* Dashboard Schemes Card (inside weather-card) */
+        .dashboard-schemes-header {
+            margin-bottom: 1rem;
+        }
+
+        .dashboard-schemes-title-row {
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            margin-bottom: 1.5rem;
+            gap: 0.75rem;
         }
 
-        .weather-icon-large {
-            width: 90px;
-            height: 90px;
-            object-fit: contain;
-        }
-
-        .weather-temp-large {
-            font-size: 3.5rem;
-            font-weight: 800;
-            line-height: 1;
-        }
-
-        .weather-condition {
-            font-size: 1.1rem;
-            opacity: 0.9;
-            margin-top: 0.5rem;
-        }
-
-        .weather-details-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1rem;
-            margin-top: 2rem;
-            padding-top: 1.5rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .weather-detail-item {
-            text-align: center;
-        }
-
-        .weather-detail-item i {
-            font-size: 1.25rem;
-            margin-bottom: 0.5rem;
-            opacity: 0.8;
-        }
-
-        .weather-detail-value {
+        .ds-title {
             font-size: 1.1rem;
             font-weight: 700;
         }
 
-        .weather-detail-label {
+        .ds-subtitle {
             font-size: 0.8rem;
-            opacity: 0.8;
-            margin-top: 0.25rem;
+            opacity: 0.9;
+            margin-top: 0.2rem;
+        }
+
+        .ds-badge-wrapper {
+            display: flex;
+            align-items: center;
+        }
+
+        .ds-new-pulse {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.8rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.09em;
+            color: #ffffff;
+            background: #dc2626;
+            /* solid red */
+            padding: 0.3rem 0.9rem;
+            border-radius: 999px;
+            border: 1px solid #b91c1c;
+            box-shadow:
+                0 0 0 1px rgba(248, 113, 113, 0.8),
+                0 8px 18px rgba(248, 113, 113, 0.55);
+            animation: dsBlink 0.9s ease-in-out infinite;
+        }
+
+        .ds-new-pulse i {
+            font-size: 0.9rem;
+        }
+
+        /* Stronger blinking / glow effect */
+        @keyframes dsBlink {
+
+            0%,
+            100% {
+                transform: translateY(0) scale(1);
+                box-shadow:
+                    0 0 0 0 rgba(248, 113, 113, 0.9),
+                    0 8px 18px rgba(248, 113, 113, 0.6);
+            }
+
+            50% {
+                transform: translateY(-1px) scale(1.04);
+                box-shadow:
+                    0 0 14px 2px rgba(248, 113, 113, 1),
+                    0 12px 26px rgba(248, 113, 113, 0.8);
+            }
+        }
+
+        .dashboard-schemes-list {
+            margin-top: 0.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .ds-item {
+            background: rgba(22, 163, 74, 0.08);
+            border-radius: 12px;
+            padding: 0.7rem 0.85rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+            border: 1px solid rgba(22, 163, 74, 0.5);
+            backdrop-filter: blur(4px);
+        }
+
+        body.dark .ds-item {
+            background: rgba(15, 23, 42, 0.6);
+            border-color: rgba(148, 163, 184, 0.6);
+        }
+
+        .ds-item-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .ds-name {
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .ds-chip {
+            font-size: 0.7rem;
+            padding: 0.15rem 0.55rem;
+            border-radius: 999px;
+            border: 1px solid rgba(148, 163, 184, 0.7);
+            opacity: 0.9;
+        }
+
+        .ds-meta {
+            font-size: 0.75rem;
+            opacity: 0.9;
+            display: flex;
+            justify-content: space-between;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .ds-empty {
+            font-size: 0.8rem;
+            opacity: 0.9;
+        }
+
+        .dashboard-schemes-footer {
+            margin-top: 1.1rem;
+            border-top: 1px solid rgba(148, 163, 184, 0.35);
+            padding-top: 0.7rem;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .ds-view-all {
+            font-size: 0.82rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            opacity: 0.95;
+        }
+
+        .ds-view-all::after {
+            content: '↗';
+            font-size: 0.8rem;
         }
 
         /* Features Section */
@@ -898,11 +1053,6 @@
             .content-area {
                 padding: 1rem;
             }
-
-            .weather-details-grid {
-                grid-template-columns: repeat(3, 1fr);
-                gap: 0.75rem;
-            }
         }
 
         @media (max-width: 480px) {
@@ -914,15 +1064,6 @@
                 width: 48px;
                 height: 48px;
                 font-size: 1.5rem;
-            }
-
-            .weather-temp-large {
-                font-size: 2.75rem;
-            }
-
-            .weather-icon-large {
-                width: 60px;
-                height: 60px;
             }
         }
 
@@ -954,7 +1095,7 @@
     <nav class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <div class="logo">
-                <img src="images/krishimitr-logo.svg" alt="KrishiMitr logo" class="logo-icon">
+                <img src="images/logo.png" alt="KrishiMitr logo" class="logo-icon">
                 <div class="logo-brand">
                     <span class="logo-text-krishi">Krishi</span>
                     <span class="logo-text-mitr">Mitr</span>
@@ -963,50 +1104,54 @@
         </div>
         <div class="nav-menu">
             <div class="nav-section">
-                <div class="nav-section-title">Main Menu</div>
+                <div class="nav-section-title" data-i18n="sidebar.mainMenu">Main Menu</div>
                 <a href="dashboard.html" class="nav-item active">
                     <i class="fas fa-home"></i>
-                    <span>Dashboard</span>
+                    <span data-i18n="sidebar.dashboard">Dashboard</span>
                 </a>
                 <a href="ask-query.html" class="nav-item">
                     <i class="fas fa-robot"></i>
-                    <span>Ask Query</span>
+                    <span data-i18n="sidebar.askQuery">Ask Query</span>
                 </a>
             </div>
 
             <div class="nav-section">
-                <div class="nav-section-title">Tools</div>
+                <div class="nav-section-title" data-i18n="sidebar.tools">Tools</div>
                 <a href="crop-diagnosis.html" class="nav-item">
-                    <i class="fas fa-camera"></i>
-                    <span>Crop Diagnosis</span>
+                    <i class="fa-solid fa-briefcase-medical"></i>
+                    <span data-i18n="sidebar.cropDiagnosis">Crop Diagnosis</span>
                 </a>
                 <a href="weather-alerts.html" class="nav-item">
                     <i class="fas fa-cloud-sun"></i>
-                    <span>Weather & Alerts</span>
+                    <span data-i18n="sidebar.weatherAlerts">Weather & Alerts</span>
                 </a>
                 <a href="Schemes.html" class="nav-item">
-                    <i class="fa-solid fa-binoculars"></i>
-                    <span>Govt Schemes</span>
+                    <i class="fa-solid fa-building-ngo"></i>
+                    <span data-i18n="sidebar.schemes">Govt Schemes</span>
+                </a>
+                <a href="helpline.html" class="nav-item">
+                    <i class="fa-solid fa-phone"></i>
+                    <span data-i18n="sidebar.helpline">Helpline Number</span>
                 </a>
                 <a href="smart-farming.html" class="nav-item">
                     <i class="fa-solid fa-briefcase"></i>
-                    <span>Agri Swasthya</span>
+                    <span data-i18n="sidebar.agriSwasthya">Agri Swasthya</span>
                 </a>
                 <a href="market-prices.html" class="nav-item">
-                    <i class="fas fa-chart-line"></i>
-                    <span>Market Prices</span>
+                    <i class="fa-solid fa-dollar-sign"></i>
+                    <span data-i18n="sidebar.marketPrices">Market Prices</span>
                 </a>
             </div>
 
             <div class="nav-section">
-                <div class="nav-section-title">Community</div>
+                <div class="nav-section-title" data-i18n="sidebar.communitySection">Community</div>
                 <a href="farmer-community.html" class="nav-item">
                     <i class="fas fa-users"></i>
-                    <span>Community</span>
+                    <span data-i18n="sidebar.community">Community</span>
                 </a>
                 <a href="profile.html" class="nav-item">
                     <i class="fas fa-user"></i>
-                    <span>Profile</span>
+                    <span data-i18n="sidebar.profile">Profile</span>
                 </a>
             </div>
         </div>
@@ -1014,11 +1159,11 @@
             <div id="userInfo" class="user-info" style="display:none;"></div>
             <button class="theme-toggle-sidebar" onclick="toggleTheme()">
                 <i class="fas fa-sun"></i>
-                <span>Toggle Theme</span>
+                <span data-i18n="sidebar.toggleTheme">Toggle Theme</span>
             </button>
             <button id="logoutBtn" class="logout-btn">
                 <i class="fas fa-sign-out-alt"></i>
-                <span>Logout</span>
+                <span data-i18n="sidebar.logout">Logout</span>
             </button>
         </div>
     </nav>
@@ -1031,13 +1176,19 @@
                 <button class="mobile-menu-btn" onclick="toggleSidebar()">
                     <i class="fas fa-bars"></i>
                 </button>
-                <img src="images/krishimitr-logo.svg" alt="KrishiMitr logo" class="topbar-logo" />
-                <h1 class="simple-title">Digital Krishi Officer</h1>
+                <img src="images/krishi-officer.png" alt="KrishiMitr logo" class="topbar-logo" />
+                <h1 class="simple-title" data-i18n="header.title">Digital Krishi Officer</h1>
             </div>
             <div class="topbar-right">
+                <!-- 🔤 Language toggle button -->
+                <div class="language-switcher">
+                    <button class="lang-btn active" data-lang="en" onclick="setLanguage('en')">EN</button>
+                    <button class="lang-btn" data-lang="ml" onclick="setLanguage('ml')">മലയാളം</button>
+                </div>
+
                 <span class="status-badge">
                     <span class="status-dot"></span>
-                    <span>System Online</span>
+                    <span data-i18n="status.online">System Online</span>
                 </span>
             </div>
         </div>
@@ -1046,13 +1197,13 @@
             <!-- Welcome Banner -->
             <div class="welcome-banner animate-fade-in">
                 <div class="welcome-text">
-                    <h1>Welcome Back, Farmer</h1>
-                    <p>Here's what's happening with your farm today</p>
+                    <h1 data-i18n="welcome.title">Welcome Back, Farmer</h1>
+                    <p data-i18n="welcome.subtitle">Here's what's happening with your farm today</p>
                 </div>
                 <div class="welcome-meta">
                     <div class="meta-item">
                         <i class="fas fa-map-marker-alt"></i>
-                        <span>Kochi, Kerala</span>
+                        <span data-i18n="meta.location">Kochi, Kerala</span>
                     </div>
                     <div class="meta-item">
                         <i class="fas fa-clock"></i>
@@ -1076,7 +1227,7 @@
                     <div class="stat-card">
                         <div class="stat-card-header">
                             <div class="stat-info">
-                                <h3>Total Queries</h3>
+                                <h3 data-i18n="stat.totalQueries">Total Queries</h3>
                                 <div class="stat-value" id="queryCount">0</div>
                                 <div class="stat-trend">
                                     <i class="fas fa-arrow-up"></i>
@@ -1092,11 +1243,11 @@
                     <div class="stat-card">
                         <div class="stat-card-header">
                             <div class="stat-info">
-                                <h3>Temperature</h3>
+                                <h3 data-i18n="stat.temperature">Temperature</h3>
                                 <div class="stat-value" id="currentTemp">--</div>
                                 <div class="stat-trend" id="tempTrend">
                                     <i class="fas fa-check-circle"></i>
-                                    <span>Perfect for crops</span>
+                                    <span data-i18n="stat.tempStatus">Perfect for crops</span>
                                 </div>
                             </div>
                             <div class="stat-icon-box">
@@ -1108,11 +1259,11 @@
                     <div class="stat-card">
                         <div class="stat-card-header">
                             <div class="stat-info">
-                                <h3>Crops Monitored</h3>
+                                <h3 data-i18n="stat.cropsMonitored">Crops Monitored</h3>
                                 <div class="stat-value" id="cropsCount">0</div>
                                 <div class="stat-trend">
                                     <i class="fas fa-arrow-up"></i>
-                                    <span>2 new this week</span>
+                                    <span data-i18n="stat.cropsNew">2 new this week</span>
                                 </div>
                             </div>
                             <div class="stat-icon-box">
@@ -1124,11 +1275,11 @@
                     <div class="stat-card">
                         <div class="stat-card-header">
                             <div class="stat-info">
-                                <h3>Active Alerts</h3>
+                                <h3 data-i18n="stat.activeAlerts">Active Alerts</h3>
                                 <div class="stat-value" id="alertsCount">0</div>
                                 <div class="stat-trend">
                                     <i class="fas fa-info-circle"></i>
-                                    <span id="alertsStatus">All systems normal</span>
+                                    <span id="alertsStatus" data-i18n="alerts.statusNormal">All systems normal</span>
                                 </div>
                             </div>
                             <div class="stat-icon-box">
@@ -1138,35 +1289,32 @@
                     </div>
                 </div>
 
-                <!-- Weather Card -->
-                <div class="weather-card" onclick="window.location.href='weather-alerts.html'">
+                <!-- Latest Govt Schemes Card -->
+                <div class="weather-card" onclick="window.location.href='Schemes.html'">
                     <div class="weather-content">
-                        <div class="weather-header">
-                            <div>
-                                <div class="weather-temp-large" id="weatherTemp">--°</div>
-                                <div class="weather-condition" id="weatherCondition">Loading...</div>
-                            </div>
-                            <div>
-                                <img src="images/weather.png" alt="Weather" class="weather-icon-large">
+                        <div class="dashboard-schemes-header">
+                            <div class="dashboard-schemes-title-row">
+                                <div>
+                                    <div class="ds-title" data-i18n="schemes.latestTitle">Latest Govt Schemes</div>
+                                    <div class="ds-subtitle" id="dashboardSchemesSubtitle" data-i18n="schemes.subtitle">
+                                        Recently added benefits for farmers
+                                    </div>
+                                </div>
+                                <div class="ds-badge-wrapper">
+                                    <span class="ds-new-pulse">
+                                        <i class="fas fa-bolt"></i>
+                                        <span data-i18n="schemes.newUpdates">New updates</span>
+                                    </span>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="weather-details-grid">
-                            <div class="weather-detail-item">
-                                <i class="fas fa-tint"></i>
-                                <div class="weather-detail-value" id="humidity">--%</div>
-                                <div class="weather-detail-label">Humidity</div>
-                            </div>
-                            <div class="weather-detail-item">
-                                <i class="fas fa-wind"></i>
-                                <div class="weather-detail-value" id="windSpeed">-- km/h</div>
-                                <div class="weather-detail-label">Wind Speed</div>
-                            </div>
-                            <div class="weather-detail-item">
-                                <i class="fas fa-cloud-rain"></i>
-                                <div class="weather-detail-value" id="rainfall">--%</div>
-                                <div class="weather-detail-label">Rain Chance</div>
-                            </div>
+                        <div id="dashboardSchemesList" class="dashboard-schemes-list">
+                            <div class="ds-empty">Loading latest schemes...</div>
+                        </div>
+
+                        <div class="dashboard-schemes-footer">
+                            <span class="ds-view-all" data-i18n="schemes.viewAll">View all schemes</span>
                         </div>
                     </div>
                 </div>
@@ -1175,7 +1323,7 @@
             <!-- Features Section -->
             <div class="features-section animate-fade-in">
                 <div class="section-header">
-                    <h2 class="section-title">Quick Actions</h2>
+                    <h2 class="section-title" data-i18n="features.quickActions">Quick Actions</h2>
                 </div>
 
                 <div class="features-grid">
@@ -1183,13 +1331,13 @@
                         <div class="feature-icon-wrapper">
                             <img src="images/ai-assistant.png" alt="AI Assistant">
                         </div>
-                        <h3 class="feature-title">AI Farming Assistant</h3>
-                        <p class="feature-description">
+                        <h3 class="feature-title" data-i18n="features.aiAssistant.title">AI Farming Assistant</h3>
+                        <p class="feature-description" data-i18n="features.aiAssistant.desc">
                             Get instant answers to your farming questions. Ask about pest control, crop diseases,
                             fertilizers, and best practices.
                         </p>
                         <button class="feature-btn" onclick="window.location.href='ask-query.html'">
-                            <span>Ask Question</span>
+                            <span data-i18n="features.aiAssistant.btn">Ask Question</span>
                             <i class="fas fa-arrow-right"></i>
                         </button>
                     </div>
@@ -1198,13 +1346,13 @@
                         <div class="feature-icon-wrapper">
                             <img src="images/crop-diagnosis.png" alt="Crop Diagnosis">
                         </div>
-                        <h3 class="feature-title">Crop Diagnosis</h3>
-                        <p class="feature-description">
+                        <h3 class="feature-title" data-i18n="features.cropDiagnosis.title">Crop Diagnosis</h3>
+                        <p class="feature-description" data-i18n="features.cropDiagnosis.desc">
                             Upload crop images to detect diseases, pests, and nutrient deficiencies using advanced AI
                             technology.
                         </p>
                         <button class="feature-btn" onclick="window.location.href='crop-diagnosis.html'">
-                            <span>Upload Image</span>
+                            <span data-i18n="features.cropDiagnosis.btn">Upload Image</span>
                             <i class="fas fa-arrow-right"></i>
                         </button>
                     </div>
@@ -1213,13 +1361,13 @@
                         <div class="feature-icon-wrapper">
                             <img src="images/market-prices.png" alt="Market Prices">
                         </div>
-                        <h3 class="feature-title">Market Prices</h3>
-                        <p class="feature-description">
+                        <h3 class="feature-title" data-i18n="features.marketPrices.title">Market Prices</h3>
+                        <p class="feature-description" data-i18n="features.marketPrices.desc">
                             Access real-time vegetable prices with AI-powered recommendations and market analysis for
                             better decisions.
                         </p>
                         <button class="feature-btn" onclick="window.location.href='market-prices.html'">
-                            <span>View Prices</span>
+                            <span data-i18n="features.marketPrices.btn">View Prices</span>
                             <i class="fas fa-arrow-right"></i>
                         </button>
                     </div>
@@ -1228,13 +1376,13 @@
                         <div class="feature-icon-wrapper">
                             <img src="images/weather-alert.png" alt="Weather Alerts">
                         </div>
-                        <h3 class="feature-title">Weather Alerts</h3>
-                        <p class="feature-description">
+                        <h3 class="feature-title" data-i18n="features.weatherAlerts.title">Weather Alerts</h3>
+                        <p class="feature-description" data-i18n="features.weatherAlerts.desc">
                             Get detailed forecasts, rainfall predictions, and farming-specific alerts for your location
                             and crops.
                         </p>
                         <button class="feature-btn" onclick="window.location.href='weather-alerts.html'">
-                            <span>View Alerts</span>
+                            <span data-i18n="features.weatherAlerts.btn">View Alerts</span>
                             <i class="fas fa-arrow-right"></i>
                         </button>
                     </div>
@@ -1243,414 +1391,635 @@
         </div>
     </main>
 
+    <!-- 🔤 Language JS (front-end only, no backend needed) -->
     <script>
-        // MARKET PREVIEW
-        async function loadMarketPreview() {
-            try {
-                const response = await fetch('/api/market/live-prices', {
-                    credentials: 'include'
-                });
+        const translations = {
+            en: {
+                "sidebar.mainMenu": "Main Menu",
+                "sidebar.dashboard": "Dashboard",
+                "sidebar.askQuery": "Ask Query",
+                "sidebar.tools": "Tools",
+                "sidebar.cropDiagnosis": "Crop Diagnosis",
+                "sidebar.weatherAlerts": "Weather & Alerts",
+                "sidebar.schemes": "Govt Schemes",
+                "sidebar.helpline": "Helpline Number",
+                "sidebar.agriSwasthya": "Agri Swasthya",
+                "sidebar.marketPrices": "Market Prices",
+                "sidebar.communitySection": "Community",
+                "sidebar.community": "Community",
+                "sidebar.profile": "Profile",
+                "sidebar.toggleTheme": "Toggle Theme",
+                "sidebar.logout": "Logout",
 
-                if (response.ok) {
-                    const data = await response.json();
+                "header.title": "Digital Krishi Officer",
+                "status.online": "System Online",
 
-                    const vegetableCountElement = document.getElementById('marketVegetableCount');
-                    const marketCountElement = document.getElementById('marketCount');
+                "welcome.title": "Welcome Back, Farmer",
+                "welcome.subtitle": "Here's what's happening with your farm today",
+                "meta.location": "Kochi, Kerala",
 
-                    if (vegetableCountElement && data.stats) {
-                        vegetableCountElement.textContent = data.stats.totalVegetables || '50+';
-                    }
+                "stat.totalQueries": "Total Queries",
+                "stat.temperature": "Temperature",
+                "stat.cropsMonitored": "Crops Monitored",
+                "stat.activeAlerts": "Active Alerts",
+                "stat.tempStatus": "Perfect for crops",
+                "stat.cropsNew": "2 new this week",
+                "alerts.statusNormal": "All systems normal",
 
-                    if (marketCountElement && data.stats) {
-                        marketCountElement.textContent = data.stats.totalMarkets || '15+';
-                    }
+                "schemes.latestTitle": "Latest Govt Schemes",
+                "schemes.subtitle": "Recently added benefits for farmers",
+                "schemes.viewAll": "View all schemes",
+                "schemes.newUpdates": "New updates",
 
-                    console.log('✅ Market preview loaded on dashboard');
+                "features.quickActions": "Quick Actions",
+                "features.aiAssistant.title": "AI Farming Assistant",
+                "features.aiAssistant.desc": "Get instant answers to your farming questions. Ask about pest control, crop diseases, fertilizers, and best practices.",
+                "features.aiAssistant.btn": "Ask Question",
+
+                "features.cropDiagnosis.title": "Crop Diagnosis",
+                "features.cropDiagnosis.desc": "Upload crop images to detect diseases, pests, and nutrient deficiencies using advanced AI technology.",
+                "features.cropDiagnosis.btn": "Upload Image",
+
+                "features.marketPrices.title": "Market Prices",
+                "features.marketPrices.desc": "Access real-time vegetable prices with AI-powered recommendations and market analysis for better decisions.",
+                "features.marketPrices.btn": "View Prices",
+
+                "features.weatherAlerts.title": "Weather Alerts",
+                "features.weatherAlerts.desc": "Get detailed forecasts, rainfall predictions, and farming-specific alerts for your location and crops.",
+                "features.weatherAlerts.btn": "View Alerts"
+            },
+            ml: {
+                "sidebar.mainMenu": "പ്രധാന മെനു",
+                "sidebar.dashboard": "ഡാഷ്ബോർഡ്",
+                "sidebar.askQuery": "ചോദ്യം ചോദിക്കുക",
+                "sidebar.tools": "ഉപകരണങ്ങൾ",
+                "sidebar.cropDiagnosis": "വിള രോഗനിർണയം",
+                "sidebar.weatherAlerts": "കാലാവസ്ഥ & മുന്നറിയിപ്പുകൾ",
+                "sidebar.schemes": "സർക്കാർ പദ്ധതികൾ",
+                "sidebar.helpline": "ഹെൽപ്‌ലൈൻ നമ്പർ",
+                "sidebar.agriSwasthya": "അഗ്രീ ആരോഗ്യ",
+                "sidebar.marketPrices": "ചന്ത വിലകൾ",
+                "sidebar.communitySection": "കമ്മ്യൂണിറ്റി",
+                "sidebar.community": "കർഷക സമുദായം",
+                "sidebar.profile": "പ്രൊഫൈൽ",
+                "sidebar.toggleTheme": "തീം മാറ്റുക",
+                "sidebar.logout": "ലോഗൗട്ട്",
+
+                "header.title": "ഡിജിറ്റൽ കൃഷി ഓഫീസർ",
+                "status.online": "സിസ്റ്റം ഓൺലൈൻ",
+
+                "welcome.title": "തിരിച്ച് വരവിന് സ്വാഗതം, കർഷകനേ",
+                "welcome.subtitle": "ഇന്ന് നിങ്ങളുടെ വയലിൽ നടക്കുന്ന കാര്യങ്ങൾ ഇവയാണ്",
+                "meta.location": "കൊച്ചി, കേരളം",
+
+                "stat.totalQueries": "ആകെ ചോദിച്ച ചോദ്യങ്ങൾ",
+                "stat.temperature": "താപനില",
+                "stat.cropsMonitored": "നിരീക്ഷിക്കുന്ന വിളകൾ",
+                "stat.activeAlerts": "ആക്ടീവ് അലർട്ടുകൾ",
+                "stat.tempStatus": "വിളകൾക്ക് അനുയോജ്യമായ താപനില",
+                "stat.cropsNew": "ഈ ആഴ്ച 2 പുതിയത്",
+                "alerts.statusNormal": "എല്ലാം സാധാരണ നിലയിലാണ്",
+
+                "schemes.latestTitle": "പുതിയ സർക്കാർ പദ്ധതികൾ",
+                "schemes.subtitle": "കർഷകർക്ക് പുതിയ ആനുകൂല്യങ്ങൾ",
+                "schemes.viewAll": "എല്ലാ പദ്ധതികളും കാണുക",
+                "schemes.newUpdates": "പുതിയ അപ്‌ഡേറ്റുകൾ",
+
+                "features.quickActions": "പെട്ടെന്ന് ചെയ്യാവുന്നതുകൾ",
+                "features.aiAssistant.title": "എ.ഐ കൃഷി സഹായി",
+                "features.aiAssistant.desc": "കൃഷി സംബന്ധമായ നിങ്ങളുടെ സംശയങ്ങൾക്ക് ഉടനെ മറുപടി. കീടനിയന്ത്രണം, വിള രോഗങ്ങൾ, വളങ്ങൾ, ശാസ്ത്രീയ കൃഷി എന്നിവയെ കുറിച്ച് ചോദിക്കൂ.",
+                "features.aiAssistant.btn": "ചോദ്യം ചോദിക്കുക",
+
+                "features.cropDiagnosis.title": "വിള രോഗനിർണയം",
+                "features.cropDiagnosis.desc": "വിളകളുടെ ഫോട്ടോ അപ്ലോഡ് ചെയ്ത് രോഗം, കീടാക്രമണം, പോഷകക്കുറവ് എന്നിവ എ.ഐ ഉപയോഗിച്ച് കണ്ടെത്തൂ.",
+                "features.cropDiagnosis.btn": "ഇമേജ് അപ്ലോഡ് ചെയ്യുക",
+
+                "features.marketPrices.title": "ചന്ത വിലകൾ",
+                "features.marketPrices.desc": "പച്ചക്കറികളുടെ തത്സമയ വിലയും എ.ഐ അടിസ്ഥാനത്തിലുള്ള വിപണി വിശകലനവും വഴി മികച്ച വിലയ്ക്ക് വിള വിറ്റഴിക്കൂ.",
+                "features.marketPrices.btn": "വിലകൾ കാണുക",
+
+                "features.weatherAlerts.title": "കാലാവസ്ഥ മുന്നറിയിപ്പുകൾ",
+                "features.weatherAlerts.desc": "നിങ്ങളുടെ പ്രദേശത്തെ മഴ പ്രവചനം, കാറ്റ്, താപനില തുടങ്ങിയ കൃഷിയുമായി ബന്ധപ്പെട്ട വിശദമായ കാലാവസ്ഥ വിവരങ്ങൾ.",
+                "features.weatherAlerts.btn": "മുന്നറിയിപ്പുകൾ കാണുക"
+            }
+        };
+
+        function applyTranslations(lang) {
+            const elements = document.querySelectorAll("[data-i18n]");
+            elements.forEach(el => {
+                const key = el.getAttribute("data-i18n");
+                const translation = translations[lang] && translations[lang][key];
+                if (translation) {
+                    el.textContent = translation;
                 }
-            } catch (error) {
-                console.log('Market preview not available:', error.message);
-            }
+            });
         }
 
-        // GLOBAL STATE
-        let isDarkMode = localStorage.getItem('darkMode') === 'true';
-        let dashboardQueryCount = parseInt(localStorage.getItem('farmerQueryCount')) || 0;
-
-        // THEME
-        function initializeTheme() {
-            if (isDarkMode) {
-                document.body.classList.add('dark');
-                const themeIcon = document.querySelector('.theme-toggle-sidebar i');
-                const themeText = document.querySelector('.theme-toggle-sidebar span');
-                if (themeIcon) themeIcon.className = 'fas fa-moon';
-                if (themeText) themeText.textContent = 'Light Mode';
-            }
+        function updateLangButtons(lang) {
+            document.querySelectorAll(".lang-btn").forEach(btn => {
+                btn.classList.toggle("active", btn.dataset.lang === lang);
+            });
         }
 
-        function toggleTheme() {
-            isDarkMode = !isDarkMode;
-            document.body.classList.toggle('dark');
+        function setLanguage(lang) {
+            localStorage.setItem("appLanguage", lang);
+            applyTranslations(lang);
+            updateLangButtons(lang);
+            document.body.classList.toggle("lang-ml", lang === "ml");
+        }
 
+        document.addEventListener("DOMContentLoaded", () => {
+            const savedLang = localStorage.getItem("appLanguage") || "en";
+            setLanguage(savedLang);
+        });
+
+        // NOTE for future:
+        // If you later add backend + translation API (Google, Azure etc.),
+        // you can call it inside applyTranslations or before filling the translations object.
+    </script>
+</body>
+
+</html>
+
+
+<script>
+    // MARKET PREVIEW
+    async function loadMarketPreview() {
+        try {
+            const response = await fetch('/api/market/live-prices', {
+                credentials: 'include'
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+
+                const vegetableCountElement = document.getElementById('marketVegetableCount');
+                const marketCountElement = document.getElementById('marketCount');
+
+                if (vegetableCountElement && data.stats) {
+                    vegetableCountElement.textContent = data.stats.totalVegetables || '50+';
+                }
+
+                if (marketCountElement && data.stats) {
+                    marketCountElement.textContent = data.stats.totalMarkets || '15+';
+                }
+
+                console.log('✅ Market preview loaded on dashboard');
+            }
+        } catch (error) {
+            console.log('Market preview not available:', error.message);
+        }
+    }
+
+    // GLOBAL STATE
+    let isDarkMode = localStorage.getItem('darkMode') === 'true';
+    let dashboardQueryCount = parseInt(localStorage.getItem('farmerQueryCount')) || 0;
+
+    // THEME
+    function initializeTheme() {
+        if (isDarkMode) {
+            document.body.classList.add('dark');
             const themeIcon = document.querySelector('.theme-toggle-sidebar i');
             const themeText = document.querySelector('.theme-toggle-sidebar span');
+            if (themeIcon) themeIcon.className = 'fas fa-moon';
+            if (themeText) themeText.textContent = 'Light Mode';
+        }
+    }
 
-            if (isDarkMode) {
-                if (themeIcon) themeIcon.className = 'fas fa-moon';
-                if (themeText) themeText.textContent = 'Light Mode';
-            } else {
-                if (themeIcon) themeIcon.className = 'fas fa-sun';
-                if (themeText) themeText.textContent = 'Dark Mode';
-            }
+    function toggleTheme() {
+        isDarkMode = !isDarkMode;
+        document.body.classList.toggle('dark');
 
-            localStorage.setItem('darkMode', isDarkMode);
+        const themeIcon = document.querySelector('.theme-toggle-sidebar i');
+        const themeText = document.querySelector('.theme-toggle-sidebar span');
+
+        if (isDarkMode) {
+            if (themeIcon) themeIcon.className = 'fas fa-moon';
+            if (themeText) themeText.textContent = 'Light Mode';
+        } else {
+            if (themeIcon) themeIcon.className = 'fas fa-sun';
+            if (themeText) themeText.textContent = 'Dark Mode';
         }
 
-        // TIME
-        function updateTime() {
-            const now = new Date();
-            const timeString = now.toLocaleTimeString('en-IN', {
-                hour: '2-digit',
-                minute: '2-digit'
+        localStorage.setItem('darkMode', isDarkMode);
+    }
+
+    // TIME
+    function updateTime() {
+        const now = new Date();
+        const timeString = now.toLocaleTimeString('en-IN', {
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+
+        const dateString = now.toLocaleDateString('en-IN', {
+            weekday: 'short',
+            month: 'short',
+            day: 'numeric'
+        });
+
+        const timeElement = document.getElementById('currentTime');
+        if (timeElement) timeElement.textContent = timeString;
+
+        const dateTimeElement = document.getElementById('currentDateTime');
+        const welcomeTimeElement = document.getElementById('welcomeTime');
+
+        if (dateTimeElement) dateTimeElement.textContent = `${dateString} • ${timeString}`;
+        if (welcomeTimeElement) welcomeTimeElement.textContent = timeString;
+    }
+
+    // PROFILE
+    async function loadProfile() {
+        try {
+            const res = await fetch('/api/user/profile', {
+                method: 'GET',
+                credentials: 'include'
             });
 
-            const dateString = now.toLocaleDateString('en-IN', {
-                weekday: 'short',
-                month: 'short',
-                day: 'numeric'
-            });
+            if (!res.ok) throw new Error('Unauthorized');
 
-            const timeElement = document.getElementById('currentTime');
-            if (timeElement) timeElement.textContent = timeString;
-
-            const dateTimeElement = document.getElementById('currentDateTime');
-            const welcomeTimeElement = document.getElementById('welcomeTime');
-
-            if (dateTimeElement) dateTimeElement.textContent = `${dateString} • ${timeString}`;
-            if (welcomeTimeElement) welcomeTimeElement.textContent = timeString;
-        }
-
-        // PROFILE
-        async function loadProfile() {
-            try {
-                const res = await fetch('/api/user/profile', {
-                    method: 'GET',
-                    credentials: 'include'
-                });
-
-                if (!res.ok) throw new Error('Unauthorized');
-
-                const user = await res.json();
-                const userInfoElement = document.getElementById('userInfo');
-                if (userInfoElement) {
-                    userInfoElement.style.display = 'block';
-                    userInfoElement.innerHTML = `
+            const user = await res.json();
+            const userInfoElement = document.getElementById('userInfo');
+            if (userInfoElement) {
+                userInfoElement.style.display = 'block';
+                userInfoElement.innerHTML = `
                         <div style="font-weight: 500;">${user.username}</div>
                         <div style="font-size: 0.8rem; opacity: 0.8;">${user.email}</div>
                     `;
-                }
-            } catch (error) {
-                const userInfoElement = document.getElementById('userInfo');
-                if (userInfoElement) {
-                    userInfoElement.style.display = 'block';
-                    userInfoElement.innerHTML = `
+            }
+        } catch (error) {
+            const userInfoElement = document.getElementById('userInfo');
+            if (userInfoElement) {
+                userInfoElement.style.display = 'block';
+                userInfoElement.innerHTML = `
                         <div style="font-weight: 500;">KrishiMitr User</div>
                         <div style="font-size: 0.8rem; opacity: 0.8;">farmer@example.com</div>
                     `;
-                }
             }
         }
+    }
 
-        // QUERY COUNTER (DB + local)
-        function initializeQueryCounter() {
+    // QUERY COUNTER (DB + local)
+    function initializeQueryCounter() {
+        loadDatabaseQueryStats();
+        updateQueryCountDisplay(dashboardQueryCount);
+
+        window.addEventListener('storage', function (e) {
+            if (e.key === 'farmerQueryCount') {
+                const newCount = parseInt(e.newValue) || 0;
+                dashboardQueryCount = newCount;
+                updateQueryCountDisplay(newCount);
+            }
+        });
+
+        setInterval(() => {
             loadDatabaseQueryStats();
-            updateQueryCountDisplay(dashboardQueryCount);
 
-            window.addEventListener('storage', function (e) {
-                if (e.key === 'farmerQueryCount') {
-                    const newCount = parseInt(e.newValue) || 0;
-                    dashboardQueryCount = newCount;
-                    updateQueryCountDisplay(newCount);
-                }
+            const latestCount = parseInt(localStorage.getItem('farmerQueryCount')) || 0;
+            if (latestCount !== dashboardQueryCount) {
+                dashboardQueryCount = latestCount;
+                updateQueryCountDisplay(latestCount);
+            }
+        }, 30000);
+    }
+
+    async function loadDatabaseQueryStats() {
+        try {
+            const response = await fetch('/api/query/stats', {
+                credentials: 'include'
             });
 
-            setInterval(() => {
-                loadDatabaseQueryStats();
+            if (response.ok) {
+                const data = await response.json();
+                const stats = data.stats;
 
-                const latestCount = parseInt(localStorage.getItem('farmerQueryCount')) || 0;
-                if (latestCount !== dashboardQueryCount) {
-                    dashboardQueryCount = latestCount;
-                    updateQueryCountDisplay(latestCount);
+                const databaseCount = stats.total || 0;
+                if (databaseCount !== dashboardQueryCount) {
+                    dashboardQueryCount = databaseCount;
+                    updateQueryCountDisplay(databaseCount);
+                    localStorage.setItem('farmerQueryCount', databaseCount.toString());
                 }
-            }, 30000);
+
+                console.log('✅ Database query stats loaded:', stats);
+            }
+        } catch (error) {
+            console.error('Error loading database query stats:', error);
+            const localCount = parseInt(localStorage.getItem('farmerQueryCount')) || 0;
+            dashboardQueryCount = localCount;
+            updateQueryCountDisplay(localCount);
+        }
+    }
+
+    function updateQueryCountDisplay(count) {
+        const queryCountElement = document.getElementById('queryCount');
+        const queryTrendElement = document.getElementById('queryTrend');
+
+        if (queryCountElement) {
+            animateNumber(queryCountElement, parseInt(queryCountElement.textContent) || 0, count, true);
         }
 
-        async function loadDatabaseQueryStats() {
-            try {
-                const response = await fetch('/api/query/stats', {
-                    credentials: 'include'
-                });
+        if (queryTrendElement) {
+            const trend = Math.max(5, Math.min(50, Math.floor(count / 5 + 10)));
+            queryTrendElement.textContent = `+${trend}%`;
+        }
+    }
 
-                if (response.ok) {
-                    const data = await response.json();
-                    const stats = data.stats;
+    function animateNumber(element, start, end, addSuffixCelsius = false) {
+        const duration = 1000;
+        const startTime = performance.now();
 
-                    const databaseCount = stats.total || 0;
-                    if (databaseCount !== dashboardQueryCount) {
-                        dashboardQueryCount = databaseCount;
-                        updateQueryCountDisplay(databaseCount);
-                        localStorage.setItem('farmerQueryCount', databaseCount.toString());
-                    }
+        function updateNumber(currentTime) {
+            const elapsed = currentTime - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            const easeOut = 1 - Math.pow(1 - progress, 3);
+            const current = Math.round(start + (end - start) * easeOut);
 
-                    console.log('✅ Database query stats loaded:', stats);
-                }
-            } catch (error) {
-                console.error('Error loading database query stats:', error);
-                const localCount = parseInt(localStorage.getItem('farmerQueryCount')) || 0;
-                dashboardQueryCount = localCount;
-                updateQueryCountDisplay(localCount);
+            element.textContent = addSuffixCelsius ? current : current;
+
+            if (progress < 1) {
+                requestAnimationFrame(updateNumber);
             }
         }
 
-        function updateQueryCountDisplay(count) {
-            const queryCountElement = document.getElementById('queryCount');
-            const queryTrendElement = document.getElementById('queryTrend');
+        requestAnimationFrame(updateNumber);
+    }
 
-            if (queryCountElement) {
-                animateNumber(queryCountElement, parseInt(queryCountElement.textContent) || 0, count, true);
-            }
+    // WEATHER (live, still used for banner + temp card + alerts)
+    async function loadLiveDashboardWeather() {
+        try {
+            console.log('Loading live weather for dashboard...');
 
-            if (queryTrendElement) {
-                const trend = Math.max(5, Math.min(50, Math.floor(count / 5 + 10)));
-                queryTrendElement.textContent = `+${trend}%`;
-            }
-        }
+            const response = await fetch('/api/weather/current/Kochi, Kerala', {
+                credentials: 'include'
+            });
 
-        function animateNumber(element, start, end, addSuffixCelsius = false) {
-            const duration = 1000;
-            const startTime = performance.now();
-
-            function updateNumber(currentTime) {
-                const elapsed = currentTime - startTime;
-                const progress = Math.min(elapsed / duration, 1);
-                const easeOut = 1 - Math.pow(1 - progress, 3);
-                const current = Math.round(start + (end - start) * easeOut);
-
-                element.textContent = addSuffixCelsius ? current : current;
-
-                if (progress < 1) {
-                    requestAnimationFrame(updateNumber);
-                }
-            }
-
-            requestAnimationFrame(updateNumber);
-        }
-
-        // WEATHER (live)
-        async function loadLiveDashboardWeather() {
-            try {
-                console.log('Loading live weather for dashboard...');
-
-                const response = await fetch('/api/weather/current/Kochi, Kerala', {
-                    credentials: 'include'
-                });
-
-                if (response.ok) {
-                    const weatherData = await response.json();
-                    console.log('Dashboard weather data received:', weatherData);
-                    updateDashboardWeatherDisplay(weatherData);
-                } else {
-                    console.log('Weather API failed, using fallback');
-                    useFallbackWeather();
-                }
-
-            } catch (error) {
-                console.error('Dashboard weather error:', error);
+            if (response.ok) {
+                const weatherData = await response.json();
+                console.log('Dashboard weather data received:', weatherData);
+                updateDashboardWeatherDisplay(weatherData);
+            } else {
+                console.log('Weather API failed, using fallback');
                 useFallbackWeather();
             }
+
+        } catch (error) {
+            console.error('Dashboard weather error:', error);
+            useFallbackWeather();
+        }
+    }
+
+    function useFallbackWeather() {
+        const fallbackWeather = {
+            current: {
+                temp: 28,
+                humidity: 75,
+                wind_speed: 12,
+                weather_code: 2
+            }
+        };
+        updateDashboardWeatherDisplay(fallbackWeather);
+    }
+
+    function updateDashboardWeatherDisplay(data) {
+        const current = data.current;
+
+        // These IDs used to be in the old weather card, kept safe by checks
+        const tempElement = document.getElementById('weatherTemp');
+        const conditionElement = document.getElementById('weatherCondition');
+        const humidityElement = document.getElementById('humidity');
+        const windElement = document.getElementById('windSpeed');
+        const rainElement = document.getElementById('rainfall');
+
+        if (tempElement) tempElement.textContent = `${current.temp}°`;
+        if (conditionElement) conditionElement.textContent = getWeatherDescription(current.weather_code);
+        if (humidityElement) humidityElement.textContent = `${current.humidity}%`;
+        if (windElement) windElement.textContent = `${current.wind_speed} km/h`;
+        if (rainElement) {
+            const rainChance = current.humidity > 80 ? Math.min(current.humidity - 20, 90) : Math.max(0, current.humidity - 40);
+            rainElement.textContent = `${Math.round(rainChance)}%`;
         }
 
-        function useFallbackWeather() {
-            const fallbackWeather = {
-                current: {
-                    temp: 28,
-                    humidity: 75,
-                    wind_speed: 12,
-                    weather_code: 2
+        const bannerTemp = document.getElementById('bannerTemp');
+        const bannerWind = document.getElementById('bannerWind');
+        if (bannerTemp) bannerTemp.textContent = `${current.temp}°C`;
+        if (bannerWind) bannerWind.textContent = `${current.wind_speed} km/h`;
+
+        updateTemperatureStatCard(current.temp);
+        updateAlertsCount(current);
+    }
+
+    function updateTemperatureStatCard(temp) {
+        const tempStatElement = document.getElementById('currentTemp');
+        const tempTrendElement = document.getElementById('tempTrend');
+
+        if (tempStatElement) {
+            animateNumber(tempStatElement, parseInt(tempStatElement.textContent) || 0, temp);
+            setTimeout(() => {
+                if (tempStatElement.textContent && !tempStatElement.textContent.includes('°C')) {
+                    tempStatElement.textContent = temp + '°C';
                 }
-            };
-            updateDashboardWeatherDisplay(fallbackWeather);
+            }, 1100);
         }
 
-        function updateDashboardWeatherDisplay(data) {
-            const current = data.current;
+        if (tempTrendElement) {
+            if (temp > 32) {
+                tempTrendElement.textContent = 'Hot';
+                tempTrendElement.style.color = '#ef4444';
+            } else if (temp < 18) {
+                tempTrendElement.textContent = 'Cool';
+                tempTrendElement.style.color = '#3b82f6';
+            } else {
+                tempTrendElement.textContent = 'Perfect';
+                tempTrendElement.style.color = '#10b981';
+            }
+        }
+    }
 
-            const tempElement = document.getElementById('weatherTemp');
-            const conditionElement = document.getElementById('weatherCondition');
-            const humidityElement = document.getElementById('humidity');
-            const windElement = document.getElementById('windSpeed');
-            const rainElement = document.getElementById('rainfall');
+    function updateAlertsCount(current) {
+        let alertsCount = 0;
 
-            if (tempElement) tempElement.textContent = `${current.temp}°`;
-            if (conditionElement) conditionElement.textContent = getWeatherDescription(current.weather_code);
-            if (humidityElement) humidityElement.textContent = `${current.humidity}%`;
-            if (windElement) windElement.textContent = `${current.wind_speed} km/h`;
-            if (rainElement) {
-                const rainChance = current.humidity > 80 ? Math.min(current.humidity - 20, 90) : Math.max(0, current.humidity - 40);
-                rainElement.textContent = `${Math.round(rainChance)}%`;
+        if (current.temp > 35) alertsCount++;
+        if (current.temp < 10) alertsCount++;
+        if (current.humidity > 85) alertsCount++;
+        if (current.wind_speed > 30) alertsCount++;
+
+        const alertsElement = document.getElementById('alertsCount');
+        const alertsStatusElement = document.getElementById('alertsStatus');
+
+        if (alertsElement) {
+            animateNumber(alertsElement, parseInt(alertsElement.textContent) || 0, alertsCount);
+        }
+
+        if (alertsStatusElement) {
+            if (alertsCount > 0) {
+                alertsStatusElement.textContent = 'Active';
+                alertsStatusElement.style.color = '#ef4444';
+            } else {
+                alertsStatusElement.textContent = 'Normal';
+                alertsStatusElement.style.color = '#10b981';
+            }
+        }
+    }
+
+    function getWeatherDescription(code) {
+        const descriptions = {
+            0: 'Clear sky',
+            1: 'Mainly clear',
+            2: 'Partly cloudy',
+            3: 'Overcast',
+            45: 'Foggy',
+            61: 'Light rain',
+            63: 'Moderate rain',
+            65: 'Heavy rain',
+            95: 'Thunderstorm'
+        };
+        return descriptions[code] || 'Partly cloudy';
+    }
+
+    // =============== DASHBOARD – LATEST SCHEMES ===============
+    async function loadLatestSchemesDashboard() {
+        const container = document.getElementById('dashboardSchemesList');
+        const subtitle = document.getElementById('dashboardSchemesSubtitle');
+
+        if (!container) return;
+
+        try {
+            container.innerHTML = '<div class="ds-empty">Loading latest schemes...</div>';
+
+            const res = await fetch('/api/schemes', {
+                credentials: 'include'
+            });
+
+            const data = await res.json();
+
+            if (!data.success || !Array.isArray(data.schemes)) {
+                throw new Error(data.message || 'Failed to load schemes');
             }
 
-            const bannerTemp = document.getElementById('bannerTemp');
-            const bannerWind = document.getElementById('bannerWind');
-            if (bannerTemp) bannerTemp.textContent = `${current.temp}°C`;
-            if (bannerWind) bannerWind.textContent = `${current.wind_speed} km/h`;
+            // assume newest first; take top 2
+            const latest = data.schemes.slice(0, 2);
 
-            updateTemperatureStatCard(current.temp);
-            updateAlertsCount(current);
+            if (!latest.length) {
+                container.innerHTML = '<div class="ds-empty">No schemes available yet.</div>';
+                if (subtitle) {
+                    subtitle.textContent = 'No schemes found. Tap to open full list.';
+                }
+                return;
+            }
+
+            renderDashboardSchemes(latest);
+            if (subtitle) {
+                subtitle.textContent = 'Recently added farmer schemes from official PDFs';
+            }
+        } catch (err) {
+            console.error('Dashboard schemes error:', err);
+            if (container) {
+                container.innerHTML = '<div class="ds-empty">Unable to load schemes right now.</div>';
+            }
+            if (subtitle) {
+                subtitle.textContent = 'Tap to view full schemes list.';
+            }
+        }
+    }
+
+    function renderDashboardSchemes(schemes) {
+        const container = document.getElementById('dashboardSchemesList');
+        if (!container) return;
+
+        container.innerHTML = schemes.map((s, index) => {
+            const dept = s.department || 'Agriculture & Farmers Welfare';
+            const region = s.region || 'Central / State';
+
+            return `
+                    <div class="ds-item">
+                        <div class="ds-item-top">
+                            <span class="ds-name">${s.schemeName}</span>
+                            <span class="ds-chip">${index === 0 ? 'New' : 'Updated'}</span>
+                        </div>
+                        <div class="ds-meta">
+                            <span>${dept}</span>
+                            <span>${region}</span>
+                        </div>
+                    </div>
+                `;
+        }).join('');
+    }
+
+    // NAV ACTIVE STATE
+    function setActiveNavigation() {
+        const currentPage = window.location.pathname.split('/').pop() || 'dashboard.html';
+        const navItems = document.querySelectorAll('.nav-item');
+
+        navItems.forEach(item => item.classList.remove('active'));
+
+        let activeSelector = '';
+
+        if (currentPage === 'dashboard.html' || currentPage === '' || currentPage === '/') {
+            activeSelector = 'a[href="dashboard.html"]';
+        } else if (currentPage === 'weather-alerts.html') {
+            activeSelector = 'a[href="weather-alerts.html"]';
+        } else if (currentPage === 'ask-query.html') {
+            activeSelector = 'a[href="ask-query.html"]';
+        } else if (currentPage === 'crop-diagnosis.html') {
+            activeSelector = 'a[href="crop-diagnosis.html"]';
+        } else if (currentPage === 'market-prices.html') {
+            activeSelector = 'a[href="market-prices.html"]';
         }
 
-        function updateTemperatureStatCard(temp) {
-            const tempStatElement = document.getElementById('currentTemp');
-            const tempTrendElement = document.getElementById('tempTrend');
+        if (activeSelector) {
+            const activeItem = document.querySelector(activeSelector);
+            if (activeItem) {
+                activeItem.classList.add('active');
+            }
+        }
+    }
 
-            if (tempStatElement) {
-                animateNumber(tempStatElement, parseInt(tempStatElement.textContent) || 0, temp);
-                setTimeout(() => {
-                    if (tempStatElement.textContent && !tempStatElement.textContent.includes('°C')) {
-                        tempStatElement.textContent = temp + '°C';
+    // LOGOUT
+    function setupLogout() {
+        const logoutBtn = document.getElementById('logoutBtn');
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', async () => {
+                if (confirm('Are you sure you want to logout?')) {
+                    try {
+                        await fetch('/api/auth/logout', {
+                            method: 'POST',
+                            credentials: 'include'
+                        });
+                        window.location.href = 'index.html';
+                    } catch {
+                        window.location.href = 'index.html';
                     }
-                }, 1100);
-            }
-
-            if (tempTrendElement) {
-                if (temp > 32) {
-                    tempTrendElement.textContent = 'Hot';
-                    tempTrendElement.style.color = '#ef4444';
-                } else if (temp < 18) {
-                    tempTrendElement.textContent = 'Cool';
-                    tempTrendElement.style.color = '#3b82f6';
-                } else {
-                    tempTrendElement.textContent = 'Perfect';
-                    tempTrendElement.style.color = '#10b981';
-                }
-            }
-        }
-
-        function updateAlertsCount(current) {
-            let alertsCount = 0;
-
-            if (current.temp > 35) alertsCount++;
-            if (current.temp < 10) alertsCount++;
-            if (current.humidity > 85) alertsCount++;
-            if (current.wind_speed > 30) alertsCount++;
-
-            const alertsElement = document.getElementById('alertsCount');
-            const alertsStatusElement = document.getElementById('alertsStatus');
-
-            if (alertsElement) {
-                animateNumber(alertsElement, parseInt(alertsElement.textContent) || 0, alertsCount);
-            }
-
-            if (alertsStatusElement) {
-                if (alertsCount > 0) {
-                    alertsStatusElement.textContent = 'Active';
-                    alertsStatusElement.style.color = '#ef4444';
-                } else {
-                    alertsStatusElement.textContent = 'Normal';
-                    alertsStatusElement.style.color = '#10b981';
-                }
-            }
-        }
-
-        function getWeatherDescription(code) {
-            const descriptions = {
-                0: 'Clear sky',
-                1: 'Mainly clear',
-                2: 'Partly cloudy',
-                3: 'Overcast',
-                45: 'Foggy',
-                61: 'Light rain',
-                63: 'Moderate rain',
-                65: 'Heavy rain',
-                95: 'Thunderstorm'
-            };
-            return descriptions[code] || 'Partly cloudy';
-        }
-
-        // NAV ACTIVE STATE
-        function setActiveNavigation() {
-            const currentPage = window.location.pathname.split('/').pop() || 'dashboard.html';
-            const navItems = document.querySelectorAll('.nav-item');
-
-            navItems.forEach(item => item.classList.remove('active'));
-
-            let activeSelector = '';
-
-            if (currentPage === 'dashboard.html' || currentPage === '' || currentPage === '/') {
-                activeSelector = 'a[href="dashboard.html"]';
-            } else if (currentPage === 'weather-alerts.html') {
-                activeSelector = 'a[href="weather-alerts.html"]';
-            } else if (currentPage === 'ask-query.html') {
-                activeSelector = 'a[href="ask-query.html"]';
-            } else if (currentPage === 'crop-diagnosis.html') {
-                activeSelector = 'a[href="crop-diagnosis.html"]';
-            } else if (currentPage === 'market-prices.html') {
-                activeSelector = 'a[href="market-prices.html"]';
-            }
-
-            if (activeSelector) {
-                const activeItem = document.querySelector(activeSelector);
-                if (activeItem) {
-                    activeItem.classList.add('active');
-                }
-            }
-        }
-
-        // LOGOUT
-        function setupLogout() {
-            const logoutBtn = document.getElementById('logoutBtn');
-            if (logoutBtn) {
-                logoutBtn.addEventListener('click', async () => {
-                    if (confirm('Are you sure you want to logout?')) {
-                        try {
-                            await fetch('/api/auth/logout', {
-                                method: 'POST',
-                                credentials: 'include'
-                            });
-                            window.location.href = 'index.html';
-                        } catch {
-                            window.location.href = 'index.html';
-                        }
-                    }
-                });
-            }
-        }
-
-        // SIDEBAR (mobile)
-        function toggleSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            if (sidebar) {
-                sidebar.classList.toggle('active');
-            }
-        }
-
-        function setupMobileNavigation() {
-            document.addEventListener('click', function (event) {
-                const sidebar = document.getElementById('sidebar');
-                const menuBtn = document.querySelector('.mobile-menu-btn');
-
-                if (window.innerWidth <= 768 &&
-                    sidebar && sidebar.classList.contains('active') &&
-                    !sidebar.contains(event.target) &&
-                    (!menuBtn || !menuBtn.contains(event.target))) {
-                    sidebar.classList.remove('active');
                 }
             });
         }
+    }
 
-        // NOTIFICATION
-        function showNotification(message, type = 'info') {
-            const notification = document.createElement('div');
-            notification.style.cssText = `
+    // SIDEBAR (mobile)
+    function toggleSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        if (sidebar) {
+            sidebar.classList.toggle('active');
+        }
+    }
+
+    function setupMobileNavigation() {
+        document.addEventListener('click', function (event) {
+            const sidebar = document.getElementById('sidebar');
+            const menuBtn = document.querySelector('.mobile-menu-btn');
+
+            if (window.innerWidth <= 768 &&
+                sidebar && sidebar.classList.contains('active') &&
+                !sidebar.contains(event.target) &&
+                (!menuBtn || !menuBtn.contains(event.target))) {
+                sidebar.classList.remove('active');
+            }
+        });
+    }
+
+    // NOTIFICATION
+    function showNotification(message, type = 'info') {
+        const notification = document.createElement('div');
+        notification.style.cssText = `
                 position: fixed;
                 top: 20px;
                 right: 20px;
@@ -1664,62 +2033,63 @@
                 max-width: 300px;
                 font-size: 0.9rem;
             `;
-            notification.innerHTML = `
+        notification.innerHTML = `
                 <div style="display: flex; align-items: center; gap: 0.5rem;">
                     <i class="fas fa-${type === 'success' ? 'check-circle' : 'info-circle'}"></i>
                     <span>${message}</span>
                 </div>
             `;
-            document.body.appendChild(notification);
+        document.body.appendChild(notification);
 
-            setTimeout(() => {
-                notification.remove();
-            }, 4000);
-        }
+        setTimeout(() => {
+            notification.remove();
+        }, 4000);
+    }
 
-        // CARD HOVER ANIMATIONS
-        function setupCardAnimations() {
-            document.querySelectorAll('.stat-card, .feature-card').forEach(card => {
-                card.addEventListener('mouseenter', function () {
-                    this.style.transform = 'translateY(-6px)';
-                });
-
-                card.addEventListener('mouseleave', function () {
-                    this.style.transform = 'translateY(0)';
-                });
+    // CARD HOVER ANIMATIONS
+    function setupCardAnimations() {
+        document.querySelectorAll('.stat-card, .feature-card').forEach(card => {
+            card.addEventListener('mouseenter', function () {
+                this.style.transform = 'translateY(-6px)';
             });
 
-            const animatedElements = document.querySelectorAll('.animate-fade-in');
-            animatedElements.forEach((el, index) => {
-                el.style.animationDelay = `${index * 0.1}s`;
+            card.addEventListener('mouseleave', function () {
+                this.style.transform = 'translateY(0)';
             });
-        }
-
-        // MAIN INIT
-        document.addEventListener('DOMContentLoaded', function () {
-            console.log('Dashboard initializing...');
-
-            initializeTheme();
-            loadProfile();
-            updateTime();
-            setActiveNavigation();
-            initializeQueryCounter();
-            loadLiveDashboardWeather();
-            loadMarketPreview();
-            setupLogout();
-            setupMobileNavigation();
-            setupCardAnimations();
-
-            setInterval(updateTime, 60000);
-            setInterval(loadLiveDashboardWeather, 10 * 60 * 1000);
-
-            setTimeout(() => {
-                showNotification('Welcome to KrishiMitr Smart Farming! 🌱', 'success');
-            }, 1500);
-
-            console.log('Dashboard initialized successfully');
         });
-    </script>
+
+        const animatedElements = document.querySelectorAll('.animate-fade-in');
+        animatedElements.forEach((el, index) => {
+            el.style.animationDelay = `${index * 0.1}s`;
+        });
+    }
+
+    // MAIN INIT
+    document.addEventListener('DOMContentLoaded', function () {
+        console.log('Dashboard initializing...');
+
+        initializeTheme();
+        loadProfile();
+        updateTime();
+        setActiveNavigation();
+        initializeQueryCounter();
+        loadLiveDashboardWeather();
+        loadMarketPreview();
+        loadLatestSchemesDashboard();
+        setupLogout();
+        setupMobileNavigation();
+        setupCardAnimations();
+
+        setInterval(updateTime, 60000);
+        setInterval(loadLiveDashboardWeather, 10 * 60 * 1000);
+
+        //  setTimeout(() => {
+        //    showNotification('Welcome to KrishiMitr Smart Farming! 🌱', 'success');
+        //}, 1500);
+
+        console.log('Dashboard initialized successfully');
+    });
+</script>
 </body>
 
 </html>
