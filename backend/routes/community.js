@@ -9,7 +9,7 @@ const mongoose = require('mongoose');
 // Configure multer for image uploads
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, 'uploads/posts/')
+        cb(null, '/tmp/uploads/posts/')
     },
     filename: function (req, file, cb) {
         cb(null, Date.now() + '-' + Math.round(Math.random() * 1E9) + path.extname(file.originalname))
@@ -212,7 +212,7 @@ router.post('/posts', auth, upload.single('image'), async (req, res) => {
                 const base64Data = image.replace(/^data:image\/\w+;base64,/, '');
                 const buffer = Buffer.from(base64Data, 'base64');
                 const filename = `post-${Date.now()}-${userId}.jpg`;
-                const uploadDir = path.join(__dirname, '../uploads/posts');
+                const uploadDir = '/tmp/uploads/posts';
                 const uploadPath = path.join(uploadDir, filename);
 
                 if (!fs.existsSync(uploadDir)) {

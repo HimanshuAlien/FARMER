@@ -13,7 +13,7 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 // Configure multer for image upload
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        const uploadPath = path.join(__dirname, '../uploads/crop-images');
+        const uploadPath = '/tmp/uploads/crop-images';
         fs.ensureDirSync(uploadPath);
         cb(null, uploadPath);
     },

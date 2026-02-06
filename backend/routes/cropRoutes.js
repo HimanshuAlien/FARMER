@@ -8,7 +8,7 @@ const Crop = require("../models/crop");
 dotenv.config();
 
 const router = express.Router();
-const upload = multer({ dest: "uploads/" });
+const upload = multer({ dest: "/tmp/uploads/" });
 router.use(express.json());
 // ---- GEMINI SETUP ----
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);

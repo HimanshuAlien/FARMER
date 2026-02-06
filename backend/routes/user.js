@@ -9,7 +9,7 @@ const fs = require('fs');
 // Configure multer for avatar uploads with advanced settings
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        const uploadPath = 'uploads/avatars/';
+        const uploadPath = '/tmp/uploads/avatars/';
         if (!fs.existsSync(uploadPath)) {
             fs.mkdirSync(uploadPath, { recursive: true });
         }
@@ -142,7 +142,7 @@ router.put('/profile', auth, async (req, res) => {
                 }
 
                 const filename = `avatar-${req.user.id}-${Date.now()}.jpg`;
-                const uploadDir = path.join(__dirname, '../uploads/avatars');
+                const uploadDir = '/tmp/uploads/avatars';
                 const uploadPath = path.join(uploadDir, filename);
 
                 // Ensure directory exists
