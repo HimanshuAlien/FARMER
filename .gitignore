@@ -71,7 +71,6 @@ get-pip.py
 android/
 www/
 Kerela/
-frontend-new/
 
 # Vercel
 .vercel
