@@ -1,0 +1,16 @@
+{
+    "name": "kerala-farmer-advisory-mobile",
+    "version": "1.0.0",
+    "description": "Mobile wrapper for Kerala Farmer Advisory",
+    "scripts": {
+        "build": "echo 'No build step needed for static files'",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "@capacitor/android": "^7.4.5",
+        "@capacitor/cli": "^7.0.0",
+        "@capacitor/core": "^7.0.0"
+    }
+}

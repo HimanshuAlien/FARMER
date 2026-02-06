@@ -1,0 +1,11 @@
+// Configuration for API Endpoints
+// WHEN RUNNING ON ANDROID EMULATOR: Use 'http://10.0.2.2:5000'
+// WHEN RUNNING ON REAL DEVICE: Use your computer's local IP, e.g., 'http://192.168.1.5:5000'
+// WHEN DEPLOYED TO VERCEL: Use your Vercel URL, e.g., 'https://your-app-name.vercel.app'
+
+const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+    ? 'http://localhost:5000'
+    : 'https://kerala-farmer-advisory.vercel.app';
+
+console.log('API Base URL set to:', API_BASE_URL);
+

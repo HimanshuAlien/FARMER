@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>KrishiMitr - Login</title>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap"
+        rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+
+    <style>
+        :root {
+            --primary: #166534;
+            --border: rgba(0, 0, 0, 0.08);
+            --text-main: #020202;
+            --text-muted: #0a0b0c;
+            --card-bg: rgba(255, 255, 255, 0);
+            --glass-border: rgba(255, 255, 255, 0.26);
+            --accent: #6b4a2c;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html,
+        body {
+            height: 100%;
+        }
+
+        body {
+            font-family: "Inter", sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            color: var(--text-main);
+
+            /* UPDATE this path to the background image you'll add in frontend/images */
+            background-image: url("images/bg1.png");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        /* gentle dark overlay so card reads better on any image */
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background: rgba(14, 23, 34, 0.18);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .card {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 480px;
+            background: var(--card-bg);
+            border-radius: 18px;
+            border: 1px solid var(--glass-border);
+            padding: 1.8rem 1.6rem 1.4rem;
+            box-shadow: 0 18px 40px rgba(255, 255, 255, 0.18);
+
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 0.9rem;
+            margin-bottom: 1.1rem;
+        }
+
+        .brand-logo-wrap {
+            width: 64px;
+            height: 64px;
+            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--glass-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .brand-logo-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .brand-text h1 {
+            font-family: "Playfair Display", serif;
+            font-size: 1.45rem;
+            font-weight: 700;
+            color: rgba(17, 24, 39, 0.95);
+        }
+
+        .brand-text p {
+            font-size: 0.86rem;
+            color: var(--text-muted);
+            margin-top: 3px;
+        }
+
+        .subtitle {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            margin-bottom: 1.15rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.35rem;
+            font-size: 0.84rem;
+            font-weight: 600;
+            color: rgba(17, 24, 39, 0.85);
+        }
+
+        .input-wrap {
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 0.95rem;
+            color: #9aa0a6;
+            pointer-events: none;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.78rem 0.9rem 0.78rem 2.6rem;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            font-size: 0.94rem;
+            outline: none;
+            background: rgba(249, 250, 251, 0.9);
+            color: var(--text-main);
+        }
+
+        .form-input:focus {
+            border-color: var(--primary);
+            background: #ffffff;
+            box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 0.7rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            color: #9aa0a6;
+            font-size: 0.95rem;
+        }
+
+        .password-toggle:focus {
+            outline: none;
+        }
+
+        .error-message {
+            font-size: 0.76rem;
+            color: #dc2626;
+            margin-top: 0.25rem;
+            min-height: 0.9rem;
+        }
+
+        .success-message {
+            font-size: 0.82rem;
+            color: #065f46;
+            margin-top: 0.3rem;
+            text-align: center;
+            min-height: 1rem;
+        }
+
+        .submit-btn {
+            width: 100%;
+            margin-top: 0.9rem;
+            padding: 0.85rem;
+            border-radius: 999px;
+            border: none;
+            background: #0f1724;
+            color: #ffffff;
+            font-size: 0.96rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+        }
+
+        .submit-btn .spinner {
+            width: 16px;
+            height: 16px;
+            border-radius: 999px;
+            border: 2px solid rgba(255, 255, 255, 0.35);
+            border-top-color: #ffffff;
+            animation: spin 0.9s linear infinite;
+            display: inline-block;
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.85;
+            cursor: not-allowed;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .register-link {
+            margin-top: 1.1rem;
+            font-size: 0.86rem;
+            text-align: center;
+            color: var(--text-muted);
+        }
+
+        .register-link a {
+            color: #111827;
+            font-weight: 700;
+            text-decoration: none;
+            padding-left: 6px;
+        }
+
+        .register-link a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 640px) {
+            body {
+                padding: 1rem;
+            }
+
+            .card {
+                padding: 1.5rem 1.25rem;
+                border-radius: 12px;
+            }
+
+            .brand-logo-wrap {
+                width: 52px;
+                height: 52px;
+                border-radius: 12px;
+            }
+
+            .brand-text h1 {
+                font-size: 1.2rem;
+            }
+
+            .brand-text p {
+                font-size: 0.75rem;
+            }
+
+            .subtitle {
+                font-size: 0.82rem;
+                margin-bottom: 1rem;
+            }
+
+            .form-input {
+                padding: 0.7rem 0.8rem 0.7rem 2.4rem;
+                font-size: 0.9rem;
+            }
+
+            .submit-btn {
+                padding: 0.75rem;
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .brand {
+                gap: 0.6rem;
+            }
+
+            .brand-logo-wrap {
+                width: 44px;
+                height: 44px;
+            }
+
+            .brand-text h1 {
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+    <script src="config.js"></script>
+</head>
+
+<body>
+    <div class="card" role="region" aria-label="Login card">
+        <!-- Branding -->
+        <div class="brand">
+            <div class="brand-logo-wrap">
+                <!-- keep your logo file in images/ -->
+                <img src="images/ashok.png" alt="KrishiMitr Logo" />
+            </div>
+            <div class="brand-text">
+                <h1>KrishiMitr</h1>
+                <p>Kerala Farmer Advisory System</p>
+            </div>
+        </div>
+
+        <p class="subtitle">Sign in to access your farmer or officer dashboard.</p>
+
+        <form id="loginForm" novalidate>
+            <div class="form-group">
+                <label for="email" class="form-label">Email</label>
+                <div class="input-wrap">
+                    <i class="fas fa-envelope input-icon" aria-hidden="true"></i>
+                    <input type="email" id="email" name="email" class="form-input" placeholder="yourname@example.com"
+                        required />
+                </div>
+                <div id="emailError" class="error-message" aria-live="polite"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="password" class="form-label">Password</label>
+                <div class="input-wrap">
+                    <i class="fas fa-lock input-icon" aria-hidden="true"></i>
+                    <input type="password" id="password" name="password" class="form-input"
+                        placeholder="Enter your password" required />
+                    <button type="button" class="password-toggle" id="togglePasswordBtn"
+                        aria-label="Toggle password visibility">
+                        <i class="fas fa-eye" id="toggleIcon"></i>
+                    </button>
+                </div>
+                <div id="passwordError" class="error-message" aria-live="polite"></div>
+            </div>
+
+            <div id="formError" class="error-message" style="text-align:center;"></div>
+            <div id="formSuccess" class="success-message" role="status" aria-live="polite"></div>
+
+            <button type="submit" class="submit-btn" id="loginBtn" aria-live="polite">
+                <span class="spinner" style="display:none;"></span>
+                <span class="btn-text">Sign in</span>
+            </button>
+        </form>
+
+        <div class="register-link">
+            New to the platform? <a href="register.html">Create an account</a>
+        </div>
+    </div>
+
+    <script>
+        // --- DOM refs
+        const loginForm = document.getElementById("loginForm");
+        const loginBtn = document.getElementById("loginBtn");
+        const togglePasswordBtn = document.getElementById("togglePasswordBtn");
+        const toggleIcon = document.getElementById("toggleIcon");
+        const passwordInput = document.getElementById("password");
+
+        // --- small helpers
+        function showError(id, msg) {
+            const el = document.getElementById(id);
+            if (!el) return;
+            el.textContent = msg || "";
+        }
+
+        function clearErrors() {
+            ["emailError", "passwordError", "formError", "formSuccess"].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.textContent = "";
+            });
+        }
+
+        // Toggle password visibility
+        togglePasswordBtn.addEventListener("click", () => {
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+                toggleIcon.classList.remove("fa-eye");
+                toggleIcon.classList.add("fa-eye-slash");
+            } else {
+                passwordInput.type = "password";
+                toggleIcon.classList.remove("fa-eye-slash");
+                toggleIcon.classList.add("fa-eye");
+            }
+        });
+
+        // Form submit with validation + fetch logic (kept intact)
+        loginForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            clearErrors();
+
+            const email = loginForm.email.value.trim();
+            const password = loginForm.password.value;
+            let valid = true;
+
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                showError("emailError", "Enter a valid email address.");
+                valid = false;
+            }
+
+            if (!password) {
+                showError("passwordError", "Please enter your password.");
+                valid = false;
+            }
+
+            if (!valid) return;
+
+            const spinner = loginBtn.querySelector(".spinner");
+            const btnText = loginBtn.querySelector(".btn-text");
+            spinner.style.display = "inline-block";
+            // Optionally hide text while spinner runs:
+            // btnText.style.visibility = "hidden";
+            loginBtn.disabled = true;
+
+            try {
+                const res = await fetch(API_BASE_URL + "/api/auth/login", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    credentials: "include",
+                    body: JSON.stringify({ email, password })
+                });
+
+                // defensively parse JSON
+                let data;
+                try {
+                    data = await res.json();
+                } catch (err) {
+                    data = {};
+                }
+
+                if (!res.ok) {
+                    showError("formError", (data && data.message) ? data.message : "Login failed. Check your credentials.");
+                } else {
+                    const role = (data.user && data.user.role) ? data.user.role : "farmer";
+
+                    try { localStorage.setItem("userRole", role); } catch (e) { /* ignore */ }
+
+                    document.getElementById("formSuccess").textContent = "Login successful. Redirecting...";
+
+                    let redirectUrl = "dashboard.html";
+                    if (role === "officer") redirectUrl = "officer-escalated.html";
+
+                    // small delay so user sees the success message
+                    setTimeout(() => {
+                        window.location.href = redirectUrl;
+                    }, 900);
+                }
+            } catch (err) {
+                console.error(err);
+                showError("formError", "Connection error. Please try again.");
+            } finally {
+                spinner.style.display = "none";
+                loginBtn.disabled = false;
+                // btnText.style.visibility = "visible";
+            }
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,1359 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>KrishiMitr – Officer Escalation Desk</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+    <style>
+        :root {
+            --primary: #14532d;
+            --primary-soft: #e5f4eb;
+            --accent: #1d4ed8;
+            --danger: #b91c1c;
+            --warning: #b45309;
+            --success: #15803d;
+            --bg-page: #f3f4f6;
+            --bg-sidebar: #ffffff;
+            --bg-card: #ffffff;
+            --border-soft: #e5e7eb;
+            --text-main: #111827;
+            --text-muted: #6b7280;
+            --badge-bg: #eff6ff;
+            --badge-text: #1d4ed8;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: "Inter", sans-serif;
+            background: var(--bg-page);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+        }
+
+        /* Sidebar (govt-ish) */
+
+        .sidebar {
+            width: 260px;
+            background: var(--bg-sidebar);
+            border-right: 1px solid var(--border-soft);
+            box-shadow: 2px 0 8px rgba(15, 23, 42, 0.05);
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            z-index: 20;
+        }
+
+        .sidebar-header {
+            padding: 1.2rem 1.4rem;
+            border-bottom: 1px solid var(--border-soft);
+            display: flex;
+            align-items: center;
+            gap: 0.9rem;
+        }
+
+        .gov-emblem {
+            width: 40px;
+            height: 40px;
+            border-radius: 999px;
+            border: 1px solid var(--border-soft);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            background: #f9fafb;
+        }
+
+        .gov-title {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .gov-title span:first-child {
+            font-size: 0.8rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+        }
+
+        .gov-title span:last-child {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .sidebar-section-title {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-muted);
+            padding: 0.9rem 1.3rem 0.3rem;
+        }
+
+        .nav-list {
+            list-style: none;
+            padding: 0.4rem 0 0.9rem;
+        }
+
+        .nav-item {
+            margin: 0.1rem 0.7rem;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.55rem 0.65rem;
+            border-radius: 0.6rem;
+            text-decoration: none;
+            color: var(--text-main);
+            font-size: 0.87rem;
+        }
+
+        .nav-link i {
+            width: 1rem;
+            text-align: center;
+            font-size: 0.95rem;
+        }
+
+        .nav-link.active {
+            background: var(--primary-soft);
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .sidebar-footer {
+            margin-top: auto;
+            border-top: 1px solid var(--border-soft);
+            padding: 0.9rem 1.3rem 1.1rem;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .sidebar-user {
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .sidebar-btn {
+            margin-top: 0.5rem;
+            width: 100%;
+            border-radius: 999px;
+            border: 1px solid var(--border-soft);
+            background: #f9fafb;
+            font-size: 0.8rem;
+            padding: 0.45rem 0.3rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.35rem;
+        }
+
+        .sidebar-btn i {
+            font-size: 0.85rem;
+        }
+
+        /* Main */
+
+        .main {
+            margin-left: 260px;
+            flex: 1;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Topbar */
+
+        .topbar {
+            background: #ffffff;
+            border-bottom: 1px solid var(--border-soft);
+            padding: 0.85rem 1.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .topbar-left {
+            display: flex;
+            flex-direction: column;
+            gap: 0.1rem;
+        }
+
+        .topbar-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+        }
+
+        .topbar-subtitle {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.15rem 0.6rem;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            background: #ecfdf5;
+            color: var(--success);
+            border: 1px solid #bbf7d0;
+        }
+
+        .badge-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 999px;
+            background: #22c55e;
+        }
+
+        /* Content */
+
+        .content {
+            padding: 1.4rem 1.8rem 2rem;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: minmax(0, 2.1fr) minmax(0, 1.1fr);
+            gap: 1.4rem;
+        }
+
+        @media (max-width: 1100px) {
+            .main {
+                margin-left: 0;
+            }
+
+            .sidebar {
+                display: none;
+            }
+
+            .grid {
+                grid-template-columns: minmax(0, 1fr);
+            }
+
+            .topbar {
+                padding-inline: 1rem;
+            }
+
+            .content {
+                padding-inline: 1rem;
+            }
+        }
+
+        /* Cards */
+
+        .card {
+            background: var(--bg-card);
+            border-radius: 1rem;
+            border: 1px solid var(--border-soft);
+            padding: 1rem 1.1rem;
+            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.05);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.6rem;
+        }
+
+        .card-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        .card-subtitle {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+        }
+
+        /* Stats row */
+
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 0.7rem;
+            margin-bottom: 1rem;
+        }
+
+        @media (max-width: 900px) {
+            .stats-row {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        .stat-card {
+            background: #f9fafb;
+            border-radius: 0.8rem;
+            padding: 0.6rem 0.7rem;
+            border: 1px solid var(--border-soft);
+        }
+
+        .stat-label {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .stat-value {
+            margin-top: 0.25rem;
+            font-size: 1.05rem;
+            font-weight: 700;
+        }
+
+        .stat-pill {
+            margin-top: 0.25rem;
+            font-size: 0.72rem;
+            padding: 0.15rem 0.5rem;
+            border-radius: 999px;
+            background: #eef2ff;
+            color: #3730a3;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.2rem;
+        }
+
+        /* Filters */
+
+        @media (max-width: 768px) {
+            .filters {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 0.8rem;
+            }
+
+            .filters-left,
+            .filters-right {
+                flex-direction: column;
+                width: 100%;
+                gap: 0.5rem;
+            }
+
+            .filter-input,
+            .filter-select {
+                width: 100%;
+                min-width: 0;
+            }
+        }
+
+        .filter-input,
+        .filter-select {
+            border-radius: 999px;
+            border: 1px solid var(--border-soft);
+            background: #f9fafb;
+            padding: 0.3rem 0.7rem;
+            font-size: 0.8rem;
+            outline: none;
+        }
+
+        .filter-input {
+            min-width: 210px;
+        }
+
+        .filter-select {
+            min-width: 180px;
+        }
+
+        /* Table-style list */
+
+        .query-table-header,
+        .query-row {
+            display: grid;
+            grid-template-columns: 1.1fr 1.3fr 0.9fr 0.7fr 0.6fr;
+            gap: 0.5rem;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        @media (max-width: 800px) {
+            .query-table-header {
+                display: none;
+            }
+
+            .query-row {
+                grid-template-columns: 1fr 1fr;
+                padding: 1rem;
+            }
+
+            .q-question {
+                grid-column: span 2;
+                max-height: none;
+            }
+
+            .q-actions {
+                grid-column: span 2;
+                justify-content: flex-end;
+                margin-top: 0.5rem;
+            }
+        }
+
+        .query-row:nth-child(even) {
+            background: #f9fafb;
+        }
+
+        .query-row:hover {
+            background: #eff6ff;
+        }
+
+        .q-farmer {
+            display: flex;
+            flex-direction: column;
+            gap: 0.1rem;
+        }
+
+        .q-name {
+            font-weight: 600;
+        }
+
+        .q-sub {
+            font-size: 0.74rem;
+            color: var(--text-muted);
+        }
+
+        .q-question {
+            font-size: 0.82rem;
+            color: var(--text-main);
+            max-height: 2.3em;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .q-tags {
+            display: flex;
+            flex-direction: column;
+            gap: 0.2rem;
+        }
+
+        .badge-pill {
+            font-size: 0.7rem;
+            border-radius: 999px;
+            padding: 0.13rem 0.45rem;
+            display: inline-flex;
+            align-items: center;
+            max-width: fit-content;
+        }
+
+        .badge-category {
+            background: var(--badge-bg);
+            color: var(--badge-text);
+        }
+
+        .badge-lang {
+            background: #f5f5f4;
+            color: #57534e;
+        }
+
+        .q-status {
+            display: flex;
+            flex-direction: column;
+            gap: 0.22rem;
+        }
+
+        .status-label {
+            font-size: 0.72rem;
+            font-weight: 600;
+            border-radius: 999px;
+            padding: 0.13rem 0.5rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .status-escalated {
+            background: #fef3c7;
+            color: var(--warning);
+        }
+
+        .status-officer-replied {
+            background: #e0f2fe;
+            color: #1d4ed8;
+        }
+
+        .status-resolved {
+            background: #dcfce7;
+            color: var(--success);
+        }
+
+        .q-time {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .q-actions {
+            display: flex;
+            gap: 0.25rem;
+        }
+
+        .btn-xs {
+            border-radius: 999px;
+            border: 1px solid var(--border-soft);
+            background: #ffffff;
+            font-size: 0.72rem;
+            padding: 0.18rem 0.5rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            cursor: pointer;
+        }
+
+        .btn-xs.primary {
+            border-color: var(--primary);
+            color: #ffffff;
+            background: var(--primary);
+        }
+
+        .btn-xs.success {
+            border-color: var(--success);
+            color: #ffffff;
+            background: var(--success);
+        }
+
+        .btn-xs:disabled {
+            opacity: 0.6;
+            cursor: default;
+        }
+
+        /* Right column: detail panel */
+
+        .detail-panel {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .detail-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.4rem;
+        }
+
+        .detail-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        .detail-empty {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            padding: 1.5rem 0.4rem;
+        }
+
+        .detail-section {
+            margin-bottom: 0.8rem;
+        }
+
+        .detail-section-title {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-muted);
+            margin-bottom: 0.25rem;
+        }
+
+        .detail-block {
+            font-size: 0.85rem;
+            border-radius: 0.7rem;
+            border: 1px solid var(--border-soft);
+            padding: 0.55rem 0.6rem;
+            background: #f9fafb;
+            max-height: 140px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+        }
+
+        .detail-row-inline {
+            font-size: 0.83rem;
+            display: grid;
+            grid-template-columns: 0.7fr 1.3fr;
+            row-gap: 0.2rem;
+            column-gap: 0.5rem;
+        }
+
+        .detail-label {
+            color: var(--text-muted);
+        }
+
+        .detail-value {
+            font-weight: 500;
+        }
+
+        .timeline {
+            border-left: 2px solid var(--border-soft);
+            padding-left: 0.7rem;
+            margin-top: 0.3rem;
+        }
+
+        .timeline-step {
+            position: relative;
+            margin-bottom: 0.4rem;
+        }
+
+        .timeline-step::before {
+            content: "";
+            position: absolute;
+            left: -0.82rem;
+            top: 0.25rem;
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: #9ca3af;
+        }
+
+        .timeline-step.active::before {
+            background: var(--primary);
+        }
+
+        .timeline-label {
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .timeline-time {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+        }
+
+        /* Officer response box */
+
+        .response-box {
+            margin-top: 0.3rem;
+        }
+
+        .response-textarea {
+            width: 100%;
+            border-radius: 0.6rem;
+            border: 1px solid var(--border-soft);
+            padding: 0.45rem 0.55rem;
+            min-height: 70px;
+            max-height: 170px;
+            resize: vertical;
+            font-size: 0.85rem;
+            font-family: "Inter", sans-serif;
+            outline: none;
+        }
+
+        .response-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.4rem;
+            margin-top: 0.35rem;
+        }
+
+        .btn-sm {
+            border-radius: 999px;
+            border: 1px solid var(--border-soft);
+            background: #ffffff;
+            padding: 0.3rem 0.75rem;
+            font-size: 0.76rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .btn-sm.primary {
+            border-color: var(--primary);
+            background: var(--primary);
+            color: #ffffff;
+        }
+
+        .btn-sm.success {
+            border-color: var(--success);
+            background: var(--success);
+            color: #ffffff;
+        }
+
+        .btn-sm:disabled {
+            opacity: 0.6;
+            cursor: default;
+        }
+
+        /* Toast */
+
+        .toast {
+            position: fixed;
+            right: 16px;
+            top: 16px;
+            background: #111827;
+            color: #ffffff;
+            padding: 0.6rem 0.9rem;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            opacity: 0;
+            transform: translateY(-6px);
+            transition: all 0.18s ease;
+            z-index: 50;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .toast.success {
+            background: #16a34a;
+        }
+
+        .toast.error {
+            background: #b91c1c;
+        }
+
+        .toast.info {
+            background: #1d4ed8;
+        }
+    </style>
+    <script src="config.js"></script>
+</head>
+
+<body>
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="gov-emblem">
+                <i class="fas fa-landmark"></i>
+            </div>
+            <div class="gov-title">
+                <span>Govt. of Kerala</span>
+                <span>KrishiMitr Officer</span>
+            </div>
+        </div>
+
+        <div>
+            <div class="sidebar-section-title">Officer Desk</div>
+            <ul class="nav-list">
+                <li class="nav-item">
+                    <a href="officer-escalated.html" class="nav-link active">
+                        <i class="fas fa-inbox"></i>
+                        <span>Escalated Queries</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="schemeupdate.html" class="nav-link">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Scheme Update</span>
+                    </a>
+                </li>
+            </ul>
+
+            <div class="sidebar-section-title">System</div>
+            <ul class="nav-list">
+                <li class="nav-item">
+                    <!-- 🔁 Officer should NOT go to farmer dashboard -->
+                    <a href="index.html" class="nav-link">
+                        <i class="fas fa-arrow-left"></i>
+                        <span>Back to Login / Switch User</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="sidebar-footer">
+            <div class="sidebar-user" id="officerName">Officer (loading...)</div>
+            <div>KrishiBhavan Level Access</div>
+            <button class="sidebar-btn" id="logoutBtn">
+                <i class="fas fa-sign-out-alt"></i>
+                Logout
+            </button>
+        </div>
+    </aside>
+
+    <!-- MAIN -->
+    <div class="main">
+        <!-- TOPBAR -->
+        <header class="topbar">
+            <div class="topbar-left">
+                <div class="topbar-title">Escalation Monitoring Desk</div>
+                <div class="topbar-subtitle">
+                    Review AI recommendations and record your guidance for farmer queries.
+                </div>
+            </div>
+            <div class="topbar-right">
+                <div class="badge">
+                    <span class="badge-dot"></span>
+                    Officer Panel Online
+                </div>
+            </div>
+        </header>
+
+        <!-- CONTENT -->
+        <main class="content">
+            <!-- Stats -->
+            <section class="card" style="margin-bottom: 1.1rem;">
+                <div class="stats-row">
+                    <div class="stat-card">
+                        <div class="stat-label">Total Escalated</div>
+                        <div class="stat-value" id="statTotal">0</div>
+                        <div class="stat-pill">
+                            <i class="fas fa-exclamation-circle"></i>
+                            All escalated cases
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Pending for Action</div>
+                        <div class="stat-value" id="statPending">0</div>
+                        <div class="stat-pill">
+                            <i class="fas fa-hourglass-half"></i>
+                            Waiting for your reply
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Officer Replied</div>
+                        <div class="stat-value" id="statReplied">0</div>
+                        <div class="stat-pill">
+                            <i class="fas fa-comment-medical"></i>
+                            Farmer yet to close
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Resolved & Closed</div>
+                        <div class="stat-value" id="statResolved">0</div>
+                        <div class="stat-pill">
+                            <i class="fas fa-check-circle"></i>
+                            Marked as resolved
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="grid">
+                <!-- LEFT: LIST -->
+                <section class="card">
+                    <div class="card-header">
+                        <div>
+                            <div class="card-title">Escalated Farmer Queries</div>
+                            <div class="card-subtitle">
+                                Click on a row to view full case details and respond.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="filters">
+                        <div class="filters-left">
+                            <input type="text" class="filter-input" id="searchInput"
+                                placeholder="Search by farmer name / crop / question" />
+                            <select id="statusFilter" class="filter-select">
+                                <option value="all">Status: All</option>
+                                <option value="escalated">New escalations (waiting for you)</option>
+                                <option value="officer-replied">Officer replied (farmer pending)</option>
+                                <option value="resolved">Resolved & closed</option>
+                            </select>
+                        </div>
+                        <div class="filters-right">
+                            <button class="btn-xs" id="refreshBtn">
+                                <i class="fas fa-rotate"></i> Refresh
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="query-table-header">
+                        <div>Farmer</div>
+                        <div>Question</div>
+                        <div>Category / Language</div>
+                        <div>Status</div>
+                        <div>Actions</div>
+                    </div>
+
+                    <div class="query-list" id="queryList">
+                        <!-- rows injected via JS -->
+                    </div>
+                </section>
+
+                <!-- RIGHT: DETAIL -->
+                <section class="card detail-panel">
+                    <div class="detail-header">
+                        <div>
+                            <div class="detail-title">Case Details</div>
+                            <div class="card-subtitle" id="detailSubtitle">
+                                Select any query from left to view full information.
+                            </div>
+                        </div>
+                        <div id="detailStatusBadge"></div>
+                    </div>
+
+                    <div id="detailContent">
+                        <div class="detail-empty">
+                            <i class="fas fa-info-circle"></i>
+                            No query selected. Use the left panel to open a case.
+                        </div>
+                    </div>
+                </section>
+            </section>
+        </main>
+    </div>
+
+    <!-- Toast -->
+    <div id="toast" class="toast">
+        <i class="fas fa-info-circle"></i>
+        <span id="toastMessage"></span>
+    </div>
+
+    <script>
+        // ===== Helper: Toast =====
+        function showToast(msg, type = "info") {
+            const toast = document.getElementById("toast");
+            const msgSpan = document.getElementById("toastMessage");
+            msgSpan.textContent = msg;
+            toast.className = `toast ${type}`;
+            requestAnimationFrame(() => {
+                toast.classList.add("show");
+            });
+            setTimeout(() => {
+                toast.classList.remove("show");
+            }, 2200);
+        }
+
+        // ===== State =====
+        let queries = [];
+        let filtered = [];
+        let selectedQuery = null;
+        let isSubmittingResponse = false;
+
+        // ===== Utils =====
+        function formatTimeAgo(dateStr) {
+            const date = new Date(dateStr);
+            const now = new Date();
+            const diffSec = Math.floor((now - date) / 1000);
+
+            if (diffSec < 60) return "Just now";
+            if (diffSec < 3600) return `${Math.floor(diffSec / 60)} min ago`;
+            if (diffSec < 86400) return `${Math.floor(diffSec / 3600)} hrs ago`;
+            return date.toLocaleString("en-IN", {
+                day: "2-digit",
+                month: "short",
+                hour: "2-digit",
+                minute: "2-digit"
+            });
+        }
+
+        function formatAIResponse(text) {
+            if (!text) return "";
+            return text
+                .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
+                .replace(/\*/g, "")
+                .replace(/\n/g, "<br>");
+        }
+
+        function getStatusLabel(status) {
+            if (!status) return { label: "Unknown", className: "status-escalated" };
+            if (status === "escalated") return { label: "Awaiting officer", className: "status-escalated" };
+            if (status === "officer-replied") return { label: "Officer replied", className: "status-officer-replied" };
+            if (status === "resolved") return { label: "Resolved & closed", className: "status-resolved" };
+            return { label: status, className: "status-escalated" };
+        }
+
+        // ===== Fetch officer info =====
+        async function loadOfficerInfo() {
+            try {
+                const res = await fetch(API_BASE_URL + "/api/user/profile", { credentials: "include" });
+                if (!res.ok) return;
+                const user = await res.json();
+                if (user.role !== "officer" && user.role !== "admin") {
+                    // If not officer, throw them out
+                    window.location.href = "index.html";
+                    return;
+                }
+                document.getElementById("officerName").textContent = user.username || "Officer";
+            } catch (e) {
+                console.error("Failed to load officer info", e);
+            }
+        }
+
+        // ===== Fetch escalated queries (pending + handled) =====
+        async function loadEscalatedQueries() {
+            const listEl = document.getElementById("queryList");
+            listEl.innerHTML = `
+                <div style="padding: 1.2rem 0.6rem; font-size: 0.85rem; color: #6b7280; text-align: center;">
+                    <i class="fas fa-spinner fa-spin"></i> Loading escalated queries...
+                </div>
+            `;
+
+            try {
+                // GET /api/query/officer/pending
+                // GET /api/query/officer/handled
+                const [resPending, resHandled] = await Promise.all([
+                    fetch(API_BASE_URL + "/api/query/officer/pending", { credentials: "include" }),
+                    fetch(API_BASE_URL + "/api/query/officer/handled", { credentials: "include" })
+                ]);
+
+                const dataPending = await resPending.json();
+                const dataHandled = await resHandled.json();
+
+                if (!resPending.ok || !dataPending.success) {
+                    throw new Error(dataPending.message || "Failed to load pending");
+                }
+                if (!resHandled.ok || !dataHandled.success) {
+                    throw new Error(dataHandled.message || "Failed to load handled");
+                }
+
+                const pending = dataPending.queries || [];
+                const handled = dataHandled.queries || [];
+
+                // Combine both lists
+                queries = [...pending, ...handled];
+                applyFilters();
+                updateStats();
+
+                if (queries.length === 0) {
+                    listEl.innerHTML = `
+                        <div style="padding: 1.2rem 0.6rem; font-size: 0.85rem; color: #6b7280; text-align: center;">
+                            <i class="fas fa-circle-info"></i> No escalated queries at the moment.
+                        </div>
+                    `;
+                }
+            } catch (e) {
+                console.error("Error loading escalated queries", e);
+                listEl.innerHTML = `
+                    <div style="padding: 1.2rem 0.6rem; font-size: 0.85rem; color: #b91c1c; text-align: center;">
+                        <i class="fas fa-triangle-exclamation"></i> Unable to load queries. Please refresh.
+                    </div>
+                `;
+                showToast("Failed to fetch escalated queries.", "error");
+            }
+        }
+
+        // ===== Stats =====
+        function updateStats() {
+            const total = queries.length;
+            const pending = queries.filter(q => q.status === "escalated").length;
+            const replied = queries.filter(q => q.status === "officer-replied").length;
+            const resolved = queries.filter(q => q.status === "resolved").length;
+
+            document.getElementById("statTotal").textContent = total;
+            document.getElementById("statPending").textContent = pending;
+            document.getElementById("statReplied").textContent = replied;
+            document.getElementById("statResolved").textContent = resolved;
+        }
+
+        // ===== Filters =====
+        function applyFilters() {
+            const searchTerm = document.getElementById("searchInput").value.trim().toLowerCase();
+            const statusFilter = document.getElementById("statusFilter").value;
+
+            filtered = queries.filter(q => {
+                // status filter
+                if (statusFilter !== "all" && q.status !== statusFilter) return false;
+
+                // search filter
+                if (searchTerm) {
+                    const farmer = q.userId || {};
+                    const parts = [
+                        farmer.username,
+                        farmer.location,
+                        farmer.primaryCrops,
+                        q.question,
+                        q.category
+                    ].filter(Boolean).join(" ").toLowerCase();
+
+                    return parts.includes(searchTerm);
+                }
+                return true;
+            });
+
+            renderQueryList();
+        }
+
+        function renderQueryList() {
+            const listEl = document.getElementById("queryList");
+            if (filtered.length === 0) {
+                listEl.innerHTML = `
+                    <div style="padding: 1.2rem 0.6rem; font-size: 0.85rem; color: #6b7280; text-align: center;">
+                        No queries match current filters.
+                    </div>
+                `;
+                return;
+            }
+
+            listEl.innerHTML = "";
+            filtered.forEach(q => {
+                const farmer = q.userId || {};
+                const statusInfo = getStatusLabel(q.status);
+
+                const row = document.createElement("div");
+                row.className = "query-row";
+                row.dataset.id = q._id;
+
+                row.innerHTML = `
+                    <div class="q-farmer">
+                        <span class="q-name">${farmer.username || "Farmer"}</span>
+                        <span class="q-sub">${farmer.location ? farmer.location : (farmer.primaryCrops || "")}</span>
+                    </div>
+                    <div class="q-question">${q.question || ""}</div>
+                    <div class="q-tags">
+                        <span class="badge-pill badge-category">
+                            <i class="fas fa-seedling"></i> ${q.category || "general"}
+                        </span>
+                        <span class="badge-pill badge-lang">
+                            <i class="fas fa-language"></i> ${q.language || "en"}
+                        </span>
+                    </div>
+                    <div class="q-status">
+                        <span class="status-label ${statusInfo.className}">
+                            <i class="fas fa-circle-dot"></i> ${statusInfo.label}
+                        </span>
+                        <span class="q-time">${q.escalatedAt ? "Escalated " + formatTimeAgo(q.escalatedAt) : ""}</span>
+                    </div>
+                    <div class="q-actions">
+                        <button class="btn-xs primary btn-open" data-id="${q._id}">
+                            <i class="fas fa-folder-open"></i> Open
+                        </button>
+                    </div>
+                `;
+
+                // Row click -> open detail
+                row.addEventListener("click", (e) => {
+                    if (e.target.closest("button")) return;
+                    openCase(q._id);
+                });
+
+                row.querySelector(".btn-open").addEventListener("click", (e) => {
+                    e.stopPropagation();
+                    openCase(q._id);
+                });
+
+                listEl.appendChild(row);
+            });
+        }
+
+        // ===== Detail panel =====
+        function openCase(id) {
+            const q = queries.find(x => x._id === id);
+            if (!q) return;
+            selectedQuery = q;
+
+            const farmer = q.userId || {};
+            const detailEl = document.getElementById("detailContent");
+            const subtitleEl = document.getElementById("detailSubtitle");
+            const statusBadgeEl = document.getElementById("detailStatusBadge");
+
+            const statusInfo = getStatusLabel(q.status);
+
+            subtitleEl.textContent = `Case ID: ${q._id} · Escalated ${q.escalatedAt ? formatTimeAgo(q.escalatedAt) : ""}`;
+
+            statusBadgeEl.innerHTML = `
+                <span class="status-label ${statusInfo.className}">
+                    <i class="fas fa-circle-dot"></i> ${statusInfo.label}
+                </span>
+            `;
+
+            const createdTime = q.createdAt ? formatTimeAgo(q.createdAt) : "N/A";
+            const escalatedTime = q.escalatedAt ? formatTimeAgo(q.escalatedAt) : "N/A";
+
+            const officerReplyTime = q.officerUpdatedAt
+                ? formatTimeAgo(q.officerUpdatedAt)
+                : (q.officerResponse ? "Updated recently" : "—");
+
+            const resolvedTime = q.resolvedAt ? formatTimeAgo(q.resolvedAt) : (q.resolved ? "Marked resolved" : "—");
+
+            detailEl.innerHTML = `
+                <div class="detail-section">
+                    <div class="detail-section-title">Farmer details</div>
+                    <div class="detail-row-inline">
+                        <div class="detail-label">Name</div>
+                        <div class="detail-value">${farmer.username || "Farmer"}</div>
+                        <div class="detail-label">Village / Location</div>
+                        <div class="detail-value">${farmer.location || "—"}</div>
+                        <div class="detail-label">Contact</div>
+                        <div class="detail-value">${farmer.phone || "—"}</div>
+                        <div class="detail-label">Primary crops</div>
+                        <div class="detail-value">${farmer.primaryCrops || "—"}</div>
+                        <div class="detail-label">Land holding</div>
+                        <div class="detail-value">${farmer.farmSize ? farmer.farmSize + " acres" : "—"}</div>
+                    </div>
+                </div>
+
+                <div class="detail-section">
+                    <div class="detail-section-title">Farmer question</div>
+                    <div class="detail-block">${q.question || ""}</div>
+                </div>
+
+                <div class="detail-section">
+                    <div class="detail-section-title">AI recommendation</div>
+                    <div class="detail-block">${formatAIResponse(q.response || "")}</div>
+                </div>
+
+                <div class="detail-section">
+                    <div class="detail-section-title">Escalation details</div>
+                    <div class="detail-block" style="max-height: 110px;">
+                        <div><strong>Reason:</strong> ${q.escalationReason || "Not specified by farmer"}</div>
+                        <div style="margin-top: 0.25rem;"><strong>Escalation status:</strong> ${q.escalationStatus || q.status || "escalated"}</div>
+                        ${q.escalationNotes
+                    ? `<div style="margin-top:0.25rem;"><strong>Farmer notes:</strong> ${q.escalationNotes}</div>`
+                    : ""
+                }
+                    </div>
+                    <div class="timeline">
+                        <div class="timeline-step active">
+                            <div class="timeline-label">Query asked to AI</div>
+                            <div class="timeline-time">${createdTime}</div>
+                        </div>
+                        <div class="timeline-step ${q.escalatedAt ? "active" : ""}">
+                            <div class="timeline-label">Query escalated to officer</div>
+                            <div class="timeline-time">${escalatedTime}</div>
+                        </div>
+                        <div class="timeline-step ${q.officerResponse ? "active" : ""}">
+                            <div class="timeline-label">Officer response recorded</div>
+                            <div class="timeline-time">${officerReplyTime}</div>
+                        </div>
+                        <div class="timeline-step ${q.resolved ? "active" : ""}">
+                            <div class="timeline-label">Case resolved & closed</div>
+                            <div class="timeline-time">${resolvedTime}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="detail-section">
+                    <div class="detail-section-title">Officer remarks</div>
+                    <div class="detail-block" style="max-height: 100px;">
+                        ${q.officerResponse
+                    ? formatAIResponse(q.officerResponse)
+                    : "<span style='color:#6b7280;'>No response added yet. Use the box below to record your guidance.</span>"
+                }
+                    </div>
+                    ${q.status !== "resolved"
+                    ? `
+                            <div class="response-box">
+                                <textarea id="officerResponseInput" class="response-textarea"
+                                    placeholder="Write your recommendation / correction to the AI advice here...">${q.officerResponse || ""}</textarea>
+                                <div class="response-footer">
+                                    <button class="btn-sm" onclick="clearOfficerDraft()">
+                                        <i class="fas fa-eraser"></i> Clear
+                                    </button>
+                                    <button class="btn-sm primary" id="saveResponseBtn">
+                                        <i class="fas fa-paper-plane"></i> Save Response
+                                    </button>
+                                </div>
+                            </div>
+                        `
+                    : `
+                            <div style="margin-top:0.4rem; font-size:0.8rem; color:#16a34a;">
+                                <i class="fas fa-circle-check"></i> This case is already marked as resolved.
+                            </div>
+                        `
+                }
+                </div>
+            `;
+
+            if (q.status !== "resolved") {
+                document.getElementById("saveResponseBtn").addEventListener("click", submitOfficerResponse);
+            }
+        }
+
+        // Clear response textarea draft
+        function clearOfficerDraft() {
+            const input = document.getElementById("officerResponseInput");
+            if (input) input.value = "";
+        }
+
+        // ===== API: Submit officer response (DOES NOT close case) =====
+        async function submitOfficerResponse(event) {
+            if (!selectedQuery || isSubmittingResponse) return;
+            const btn = event.currentTarget || document.getElementById("saveResponseBtn");
+            const input = document.getElementById("officerResponseInput");
+            if (!input) return;
+            const text = input.value.trim();
+
+            if (!text) {
+                showToast("Please write some guidance before saving.", "info");
+                return;
+            }
+
+            isSubmittingResponse = true;
+            btn.disabled = true;
+
+            try {
+                // PUT /api/query/officer/:id/respond  body: { officerResponse, markResolved }
+                const res = await fetch(`/api/query/officer/${selectedQuery._id}/respond`, {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" },
+                    credentials: "include",
+                    body: JSON.stringify({
+                        officerResponse: text,
+                        markResolved: false
+                    })
+                });
+                const data = await res.json();
+                if (!res.ok || !data.success) {
+                    throw new Error(data.message || "Failed");
+                }
+
+                showToast("Response saved and shared with farmer.", "success");
+                await loadEscalatedQueries();
+                openCase(selectedQuery._id);
+            } catch (e) {
+                console.error("Error saving officer response", e);
+                showToast("Could not save response.", "error");
+            } finally {
+                isSubmittingResponse = false;
+                btn.disabled = false;
+            }
+        }
+
+        // ===== Auth + logout =====
+        const logoutBtn = document.getElementById("logoutBtn");
+        if (logoutBtn) {
+            logoutBtn.addEventListener("click", async () => {
+                if (!confirm("Logout from officer panel?")) return;
+                try {
+                    await fetch(API_BASE_URL + "/api/auth/logout", { method: "POST", credentials: "include" });
+                } catch (e) { }
+                window.location.href = "index.html";
+            });
+        }
+
+        // ===== Events =====
+        document.getElementById("searchInput").addEventListener("input", () => {
+            applyFilters();
+        });
+
+        document.getElementById("statusFilter").addEventListener("change", () => {
+            applyFilters();
+        });
+
+        document.getElementById("refreshBtn").addEventListener("click", () => {
+            loadEscalatedQueries();
+            showToast("Refreshing escalation list...", "info");
+        });
+
+        // ===== Init =====
+        window.addEventListener("load", () => {
+            loadOfficerInfo();
+            loadEscalatedQueries();
+        });
+
+        window.clearOfficerDraft = clearOfficerDraft;
+    </script>
+</body>
+
+</html>

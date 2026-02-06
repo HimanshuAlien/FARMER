@@ -1,0 +1,376 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>NQI Intelligence Layer – Smart Farming</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        :root {
+            --primary: #1e40af;
+            --green: #16a34a;
+            --yellow: #f59e0b;
+            --red: #dc2626;
+            --border: #e5e7eb;
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        body {
+            margin: 0;
+            font-family: Poppins, sans-serif;
+            background:
+                linear-gradient(rgba(15, 23, 42, .85), rgba(60, 79, 122, .85)),
+                url("https://images.unsplash.com/photo-1560493676-04071c5f467b");
+            background-size: cover;
+            background-attachment: fixed;
+        }
+
+        main {
+            max-width: 1600px;
+            margin: auto;
+            padding: 32px 24px
+        }
+
+        .header {
+            color: #fff;
+            margin-bottom: 24px
+        }
+
+        .card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 22px
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr 1fr;
+            gap: 22px
+        }
+
+        @media(max-width:1000px) {
+            .grid-3 {
+                grid-template-columns: 1fr
+            }
+        }
+
+        .input-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 14px;
+            margin-top: 12px
+        }
+
+        @media(max-width:1200px) {
+            .input-grid {
+                grid-template-columns: repeat(3, 1fr)
+            }
+        }
+
+        @media(max-width:768px) {
+            .input-grid {
+                grid-template-columns: repeat(2, 1fr)
+            }
+        }
+
+        @media(max-width:480px) {
+            .input-grid {
+                grid-template-columns: 1fr
+            }
+        }
+
+        input {
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid var(--border)
+        }
+
+        button {
+            padding: 12px 22px;
+            border: none;
+            border-radius: 12px;
+            background: var(--primary);
+            color: #fff;
+            font-weight: 600;
+            cursor: pointer
+        }
+
+        .score {
+            font-size: 56px;
+            font-weight: 700;
+            text-align: center
+        }
+
+        .status {
+            padding: 14px;
+            border-radius: 12px;
+            font-weight: 600;
+            text-align: center;
+            margin-top: 12px
+        }
+
+        .safe {
+            background: #dcfce7;
+            color: #14532d
+        }
+
+        .warn {
+            background: #fef3c7;
+            color: #7c2d12
+        }
+
+        .danger {
+            background: #fee2e2;
+            color: #7f1d1d
+        }
+
+        /* Veg nutrition */
+        .veg-row {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 16px
+        }
+
+        .veg {
+            padding: 8px 16px;
+            border-radius: 999px;
+            background: #e5e7eb;
+            cursor: pointer;
+            font-size: 14px
+        }
+
+        .veg.active {
+            background: var(--primary);
+            color: #fff
+        }
+
+        .nutrition-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px
+        }
+
+        @media(max-width:900px) {
+            .nutrition-grid {
+                grid-template-columns: 1fr
+            }
+        }
+
+        .nutrient {
+            padding: 10px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between
+        }
+
+        .good {
+            background: #dcfce7
+        }
+
+        .mid {
+            background: #fef3c7
+        }
+
+        .low {
+            background: #fee2e2
+        }
+
+        /* Health impact */
+        .health-list {
+            margin-top: 10px;
+        }
+
+        .health-item {
+            padding: 10px 14px;
+            border-left: 5px solid var(--red);
+            background: #fff7ed;
+            border-radius: 10px;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+    </style>
+    <script src="config.js"></script>
+</head>
+
+<body>
+    <main>
+
+        <div class="header">
+            <h1>NQI Intelligence Layer</h1>
+            <p>Smart Farming → Nutrition → Health Risk Intelligence</p>
+        </div>
+
+        <!-- INPUT -->
+        <div class="card">
+            <h3>Farming Stress Inputs</h3>
+            <div class="input-grid">
+                <input id="ndvi" placeholder="NDVI (0–1)" type="number" step="0.01">
+                <input id="moisture" placeholder="Soil Moisture %" type="number">
+                <input id="temp" placeholder="Temperature °C" type="number">
+                <input id="humidity" placeholder="Humidity %" type="number">
+                <input id="coords" placeholder="Lat, Long" readonly>
+                <button onclick="detectLocation()">Detect Location</button>
+            </div>
+            <button onclick="analyze()">Run NQI Analysis</button>
+        </div>
+
+        <!-- NQI OUTPUT -->
+        <div class="grid-3">
+            <div class="card">
+                <h3>Overall NQI Score</h3>
+                <div id="score" class="score">–</div>
+                <div id="status" class="status">Awaiting analysis</div>
+            </div>
+
+            <div class="card">
+                <h3>NQI Risk Chart</h3>
+                <canvas id="chart" height="220"></canvas>
+            </div>
+
+            <div class="card">
+                <h3>Environmental Danger</h3>
+                <div id="danger" class="status">No data</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>AI Explanation & Suggestions</h3>
+            <div id="aiText">No analysis yet.</div>
+        </div>
+
+        <!-- 🆕 HEALTH IMPACT SECTION -->
+        <div class="card">
+            <h3>Human Health Impact Assessment</h3>
+            <p style="color:#555;font-size:14px">
+                Potential public health implications based on crop nutrition quality and environmental exposure.
+            </p>
+            <div id="healthImpact" class="health-list">
+                No assessment yet.
+            </div>
+        </div>
+
+        <!-- VEGETABLE NUTRITION -->
+        <div class="card">
+            <h3>Crop Nutrition Intelligence</h3>
+            <div class="veg-row" id="vegList"></div>
+            <div class="nutrition-grid" id="nutritionList"></div>
+        </div>
+
+    </main>
+
+    <script>
+        const chart = new Chart(document.getElementById("chart"), {
+            type: "bar",
+            data: { labels: ["Nutrition Risk"], datasets: [{ data: [0], backgroundColor: "#16a34a" }] },
+            options: { plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, max: 100 } } }
+        });
+
+        let latitude = null, longitude = null;
+        function detectLocation() {
+            navigator.geolocation.getCurrentPosition(pos => {
+                latitude = pos.coords.latitude.toFixed(5);
+                longitude = pos.coords.longitude.toFixed(5);
+                coords.value = `${latitude}, ${longitude}`;
+            });
+        }
+
+        async function analyze() {
+            const res = await fetch(API_BASE_URL + "/api/nqi/analyze", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    ndvi: +ndvi.value,
+                    moisture: +moisture.value,
+                    temp: +temp.value,
+                    humidity: +humidity.value,
+                    location: `${latitude}, ${longitude}`
+                })
+            });
+
+            const json = await res.json();
+            if (!json.success) return alert("Analysis failed");
+
+            const d = json.data;
+
+            score.innerText = d.nqiScore;
+            status.className = `status ${d.riskStatus === "SAFE" ? "safe" : d.riskStatus === "WARNING" ? "warn" : "danger"}`;
+            status.innerText = d.riskStatus;
+
+            danger.className = `status ${d.environmentalDanger.color === "green" ? "safe" : d.environmentalDanger.color === "yellow" ? "warn" : "danger"}`;
+            danger.innerText = d.environmentalDanger.message;
+
+            chart.data.datasets[0].data = [d.chartRisk];
+            chart.update();
+
+            aiText.innerHTML = `
+    <b>Explanation:</b> ${d.aiExplanation.explanation}<br>
+    <b>Prevention:</b> ${d.aiExplanation.prevention}<br>
+    <b>Suggestions:</b> ${d.aiExplanation.suggestions}
+  `;
+
+            // 🆕 Health Impact Rendering
+            const healthBox = document.getElementById("healthImpact");
+            healthBox.innerHTML = "";
+            if (d.healthImpact && d.healthImpact.length) {
+                d.healthImpact.forEach(h => {
+                    const div = document.createElement("div");
+                    div.className = "health-item";
+                    div.innerText = h;
+                    healthBox.appendChild(div);
+                });
+            } else {
+                healthBox.innerText = "No significant health risks detected.";
+            }
+        }
+
+        /* Nutrition data unchanged (same as before) */
+        const DATA = {
+            Tomato: { Protein: 15, Carbs: 60, Fat: 10, Sugar: 40, Fiber: 60, VitaminC: 70, Kcal: 18 },
+            Potato: { Protein: 20, Carbs: 80, Fat: 15, Sugar: 30, Fiber: 55, VitaminC: 50, Kcal: 77 },
+            Spinach: { Protein: 35, Carbs: 30, Fat: 10, Sugar: 10, Fiber: 75, VitaminC: 80, Kcal: 23 },
+            Onion: { Protein: 10, Carbs: 55, Fat: 5, Sugar: 40, Fiber: 40, VitaminC: 45, Kcal: 40 },
+            Carrot: { Protein: 15, Carbs: 50, Fat: 5, Sugar: 45, Fiber: 60, VitaminC: 35, Kcal: 41 },
+            Cabbage: { Protein: 20, Carbs: 45, Fat: 5, Sugar: 30, Fiber: 65, VitaminC: 70, Kcal: 25 },
+            Cauliflower: { Protein: 25, Carbs: 40, Fat: 5, Sugar: 25, Fiber: 60, VitaminC: 75, Kcal: 25 },
+            Brinjal: { Protein: 15, Carbs: 35, Fat: 5, Sugar: 20, Fiber: 55, VitaminC: 20, Kcal: 24 },
+            Capsicum: { Protein: 20, Carbs: 40, Fat: 5, Sugar: 35, Fiber: 50, VitaminC: 90, Kcal: 31 },
+            Peas: { Protein: 45, Carbs: 55, Fat: 10, Sugar: 30, Fiber: 70, VitaminC: 45, Kcal: 81 },
+            Beans: { Protein: 50, Carbs: 50, Fat: 10, Sugar: 25, Fiber: 75, VitaminC: 30, Kcal: 347 }
+        };
+
+        const vegList = document.getElementById("vegList");
+        const nutritionList = document.getElementById("nutritionList");
+
+        Object.keys(DATA).forEach(v => {
+            const b = document.createElement("div");
+            b.className = "veg";
+            b.innerText = v;
+            b.onclick = () => selectVeg(v);
+            vegList.appendChild(b);
+        });
+
+        function selectVeg(v) {
+            document.querySelectorAll(".veg").forEach(x => x.classList.toggle("active", x.innerText === v));
+            nutritionList.innerHTML = "";
+            Object.entries(DATA[v]).forEach(([k, val]) => {
+                const div = document.createElement("div");
+                div.className = "nutrient " + (val > 60 ? "good" : val > 30 ? "mid" : "low");
+                div.innerHTML = `<span>${k}</span><span>${val}</span>`;
+                nutritionList.appendChild(div);
+            });
+        }
+    </script>
+
+</body>
+
+</html>

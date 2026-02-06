@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Admin – Government Schemes PDFs</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet" />
+
+    <style>
+        :root {
+            --primary: #0f766e;
+            --primary-soft: #ecfdf5;
+            --primary-dark: #115e59;
+            --accent: #2563eb;
+            --bg: #f9fafb;
+            --bg-card: #ffffff;
+            --border: #e5e7eb;
+            --text-main: #111827;
+            --text-muted: #6b7280;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text-main);
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* ---------- Header ---------- */
+
+        .page-header {
+            border-bottom: 1px solid var(--border);
+            background: #ffffff;
+        }
+
+        @media (max-width: 640px) {
+            .page-header-inner {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 1rem;
+                gap: 1rem;
+            }
+
+            .header-actions {
+                width: 100%;
+            }
+
+            .btn-outline {
+                flex: 1;
+                justify-content: center;
+            }
+        }
+
+        .brand-block {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .brand-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            font-size: 1.3rem;
+        }
+
+        .brand-text h1 {
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .brand-text p {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .btn-outline {
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            padding: 0.5rem 0.9rem;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: #ffffff;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            border-radius: 999px;
+            border: none;
+            padding: 0.55rem 1.1rem;
+            font-size: 0.82rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            background: var(--primary);
+            color: #ffffff;
+            cursor: pointer;
+        }
+
+        .btn-primary i,
+        .btn-outline i {
+            font-size: 0.9rem;
+        }
+
+        /* ---------- Layout ---------- */
+
+        .page-body {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 1.5rem;
+        }
+
+        .layout-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.8fr);
+            gap: 1.5rem;
+            align-items: flex-start;
+        }
+
+        @media (max-width: 900px) {
+            .layout-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .panel {
+            border-radius: 16px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 1.25rem 1.3rem;
+        }
+
+        .panel-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .panel-title {
+            display: flex;
+            flex-direction: column;
+            gap: 0.15rem;
+        }
+
+        .panel-title h2 {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .panel-title span {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+        }
+
+        /* ---------- Form ---------- */
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0.85rem;
+            margin-top: 0.25rem;
+        }
+
+        .form-field {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .form-field label {
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: #374151;
+        }
+
+        .form-field input[type="text"],
+        .form-field input[type="file"],
+        .form-field select {
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            padding: 0.45rem 0.6rem;
+            font-size: 0.82rem;
+            outline: none;
+            background: #f9fafb;
+        }
+
+        .form-field input[type="file"] {
+            padding: 0.4rem 0.6rem;
+        }
+
+        .form-help {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .form-actions {
+            margin-top: 0.8rem;
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.5rem;
+        }
+
+        .btn-secondary {
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            padding: 0.45rem 0.9rem;
+            font-size: 0.8rem;
+            background: #f9fafb;
+            cursor: pointer;
+        }
+
+        .btn-primary[disabled] {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        /* ---------- Schemes table ---------- */
+
+        .schemes-table-wrapper {
+            margin-top: 0.3rem;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+            background: #ffffff;
+        }
+
+        .schemes-table-header,
+        .scheme-row {
+            display: grid;
+            grid-template-columns: 2.5fr 1.5fr 1.2fr 1.2fr;
+            padding: 0.55rem 0.8rem;
+            align-items: center;
+        }
+
+        @media (max-width: 768px) {
+            .schemes-table-header {
+                display: none;
+            }
+
+            .scheme-row {
+                grid-template-columns: 1fr 1fr;
+                gap: 0.75rem;
+                padding: 1rem;
+            }
+
+            .row-actions {
+                grid-column: span 2;
+                justify-content: flex-end;
+                margin-top: 0.5rem;
+            }
+        }
+
+        .scheme-row:last-child {
+            border-bottom: none;
+        }
+
+        .scheme-row span.muted {
+            color: var(--text-muted);
+            font-size: 0.78rem;
+        }
+
+        .row-actions {
+            display: flex;
+            gap: 0.4rem;
+            justify-content: flex-end;
+        }
+
+        .btn-chip {
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            padding: 0.25rem 0.55rem;
+            font-size: 0.75rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            background: #ffffff;
+            cursor: pointer;
+        }
+
+        .btn-chip.danger {
+            border-color: #fecaca;
+            background: #fef2f2;
+            color: #b91c1c;
+        }
+
+        .btn-chip i {
+            font-size: 0.75rem;
+        }
+
+        .empty-state {
+            padding: 1.2rem 0.8rem;
+            text-align: center;
+            font-size: 0.86rem;
+            color: var(--text-muted);
+        }
+
+        .linear-loading {
+            height: 2px;
+            width: 100%;
+            background: transparent;
+            border-radius: 999px;
+            overflow: hidden;
+            display: none;
+        }
+
+        .linear-loading-inner {
+            height: 100%;
+            width: 40%;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            animation: loading-slide 1s infinite;
+        }
+
+        @keyframes loading-slide {
+            0% {
+                transform: translateX(-100%);
+            }
+
+            50% {
+                transform: translateX(50%);
+            }
+
+            100% {
+                transform: translateX(200%);
+            }
+        }
+
+        /* ---------- Toast ---------- */
+
+        .toast {
+            position: fixed;
+            bottom: 18px;
+            right: 18px;
+            padding: 0.7rem 1rem;
+            border-radius: 999px;
+            background: #111827;
+            color: #f9fafb;
+            font-size: 0.78rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 10px 25px rgba(15, 23, 42, 0.25);
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(6px);
+            transition: opacity 0.15s ease, transform 0.15s ease;
+            z-index: 1000;
+        }
+
+        .toast.show {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0);
+        }
+
+        .toast i {
+            font-size: 0.85rem;
+        }
+    </style>
+    <script src="config.js"></script>
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="page-header">
+        <div class="page-header-inner">
+            <div class="brand-block">
+                <div class="brand-icon">
+                    <i class="fas fa-user-shield"></i>
+                </div>
+                <div class="brand-text">
+                    <h1>Scheme PDF Admin Console</h1>
+                    <p>Manage agriculture scheme PDFs used by FarmSure</p>
+                </div>
+            </div>
+            <div class="header-actions">
+
+                <a href="officer-escalated.html" class="btn-outline">
+                    <i class="fas fa-gauge"></i>
+                    <span>Back to Dashboard</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Body -->
+    <main class="page-body">
+        <div class="layout-grid">
+            <!-- Left: Add / Upload -->
+            <section class="panel">
+                <div class="panel-header">
+                    <div class="panel-title">
+                        <h2>Add New Scheme PDF</h2>
+                        <span>Upload official PDF and basic metadata.</span>
+                    </div>
+                </div>
+
+                <div class="linear-loading" id="uploadLoadingBar">
+                    <div class="linear-loading-inner"></div>
+                </div>
+
+                <form id="schemeForm">
+                    <div class="form-grid">
+                        <div class="form-field">
+                            <label for="schemeName">Scheme Name *</label>
+                            <input type="text" id="schemeName" name="schemeName" required
+                                placeholder="e.g. PM-KISAN, PMFBY" />
+                            <div class="form-help">Shown to farmers on the schemes explorer page.</div>
+                        </div>
+
+                        <div class="form-field">
+                            <label for="department">Department / Ministry</label>
+                            <input type="text" id="department" name="department"
+                                placeholder="e.g. Dept. of Agriculture & Farmers Welfare" />
+                        </div>
+
+                        <div class="form-field">
+                            <label for="region">Region / Level</label>
+                            <input type="text" id="region" name="region"
+                                placeholder="e.g. Central, Kerala State, District etc." />
+                        </div>
+
+                        <div class="form-field">
+                            <label for="pdfFile">Scheme PDF File *</label>
+                            <input type="file" id="pdfFile" name="pdf" accept="application/pdf" required />
+                            <div class="form-help">Only PDF files are supported. Size limits depend on server config.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn-secondary" id="resetFormBtn">
+                            Clear
+                        </button>
+                        <button type="submit" class="btn-primary" id="submitBtn">
+                            <i class="fas fa-upload"></i>
+                            <span>Upload Scheme PDF</span>
+                        </button>
+                    </div>
+                </form>
+            </section>
+
+            <!-- Right: Existing Schemes List -->
+            <section class="panel">
+                <div class="panel-header">
+                    <div class="panel-title">
+                        <h2>Existing Schemes (PDF Library)</h2>
+                        <span>These entries power the public schemes explorer & AI summaries.</span>
+                    </div>
+                </div>
+
+                <div class="linear-loading" id="listLoadingBar">
+                    <div class="linear-loading-inner"></div>
+                </div>
+
+                <div class="schemes-table-wrapper">
+                    <div class="schemes-table-header">
+                        <div>Scheme Name</div>
+                        <div>Department</div>
+                        <div>Region</div>
+                        <div style="text-align:right;">Actions</div>
+                    </div>
+                    <div class="schemes-table-body" id="schemesTableBody">
+                        <!-- Rows rendered by JS -->
+                    </div>
+                </div>
+
+                <div id="schemesEmpty" class="empty-state" style="display: none;">
+                    No schemes found. Upload a PDF to get started.
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Toast -->
+    <div class="toast" id="toast">
+        <i class="fas fa-circle-check"></i>
+        <span id="toastText">Done</span>
+    </div>
+
+    <script>
+        const schemeForm = document.getElementById('schemeForm');
+        const resetFormBtn = document.getElementById('resetFormBtn');
+        const submitBtn = document.getElementById('submitBtn');
+
+        const uploadLoadingBar = document.getElementById('uploadLoadingBar');
+        const listLoadingBar = document.getElementById('listLoadingBar');
+
+        const schemesTableBody = document.getElementById('schemesTableBody');
+        const schemesEmpty = document.getElementById('schemesEmpty');
+
+        const toast = document.getElementById('toast');
+        const toastText = document.getElementById('toastText');
+
+        let schemesData = [];
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadSchemes();
+            setupForm();
+        });
+
+        function showToast(message, isError = false) {
+            toastText.textContent = message;
+            toast.style.background = isError ? '#b91c1c' : '#111827';
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2300);
+        }
+
+        function setUploadLoading(isLoading) {
+            uploadLoadingBar.style.display = isLoading ? 'block' : 'none';
+            submitBtn.disabled = isLoading;
+        }
+
+        function setListLoading(isLoading) {
+            listLoadingBar.style.display = isLoading ? 'block' : 'none';
+        }
+
+        async function loadSchemes() {
+            try {
+                setListLoading(true);
+                schemesTableBody.innerHTML = '';
+                schemesEmpty.style.display = 'none';
+
+                const res = await fetch(API_BASE_URL + '/api/schemes');
+                const data = await res.json();
+
+                if (!data.success) {
+                    throw new Error(data.message || 'Failed to load schemes');
+                }
+
+                schemesData = data.schemes || [];
+                renderSchemesTable();
+            } catch (err) {
+                console.error('Error loading schemes:', err);
+                schemesTableBody.innerHTML = '';
+                schemesEmpty.style.display = 'block';
+                showToast('Unable to load schemes list', true);
+            } finally {
+                setListLoading(false);
+            }
+        }
+
+        function renderSchemesTable() {
+            schemesTableBody.innerHTML = '';
+
+            if (!schemesData.length) {
+                schemesEmpty.style.display = 'block';
+                return;
+            }
+
+            schemesEmpty.style.display = 'none';
+
+            schemesData.forEach((s) => {
+                const row = document.createElement('div');
+                row.className = 'scheme-row';
+
+                const departmentText = s.department || 'Agriculture & Farmers Welfare';
+                const regionText = s.region || 'Central / State';
+
+                row.innerHTML = `
+          <div>
+            <div>${s.schemeName || '(No name)'}</div>
+            <span class="muted">${s._id}</span>
+          </div>
+          <div>${departmentText}</div>
+          <div>${regionText}</div>
+          <div>
+            <div class="row-actions">
+              <button class="btn-chip" type="button" data-open-pdf>
+                <i class="fas fa-file-pdf"></i>
+                <span>Open</span>
+              </button>
+              <button class="btn-chip danger" type="button" data-delete>
+                <i class="fas fa-trash"></i>
+                <span>Delete</span>
+              </button>
+            </div>
+          </div>
+        `;
+
+                // Open PDF
+                row.querySelector('[data-open-pdf]').addEventListener('click', () => {
+                    if (s.pdfUrl) {
+                        window.open(s.pdfUrl, '_blank', 'noopener');
+                    } else {
+                        showToast('No PDF URL stored for this scheme', true);
+                    }
+                });
+
+                // Delete scheme
+                row.querySelector('[data-delete]').addEventListener('click', () => {
+                    handleDeleteScheme(s._id, s.schemeName);
+                });
+
+                schemesTableBody.appendChild(row);
+            });
+        }
+
+        function setupForm() {
+            schemeForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                const schemeName = document.getElementById('schemeName').value.trim();
+                const department = document.getElementById('department').value.trim();
+                const region = document.getElementById('region').value.trim();
+                const pdfFile = document.getElementById('pdfFile').files[0];
+
+                if (!schemeName) {
+                    showToast('Scheme name is required', true);
+                    return;
+                }
+                if (!pdfFile) {
+                    showToast('Please select a PDF file', true);
+                    return;
+                }
+
+                try {
+                    setUploadLoading(true);
+
+                    const formData = new FormData();
+                    formData.append('schemeName', schemeName);
+                    if (department) formData.append('department', department);
+                    if (region) formData.append('region', region);
+                    formData.append('pdf', pdfFile); // assumes your backend expects "pdf"
+
+                    // Adjust URL to /api/admin/schemes if you separate admin routes
+                    const res = await fetch(API_BASE_URL + '/api/schemes', {
+                        method: 'POST',
+                        body: formData,
+                    });
+
+                    const data = await res.json();
+
+                    if (!data.success) {
+                        throw new Error(data.message || 'Upload failed');
+                    }
+
+                    showToast('Scheme PDF uploaded successfully');
+                    schemeForm.reset();
+                    loadSchemes();
+                } catch (err) {
+                    console.error('Upload error:', err);
+                    showToast(err.message || 'Failed to upload scheme PDF', true);
+                } finally {
+                    setUploadLoading(false);
+                }
+            });
+
+            resetFormBtn.addEventListener('click', () => {
+                schemeForm.reset();
+            });
+        }
+
+        async function handleDeleteScheme(id, name) {
+            const confirmed = window.confirm(
+                `Delete scheme "${name || id}"?\nThis will remove the record and may also delete the PDF on the server, depending on backend logic.`
+            );
+            if (!confirmed) return;
+
+            try {
+                setListLoading(true);
+
+                // Adjust URL to /api/admin/schemes/${id} if needed
+                const res = await fetch(`/api/schemes/${encodeURIComponent(id)}`, {
+                    method: 'DELETE',
+                });
+
+                const data = await res.json();
+
+                if (!data.success) {
+                    throw new Error(data.message || 'Delete failed');
+                }
+
+                showToast('Scheme deleted');
+                schemesData = schemesData.filter((s) => s._id !== id);
+                renderSchemesTable();
+            } catch (err) {
+                console.error('Delete error:', err);
+                showToast(err.message || 'Failed to delete scheme', true);
+            } finally {
+                setListLoading(false);
+            }
+        }
+    </script>
+</body>
+
+</html>

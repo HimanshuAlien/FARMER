@@ -1,0 +1,1595 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>YOUR CROPS — Modern</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- ✔ Correct Google Fonts (Poppins Only) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: #f5f7f6;
+            --card: #ffffff;
+            --muted: #6b7280;
+            --accent: #1f8a56;
+            --accent-2: #2c7be5;
+            --accent-soft: #dff6e9;
+            --border: #e6eef0;
+            --shadow: 0 8px 20px rgba(26, 32, 44, 0.06);
+            --radius: 12px;
+            --maxw: 1600px;
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        html,
+        body {
+            height: 100%;
+        }
+
+        body {
+            margin: 0;
+
+            /* ✔ Poppins as the ONLY font */
+            font-family: 'Poppins', sans-serif;
+
+            color: #0f1724;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            line-height: 1.45;
+
+            background-color: #eef3f1;
+            background-image: linear-gradient(rgba(255, 255, 255, 0.86), rgba(255, 255, 255, 0.86));
+            background-size: cover;
+            background-position: center;
+            padding-bottom: 40px;
+        }
+
+        #rightCol {
+            height: 700px;
+            overflow-y: auto;
+            overflow-x: hidden;
+
+        }
+
+
+        header {
+            background: linear-gradient(120deg, #1f8a56, #2fa46c);
+            color: white;
+            padding: 16px 20px;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 40;
+            box-shadow: 0 6px 18px rgba(31, 138, 86, 0.12);
+            backdrop-filter: blur(4px);
+        }
+
+        header .brand {
+            display: flex;
+            gap: 12px;
+            align-items: center
+        }
+
+        header h1 {
+            margin: 0;
+            font-family: 'Nunito', sans-serif;
+            font-size: 20px;
+            letter-spacing: 0.6px
+        }
+
+        header .tagline {
+            font-size: 13px;
+            opacity: 0.95;
+            color: rgba(255, 255, 255, 0.92)
+        }
+
+        header .pill {
+            background: rgba(255, 255, 255, 0.12);
+            padding: 6px 10px;
+            border-radius: 999px;
+            font-weight: 700;
+            font-size: 13px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            white-space: nowrap;
+        }
+
+        @media (max-width: 600px) {
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+                padding: 12px 16px;
+            }
+
+            .header-actions {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            header h1 {
+                font-size: 18px;
+            }
+
+            header .tagline {
+                font-size: 11px;
+            }
+        }
+
+        main {
+            max-width: var(--maxw);
+            margin: 20px auto;
+            padding: 0 18px;
+            display: grid;
+            grid-template-columns: 1.0fr 1.7fr;
+            gap: 18px;
+            align-items: start;
+        }
+
+        @media (max-width:980px) {
+            main {
+                grid-template-columns: 1fr;
+                padding: 16px
+            }
+        }
+
+        /* glass card look */
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: var(--radius);
+            padding: 16px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            backdrop-filter: blur(6px);
+        }
+
+        /* Left: plan list and create */
+        #leftCol .section-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 8px
+        }
+
+        #leftCol h2 {
+            margin: 0;
+            font-size: 16px
+        }
+
+        .btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 999px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 6px 14px rgba(31, 138, 86, 0.14)
+        }
+
+        .btn.secondary {
+            background: #f4f6f6;
+            color: #24303a;
+            box-shadow: none;
+            border: 1px solid #e6eef0
+        }
+
+        .list {
+            margin-top: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            max-height: 621px;
+            overflow: auto;
+            padding-right: 6px
+        }
+
+        .empty-state {
+            padding: 12px;
+            color: var(--muted);
+            font-size: 14px
+        }
+
+        .crop-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px;
+            border-radius: 10px;
+            background: linear-gradient(180deg, #ffffff, #fbfdfb);
+            border: 1px solid #eef6f1;
+            box-shadow: 0 3px 8px rgba(10, 20, 12, 0.03);
+            justify-content: space-between;
+        }
+
+        .crop-left {
+            display: flex;
+            gap: 12px;
+            align-items: center
+        }
+
+        /* .crop-thumb supports <img> now */
+        .crop-thumb {
+            width: 68px;
+            height: 56px;
+            border-radius: 8px;
+            background: #eef5ef;
+            background-size: cover;
+            background-position: center;
+            border: 1px solid #e8f0ea;
+            flex-shrink: 0;
+            display: inline-block;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .crop-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .crop-meta {
+            display: flex;
+            flex-direction: column
+        }
+
+        .crop-meta .title {
+            font-weight: 700
+        }
+
+        .crop-meta .meta {
+            color: var(--muted);
+            font-size: 13px
+        }
+
+        .crop-right {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+
+        @media (max-width: 480px) {
+            .crop-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+
+            .crop-right {
+                width: 100%;
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+                border-top: 1px solid #eef6f1;
+                padding-top: 8px;
+            }
+
+            .crop-thumb {
+                width: 100%;
+                height: 120px;
+            }
+        }
+
+        .crop-right .date {
+            font-size: 13px;
+            color: var(--muted)
+        }
+
+        /* Right: Plan / lifecycle */
+        .headline {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px
+        }
+
+        .headline h2 {
+            margin: 0;
+            font-size: 18px
+        }
+
+        .muted {
+            color: var(--muted);
+            font-size: 13px
+        }
+
+        /* New plan form compact */
+        form.grid {
+            display: grid;
+            gap: 10px;
+            grid-template-columns: 1fr 1fr
+        }
+
+        @media (max-width:700px) {
+            form.grid {
+                grid-template-columns: 1fr
+            }
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            color: var(--muted);
+            margin-bottom: 6px
+        }
+
+        input[type="text"],
+        input[type="date"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: #fbfdfb;
+            font-size: 14px;
+            font-family: inherit
+        }
+
+        textarea {
+            min-height: 90px;
+            resize: vertical
+        }
+
+        .helper-text {
+            font-size: 12px;
+            color: var(--muted);
+            margin-top: 6px
+        }
+
+        /* Lifecycle hero */
+        .crop-hero {
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            align-items: flex-end;
+            min-height: 160px;
+            background: linear-gradient(180deg, #e6eef0, #f8fbfa);
+            border: 1px solid var(--border);
+        }
+
+        @media (max-width: 480px) {
+            .crop-hero {
+                min-height: 120px;
+            }
+
+            .crop-hero .info .title {
+                font-size: 16px;
+            }
+
+            .crop-hero .info .meta {
+                font-size: 11px;
+            }
+        }
+
+        .crop-hero img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            filter: saturate(1.02) contrast(1.02)
+        }
+
+        .crop-hero .overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(0, 0, 0, 0.22), rgba(0, 0, 0, 0.04));
+            pointer-events: none
+        }
+
+        .crop-hero .info {
+            position: absolute;
+            left: 16px;
+            bottom: 14px;
+            color: white;
+            z-index: 12;
+            text-shadow: 0 3px 10px rgba(0, 0, 0, 0.35)
+        }
+
+        .crop-hero .info .title {
+            font-size: 18px;
+            font-weight: 800;
+            font-family: 'Nunito'
+        }
+
+        .crop-hero .info .meta {
+            font-size: 13px;
+            opacity: 0.95
+        }
+
+        /* top row */
+        .top-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 12px
+        }
+
+        @media (max-width:700px) {
+            .top-row {
+                grid-template-columns: 1fr
+            }
+        }
+
+        .card-today {
+            background: linear-gradient(180deg, #f7fffb, #ecfff2);
+            border: 1px solid rgba(34, 84, 61, 0.07);
+            padding: 12px;
+            border-radius: 10px
+        }
+
+        .card-weather {
+            background: linear-gradient(180deg, #f0f8ff, #eaf7ff);
+            border: 1px solid rgba(44, 123, 229, 0.08);
+            padding: 12px;
+            border-radius: 10px
+        }
+
+        .card-today h3,
+        .card-weather h3 {
+            margin: 0 0 8px 0;
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            font-size: 15px
+        }
+
+        .card-today h3 .icon {
+            background: var(--accent);
+            color: white;
+            border-radius: 8px;
+            padding: 6px;
+            display: inline-flex
+        }
+
+        .card-weather h3 .icon {
+            background: var(--accent-2);
+            color: white;
+            border-radius: 8px;
+            padding: 6px;
+            display: inline-flex
+        }
+
+        .bullet-list {
+            margin: 0;
+            padding-left: 18px
+        }
+
+        .bullet-list li {
+            margin-bottom: 8px;
+            color: #1b2930;
+            font-size: 14px
+        }
+
+        /* Stage + progress */
+        .stage-area {
+            margin-top: 14px
+        }
+
+        .stage-progress {
+            height: 10px;
+            background: #f0f3f2;
+            border-radius: 999px;
+            overflow: hidden;
+            margin-bottom: 12px
+        }
+
+        .stage-progress>span {
+            display: block;
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), #5bd585);
+            width: 0%;
+            transition: width 600ms ease
+        }
+
+        .stage-tiles {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap
+        }
+
+        .tile {
+            background: #f8faf9;
+            padding: 8px 10px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 13px;
+            color: #123;
+            border: 1px solid #eef6f1;
+            display: flex;
+            align-items: center;
+            gap: 10px
+        }
+
+        .tile.active {
+            background: linear-gradient(90deg, var(--accent), #49b879);
+            color: white;
+            box-shadow: 0 6px 14px rgba(31, 138, 86, 0.12);
+            border: none
+        }
+
+        .tile .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 99px;
+            background: #cfefe0
+        }
+
+        .tile.active .dot {
+            background: white;
+            box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.06)
+        }
+
+        /* phases */
+        .phases {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 12px;
+            margin-top: 12px
+        }
+
+        .phase-card {
+            background: linear-gradient(180deg, #ffffff, #fbfffb);
+            border-radius: 10px;
+            padding: 12px;
+            border: 1px solid #eef6f1;
+            display: flex;
+            flex-direction: column;
+            gap: 8px
+        }
+
+        .phase-card h4 {
+            margin: 0;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px
+        }
+
+        .phase-row {
+            display: flex;
+            gap: 8px;
+            align-items: flex-start;
+            font-size: 13px;
+            color: #1b2930
+        }
+
+        .label {
+            font-weight: 700;
+            color: var(--muted);
+            font-size: 12px
+        }
+
+        /* harvest */
+        .harvest-window {
+            margin-top: 12px;
+            padding: 12px;
+            border-radius: 10px;
+            background: linear-gradient(180deg, #fffaf0, #fff8f0);
+            border: 1px solid #fbde9a;
+            font-size: 14px;
+            color: #4a3b1c
+        }
+
+        /* feedback & ask */
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 12px
+        }
+
+        @media (max-width:900px) {
+            .two-col {
+                grid-template-columns: 1fr
+            }
+        }
+
+        .ask-box textarea {
+            min-height: 70px;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            width: 100%
+        }
+
+        .ai-answer {
+            margin-top: 8px;
+            padding: 10px;
+            border-radius: 10px;
+            background: #f0fff4;
+            border: 1px solid #c6f6d5;
+            display: none
+        }
+
+        .muted-small {
+            font-size: 13px;
+            color: var(--muted)
+        }
+
+        .row-right {
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+            align-items: center
+        }
+
+        .small {
+            font-size: 13px;
+            color: var(--muted)
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        /* Navigation-style header button */
+        .track-nutrition-btn {
+            background: #ffffff;
+            color: #1f2937;
+            border: none;
+            padding: 8px 14px 8px 16px;
+            border-radius: 10px;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+
+        .track-nutrition-btn .nav-arrow {
+            font-size: 18px;
+            color: #2c7be5;
+            line-height: 1;
+            transform: translateX(0);
+            transition: transform 0.15s ease;
+        }
+
+        .track-nutrition-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
+        }
+
+        .track-nutrition-btn:hover .nav-arrow {
+            transform: translateX(3px);
+        }
+
+        .track-nutrition-btn:active {
+            transform: translateY(0);
+        }
+    </style>
+    <script src="config.js"></script>
+</head>
+
+<body>
+    <header>
+        <div class="brand">
+            <div>
+                <h1>YOUR CROPS</h1>
+                <div class="tagline">Smart crop planning & daily field guidance</div>
+            </div>
+        </div>
+        <div class="header-actions">
+            <button class="track-nutrition-btn" onclick="window.location.href='nutrition.html'">
+                Track Nutrition
+            </button>
+            <div class="pill">Farmer dashboard</div>
+        </div>
+
+    </header>
+
+    <main>
+        <!-- LEFT -->
+        <section id="leftCol" class="card">
+            <div class="section-head">
+                <h2>Active crop plans</h2>
+                <button id="newPlanBtn" class="btn secondary">+ New Crop Plan</button>
+            </div>
+
+            <div id="cropsList" class="list">
+                <div class="empty-state small muted">No crop plans yet. Start by creating a new crop plan.</div>
+            </div>
+        </section>
+
+        <!-- RIGHT -->
+        <section id="rightCol" class="card">
+            <div class="headline">
+                <div>
+                    <h2>Plan & manage your crop</h2>
+                    <div id="currentCropLabel" class="muted small">No crop selected</div>
+                </div>
+                <div class="row-right">
+                    <span id="cropChip" class="small muted">—</span>
+                </div>
+            </div>
+
+            <!-- New plan -->
+            <div id="newPlanSection" style="display:none;margin-top:12px;">
+                <h3 style="margin:0 0 8px 0;font-size:15px">New Crop Plan</h3>
+                <p class="muted-small">Tell us about your field. We'll ask our AI to suggest the best crops.</p>
+                <form id="cropForm" class="grid" enctype="multipart/form-data" style="margin-top:10px;">
+                    <div style="grid-column:1 / -1;">
+                        <label>Location (GPS)</label>
+                        <div style="display:flex;gap:10px;align-items:center;">
+                            <button type="button" class="btn secondary" id="gpsBtn">Use current location</button>
+                            <div id="gpsStatus" class="muted-small">Not set</div>
+                        </div>
+                        <input type="hidden" name="gps" id="gpsField" />
+                    </div>
+
+                    <div>
+                        <label>Land area</label>
+                        <input name="landArea" type="text" placeholder="e.g. 2 acres" required />
+                    </div>
+
+                    <div>
+                        <label>Soil type</label>
+                        <select name="soilType" required>
+                            <option value="">Select soil type</option>
+                            <option value="sandy">Sandy</option>
+                            <option value="clay">Clay</option>
+                            <option value="loamy">Loamy</option>
+                            <option value="silty">Silty</option>
+                            <option value="peaty">Peaty</option>
+                            <option value="saline">Saline</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label>Previous crop</label>
+                        <input name="previousCrop" type="text" placeholder="e.g. Rice" />
+                    </div>
+
+                    <div>
+                        <label>Start tentative date</label>
+                        <input name="startDate" type="date" required />
+                    </div>
+
+                    <div style="grid-column:1 / -1;">
+                        <label>Soil picture (optional)</label>
+                        <input name="soilImage" type="file" accept="image/*" />
+                        <div class="helper-text">A clear soil surface photo helps the AI understand local conditions.
+                        </div>
+                    </div>
+
+                    <div style="grid-column:1 / -1;">
+                        <label>Additional notes (optional)</label>
+                        <textarea name="notes"
+                            placeholder="Irrigation availability, variety preference, local issues, etc."></textarea>
+                    </div>
+
+                    <div style="grid-column:1 / -1;display:flex;justify-content:flex-end;gap:8px;margin-top:6px;">
+                        <button type="button" id="cancelPlanBtn" class="btn secondary">Cancel</button>
+                        <button type="submit" class="btn">Save & get suggestions</button>
+                    </div>
+                </form>
+                <div id="formLoading" class="small muted" style="display:none;margin-top:8px;">Talking to AI… creating
+                    recommendations…</div>
+            </div>
+
+            <!-- Recommendations -->
+            <div id="recommendSection" style="display:none;margin-top:12px;">
+                <div style="display:flex;justify-content:space-between;align-items:center;">
+                    <div>
+                        <h3 style="margin:0;font-size:15px">Recommended crops</h3>
+                        <div class="muted-small">Based on your soil, history and location</div>
+                    </div>
+                </div>
+
+                <div style="margin-top:10px;display:flex;gap:8px;align-items:center;">
+                    <select id="cropSelect"
+                        style="flex:1;padding:10px;border-radius:8px;border:1px solid var(--border);background:#fff"></select>
+                    <input id="cropSearch" placeholder="Filter…"
+                        style="padding:10px;border-radius:8px;border:1px solid var(--border);width:170px" />
+                    <button id="confirmCropBtn" class="btn">Generate lifecycle</button>
+                </div>
+                <div id="recommendLoading" class="small muted" style="display:none;margin-top:8px;">Building lifecycle…
+                </div>
+            </div>
+
+            <!-- LIFECYCLE -->
+            <div id="lifecycleSection" style="display:none;margin-top:14px;">
+                <div class="crop-hero" aria-hidden="true">
+                    <img id="cropHeroImg" alt="Crop hero image" src="" loading="lazy" />
+                    <div class="overlay"></div>
+                    <div class="info">
+                        <div id="cropHeroName" class="title">Your crop</div>
+                        <div id="cropHeroStage" class="meta">Stage: —</div>
+                    </div>
+                </div>
+
+                <div class="top-row">
+                    <div class="card-today">
+                        <h3><span class="icon">✅</span> Today's recommended action</h3>
+                        <div id="todaysAction" class="modern-list"></div>
+                    </div>
+
+                    <div class="card-weather">
+                        <h3><span class="icon">☁️</span> Weather tips</h3>
+                        <div id="weatherTips"></div>
+                    </div>
+                </div>
+
+                <div class="stage-area">
+                    <div style="display:flex;align-items:center;justify-content:space-between;">
+                        <div style="font-weight:800">Growth stages</div>
+                        <div class="small muted">Progress: <span id="stageProgressLabel">0%</span></div>
+                    </div>
+                    <div class="stage-progress" aria-hidden="true"><span id="stageProgressBar" style="width:0%"></span>
+                    </div>
+                    <div id="stageTracker" class="stage-tiles" aria-hidden="false"></div>
+                </div>
+
+                <div style="margin-top:14px;display:grid;grid-template-columns:1fr 1fr;gap:12px">
+                    <div class="card phase-card" style="padding:12px">
+                        <h4 style="margin:0 0 8px 0">Soil preparation</h4>
+                        <div id="soilPrep" class="muted-small"></div>
+                    </div>
+
+                    <div class="card phase-card" style="padding:12px">
+                        <h4 style="margin:0 0 8px 0">Sowing guidelines</h4>
+                        <div id="sowingGuidelines" class="muted-small"></div>
+                    </div>
+                </div>
+
+                <div style="margin-top:12px;">
+                    <div style="display:flex;align-items:center;justify-content:space-between;">
+                        <div style="font-weight:800">Phases</div>
+                        <div class="small muted">Detailed actions for each phase</div>
+                    </div>
+                    <div id="phasesContainer" class="phases"></div>
+                </div>
+
+                <div style="margin-top:12px;">
+                    <div class="harvest-window" id="harvestWindow"></div>
+                </div>
+
+                <div class="two-col">
+                    <div class="card" style="padding:12px">
+                        <div style="font-weight:800">Farmer feedback</div>
+                        <div class="muted-small" style="margin-top:6px">Short notes are enough — the plan adapts.</div>
+                        <form id="feedbackForm" style="margin-top:8px;display:grid;gap:8px">
+                            <div>
+                                <label>Leaf colour</label>
+                                <input name="leafColor" placeholder="green, pale, yellowing…" />
+                            </div>
+                            <div>
+                                <label>Plant height (approx)</label>
+                                <input name="plantHeight" placeholder="e.g. 20 cm" />
+                            </div>
+                            <div>
+                                <label>Soil moisture</label>
+                                <input name="soilMoisture" placeholder="dry, moist, wet…" />
+                            </div>
+                            <div>
+                                <label>Other changes / issues</label>
+                                <textarea name="notes" placeholder="Spots, wilting, pests…"></textarea>
+                            </div>
+                            <div style="display:flex;justify-content:flex-end;gap:8px">
+                                <button type="submit" class="btn secondary">Send feedback</button>
+                            </div>
+                        </form>
+                        <div id="feedbackLoading" class="small muted" style="display:none;margin-top:8px">Updating plan…
+                        </div>
+                    </div>
+
+                    <div class="card" style="padding:12px">
+                        <div style="font-weight:800">Ask AI about this crop</div>
+                        <div class="muted-small" style="margin-top:6px">Example: “Why are my leaves yellow?”</div>
+                        <div style="margin-top:8px">
+                            <textarea id="questionInput" placeholder="Type your question…"
+                                style="width:100%"></textarea>
+                            <div style="display:flex;justify-content:flex-end;margin-top:8px">
+                                <button id="askBtn" class="btn secondary">Ask</button>
+                            </div>
+                            <div id="askLoading" class="small muted" style="display:none;margin-top:6px">Thinking…</div>
+                            <div id="aiAnswer" class="ai-answer" style="display:none"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+
+    </main>
+
+    <script>
+        // API base unchanged
+        const apiBase = "/api/crops";
+        let currentCropId = null;
+        let currentRecommended = [];
+
+        // Elements
+        const cropsListEl = document.getElementById("cropsList");
+        const newPlanBtn = document.getElementById("newPlanBtn");
+        const newPlanSection = document.getElementById("newPlanSection");
+        const recommendSection = document.getElementById("recommendSection");
+        const lifecycleSection = document.getElementById("lifecycleSection");
+        const currentCropLabel = document.getElementById("currentCropLabel");
+        const gpsBtn = document.getElementById("gpsBtn");
+        const gpsField = document.getElementById("gpsField");
+        const gpsStatus = document.getElementById("gpsStatus");
+        const cropForm = document.getElementById("cropForm");
+        const formLoading = document.getElementById("formLoading");
+        const cropSelect = document.getElementById("cropSelect");
+        const cropSearch = document.getElementById("cropSearch");
+        const confirmCropBtn = document.getElementById("confirmCropBtn");
+        const recommendLoading = document.getElementById("recommendLoading");
+        const cancelPlanBtn = document.getElementById("cancelPlanBtn");
+
+        // lifecycle elements
+        const cropChip = document.getElementById("cropChip");
+        const cropHeroImg = document.getElementById("cropHeroImg");
+        const cropHeroName = document.getElementById("cropHeroName");
+        const cropHeroStage = document.getElementById("cropHeroStage");
+        const todaysActionEl = document.getElementById("todaysAction");
+        const weatherTipsEl = document.getElementById("weatherTips");
+        const stageTrackerEl = document.getElementById("stageTracker");
+        const stageProgressBar = document.getElementById("stageProgressBar");
+        const stageProgressLabel = document.getElementById("stageProgressLabel");
+        const soilPrepEl = document.getElementById("soilPrep");
+        const sowingGuidelinesEl = document.getElementById("sowingGuidelines");
+        const phasesContainerEl = document.getElementById("phasesContainer");
+        const harvestWindowEl = document.getElementById("harvestWindow");
+
+        const feedbackForm = document.getElementById("feedbackForm");
+        const feedbackLoading = document.getElementById("feedbackLoading");
+        const questionInput = document.getElementById("questionInput");
+        const askBtn = document.getElementById("askBtn");
+        const askLoading = document.getElementById("askLoading");
+        const aiAnswerEl = document.getElementById("aiAnswer");
+
+        // Keep a per-image attempt counter to avoid infinite error loops
+        cropHeroImg.dataset.attempt = '0';
+
+        // tiny SVG fallback (embedded) — small, guaranteed to load
+        const svgFallback = `data:image/svg+xml;utf8,${encodeURIComponent(
+            `<svg xmlns='http://www.w3.org/2000/svg' width='1600' height='900' viewBox='0 0 1600 900'>
+         <defs><linearGradient id='g' x1='0' x2='0' y1='0' y2='1'><stop offset='0' stop-color='#e6f3ea'/><stop offset='1' stop-color='#f7fbf7'/></linearGradient></defs>
+         <rect width='100%' height='100%' fill='url(#g)'/>
+         <g transform='translate(200,220)'>
+           <circle cx='80' cy='80' r='60' fill='#fff' opacity='0.15'/>
+           <text x='180' y='100' font-family='Nunito, Arial' font-weight='700' font-size='48' fill='#2a5b3c'>Farm Photo</text>
+           <text x='180' y='150' font-family='Inter, Arial' font-size='20' fill='#3b553d'>Image not available — using fallback</text>
+         </g>
+       </svg>`
+        )}`;
+
+        // ---------- Image logic fixes: prefer accurate crop photos ----------
+        // Map of common crop slugs -> local filenames (add more as you like)
+        const cropImageMap = {
+            "groundnut": "groundnut.jpg",
+            "peanut": "groundnut.jpg",
+            "maize": "maize.jpg",
+            "corn": "maize.jpg",
+            "rice": "rice.jpg",
+            "wheat": "wheat.jpg",
+            "tomato": "tomato.jpg",
+            "potato": "potato.jpg",
+            "banana": "banana.jpg",
+            "sugarcane": "sugarcane.jpg",
+            "cotton": "cotton.jpg",
+            "soybean": "soybean.jpg",
+            "sunflower": "sunflower.jpg"
+        };
+
+        // Optional: set this to a GitHub raw folder where you host crop images.
+        // Example: "https://raw.githubusercontent.com/<user>/<repo>/main/public/assets/crops/"
+        const GITHUB_RAW_BASE = ""; // <-- set if you host images on GitHub (include trailing slash)
+
+        // Normalize crop name to slug
+        function normalizeCropName(name) {
+            if (!name) return "";
+            return name.toString().toLowerCase().replace(/\(.*?\)/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+        }
+
+        // Attempts to find a Commons image for a query; returns image url or null
+        async function fetchCommonsImage(query) {
+            if (!query || typeof query !== 'string') return null;
+            const q = `${query} plant`;
+            try {
+                const searchUrl = 'https://commons.wikimedia.org/w/api.php?action=query&format=json&origin=*&generator=search&gsrsearch='
+                    + encodeURIComponent(q + ' filetype:bitmap OR filetype:image')
+                    + '&gsrlimit=5&prop=imageinfo&iiprop=url';
+
+                const r = await fetch(searchUrl);
+                if (!r.ok) return null;
+                const j = await r.json();
+                if (!j.query || !j.query.pages) return null;
+                const pages = Object.values(j.query.pages);
+
+                for (const p of pages) {
+                    if (p.imageinfo && p.imageinfo[0] && p.imageinfo[0].url) {
+                        return p.imageinfo[0].url;
+                    }
+                }
+                return null;
+            } catch (e) {
+                console.warn('Commons fetch failed for', query, e);
+                return null;
+            }
+        }
+
+        // Build curated candidate list for a crop name: local, github, commons, picsum
+        async function buildImageCandidatesForCrop(cropName) {
+            const slug = normalizeCropName(cropName);
+            const candidates = [];
+
+            // 1) Local asset (fast) - mapped or fallback to slug.jpg/png
+            const mapped = cropImageMap[slug] || cropImageMap[cropName.toLowerCase()];
+            if (mapped) {
+                candidates.push(`/assets/crops/${mapped}`);
+            } else {
+                candidates.push(`/assets/crops/${slug}.jpg`);
+                candidates.push(`/assets/crops/${slug}.png`);
+            }
+
+            // 2) GitHub raw fallback (optional)
+            if (GITHUB_RAW_BASE) {
+                if (mapped) {
+                    candidates.push(GITHUB_RAW_BASE + mapped);
+                } else {
+                    candidates.push(GITHUB_RAW_BASE + `${slug}.jpg`);
+                    candidates.push(GITHUB_RAW_BASE + `${slug}.png`);
+                }
+            }
+
+            // 3) Wikimedia Commons - try lookup and place first if found
+            try {
+                const commonsUrl = await fetchCommonsImage(cropName);
+                if (commonsUrl) candidates.unshift(commonsUrl);
+            } catch (e) { /* ignore */ }
+
+            // 4) Picsum seeded fallbacks (last resort)
+            const baseName = (cropName || 'field crop').trim().replace(/\s+/g, '-').toLowerCase();
+            candidates.push(`https://picsum.photos/1600/900?seed=${encodeURIComponent(baseName)}`);
+            candidates.push('https://picsum.photos/1600/900?seed=agriculture-1');
+            candidates.push('https://picsum.photos/1600/900?seed=farm-2');
+
+            // unique preserve order
+            return Array.from(new Set(candidates));
+        }
+
+        // Build hero candidates wrapper used elsewhere (keeps existing usage)
+        async function buildHeroCandidates(cropName) {
+            return await buildImageCandidatesForCrop(cropName);
+        }
+
+        // try to load hero images in sequence, fallback to SVG (improved probe)
+        function loadHeroImage(preferredUrlList) {
+            let attempts = 0;
+            function tryNext() {
+                const url = preferredUrlList[attempts];
+                if (!url) {
+                    cropHeroImg.src = svgFallback;
+                    return;
+                }
+                cropHeroImg.dataset.attempt = attempts.toString();
+
+                // Probe using Image to detect 404/405 quickly
+                const probe = new Image();
+                let settled = false;
+                const to = setTimeout(() => {
+                    if (!settled) {
+                        settled = true;
+                        attempts++;
+                        if (attempts >= preferredUrlList.length) {
+                            cropHeroImg.src = svgFallback;
+                        } else {
+                            tryNext();
+                        }
+                    }
+                }, 2500); // 2.5s timeout
+
+                probe.onload = () => {
+                    if (settled) return;
+                    settled = true;
+                    clearTimeout(to);
+                    cropHeroImg.src = url;
+                };
+                probe.onerror = () => {
+                    if (settled) return;
+                    settled = true;
+                    clearTimeout(to);
+                    attempts++;
+                    if (attempts >= preferredUrlList.length) {
+                        cropHeroImg.src = svgFallback;
+                    } else {
+                        tryNext();
+                    }
+                };
+                probe.src = url;
+            }
+
+            tryNext();
+        }
+
+        // Build hero image URL candidates (legacy function kept for compatibility but now calls buildImageCandidatesForCrop)
+        function buildHeroCandidatesFallback(cropName) {
+            const baseName = (cropName || 'field crop').trim().replace(/\s+/g, '-').toLowerCase();
+            const picsumSeeded = `https://picsum.photos/1600/900?seed=${encodeURIComponent(baseName)}`;
+            const picsumFallback1 = 'https://picsum.photos/1600/900?seed=agriculture-1';
+            const picsumFallback2 = 'https://picsum.photos/1600/900?seed=farm-2';
+            return [
+                picsumSeeded,
+                picsumFallback1,
+                picsumFallback2,
+            ].filter(Boolean);
+        }
+
+        // Init
+        loadCrops();
+
+        async function loadCrops() {
+            try {
+                const res = await fetch(apiBase);
+                if (!res.ok) throw new Error('Failed to fetch crops');
+                const crops = await res.json();
+                cropsListEl.innerHTML = '';
+                if (!crops || crops.length === 0) {
+                    cropsListEl.innerHTML = '<div class="empty-state small muted">No crop plans yet. Start by creating a new crop plan.</div>';
+                    return;
+                }
+                crops.forEach(async c => {
+                    const div = document.createElement('div');
+                    div.className = 'crop-item';
+                    const title = c.selectedCrop || 'Unselected crop';
+                    const landArea = c.landArea || '';
+                    const soilType = c.soilType || '';
+                    const stage = c.currentStage || 'Not started';
+                    const dateLabel = c.startDate ? new Date(c.startDate).toLocaleDateString() : 'No date';
+
+                    // fast immediate seed so UI isn't empty (keeps UI snappy)
+                    const seed = encodeURIComponent((title || 'crop').trim().replace(/\s+/g, '-').toLowerCase());
+                    const initialThumb = `https://picsum.photos/300/220?seed=${seed}`;
+
+                    // Create element with initial thumb (so UI shows immediately).
+                    div.innerHTML = `
+            <div class="crop-left">
+              <div class="crop-thumb"><img class="crop-thumb-img" src="${initialThumb}" alt="${title}" loading="lazy" /></div>
+              <div class="crop-meta">
+                <div class="title">${title}</div>
+                <div class="meta">${landArea} • ${soilType} • ${stage}</div>
+              </div>
+            </div>
+            <div class="crop-right">
+              <div class="date">${dateLabel}</div>
+              <div style="display:flex;gap:8px">
+                <button class="btn secondary open-btn">Open</button>
+              </div>
+            </div>
+          `;
+
+                    // add onerror fallback for image element to avoid broken thumbs
+                    const imgEl = div.querySelector('img.crop-thumb-img');
+                    if (imgEl) {
+                        imgEl.onerror = () => {
+                            imgEl.onerror = null;
+                            imgEl.src = 'data:image/svg+xml;utf8,' + encodeURIComponent(
+                                `<svg xmlns='http://www.w3.org/2000/svg' width='300' height='220' viewBox='0 0 300 220'>
+           <rect width='100%' height='100%' fill='#eef5ef'/>
+           <text x='50%' y='50%' text-anchor='middle' dominant-baseline='middle' font-family='Inter,Arial' font-size='14' fill='#6b7280'>Image not available</text>
+         </svg>`
+                            );
+                        };
+
+                        // Async: try to replace the thumbnail with a curated/local/github/commons image
+                        (async () => {
+                            try {
+                                const candidates = await buildImageCandidatesForCrop(title);
+                                for (const url of candidates) {
+                                    const ok = await new Promise((resolve) => {
+                                        const im = new Image();
+                                        let settled = false;
+                                        const to = setTimeout(() => { if (!settled) { settled = true; im.src = ''; resolve(false); } }, 2000);
+                                        im.onload = () => { if (!settled) { settled = true; clearTimeout(to); resolve(true); } };
+                                        im.onerror = () => { if (!settled) { settled = true; clearTimeout(to); resolve(false); } };
+                                        im.src = url;
+                                    });
+                                    if (ok) {
+                                        imgEl.src = url;
+                                        break;
+                                    }
+                                }
+                            } catch (e) {
+                                console.warn('Failed to get curated thumb for', title, e);
+                            }
+                        })();
+                    }
+
+                    div.querySelector('.open-btn').addEventListener('click', () => openCrop(c._id));
+                    cropsListEl.appendChild(div);
+                });
+            } catch (err) {
+                console.error(err);
+                cropsListEl.innerHTML = '<div class="empty-state small muted">Error loading crops. Please refresh.</div>';
+            }
+        }
+
+        async function openCrop(id) {
+            try {
+                currentCropId = id;
+                currentCropLabel.textContent = 'Loading crop…';
+                const res = await fetch(`${apiBase}/${id}`);
+                if (!res.ok) throw new Error('Failed to fetch crop');
+                const crop = await res.json();
+
+                currentCropLabel.textContent = crop.selectedCrop || 'New plan';
+                // Try to fetch a Commons image for hero and put it first in candidates if found
+                const cropName = crop.selectedCrop || '';
+                let commonsHero = null;
+                try {
+                    commonsHero = await fetchCommonsImage(cropName);
+                } catch (e) { commonsHero = null; }
+                let candidates = [];
+                if (commonsHero) candidates.push(commonsHero);
+
+                // build curated candidates (local/github/commons/picsum). buildHeroCandidates returns a promise.
+                try {
+                    const built = await buildImageCandidatesForCrop(cropName);
+                    // If we already put commonsHero first, built may contain commons too; merge preserving order
+                    candidates = (commonsHero ? [commonsHero] : []).concat(built.filter(u => u !== commonsHero));
+                } catch (e) {
+                    candidates = candidates.concat(buildHeroCandidatesFallback(cropName));
+                }
+
+                renderLifecycle(crop, candidates);
+
+                if (crop.recommendedCrops && crop.recommendedCrops.length && !crop.lifecycle) {
+                    currentRecommended = crop.recommendedCrops;
+                    populateCropSelect(currentRecommended);
+                    recommendSection.style.display = 'block';
+                } else {
+                    recommendSection.style.display = 'none';
+                }
+                lifecycleSection.style.display = crop.lifecycle ? 'block' : 'none';
+            } catch (err) {
+                console.error(err);
+                alert('Error opening crop');
+            }
+        }
+
+        // new plan UI
+        newPlanBtn.addEventListener('click', () => {
+            newPlanSection.style.display = 'block';
+            recommendSection.style.display = 'none';
+            lifecycleSection.style.display = 'none';
+            currentCropLabel.textContent = 'Creating new crop plan';
+            if (cropForm) cropForm.reset();
+            gpsField.value = '';
+            gpsStatus.textContent = 'Not set';
+            currentCropId = null;
+        });
+
+        cancelPlanBtn.addEventListener('click', () => {
+            newPlanSection.style.display = 'none';
+            recommendSection.style.display = 'none';
+            if (!currentCropId) {
+                lifecycleSection.style.display = 'none';
+                currentCropLabel.textContent = 'No crop selected';
+            }
+        });
+
+        // GPS
+        gpsBtn.addEventListener('click', () => {
+            if (!navigator.geolocation) {
+                gpsStatus.textContent = 'GPS not available on this device';
+                return;
+            }
+            gpsStatus.textContent = 'Fetching location…';
+            navigator.geolocation.getCurrentPosition(
+                pos => {
+                    const coords = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+                    gpsField.value = JSON.stringify(coords);
+                    gpsStatus.textContent = `Lat: ${coords.lat.toFixed(4)}, Lng: ${coords.lng.toFixed(4)}`;
+                },
+                () => {
+                    gpsStatus.textContent = 'Could not get GPS. You can still submit the form.';
+                }
+            );
+        });
+
+        // Submit new crop plan
+        if (cropForm) {
+            cropForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                formLoading.style.display = 'block';
+                const fd = new FormData(cropForm);
+                const gpsValue = gpsField.value && gpsField.value.trim();
+                if (!gpsValue) fd.set('gps', JSON.stringify({ lat: null, lng: null }));
+                else fd.set('gps', gpsValue);
+
+                try {
+                    const res = await fetch(apiBase, { method: 'POST', body: fd });
+                    if (!res.ok) throw new Error('Failed to create crop plan');
+                    const crop = await res.json();
+
+                    currentCropId = crop._id;
+                    currentCropLabel.textContent = 'Select a crop from AI suggestions';
+                    currentRecommended = crop.recommendedCrops || [];
+                    populateCropSelect(currentRecommended);
+                    recommendSection.style.display = 'block';
+                    lifecycleSection.style.display = crop.lifecycle ? 'block' : 'none';
+                    await loadCrops();
+                } catch (err) {
+                    console.error(err);
+                    alert('Error creating crop plan');
+                } finally {
+                    formLoading.style.display = 'none';
+                }
+            });
+        }
+
+        function populateCropSelect(list) {
+            cropSelect.innerHTML = '';
+            if (!list || list.length === 0) {
+                const opt = document.createElement('option');
+                opt.value = '';
+                opt.textContent = 'No crops recommended';
+                cropSelect.appendChild(opt);
+                return;
+            }
+            list.forEach(name => {
+                const opt = document.createElement('option');
+                opt.value = name;
+                opt.textContent = name;
+                cropSelect.appendChild(opt);
+            });
+        }
+
+        cropSearch.addEventListener('input', () => {
+            const term = cropSearch.value.toLowerCase();
+            const filtered = (currentRecommended || []).filter(c => c.toLowerCase().includes(term));
+            populateCropSelect(filtered);
+        });
+
+        confirmCropBtn.addEventListener('click', async () => {
+            if (!currentCropId) { alert('No crop plan selected.'); return; }
+            const selected = cropSelect.value;
+            if (!selected) { alert('Please choose a crop.'); return; }
+            recommendLoading.style.display = 'block';
+            try {
+                const res = await fetch(`${apiBase}/${currentCropId}/select`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ crop: selected })
+                });
+                if (!res.ok) throw new Error('Failed to generate lifecycle');
+                const crop = await res.json();
+
+                // attempt to fetch commons image for selected crop for hero
+                let commonsHero = null;
+                try { commonsHero = await fetchCommonsImage(selected); } catch (e) { commonsHero = null; }
+
+                currentCropLabel.textContent = crop.selectedCrop || 'Crop plan';
+                let candidates = [];
+                if (commonsHero) candidates.push(commonsHero);
+                try {
+                    const built = await buildImageCandidatesForCrop(selected);
+                    candidates = candidates.concat(built.filter(u => u !== commonsHero));
+                } catch (e) {
+                    candidates = candidates.concat(buildHeroCandidatesFallback(selected));
+                }
+
+                renderLifecycle(crop, candidates);
+                lifecycleSection.style.display = 'block';
+                await loadCrops();
+            } catch (err) {
+                console.error(err);
+                alert('Error generating lifecycle.');
+            } finally {
+                recommendLoading.style.display = 'none';
+            }
+        });
+
+        // Helper for lists
+        function toListHTML(text) {
+            if (!text) return '';
+            const parts = text
+                .replace(/\*\s*/g, '')
+                .replace(/•\s*/g, '')
+                .split(/[\n\r]+|(?<=\.)\s+/)
+                .map(p => p.trim())
+                .filter(p => p.length > 0 && p.length < 300);
+            if (parts.length === 0) return `<div class="muted-small">${text}</div>`;
+            return `<ul class="bullet-list">` + parts.map(p => `<li>${p}</li>`).join('') + `</ul>`;
+        }
+
+        // Render lifecycle with robust hero image loading
+        // Accepts optional candidates array (so openCrop / confirmCrop can await commons first)
+        function renderLifecycle(crop, candidates) {
+            if (!crop || !crop.lifecycle) {
+                lifecycleSection.style.display = 'none';
+                return;
+            }
+            lifecycleSection.style.display = 'block';
+            const cropName = crop.selectedCrop || 'Your crop';
+            const stage = crop.currentStage || '–';
+            if (cropChip) cropChip.textContent = `Crop: ${cropName}`;
+            if (cropHeroName) cropHeroName.textContent = cropName;
+            if (cropHeroStage) cropHeroStage.textContent = `Stage: ${stage}`;
+
+            // If caller supplied candidates (e.g. Commons first), use them; otherwise build fresh candidates
+            let candidateList = [];
+            if (Array.isArray(candidates) && candidates.length) candidateList = candidates.slice();
+            else {
+                if (crop.heroImage) candidateList.push(crop.heroImage);
+                // fallback: try to build curated candidates synchronously (non-blocking)
+                // we'll attempt commons asynchronously in openCrop/confirm flow; here use hero fallback
+                candidateList = candidateList.concat(buildHeroCandidatesFallback(cropName));
+            }
+
+            loadHeroImage(candidateList);
+
+            // today + weather
+            todaysActionEl.innerHTML = toListHTML(crop.todaysAction || 'No specific action today. Keep monitoring and follow schedule.');
+            weatherTipsEl.innerHTML = toListHTML(crop.weatherTips || 'No special weather notes. Water and monitor as usual.');
+
+            // soil + sowing + harvest
+            soilPrepEl.innerHTML = (crop.lifecycle.soilPreparation || '<div class="muted-small">No specific soil prep specified.</div>');
+            sowingGuidelinesEl.innerHTML = (crop.lifecycle.sowingGuidelines || '<div class="muted-small">No sowing guidelines provided.</div>');
+            harvestWindowEl.innerHTML = `<strong>Best harvest window</strong><div style="margin-top:6px">${crop.lifecycle.harvestWindow || 'Harvest when majority of plants reach maturity and the field is uniformly ready.'}</div>`;
+
+            // Stage tracker – tiles + progress
+            const phases = (crop.lifecycle.growthPhases || []).map(p => p.name || p.title || 'Phase');
+            const currentStage = crop.currentStage;
+            stageTrackerEl.innerHTML = '';
+            const total = phases.length || 1;
+            let activeIndex = 0;
+            for (let i = 0; i < phases.length; i++) {
+                const name = phases[i];
+                if (name === currentStage || name.startsWith(currentStage)) {
+                    activeIndex = i + 1;
+                }
+            }
+            const percent = Math.round((activeIndex / total) * 100);
+            stageProgressBar.style.width = percent + '%';
+            stageProgressLabel.textContent = percent + '%';
+
+            phases.forEach((name, idx) => {
+                const t = document.createElement('div');
+                t.className = 'tile' + ((name === currentStage || idx === (activeIndex - 1)) ? ' active' : '');
+                t.innerHTML = `<div class="dot"></div><div style="min-width:80px">${name}</div>`;
+                stageTrackerEl.appendChild(t);
+            });
+
+            // phases detail
+            phasesContainerEl.innerHTML = '';
+            (crop.lifecycle.growthPhases || []).forEach((p, index) => {
+                const div = document.createElement('div');
+                div.className = 'phase-card';
+                const name = p.name || p.title || `Phase ${index + 1}`;
+                const watering = p.wateringSchedule || p.watering || p.irrigation || 'Follow regular irrigation schedule.';
+                const fertilizer = p.fertilizerSchedule || p.fertilizer || 'Fertilizer as recommended.';
+                const weather = p.weatherPrecautions || 'No special weather precautions.';
+                const issues = p.issuesToCheck || p.checks || 'Monitor for pests and nutrient deficiency.';
+                const questions = p.feedbackQuestions || [];
+
+                div.innerHTML = `
+          <h4>🌱 ${name}</h4>
+          <div class="phase-row"><div style="min-width:90px" class="label">Watering</div><div>${watering}</div></div>
+          <div class="phase-row"><div style="min-width:90px" class="label">Fertilizer</div><div>${fertilizer}</div></div>
+          <div class="phase-row"><div style="min-width:90px" class="label">Weather</div><div>${weather}</div></div>
+          <div class="phase-row"><div style="min-width:90px" class="label">Check</div><div>${issues}</div></div>
+          ${questions.length ? `<div class="phase-row"><div style="min-width:90px" class="label">Ask farmer</div><div>${questions.join('; ')}</div></div>` : ''}
+        `;
+                phasesContainerEl.appendChild(div);
+            });
+        }
+
+        // Feedback submit
+        if (feedbackForm) {
+            feedbackForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                if (!currentCropId) { alert('Open a crop plan first.'); return; }
+                feedbackLoading.style.display = 'block';
+                const formData = new FormData(feedbackForm);
+                const data = Object.fromEntries(formData.entries());
+                data.date = new Date().toISOString();
+                try {
+                    const res = await fetch(`${apiBase}/${currentCropId}/feedback`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(data)
+                    });
+                    if (!res.ok) throw new Error('Failed to send feedback');
+                    const crop = await res.json();
+                    renderLifecycle(crop);
+                    feedbackForm.reset();
+                } catch (err) {
+                    console.error(err);
+                    alert('Error sending feedback');
+                } finally {
+                    feedbackLoading.style.display = 'none';
+                }
+            });
+        }
+
+        // Ask AI
+        askBtn.addEventListener('click', async () => {
+            const question = questionInput.value.trim();
+            if (!currentCropId) { alert('Open a crop plan first.'); return; }
+            if (!question) { alert('Please type a question.'); return; }
+            askLoading.style.display = 'block';
+            aiAnswerEl.style.display = 'none';
+            try {
+                const res = await fetch(`${apiBase}/${currentCropId}/ask`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ question })
+                });
+                if (!res.ok) throw new Error('Failed to ask AI');
+                const data = await res.json();
+                aiAnswerEl.textContent = data.answer || 'No answer received.';
+                aiAnswerEl.style.display = 'block';
+            } catch (err) {
+                console.error(err);
+                alert('Error asking AI');
+            } finally {
+                askLoading.style.display = 'none';
+            }
+        });
+
+    </script>
+
+    <!-- Lazy-load page background (kept as you liked it) -->
+    <script>
+        // PAGE BACKGROUND CANDIDATES (picsum seeded)
+        const pageBgCandidates = [
+            'https://picsum.photos/1600/900?seed=farm-fields-1',
+            'https://picsum.photos/1600/900?seed=tractor-field-2'
+        ];
+
+        function preloadImage(url, cb) {
+            const i = new Image();
+            i.onload = () => cb(null, url);
+            i.onerror = () => cb(new Error('failed'));
+            i.src = url;
+        }
+
+        (function lazyLoadPageBackground() {
+            let idx = 0;
+            function tryNext() {
+                if (idx >= pageBgCandidates.length) return;
+                const url = pageBgCandidates[idx++];
+                preloadImage(url, (err) => {
+                    if (!err) {
+                        document.body.style.backgroundImage = `linear-gradient(rgba(255,255,255,0.86), rgba(255,255,255,0.86)), url("${url}")`;
+                        document.body.style.backgroundSize = 'cover';
+                        document.body.style.backgroundPosition = 'center';
+                    } else {
+                        tryNext();
+                    }
+                });
+            }
+            if (document.readyState === 'complete') tryNext();
+            else window.addEventListener('load', tryNext);
+        })();
+    </script>
+</body>
+
+</html>
