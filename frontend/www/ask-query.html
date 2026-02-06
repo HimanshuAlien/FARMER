@@ -1,0 +1,3188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>KrishiMitr - AI Farming Assistant</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+    <style>
+        :root {
+            --primary: #10b981;
+            --primary-dark: #059669;
+            --secondary: #3b82f6;
+            --accent: #8b5cf6;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --success: #10b981;
+            --bg-light: #f8fafc;
+            --bg-dark: #0f172a;
+            --card-light: #ffffff;
+            --card-dark: #1e293b;
+            --text-light: #0f172a;
+            --text-dark: #f1f5f9;
+            --text-secondary-light: #64748b;
+            --text-secondary-dark: #94a3b8;
+            --border-light: #e2e8f0;
+            --border-dark: #334155;
+            --sidebar-light: #ffffff;
+            --sidebar-dark: #1e293b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-light);
+            color: var(--text-light);
+            overflow-x: hidden;
+            line-height: 1.6;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        body.dark {
+            background: var(--bg-dark);
+            color: var(--text-dark);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100vh;
+            width: 280px;
+            background: var(--sidebar-light);
+            z-index: 1000;
+            transition: transform 0.3s ease, background 0.3s ease;
+            box-shadow: 4px 0 15px rgba(15, 23, 42, 0.12);
+            border-right: 1px solid var(--border-light);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        body.dark .sidebar {
+            background: var(--sidebar-dark);
+            border-right-color: var(--border-dark);
+            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.6);
+        }
+
+        .sidebar-header {
+            padding: 1.6rem 1.5rem;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.35);
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(59, 130, 246, 0.08));
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .logo-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 0.9rem;
+            object-fit: contain;
+            background: #ecfdf5;
+            padding: 4px;
+        }
+
+        body.dark .logo-icon {
+            background: #022c22;
+        }
+
+        .logo-brand {
+            display: flex;
+            gap: 0.2rem;
+            align-items: baseline;
+            letter-spacing: 0.02em;
+        }
+
+        .logo-text-krishi {
+            color: var(--primary);
+            font-weight: 800;
+            font-size: 1.25rem;
+        }
+
+        .logo-text-mitr {
+            color: #020617;
+            font-weight: 800;
+            font-size: 1.25rem;
+        }
+
+        body.dark .logo-text-mitr {
+            color: #f9fafb;
+        }
+
+        .nav-menu {
+            flex: 1;
+            overflow-y: auto;
+            padding: 0.5rem 0;
+        }
+
+        .nav-section {
+            margin-bottom: 1rem;
+        }
+
+        .nav-section-title {
+            padding: 0 1.5rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: #4b5563;
+            margin-bottom: 0.6rem;
+        }
+
+        body.dark .nav-section-title {
+            color: var(--text-secondary-dark);
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 0.9rem;
+            text-decoration: none;
+            padding: 0.75rem 1.5rem;
+            color: #111827;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            border-left: 3px solid transparent;
+            font-size: 0.95rem;
+        }
+
+        body.dark .nav-item {
+            color: #e5e7eb;
+        }
+
+        .nav-item i {
+            font-size: 1.1rem;
+            width: 20px;
+        }
+
+        .nav-item:hover {
+            color: var(--primary);
+            border-left-color: var(--primary);
+            background: rgba(16, 185, 129, 0.06);
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+            font-weight: 600;
+            border-left-color: var(--primary);
+            background: rgba(16, 185, 129, 0.08);
+        }
+
+        .sidebar-footer {
+            flex-shrink: 0;
+            width: 100%;
+            padding: 1.2rem 1.5rem 1.5rem;
+            border-top: 1px solid var(--border-light);
+            background: var(--sidebar-light);
+            display: flex;
+            flex-direction: column;
+            gap: 0.7rem;
+        }
+
+        body.dark .sidebar-footer {
+            background: var(--sidebar-dark);
+            border-top-color: var(--border-dark);
+        }
+
+        .user-info {
+            color: var(--text-secondary-light);
+            font-size: 0.85rem;
+        }
+
+        body.dark .user-info {
+            color: var(--text-secondary-dark);
+        }
+
+        .theme-toggle-sidebar,
+        .logout-btn {
+            width: 100%;
+            border-radius: 999px;
+            padding: 0.65rem 0.8rem;
+            font-size: 0.8rem;
+            cursor: pointer;
+            border: 1px solid transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.45rem;
+            transition: all 0.2s ease;
+            font-weight: 500;
+        }
+
+        .theme-toggle-sidebar {
+            background: rgba(16, 185, 129, 0.06);
+            color: var(--primary);
+            border-color: rgba(16, 185, 129, 0.25);
+        }
+
+        .theme-toggle-sidebar:hover {
+            background: rgba(16, 185, 129, 0.12);
+        }
+
+        .logout-btn {
+            background: rgba(239, 68, 68, 0.06);
+            color: var(--danger);
+            border-color: rgba(239, 68, 68, 0.25);
+        }
+
+        .logout-btn:hover {
+            background: rgba(239, 68, 68, 0.12);
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 260px;
+                transform: translateX(-100%);
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0 !important;
+                width: 100% !important;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .sidebar {
+                width: 240px;
+            }
+        }
+
+        /* Main content & topbar */
+        .main-content {
+            margin-left: 280px;
+            min-height: 100vh;
+            transition: margin-left 0.3s ease;
+        }
+
+        body.dark .main-content {
+            background: var(--bg-dark);
+        }
+
+        .simple-topbar {
+            background: var(--card-light);
+            padding: 1rem 2.2rem;
+            border-bottom: 1px solid var(--border-light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        body.dark .simple-topbar {
+            background: var(--card-dark);
+            border-bottom-color: var(--border-dark);
+        }
+
+        .topbar-left {
+            display: flex;
+            align-items: center;
+            gap: 0.9rem;
+        }
+
+        .topbar-logo {
+            width: 30px;
+            height: 30px;
+            border-radius: 0.7rem;
+            object-fit: contain;
+            background: #ecfdf5;
+            padding: 3px;
+        }
+
+        body.dark .topbar-logo {
+            background: #022c22;
+        }
+
+        .simple-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text-light);
+        }
+
+        body.dark .simple-title {
+            color: var(--text-dark);
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .status-badge {
+            background: rgba(22, 163, 74, 0.08);
+            color: #16a34a;
+            padding: 0.35rem 0.9rem;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            border: 1px solid rgba(22, 163, 74, 0.3);
+        }
+
+        body.dark .status-badge {
+            background: rgba(22, 163, 74, 0.18);
+            color: #bbf7d0;
+            border-color: rgba(22, 163, 74, 0.4);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.5rem 0.7rem;
+            border-radius: 0.6rem;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .simple-topbar {
+                padding: 0.9rem 1rem;
+            }
+
+            .simple-title {
+                font-size: 1.1rem;
+            }
+
+            .mobile-menu-btn {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+            }
+        }
+
+        /* Layout */
+        .content-area {
+            padding: 1.7rem 2rem 2.5rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        @media (max-width: 1024px) {
+            .content-area {
+                padding: 1.3rem 1.2rem 2rem;
+            }
+        }
+
+        .layout-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1.6fr) minmax(0, 1.1fr);
+            gap: 1.75rem;
+            align-items: stretch;
+        }
+
+        @media (max-width: 1024px) {
+            .layout-grid {
+                grid-template-columns: minmax(0, 1fr);
+            }
+        }
+
+        .chat-column,
+        .history-column {
+            min-width: 0;
+            display: flex;
+        }
+
+        .chat-column {
+            flex-direction: column;
+        }
+
+        .history-column {
+            flex-direction: column;
+        }
+
+        /* Chat container */
+        .chat-container {
+            background: var(--card-light);
+            border-radius: 1.5rem;
+            padding: 1.8rem 1.4rem 1rem;
+            box-shadow: 0 10px 20px rgba(15, 23, 42, 0.12);
+            border: 1px solid var(--border-light);
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            width: 100%;
+            min-height: 78vh;
+        }
+
+        body.dark .chat-container {
+            background: var(--card-dark);
+            border-color: var(--border-dark);
+            box-shadow: 0 16px 28px rgba(0, 0, 0, 0.6);
+        }
+
+        .chat-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        body.dark .chat-header {
+            border-bottom-color: var(--border-dark);
+        }
+
+        .chat-header-main {
+            display: flex;
+            align-items: center;
+            gap: 0.9rem;
+            flex: 1;
+        }
+
+        .chat-bot-image {
+            width: 60px;
+            height: 60px;
+            border-radius: 1.2rem;
+            object-fit: cover;
+            border: 2px solid var(--primary);
+        }
+
+        .chat-header-text h3 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text-light);
+            margin-bottom: 0.15rem;
+        }
+
+        body.dark .chat-header-text h3 {
+            color: var(--text-dark);
+        }
+
+        .chat-header-text p {
+            color: var(--text-secondary-light);
+            font-size: 0.85rem;
+        }
+
+        body.dark .chat-header-text p {
+            color: var(--text-secondary-dark);
+        }
+
+        .language-selector {
+            margin-left: auto;
+            display: inline-flex;
+            gap: 0.4rem;
+            padding: 0.25rem;
+            border-radius: 999px;
+            background: #f1f5f9;
+            border: 1px solid #e2e8f0;
+        }
+
+        body.dark .language-selector {
+            background: #020617;
+            border-color: #1e293b;
+        }
+
+        .lang-btn {
+            border-radius: 999px;
+            border: none;
+            padding: 0.25rem 0.75rem;
+            font-size: 0.72rem;
+            font-weight: 600;
+            cursor: pointer;
+            background: transparent;
+            color: var(--text-secondary-light);
+            transition: all 0.18s ease;
+        }
+
+        body.dark .lang-btn {
+            color: var(--text-secondary-dark);
+        }
+
+        .lang-btn.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Chat messages */
+        .chat-messages {
+            flex: 1;
+            min-height: 420px;
+            max-height: 520px;
+            overflow-y: auto;
+            padding: 0.9rem 0.8rem 0.4rem;
+            border-radius: 1rem;
+            background: #f8fafc;
+        }
+
+        body.dark .chat-messages {
+            background: #020617;
+        }
+
+        .chat-messages::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: rgba(148, 163, 184, 0.8);
+            border-radius: 999px;
+        }
+
+        /* Banner image */
+        .welcome-hero {
+            width: 100%;
+            border-radius: 1rem;
+            overflow: hidden;
+            margin-bottom: 0.7rem;
+        }
+
+        .welcome-hero img {
+            width: 100%;
+            height: 320px;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* Sample questions */
+        .sample-questions {
+            margin-top: 0.5rem;
+            padding: 0.7rem 0.8rem;
+            border-radius: 0.8rem;
+            background: #e5f8f1;
+            border: 1px solid #bbf7d0;
+            font-size: 0.85rem;
+            color: #065f46;
+        }
+
+        body.dark .sample-questions {
+            background: #022c22;
+            border-color: #047857;
+            color: #d1fae5;
+        }
+
+        .sample-questions-title {
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+        }
+
+        .sample-question {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.4rem;
+            margin-top: 0.2rem;
+        }
+
+        .sample-question i {
+            margin-top: 0.1rem;
+            font-size: 0.8rem;
+        }
+
+        /* Messages */
+        .message {
+            display: flex;
+            gap: 0.6rem;
+            margin-top: 0.7rem;
+        }
+
+        .message-avatar {
+            width: 26px;
+            height: 26px;
+            border-radius: 999px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 0.85rem;
+        }
+
+        .user-avatar {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .bot-avatar {
+            background: #10b981;
+            color: white;
+        }
+
+        .message-content {
+            max-width: 100%;
+        }
+
+        .message-text {
+            border-radius: 0.9rem;
+            padding: 0.6rem 0.8rem;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            word-wrap: break-word;
+        }
+
+        .message-time {
+            font-size: 0.7rem;
+            opacity: 0.7;
+            margin-top: 0.2rem;
+        }
+
+        .user-message {
+            margin-left: auto;
+            flex-direction: row-reverse;
+        }
+
+        .user-message .message-text {
+            background: var(--primary);
+            color: white;
+        }
+
+        .bot-message .message-text {
+            background: #ffffff;
+            color: var(--text-light);
+            border: 1px solid #e2e8f0;
+        }
+
+        body.dark .bot-message .message-text {
+            background: #1e293b;
+            border-color: #334155;
+            color: var(--text-dark);
+        }
+
+        .highlight {
+            font-weight: 600;
+            color: var(--primary-dark);
+        }
+
+        body.dark .highlight {
+            color: #6ee7b7;
+        }
+
+        /* Input section */
+        .input-section {
+            margin-top: 0.3rem;
+            padding: 0.85rem 0.75rem 0.7rem;
+            border-radius: 1rem;
+            background: #f1f5f9;
+            border: 1px solid #e2e8f0;
+        }
+
+        body.dark .input-section {
+            background: #020617;
+            border-color: #1e293b;
+        }
+
+        .input-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.78rem;
+            color: var(--text-secondary-light);
+        }
+
+        body.dark .status-indicator {
+            color: var(--text-secondary-dark);
+        }
+
+        .status-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 999px;
+            background: var(--success);
+        }
+
+        .status-animated {
+            animation: statusBlink 2.2s linear infinite;
+        }
+
+        @keyframes statusBlink {
+            0% {
+                opacity: 0.7;
+            }
+
+            50% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0.7;
+            }
+        }
+
+        .speak-btn {
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            font-size: 1rem;
+            color: var(--text-secondary-light);
+        }
+
+        body.dark .speak-btn {
+            color: var(--text-secondary-dark);
+        }
+
+        .input-row {
+            display: flex;
+            gap: 0.6rem;
+            align-items: flex-end;
+        }
+
+        .question-input {
+            flex: 1;
+            padding: 0.8rem 0.9rem;
+            border-radius: 0.8rem;
+            border: 1px solid #cbd5f5;
+            background: #ffffff;
+            font-size: 0.9rem;
+            resize: none;
+            min-height: 52px;
+            max-height: 130px;
+            outline: none;
+            font-family: 'Inter', sans-serif;
+            color: var(--text-light);
+        }
+
+        body.dark .question-input {
+            background: #0f172a;
+            border-color: #334155;
+            color: var(--text-dark);
+        }
+
+        .question-input::placeholder {
+            color: #9ca3af;
+        }
+
+        .question-input:focus {
+            border-color: var(--primary);
+        }
+
+        .input-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            flex-shrink: 0;
+        }
+
+        .icon-btn {
+            width: 38px;
+            height: 38px;
+            border-radius: 999px;
+            border: 1px solid #cbd5f5;
+            background: #ffffff;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.95rem;
+            color: #4b5563;
+            transition: background 0.15s ease, border-color 0.15s ease;
+        }
+
+        body.dark .icon-btn {
+            background: #020617;
+            border-color: #334155;
+            color: #e5e7eb;
+        }
+
+        .icon-btn:hover {
+            background: #e5f8f1;
+            border-color: var(--primary);
+        }
+
+        .send-btn {
+            padding: 0 1rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            background: var(--primary);
+            color: white;
+            border: none;
+        }
+
+        .send-btn:hover:not(:disabled) {
+            background: var(--primary-dark);
+        }
+
+        .send-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        .mic-btn.recording {
+            background: #dcfce7;
+            border-color: var(--primary);
+            color: var(--primary-dark);
+        }
+
+        /* Past queries section */
+        .past-queries-section {
+            background: var(--card-light);
+            border-radius: 1.5rem;
+            padding: 1.4rem 1.3rem;
+            border: 1px solid var(--border-light);
+            box-shadow: 0 10px 20px rgba(15, 23, 42, 0.12);
+            width: 100%;
+            min-height: 78vh;
+        }
+
+        body.dark .past-queries-section {
+            background: var(--card-dark);
+            border-color: var(--border-dark);
+            box-shadow: 0 16px 28px rgba(0, 0, 0, 0.6);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 0.9rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.8rem;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        body.dark .section-header {
+            border-bottom-color: var(--border-dark);
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+        }
+
+        .section-title i {
+            width: 34px;
+            height: 34px;
+            border-radius: 0.9rem;
+            background: #fee2e2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #b91c1c;
+        }
+
+        body.dark .section-title i {
+            background: #7f1d1d;
+            color: #fee2e2;
+        }
+
+        .section-title h2 {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-light);
+        }
+
+        body.dark .section-title h2 {
+            color: var(--text-dark);
+        }
+
+        .section-subtitle {
+            text-align: right;
+        }
+
+        .section-subtitle p {
+            font-size: 0.8rem;
+            color: var(--text-secondary-light);
+            margin-bottom: 0.3rem;
+        }
+
+        body.dark .section-subtitle p {
+            color: var(--text-secondary-dark);
+        }
+
+        .queries-count {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            padding: 0.25rem 0.8rem;
+            border-radius: 999px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            background: #ecfdf5;
+            color: #047857;
+            border: 1px solid #bbf7d0;
+        }
+
+        body.dark .queries-count {
+            background: #022c22;
+            color: #a7f3d0;
+            border-color: #065f46;
+        }
+
+        .queries-container {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+            max-height: calc(78vh - 100px);
+            overflow-y: auto;
+            padding-right: 0.3rem;
+        }
+
+        .queries-container::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .queries-container::-webkit-scrollbar-thumb {
+            background: rgba(148, 163, 184, 0.8);
+            border-radius: 999px;
+        }
+
+        .queries-loading,
+        .no-queries {
+            text-align: center;
+            padding: 2rem 1.5rem;
+            color: var(--text-secondary-light);
+        }
+
+        body.dark .queries-loading,
+        body.dark .no-queries {
+            color: var(--text-secondary-dark);
+        }
+
+        .loading-spinner {
+            font-size: 1.7rem;
+            margin-bottom: 0.6rem;
+            color: var(--primary);
+        }
+
+        .no-queries i {
+            font-size: 2.2rem;
+            margin-bottom: 0.4rem;
+            color: var(--primary);
+        }
+
+        .no-queries h3 {
+            font-size: 1rem;
+            margin-bottom: 0.2rem;
+            color: var(--text-light);
+        }
+
+        body.dark .no-queries h3 {
+            color: var(--text-dark);
+        }
+
+        .query-card {
+            background: #ffffff;
+            border-radius: 1rem;
+            padding: 0.9rem 0.9rem;
+            border: 1px solid #e5e7eb;
+            position: relative;
+            transition: background 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
+            cursor: pointer;
+        }
+
+        body.dark .query-card {
+            background: #020617;
+            border-color: #1e293b;
+        }
+
+        .query-card:hover {
+            background: #f9fafb;
+            border-color: #10b981;
+            transform: translateY(-1px);
+        }
+
+        body.dark .query-card:hover {
+            background: #0b1120;
+        }
+
+        .query-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 0.7rem;
+            margin-bottom: 0.7rem;
+        }
+
+        .query-number {
+            width: 28px;
+            height: 28px;
+            border-radius: 0.7rem;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .query-meta {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 0.3rem;
+        }
+
+        .query-time {
+            font-size: 0.78rem;
+            color: var(--text-secondary-light);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        body.dark .query-time {
+            color: var(--text-secondary-dark);
+        }
+
+        .query-category {
+            font-size: 0.7rem;
+            padding: 0.2rem 0.6rem;
+            border-radius: 999px;
+            background: #e0f2fe;
+            color: #1d4ed8;
+            font-weight: 600;
+            text-transform: capitalize;
+        }
+
+        body.dark .query-category {
+            background: #1d4ed8;
+            color: #dbeafe;
+        }
+
+        .query-content {
+            margin-bottom: 0.6rem;
+        }
+
+        .query-question,
+        .query-response {
+            padding: 0.65rem 0.7rem;
+            border-radius: 0.7rem;
+            margin-bottom: 0.45rem;
+        }
+
+        .query-question {
+            background: #f8fafc;
+            border: 1px solid #e5e7eb;
+        }
+
+        body.dark .query-question {
+            background: #020617;
+            border-color: #1e293b;
+        }
+
+        .query-question h4,
+        .query-response h4 {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            margin-bottom: 0.3rem;
+        }
+
+        .query-question h4 {
+            color: #16a34a;
+        }
+
+        .query-question p {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            margin: 0;
+            font-weight: 500;
+            max-height: 30px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        body.dark .query-question p {
+            color: var(--text-dark);
+        }
+
+        .query-response {
+            background: #ecfdf5;
+            border: 1px solid #bbf7d0;
+        }
+
+        body.dark .query-response {
+            background: #022c22;
+            border-color: #047857;
+        }
+
+        .query-response-text {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            max-height: 38px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        body.dark .query-response-text {
+            color: #e5e7eb;
+        }
+
+        .officer-response {
+            margin-top: 0.35rem;
+        }
+
+        .query-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 0.55rem;
+            border-top: 1px solid #e5e7eb;
+            gap: 0.5rem;
+        }
+
+        body.dark .query-actions {
+            border-top-color: #1e293b;
+        }
+
+        .query-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            font-size: 0.78rem;
+            font-weight: 500;
+        }
+
+        .query-status.resolved {
+            color: #16a34a;
+        }
+
+        .query-status.pending {
+            color: #f59e0b;
+        }
+
+        .query-status.escalated {
+            color: #f97316;
+        }
+
+        body.dark .query-status.escalated {
+            color: #fdba74;
+        }
+
+        .query-actions-btns {
+            display: inline-flex;
+            gap: 0.4rem;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            border-radius: 0.6rem;
+            border: 1px solid #e5e7eb;
+            background: #f9fafb;
+            font-size: 0.78rem;
+            padding: 0.3rem 0.7rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            cursor: pointer;
+            color: #6b7280;
+            transition: all 0.15s ease;
+        }
+
+        body.dark .action-btn {
+            background: #020617;
+            border-color: #1e293b;
+            color: #e5e7eb;
+        }
+
+        .action-btn:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* -------- NEW: My Query Status section -------- */
+        .my-status-section {
+            margin-top: 1rem;
+            background: var(--card-light);
+            border-radius: 1.3rem;
+            padding: 1.1rem 1.1rem 0.9rem;
+            border: 1px solid var(--border-light);
+            box-shadow: 0 6px 16px rgba(15, 23, 42, 0.06);
+            width: 100%;
+            /* <-- Make sure it stretches fully */
+        }
+
+        body.dark .my-status-section {
+            background: var(--card-dark);
+            border-color: var(--border-dark);
+            box-shadow: 0 10px 22px rgba(0, 0, 0, 0.7);
+        }
+
+        /* HEADER: title on top, legend below (full width) */
+        .my-status-header {
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            gap: 0.6rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .my-status-title {
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+        }
+
+        .my-status-title i {
+            width: 32px;
+            height: 32px;
+            border-radius: 0.9rem;
+            background: #eef2ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #4f46e5;
+            flex-shrink: 0;
+        }
+
+        body.dark .my-status-title i {
+            background: #1e293b;
+            color: #a5b4fc;
+        }
+
+        .my-status-title h2 {
+            font-size: 0.98rem;
+            font-weight: 700;
+            color: var(--text-light);
+            margin-bottom: 0.12rem;
+        }
+
+        body.dark .my-status-title h2 {
+            color: var(--text-dark);
+        }
+
+        .my-status-title p {
+            font-size: 0.8rem;
+            color: var(--text-secondary-light);
+        }
+
+        body.dark .my-status-title p {
+            color: var(--text-secondary-dark);
+        }
+
+        /* LEGEND: nice grid of tags with top separator */
+        .status-legend {
+            width: 100%;
+            margin-top: 0.1rem;
+            padding-top: 0.45rem;
+            border-top: 1px dashed #e5e7eb;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 0.35rem 0.5rem;
+            align-items: center;
+        }
+
+        body.dark .status-legend {
+            border-top-color: #1f2937;
+        }
+
+        .status-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.22rem 0.7rem;
+            border-radius: 999px;
+            font-size: 0.72rem;
+            font-weight: 600;
+            border: 1px solid transparent;
+            white-space: nowrap;
+        }
+
+        .status-tag--resolved {
+            background: #dcfce7;
+            color: #15803d;
+            border-color: #bbf7d0;
+        }
+
+        .status-tag--officer {
+            background: #dbeafe;
+            color: #1d4ed8;
+            border-color: #bfdbfe;
+        }
+
+        .status-tag--escalated {
+            background: #fef9c3;
+            color: #854d0e;
+            border-color: #facc15;
+        }
+
+        .status-tag--normal {
+            background: #f3f4f6;
+            color: #4b5563;
+            border-color: #e5e7eb;
+        }
+
+        body.dark .status-tag--resolved {
+            background: #14532d;
+            color: #bbf7d0;
+            border-color: #16a34a;
+        }
+
+        body.dark .status-tag--officer {
+            background: #1e3a8a;
+            color: #bfdbfe;
+            border-color: #3b82f6;
+        }
+
+        body.dark .status-tag--escalated {
+            background: #451a03;
+            color: #fed7aa;
+            border-color: #f97316;
+        }
+
+        body.dark .status-tag--normal {
+            background: #020617;
+            color: #e5e7eb;
+            border-color: #374151;
+        }
+
+        .my-status-list {
+            max-height: 420px;
+            overflow-y: auto;
+            padding-right: 0.25rem;
+        }
+
+        .my-status-list::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .my-status-list::-webkit-scrollbar-thumb {
+            background: rgba(148, 163, 184, 0.8);
+            border-radius: 999px;
+        }
+
+        /* Each lifecycle block – clean card */
+        .my-status-card {
+            background: #f9fafb;
+            border-radius: 0.9rem;
+            border: 1px solid #e5e7eb;
+            padding: 0.65rem 0.75rem 0.55rem;
+            margin-bottom: 0.6rem;
+            cursor: pointer;
+            transition:
+                background 0.15s ease,
+                border-color 0.15s ease,
+                transform 0.12s ease;
+        }
+
+        body.dark .my-status-card {
+            background: #020617;
+            border-color: #1e293b;
+        }
+
+        .my-status-card:hover {
+            background: #ecfdf5;
+            border-color: var(--primary);
+            transform: translateY(-1px);
+        }
+
+        body.dark .my-status-card:hover {
+            background: #022c22;
+        }
+
+        /* Rows inside the card */
+        .my-status-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.45rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .my-status-row-label {
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: #6b7280;
+            min-width: 80px;
+            flex-shrink: 0;
+        }
+
+        body.dark .my-status-row-label {
+            color: #9ca3af;
+        }
+
+        .my-status-row-value {
+            font-size: 0.82rem;
+            color: var(--text-light);
+        }
+
+        body.dark .my-status-row-value {
+            color: var(--text-dark);
+        }
+
+        .my-status-row-value.muted {
+            color: var(--text-secondary-light);
+        }
+
+        body.dark .my-status-row-value.muted {
+            color: var(--text-secondary-dark);
+        }
+
+        /* Timeline strip at bottom of the card */
+        .my-status-row-timeline {
+            margin-top: 0.35rem;
+            padding-top: 0.25rem;
+            border-top: 1px dashed #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.75rem;
+            color: var(--text-secondary-light);
+        }
+
+        body.dark .my-status-row-timeline {
+            border-top-color: #1f2937;
+            color: var(--text-secondary-dark);
+        }
+
+        /* ------- Modal (unchanged layout, just aligned with theme) ------- */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.7);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        body.lang-ml .question-input {
+            font-size: 0.55rem;
+        }
+
+        .modal {
+            background: #ffffff;
+            border-radius: 1rem;
+            max-width: 680px;
+            width: 95%;
+            max-height: 80vh;
+            overflow: hidden;
+            border: 1px solid #e5e7eb;
+            display: flex;
+            flex-direction: column;
+        }
+
+        body.dark .modal {
+            background: #0f172a;
+            border-color: #1e293b;
+        }
+
+        .modal-header {
+            padding: 0.85rem 1rem;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.5rem;
+        }
+
+        body.dark .modal-header {
+            border-bottom-color: #1e293b;
+        }
+
+        .modal-header h3 {
+            font-size: 1rem;
+            font-weight: 700;
+        }
+
+        .modal-body {
+            padding: 0.9rem 1rem;
+            overflow-y: auto;
+        }
+
+        /* modal summary with status + timeline */
+        .modal-summary {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 0.8rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .modal-timeline {
+            font-size: 0.78rem;
+            color: var(--text-secondary-light);
+            text-align: right;
+        }
+
+        body.dark .modal-timeline {
+            color: var(--text-secondary-dark);
+        }
+
+        .modal-section {
+            margin-bottom: 0.8rem;
+            border-radius: 0.8rem;
+            padding: 0.7rem 0.8rem;
+        }
+
+        .modal-section.question {
+            background: #f9fafc;
+            border: 1px solid #e5e7eb;
+        }
+
+        body.dark .modal-section.question {
+            background: #020617;
+            border-color: #1e293b;
+        }
+
+        .modal-section.response {
+            background: #ecfdf5;
+            border: 1px solid #bbf7d0;
+        }
+
+        body.dark .modal-section.response {
+            background: #022c22;
+            border-color: #047857;
+        }
+
+        .modal-section.escalation {
+            background: #fefce8;
+            border: 1px solid #facc15;
+        }
+
+        body.dark .modal-section.escalation {
+            background: #422006;
+            border-color: #facc15;
+        }
+
+        .modal-section h4 {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-bottom: 0.4rem;
+            font-weight: 700;
+        }
+
+        .modal-section.question h4 {
+            color: #16a34a;
+        }
+
+        .modal-section.response h4 {
+            color: #047857;
+        }
+
+        body.dark .modal-section.response h4 {
+            color: #a7f3d0;
+        }
+
+        .modal-footer {
+            border-top: 1px solid #e5e7eb;
+            padding: 0.7rem 1rem;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        body.dark .modal-footer {
+            border-top-color: #1e293b;
+        }
+
+        .modal-close-btn {
+            border-radius: 999px;
+            border: 1px solid #e5e7eb;
+            padding: 0.4rem 0.9rem;
+            background: #f9fafb;
+            cursor: pointer;
+            font-size: 0.82rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+        }
+
+        body.dark .modal-close-btn {
+            background: #020617;
+            border-color: #1e293b;
+            color: #e5e7eb;
+        }
+
+        .modal-close-btn:hover {
+            background: #ef4444;
+            color: white;
+            border-color: #ef4444;
+        }
+
+        /* responsive tweaks for this block */
+        @media (max-width: 768px) {
+            .my-status-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .status-legend {
+                grid-template-columns: repeat(2, minmax(140px, 1fr));
+            }
+
+            .my-status-row-timeline {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.15rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .my-status-section {
+                border-radius: 1.1rem;
+                padding-inline: 0.9rem;
+            }
+
+            .status-legend {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .offline-ai-link {
+            text-decoration: none;
+            background: #1e88e5;
+            color: #fff;
+            cursor: pointer;
+        }
+    </style>
+    <script src="config.js"></script>
+</head>
+
+<body>
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <img src="images/krishi-officer.png" alt="KrishiMitr logo" class="logo-icon" />
+                <div class="logo-brand">
+                    <span class="logo-text-krishi">Krishi</span>
+                    <span class="logo-text-mitr">Mitr</span>
+                </div>
+            </div>
+        </div>
+        <div class="nav-menu">
+            <div class="nav-section">
+                <div class="nav-section-title" data-i18n="sidebar.mainMenu">Main Menu</div>
+                <a href="dashboard.html" class="nav-item active">
+                    <i class="fas fa-home"></i>
+                    <span data-i18n="sidebar.dashboard">Dashboard</span>
+                </a>
+                <a href="ask-query.html" class="nav-item">
+                    <i class="fas fa-robot"></i>
+                    <span data-i18n="sidebar.askQuery">Ask Query</span>
+                </a>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title" data-i18n="sidebar.tools">Tools</div>
+                <a href="crops.html" class="nav-item">
+                    <i class="fa-solid fa-carrot"></i>
+                    <span data-i18n="sidebar.yourcrop">Your Crops</span>
+                </a>
+                <a href="crop-diagnosis.html" class="nav-item">
+                    <i class="fa-solid fa-briefcase-medical"></i>
+                    <span data-i18n="sidebar.cropDiagnosis">Crop Diagnosis</span>
+                </a>
+                <a href="weather-alerts.html" class="nav-item">
+                    <i class="fas fa-cloud-sun"></i>
+                    <span data-i18n="sidebar.weatherAlerts">Weather & Alerts</span>
+                </a>
+                <a href="Schemes.html" class="nav-item">
+                    <i class="fa-solid fa-building-ngo"></i>
+                    <span data-i18n="sidebar.schemes">Govt Schemes</span>
+                </a>
+                <a href="helpline.html" class="nav-item">
+                    <i class="fa-solid fa-phone"></i>
+                    <span data-i18n="sidebar.helpline">Helpline Number</span>
+                </a>
+                <a href="smart-farming.html" class="nav-item">
+                    <i class="fa-solid fa-briefcase"></i>
+                    <span data-i18n="sidebar.agriSwasthya">Agri Swasthya</span>
+                </a>
+                <a href="market-prices.html" class="nav-item">
+                    <i class="fa-solid fa-dollar-sign"></i>
+                    <span data-i18n="sidebar.marketPrices">Market Prices</span>
+                </a>
+                <a href="iot.html" class="nav-item">
+                    <i class="fa-solid fa-screwdriver-wrench"></i>
+                    <span data-i18n="sidebar.IOT">IOT</span>
+                </a>
+                <a href="satellite.html" class="nav-item">
+                    <i class="fa-solid fa-satellite"></i>
+                    <span data-i18n="sidebar.satellite">Satellite Monitoring</span>
+                </a>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title" data-i18n="sidebar.communitySection">Community</div>
+                <a href="farmer-community.html" class="nav-item">
+                    <i class="fas fa-users"></i>
+                    <span data-i18n="sidebar.community">Community</span>
+                </a>
+                <a href="profile.html" class="nav-item">
+                    <i class="fas fa-user"></i>
+                    <span data-i18n="sidebar.profile">Profile</span>
+                </a>
+            </div>
+        </div>
+
+        <div class="sidebar-footer">
+            <div id="userInfo" class="user-info">
+                <div style="font-weight:600;">Loading...</div>
+                <div style="font-size:0.8rem;opacity:0.8;">Fetching profile</div>
+            </div>
+            <button class="theme-toggle-sidebar" onclick="toggleTheme()">
+                <i class="fas fa-sun"></i>
+                <span data-i18n="sidebar.toggleTheme">Toggle Theme</span>
+            </button>
+            <button id="logoutBtn" class="logout-btn">
+                <i class="fas fa-sign-out-alt"></i>
+                <span data-i18n="sidebar.logout">Logout</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="simple-topbar">
+            <div class="topbar-left">
+                <button class="mobile-menu-btn" onclick="toggleSidebar()">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <img src="images/krishi-officer.png" alt="KrishiMitr logo" class="topbar-logo" />
+                <h1 class="simple-title" data-i18n="header.title">FarmSure</h1>
+            </div>
+            <div class="topbar-right">
+                <a href="offline-ai.html" class="status-badge offline-ai-link">
+                    🧠 Offline AI
+                </a>
+            </div>
+
+
+        </div>
+
+        <div class="content-area">
+            <div class="layout-grid">
+                <!-- Chat Column -->
+                <div class="chat-column">
+                    <div class="chat-container">
+                        <!-- Chat Header -->
+                        <div class="chat-header">
+                            <div class="chat-header-main">
+                                <img src="images/ai-assistant.png" alt="AI Farming Expert" class="chat-bot-image" />
+                                <div class="chat-header-text">
+                                    <h3 data-i18n="ask.assistantTitle">Krishi AI Assistant</h3>
+                                    <p data-i18n="ask.assistantSubtitle">
+                                        Quick guidance for your crops and market doubts.
+                                    </p>
+                                </div>
+                            </div>
+                            <!-- AI RESPONSE LANGUAGE (ONLY) -->
+                            <div class="language-selector">
+                                <button class="lang-btn" data-lang="en">EN</button>
+                                <button class="lang-btn" data-lang="hi">हिं</button>
+                                <button class="lang-btn" data-lang="ml">മലയാളം</button>
+                            </div>
+                        </div>
+
+                        <!-- Chat Messages -->
+                        <div id="chatMessages" class="chat-messages">
+                            <div class="welcome-hero">
+                                <img src="images/banner.png" alt="AI Farming Assistant Banner" />
+                            </div>
+                            <div class="sample-questions">
+                                <div class="sample-questions-title" data-i18n="ask.sampleTitle">Try asking:</div>
+                                <div class="sample-question">
+                                    <i class="fas fa-circle"></i>
+                                    <span data-i18n="ask.sampleQ1">How to control leaf curl in chilli?</span>
+                                </div>
+                                <div class="sample-question">
+                                    <i class="fas fa-circle"></i>
+                                    <span data-i18n="ask.sampleQ2">What fertilizer schedule is best for paddy?</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Input Section -->
+                        <div class="input-section">
+                            <div class="input-controls">
+                                <div class="status-indicator">
+                                    <div class="status-dot"></div>
+                                    <span id="statusText" class="status-animated" data-i18n="ask.statusReady">
+                                        Ready to help you
+                                    </span>
+                                </div>
+                                <button id="speakBtn" class="speak-btn" title="Read last answer">
+                                    <i class="fas fa-volume-high"></i>
+                                </button>
+                            </div>
+
+                            <div class="input-row">
+                                <textarea id="questionInput" class="question-input"
+                                    data-i18n-placeholder="ask.questionPlaceholder"
+                                    placeholder="Ask your farming question here... (e.g., How to control pests in tomato?)"
+                                    rows="2"></textarea>
+                                <div class="input-actions">
+                                    <button id="micBtn" class="icon-btn mic-btn" title="Voice Input">
+                                        <i class="fas fa-microphone"></i>
+                                    </button>
+                                    <button id="clearBtn" class="icon-btn" title="Clear Chat">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                    <button id="sendBtn" class="icon-btn send-btn">
+                                        <i class="fas fa-paper-plane"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- History Column (only Past Queries here) -->
+                <div class="history-column">
+                    <!-- Existing Past Queries card -->
+                    <div class="past-queries-section">
+                        <div class="section-header">
+                            <div class="section-title">
+                                <i class="fas fa-history"></i>
+                                <h2 data-i18n="ask.pastTitle">Past Queries</h2>
+                            </div>
+                            <div class="section-subtitle">
+                                <p data-i18n="ask.pastSubtitle">Your recent farming questions & AI replies</p>
+                                <div class="queries-count">
+                                    <span id="queriesCount">0</span>
+                                    <span data-i18n="ask.pastQuestionsLabel">questions</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="queries-container" id="pastQueriesContainer">
+                            <div class="queries-loading">
+                                <div class="loading-spinner">
+                                    <i class="fas fa-spinner fa-spin"></i>
+                                </div>
+                                <p data-i18n="ask.loadingPastQueries">Loading your past queries...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> <!-- layout-grid -->
+
+            <!-- ✅ My Query Status section (full-width below both columns) -->
+            <div class="my-status-section" id="myStatusSection">
+                <div class="my-status-header">
+                    <div class="my-status-title">
+                        <i class="fas fa-list-check"></i>
+                        <div>
+                            <h2>My Query Status</h2>
+                            <p>See full lifecycle for each question – AI reply, officer update & resolution.</p>
+                        </div>
+                    </div>
+                    <div class="status-legend">
+                        <span class="status-tag status-tag--resolved">🟢 Resolved</span>
+                        <span class="status-tag status-tag--officer">🔵 Officer Replied</span>
+                        <span class="status-tag status-tag--escalated">🟡 Escalated / Pending</span>
+                        <span class="status-tag status-tag--normal">⚪ Normal AI reply</span>
+                    </div>
+                </div>
+
+                <div id="myQueryStatusList" class="my-status-list">
+                    <div class="queries-loading">
+                        <div class="loading-spinner">
+                            <i class="fas fa-spinner fa-spin"></i>
+                        </div>
+                        <p>Loading query status...</p>
+                    </div>
+                </div>
+            </div> <!-- /my-status-section -->
+        </div> <!-- content-area -->
+    </main>
+
+    <!-- Modal for full query details -->
+    <div id="queryModal" class="modal-overlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 data-i18n="ask.modalTitle">Query Details</h3>
+                <button class="modal-close-btn" onclick="closeQueryDetails()">
+                    <i class="fas fa-times"></i>
+                    <span data-i18n="ask.modalClose">Close</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- NEW summary row with lifecycle status + timeline -->
+                <div class="modal-summary">
+                    <div id="modalStatusTag" class="status-tag status-tag--normal">
+                        ⚪ Normal AI reply
+                    </div>
+                    <div id="modalTimeline" class="modal-timeline">
+                        <!-- Filled from JS -->
+                    </div>
+                </div>
+
+                <div class="modal-section question">
+                    <h4 data-i18n="ask.modalQuestionTitle">Your Question</h4>
+                    <div id="modalQuestion"></div>
+                </div>
+                <div class="modal-section response">
+                    <h4 data-i18n="ask.modalResponseTitle">AI Response</h4>
+                    <div id="modalResponse"></div>
+                </div>
+                <!-- Escalation & officer update section -->
+                <div class="modal-section escalation" id="modalEscalationSection" style="display: none;">
+                    <h4>Escalation & Officer Update</h4>
+                    <div id="modalEscalationContent"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-close-btn" onclick="closeQueryDetails()">
+                    <i class="fas fa-check"></i>
+                    <span data-i18n="ask.modalDone">Done</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+
+        // ----------------- TTS helper (kept) -----------------
+        let ttsVoices = [];
+
+        function initVoices() {
+            if (!('speechSynthesis' in window)) return;
+
+            function load() {
+                ttsVoices = window.speechSynthesis.getVoices();
+            }
+
+            load();
+
+            if (!ttsVoices.length) {
+                window.speechSynthesis.onvoiceschanged = load;
+            }
+        }
+
+        initVoices();
+
+        const ttsLangCodes = {
+            en: 'en-IN',
+            hi: 'hi-IN',
+            ml: 'ml-IN'
+        };
+
+        function cleanTextForSpeech(htmlText) {
+            let text = htmlText
+                .replace(/<br\s*\/?>/gi, '\n')
+                .replace(/<[^>]+>/g, '')
+                .replace(/\*\*/g, '')
+                .replace(/\*/g, '')
+                .replace(/•/g, '')
+                .replace(/\s+\n/g, '\n')
+                .trim();
+            return text;
+        }
+
+        function speakText(rawHtml, langKey) {
+            if (!('speechSynthesis' in window)) {
+                alert('Text-to-speech not supported in this browser');
+                return;
+            }
+
+            const text = cleanTextForSpeech(rawHtml);
+            if (!text) return;
+
+            const langCode = ttsLangCodes[langKey] || 'en-IN';
+            const langBase = langCode.split('-')[0].toLowerCase();
+
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = langCode;
+
+            let voice =
+                ttsVoices.find(v => v.lang.toLowerCase() === langCode.toLowerCase()) ||
+                ttsVoices.find(v => v.lang.toLowerCase().startsWith(langBase)) ||
+                null;
+
+            if (voice) {
+                utterance.voice = voice;
+            }
+
+            if (langKey === 'hi' || langKey === 'ml') {
+                utterance.rate = 0.9;
+            }
+
+            window.speechSynthesis.cancel();
+            window.speechSynthesis.speak(utterance);
+        }
+
+        function readAloud(buttonEl) {
+            const langKey = buttonEl.dataset.lang || 'en';
+            const msgEl = buttonEl.closest('.message-content').querySelector('.message-text');
+            if (!msgEl) return;
+            const rawHtml = msgEl.innerHTML;
+            speakText(rawHtml, langKey);
+        }
+
+        // ----------------- DOM refs -----------------
+        const chatMessages = document.getElementById('chatMessages');
+        const questionInput = document.getElementById('questionInput');
+        const sendBtn = document.getElementById('sendBtn');
+        const micBtn = document.getElementById('micBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        const statusText = document.getElementById('statusText');
+        const speakBtn = document.getElementById('speakBtn');
+        const langBtns = document.querySelectorAll('.language-selector .lang-btn');
+
+        let recognition = null;
+        let isRecording = false;
+        let lastBotResponseText = '';
+
+        // store recent queries globally so modal + My Query Status can see lifecycle
+        let recentQueries = [];
+
+        // AI language (ONLY for AI responses + STT + TTS)
+        const languages = {
+            en: { code: 'en-US', tts: 'en-IN', name: 'English' },
+            hi: { code: 'hi-IN', tts: 'hi-IN', name: 'Hindi' },
+            ml: { code: 'ml-IN', tts: 'ml-IN', name: 'Malayalam' }
+        };
+
+        let uiLanguage = 'en'; // for page text
+        let aiLanguage = localStorage.getItem('aiLanguage') || 'en'; // for AI responses
+
+        // ----------------- UI TRANSLATIONS (like dashboard) -----------------
+        const translations = {
+            en: {
+                "sidebar.mainMenu": "Main Menu",
+                "sidebar.dashboard": "Dashboard",
+                "sidebar.askQuery": "Ask Query",
+                "sidebar.tools": "Tools",
+                "sidebar.cropDiagnosis": "Crop Diagnosis",
+                "sidebar.weatherAlerts": "Weather & Alerts",
+                "sidebar.schemes": "Govt Schemes",
+                "sidebar.helpline": "Helpline Number",
+                "sidebar.agriSwasthya": "Agri Swasthya",
+                "sidebar.marketPrices": "Market Prices",
+                "sidebar.communitySection": "Community",
+                "sidebar.community": "Community",
+                "sidebar.profile": "Profile",
+                "sidebar.toggleTheme": "Toggle Theme",
+                "sidebar.logout": "Logout",
+
+                "header.title": "FarmSure",
+                "status.online": "System Online",
+
+                "ask.assistantTitle": "Krishi AI Assistant",
+                "ask.assistantSubtitle": "Quick guidance for your crops and market doubts.",
+                "ask.sampleTitle": "Try asking:",
+                "ask.sampleQ1": "How to control leaf curl in chilli?",
+                "ask.sampleQ2": "What fertilizer schedule is best for paddy?",
+                "ask.questionPlaceholder": "Ask your farming question here... (e.g., How to control pests in tomato?)",
+                "ask.statusReady": "Ready to help you",
+                "ask.pastTitle": "Past Queries",
+                "ask.pastSubtitle": "Your recent farming questions & AI replies",
+                "ask.pastQuestionsLabel": "questions",
+                "ask.loadingPastQueries": "Loading your past queries...",
+
+                "ask.noQueriesTitle": "No queries yet",
+                "ask.noQueriesDesc": "Start by asking your first farming question.",
+                "ask.unableLoadTitle": "Unable to load queries",
+                "ask.unableLoadDesc": "Please check your connection and refresh.",
+
+                "ask.modalTitle": "Query Details",
+                "ask.modalQuestionTitle": "Your Question",
+                "ask.modalResponseTitle": "AI Response",
+                "ask.modalClose": "Close",
+                "ask.modalDone": "Done"
+            },
+            hi: {
+                "sidebar.mainMenu": "मुख्य मेनू",
+                "sidebar.dashboard": "डैशबोर्ड",
+                "sidebar.askQuery": "प्रश्न पूछें",
+                "sidebar.tools": "साधन",
+                "sidebar.cropDiagnosis": "फसल रोग निदान",
+                "sidebar.weatherAlerts": "मौसम और अलर्ट",
+                "sidebar.schemes": "सरकारी योजनाएं",
+                "sidebar.helpline": "हेल्पलाइन नंबर",
+                "sidebar.agriSwasthya": "अग्री स्वास्थ्य",
+                "sidebar.marketPrices": "बाज़ार भाव",
+                "sidebar.communitySection": "समुदाय",
+                "sidebar.community": "किसान समुदाय",
+                "sidebar.profile": "प्रोफाइल",
+                "sidebar.toggleTheme": "थीम बदलें",
+                "sidebar.logout": "लॉगआउट",
+
+                "header.title": "डिजिटल कृषि अधिकारी",
+                "status.online": "सिस्टम ऑनलाइन",
+
+                "ask.assistantTitle": "कृषि AI सहायक",
+                "ask.assistantSubtitle": "आपकी फसल और बाज़ार से जुड़े सवालों के लिए झटपट मदद।",
+                "ask.sampleTitle": "यह पूछकर देखें:",
+                "ask.sampleQ1": "मिर्च में पत्ती मुड़ने की बीमारी कैसे रोकें?",
+                "ask.sampleQ2": "धान के लिए सबसे अच्छा खाद कार्यक्रम क्या है?",
+                "ask.questionPlaceholder": "अपना खेती से जुड़ा सवाल यहाँ लिखें... (जैसे, टमाटर में कीट नियंत्रण कैसे करें?)",
+                "ask.statusReady": "आपकी मदद के लिए तैयार",
+                "ask.pastTitle": "पुराने सवाल",
+                "ask.pastSubtitle": "आपके हाल के खेती से जुड़े सवाल और AI जवाब",
+                "ask.pastQuestionsLabel": "प्रश्न",
+                "ask.loadingPastQueries": "आपके पुराने सवाल लोड किए जा रहे हैं...",
+
+                "ask.noQueriesTitle": "अभी तक कोई सवाल नहीं",
+                "ask.noQueriesDesc": "अपना पहला खेती से जुड़ा सवाल पूछकर शुरू करें।",
+                "ask.unableLoadTitle": "सवाल लोड नहीं हो सके",
+                "ask.unableLoadDesc": "कृपया कनेक्शन जाँचें और पेज रीफ्रेश करें।",
+
+                "ask.modalTitle": "सवाल का विवरण",
+                "ask.modalQuestionTitle": "आपका सवाल",
+                "ask.modalResponseTitle": "AI जवाब",
+                "ask.modalClose": "बंद करें",
+                "ask.modalDone": "हो गया"
+            },
+            ml: {
+                "sidebar.mainMenu": "मुख्य मेनू",
+                "sidebar.dashboard": "डैशबोर्ड",
+                "sidebar.askQuery": "प्रश्न पूछें",
+                "sidebar.tools": "उपकरण",
+                "sidebar.cropDiagnosis": "फसल रोग निदान",
+                "sidebar.weatherAlerts": "मौसम और अलर्ट",
+                "sidebar.schemes": "सरकारी योजनाएँ",
+                "sidebar.helpline": "हेल्पलाइन नंबर",
+                "sidebar.agriSwasthya": "कृषि स्वास्थ्य",
+                "sidebar.marketPrices": "बाज़ार भाव",
+                "sidebar.communitySection": "समुदाय",
+                "sidebar.community": "किसान समुदाय",
+                "sidebar.profile": "प्रोफ़ाइल",
+                "sidebar.toggleTheme": "थीम बदलें",
+                "sidebar.logout": "लॉगआउट",
+
+                "header.title": "डिजिटल कृषि अधिकारी",
+                "status.online": "सिस्टम ऑनलाइन",
+
+                "ask.assistantTitle": "कृषि AI सहायक",
+                "ask.assistantSubtitle": "आपकी फसल और बाज़ार से जुड़े सवालों के लिए तेज़ सहायता।",
+                "ask.sampleTitle": "ऐसे पूछकर देखें:",
+                "ask.sampleQ1": "मिर्च में पत्ती मुड़ने की बीमारी कैसे नियंत्रित करें?",
+                "ask.sampleQ2": "अच्छी धान की फसल के लिए कौन-सा खाद कार्यक्रम बेहतर है?",
+                "ask.questionPlaceholder": "अपना खेती से जुड़ा सवाल यहाँ लिखें... (जैसे: टमाटर में कीट नियंत्रण कैसे करें?)",
+                "ask.statusReady": "मदद के लिए तैयार",
+                "ask.pastTitle": "पिछले प्रश्न",
+                "ask.pastSubtitle": "आपके हाल के कृषि प्रश्न और AI उत्तर",
+                "ask.pastQuestionsLabel": "प्रश्न",
+                "ask.loadingPastQueries": "आपके पुराने प्रश्न लोड हो रहे हैं...",
+
+                "ask.noQueriesTitle": "अभी तक कोई प्रश्न नहीं",
+                "ask.noQueriesDesc": "पहला कृषि प्रश्न पूछकर शुरुआत करें।",
+                "ask.unableLoadTitle": "प्रश्न लोड नहीं हो सके",
+                "ask.unableLoadDesc": "कृपया कनेक्शन जाँचें और पेज रीफ्रेश करें।",
+
+                "ask.modalTitle": "प्रश्न विवरण",
+                "ask.modalQuestionTitle": "आपका प्रश्न",
+                "ask.modalResponseTitle": "AI उत्तर",
+                "ask.modalClose": "बंद करें",
+                "ask.modalDone": "पूरा हुआ"
+            }
+        };
+
+
+        function applyTranslations(lang) {
+            const dict = translations[lang] || translations.en;
+
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (dict[key]) el.textContent = dict[key];
+            });
+
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+                const key = el.getAttribute('data-i18n-placeholder');
+                if (dict[key]) el.placeholder = dict[key];
+            });
+        }
+
+        function initLanguageFromDashboard() {
+            const saved = localStorage.getItem('appLanguage');
+            if (saved && (saved === 'en' || saved === 'hi' || saved === 'ml')) {
+                uiLanguage = saved;
+            }
+
+            applyTranslations(uiLanguage);
+        }
+
+        // ----------------- Speech synthesis for "Read last answer" -----------------
+        let synth = window.speechSynthesis;
+        let availableVoices = [];
+
+        function loadVoicesMain() {
+            if (!synth) return;
+            availableVoices = synth.getVoices();
+        }
+
+        if (synth) {
+            loadVoicesMain();
+            synth.addEventListener('voiceschanged', loadVoicesMain);
+        }
+
+        function cleanForSpeech(text) {
+            if (!text) return '';
+            return text
+                .replace(/\*\*(.*?)\*\*/g, '$1')
+                .replace(/\*/g, '')
+                .replace(/•/g, ' ')
+                .replace(/\s+/g, ' ')
+                .trim();
+        }
+
+        if (speakBtn) {
+            speakBtn.addEventListener('click', () => {
+                if (!lastBotResponseText) {
+                    showToast('No recent answer to read.', 'info');
+                    return;
+                }
+                if (!('speechSynthesis' in window)) {
+                    showToast('Read aloud not supported on this browser.', 'error');
+                    return;
+                }
+
+                const cleanText = cleanForSpeech(lastBotResponseText);
+                if (!cleanText) return;
+
+                synth.cancel();
+                const utterance = new SpeechSynthesisUtterance(cleanText);
+
+                const langConfig = languages[aiLanguage] || languages.en;
+                const langCode = langConfig.tts;
+
+                utterance.lang = langCode;
+
+                const match = availableVoices.find(v =>
+                    v.lang && v.lang.toLowerCase().startsWith(langCode.toLowerCase())
+                );
+                if (match) utterance.voice = match;
+
+                if (aiLanguage === 'hi' || aiLanguage === 'ml') {
+                    utterance.rate = 0.9;
+                }
+
+                synth.speak(utterance);
+            });
+        }
+
+        // ----------------- Speech recognition -----------------
+        function updateStatus(messageKeyOrText, fromTranslations = true) {
+            if (!statusText) return;
+
+            if (fromTranslations) {
+                const dict = translations[uiLanguage] || translations.en;
+                const text = dict[messageKeyOrText] || messageKeyOrText;
+                statusText.textContent = text;
+            } else {
+                statusText.textContent = messageKeyOrText;
+            }
+        }
+
+        function initSpeechRecognition() {
+            if (!('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)) {
+                if (micBtn) micBtn.style.display = 'none';
+                console.log('Speech recognition not supported');
+                return;
+            }
+
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            recognition = new SpeechRecognition();
+
+            recognition.continuous = false;
+            recognition.interimResults = false;
+            recognition.lang = languages[aiLanguage].code;
+
+            recognition.onstart = () => {
+                isRecording = true;
+                micBtn.classList.add('recording');
+                updateStatus('Listening...', false);
+            };
+
+            recognition.onresult = (event) => {
+                const transcript = event.results[0][0].transcript;
+                questionInput.value = transcript;
+                updateStatus('Voice input received', false);
+            };
+
+            recognition.onerror = () => {
+                updateStatus('Voice input failed. Try again.', false);
+                resetMicButton();
+            };
+
+            recognition.onend = () => {
+                resetMicButton();
+            };
+        }
+
+        function resetMicButton() {
+            isRecording = false;
+            micBtn.classList.remove('recording');
+            const dict = translations[uiLanguage] || translations.en;
+            updateStatus('ask.statusReady', true);
+        }
+
+        // ----------------- AI language buttons (ONLY AI, not UI) -----------------
+        function initAiLanguageButtons() {
+            if (!languages[aiLanguage]) aiLanguage = 'en';
+
+            langBtns.forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.lang === aiLanguage);
+
+                btn.addEventListener('click', () => {
+                    const newLang = btn.dataset.lang;
+                    if (!languages[newLang]) return;
+
+                    aiLanguage = newLang;
+                    localStorage.setItem('aiLanguage', aiLanguage);
+
+                    langBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+
+                    if (recognition) {
+                        recognition.lang = languages[aiLanguage].code;
+                    }
+
+                    showToast(`AI will reply in ${languages[aiLanguage].name}.`, 'info');
+                });
+            });
+        }
+
+        if (micBtn) {
+            micBtn.addEventListener('click', () => {
+                if (!recognition) {
+                    alert('Voice input not supported in your browser');
+                    return;
+                }
+
+                if (isRecording) {
+                    recognition.stop();
+                } else {
+                    recognition.start();
+                }
+            });
+        }
+
+        // ----------------- Past Queries & API -----------------
+
+        function getQueryStatusInfo(query) {
+            // Prefer explicit status from backend if present
+            const rawStatus =
+                query.status ||
+                query.escalationStatus ||
+                (query.resolved ? 'resolved' : null) ||
+                (query.escalated ? 'escalated' : null) ||
+                'normal';
+
+            // 1️⃣ Resolved always wins (even if escalated is true)
+            if (query.resolved || rawStatus === 'resolved') {
+                return {
+                    key: 'resolved',
+                    label: 'Resolved',
+                    className: 'resolved',
+                    icon: 'check-circle'
+                };
+            }
+
+            // 2️⃣ Officer replied (but farmer has not marked resolved yet)
+            if (rawStatus === 'officer-replied' || rawStatus === 'replied') {
+                return {
+                    key: 'officer-replied',
+                    label: 'Officer replied · waiting for you',
+                    className: 'officer-replied',
+                    icon: 'comment-medical'
+                };
+            }
+
+            // 3️⃣ Escalated but no officer reply yet
+            if (rawStatus === 'escalated' || query.escalated) {
+                return {
+                    key: 'escalated',
+                    label: 'Escalated to officer',
+                    className: 'escalated',
+                    icon: 'arrow-up'
+                };
+            }
+
+            // 4️⃣ Normal AI-only reply
+            return {
+                key: 'normal',
+                label: 'Normal AI reply',
+                className: 'pending',
+                icon: 'clock'
+            };
+        }
+
+
+        // NEW: lifecycle status-tag info for My Query Status + modal
+        function getStatusTagInfo(query) {
+            const hasOfficerResponse = query.officerResponse && query.officerResponse.trim().length > 0;
+            const isEscalated = query.status === 'escalated' || query.escalated;
+            const isResolved = !!query.resolved;
+
+            if (isResolved) {
+                return {
+                    key: 'resolved',
+                    label: 'Resolved',
+                    symbol: '🟢',
+                    className: 'status-tag status-tag--resolved'
+                };
+            }
+
+            if (hasOfficerResponse) {
+                return {
+                    key: 'officer',
+                    label: 'Officer Replied',
+                    symbol: '🔵',
+                    className: 'status-tag status-tag--officer'
+                };
+            }
+
+            if (isEscalated) {
+                return {
+                    key: 'escalated',
+                    label: 'Escalated / Pending',
+                    symbol: '🟡',
+                    className: 'status-tag status-tag--escalated'
+                };
+            }
+
+            return {
+                key: 'normal',
+                label: 'Normal AI reply',
+                symbol: '⚪',
+                className: 'status-tag status-tag--normal'
+            };
+        }
+
+        function safeFormatDate(value) {
+            if (!value) return '';
+            const d = new Date(value);
+            if (isNaN(d.getTime())) return '';
+            return d.toLocaleString('en-IN', {
+                day: '2-digit',
+                month: 'short',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        // builds timeline string for lifecycle
+        function buildTimelineText(query) {
+            const parts = [];
+
+            if (query.createdAt) {
+                parts.push(`Asked: ${safeFormatDate(query.createdAt)}`);
+            }
+            if (query.escalatedAt) {
+                parts.push(`Escalated: ${safeFormatDate(query.escalatedAt)}`);
+            }
+            if (query.officerUpdatedAt) {
+                parts.push(`Officer replied: ${safeFormatDate(query.officerUpdatedAt)}`);
+            }
+            if (query.resolvedAt) {
+                parts.push(`Resolved: ${safeFormatDate(query.resolvedAt)}`);
+            }
+
+            if (!parts.length && query.timeAgo) {
+                parts.push(`Updated ${query.timeAgo}`);
+            } else if (query.timeAgo) {
+                parts.push(`(${query.timeAgo})`);
+            }
+
+            return parts.join(' • ');
+        }
+
+        async function loadPastQueries() {
+            try {
+                const response = await fetch(API_BASE_URL + '/api/query/recent', {
+                    credentials: 'include'
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    const queries = data.queries || [];
+
+                    recentQueries = queries; // store globally for status section + modal
+                    displayPastQueries(queries);
+                    updateQueriesCount(queries.length);
+                    renderMyQueryStatus(queries); // NEW
+                } else {
+                    console.error('Failed to load past queries');
+                    showNoQueriesMessage(true);
+                    renderMyQueryStatus([]);
+                }
+            } catch (error) {
+                console.error('Error loading past queries:', error);
+                showNoQueriesMessage(true);
+                renderMyQueryStatus([]);
+            }
+        }
+
+        function displayPastQueries(queries) {
+            const container = document.getElementById('pastQueriesContainer');
+            const dict = translations[uiLanguage] || translations.en;
+
+            if (!queries || queries.length === 0) {
+                container.innerHTML = `
+                <div class="no-queries">
+                    <i class="fas fa-robot"></i>
+                    <h3>${dict["ask.noQueriesTitle"] || "No queries yet"}</h3>
+                    <p>${dict["ask.noQueriesDesc"] || "Start by asking your first farming question."}</p>
+                </div>
+            `;
+                return;
+            }
+
+            container.innerHTML = queries.map((query, index) => {
+                const statusInfo = getQueryStatusInfo(query);
+                const hasOfficerResponse = query.officerResponse && query.officerResponse.trim().length > 0;
+
+                return `
+                <div class="query-card" data-query-id="${query.id}" onclick="openQueryDetails('${query.id}')">
+                    <div class="query-header">
+                        <div class="query-number">${queries.length - index}</div>
+                        <div class="query-meta">
+                            <div class="query-time">
+                                <i class="fas fa-clock"></i>
+                                ${query.timeAgo}
+                            </div>
+                            <div class="query-category">${query.category}</div>
+                        </div>
+                    </div>
+                    
+                    <div class="query-content">
+                        <div class="query-question">
+                            <h4>${dict["ask.modalQuestionTitle"] || "Your Question"}</h4>
+                            <p>${query.question}</p>
+                        </div>
+                        
+                        <div class="query-response">
+                            <h4>${dict["ask.modalResponseTitle"] || "AI Response"}</h4>
+                            <div class="query-response-text">${formatAIResponse(query.response || '')}</div>
+                        </div>
+
+                        ${hasOfficerResponse ? `
+                        <div class="query-response officer-response">
+                            <h4>Officer Reply</h4>
+                            <div class="query-response-text">${formatAIResponse(query.officerResponse || '')}</div>
+                        </div>
+                        ` : ''}
+                    </div>
+                    
+                    <div class="query-actions" onclick="event.stopPropagation();">
+                        <div class="query-status ${statusInfo.className}">
+                            <i class="fas fa-${statusInfo.icon}"></i>
+                            ${statusInfo.label}
+                        </div>
+                        <div class="query-actions-btns">
+                            <button class="action-btn" onclick="openQueryDetails('${query.id}')">
+                                <i class="fas fa-eye"></i>
+                                View
+                            </button>
+                            ${!query.resolved && statusInfo.key !== 'escalated' ? `
+                                <button class="action-btn" onclick="escalateQuery('${query.id}')">
+                                    <i class="fas fa-arrow-up"></i>
+                                    Not solved? Ask Officer
+                                </button>
+                            ` : ''}
+                            ${!query.resolved ? `
+                                <button class="action-btn" onclick="markAsResolved('${query.id}')">
+                                    <i class="fas fa-check"></i>
+                                    Mark Resolved
+                                </button>
+                            ` : ''}
+                            <button class="action-btn" onclick="copyQuery('${query.id}')">
+                                <i class="fas fa-copy"></i>
+                                Copy
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            }).join('');
+        }
+
+        function formatAIResponse(text) {
+            if (!text) return '';
+            return text
+                .replace(/\*\*(.*?)\*\*/g, '<strong class="highlight">$1</strong>')
+                .replace(/\*/g, '')
+                .replace(/\n/g, '<br>');
+        }
+
+        function updateQueriesCount(count) {
+            const el = document.getElementById('queriesCount');
+            if (!el) return;
+            animateNumber(el, parseInt(el.textContent) || 0, count);
+        }
+
+        function animateNumber(element, start, end) {
+            const duration = 500;
+            const startTime = performance.now();
+
+            function update(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const value = Math.round(start + (end - start) * progress);
+                element.textContent = value;
+
+                if (progress < 1) requestAnimationFrame(update);
+            }
+
+            requestAnimationFrame(update);
+        }
+
+        function showNoQueriesMessage(isError = false) {
+            const container = document.getElementById('pastQueriesContainer');
+            const dict = translations[uiLanguage] || translations.en;
+
+            if (isError) {
+                container.innerHTML = `
+                <div class="no-queries">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <h3>${dict["ask.unableLoadTitle"] || "Unable to load queries"}</h3>
+                    <p>${dict["ask.unableLoadDesc"] || "Please check your connection and refresh."}</p>
+                </div>
+            `;
+            } else {
+                container.innerHTML = `
+                <div class="no-queries">
+                    <i class="fas fa-robot"></i>
+                    <h3>${dict["ask.noQueriesTitle"] || "No queries yet"}</h3>
+                    <p>${dict["ask.noQueriesDesc"] || "Start by asking your first farming question."}</p>
+                </div>
+            `;
+            }
+        }
+
+        // NEW: render My Query Status (full lifecycle view)
+        function renderMyQueryStatus(queries) {
+            const container = document.getElementById('myQueryStatusList');
+            if (!container) return;
+
+            if (!queries || queries.length === 0) {
+                container.innerHTML = `
+                    <div class="no-queries" style="padding:1.2rem 0.3rem;">
+                        <i class="fas fa-clipboard-list"></i>
+                        <h3 style="margin-top:0.3rem;">No queries yet</h3>
+                        <p style="font-size:0.8rem;">Ask a question and you’ll see its full status timeline here.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = queries.map((q) => {
+                const statusTag = getStatusTagInfo(q);
+                const timelineText = buildTimelineText(q);
+                const officerText = q.officerResponse && q.officerResponse.trim().length
+                    ? formatAIResponse(q.officerResponse)
+                    : '<span class="my-status-row-value muted">No officer update yet</span>';
+
+                return `
+                    <div class="my-status-card" onclick="openQueryDetails('${q.id}')">
+                        <div class="my-status-row">
+                            <div class="my-status-row-label">Question:</div>
+                            <div class="my-status-row-value">${q.question}</div>
+                        </div>
+                        <div class="my-status-row">
+                            <div class="my-status-row-label">AI Answer:</div>
+                            <div class="my-status-row-value">${formatAIResponse(q.response || '')}</div>
+                        </div>
+                        <div class="my-status-row">
+                            <div class="my-status-row-label">Officer Reply:</div>
+                            <div class="my-status-row-value">${officerText}</div>
+                        </div>
+                        <div class="my-status-row">
+                            <div class="my-status-row-label">Status:</div>
+                            <div class="my-status-row-value">
+                                <span class="${statusTag.className}">${statusTag.symbol} ${statusTag.label}</span>
+                            </div>
+                        </div>
+                        <div class="my-status-row-timeline">
+                            <span><i class="fas fa-clock"></i> Timeline:</span>
+                            <span>${timelineText || (q.timeAgo || 'Not available')}</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        async function markAsResolved(queryId) {
+            try {
+                const response = await fetch(`/api/query/${queryId}/resolve`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    credentials: 'include',
+                    body: JSON.stringify({ rating: 5 })
+                });
+
+                if (response.ok) {
+                    showToast('Query marked as resolved!', 'success');
+                    loadPastQueries();
+                } else {
+                    showToast('Failed to mark as resolved', 'error');
+                }
+            } catch (error) {
+                console.error('Error resolving query:', error);
+                showToast('Failed to mark as resolved', 'error');
+            }
+        }
+
+        // NEW: escalate query to officer
+        async function escalateQuery(queryId) {
+            try {
+                const response = await fetch(`/api/query/${queryId}/escalate`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    credentials: 'include',
+                    body: JSON.stringify({})
+                });
+
+                const data = await response.json().catch(() => ({}));
+
+                if (!response.ok) {
+                    showToast(data.message || 'Failed to escalate query', 'error');
+                    return;
+                }
+
+                showToast('Query escalated to officer successfully!', 'success');
+                loadPastQueries();
+            } catch (error) {
+                console.error('Error escalating query:', error);
+                showToast('Failed to escalate query', 'error');
+            }
+        }
+
+        function copyQuery(queryId) {
+            const card = document.querySelector(`[data-query-id="${queryId}"]`);
+            if (!card) return;
+
+            const text = card.querySelector('.query-question p').textContent;
+
+            navigator.clipboard.writeText(text).then(() => {
+                showToast('Question copied to clipboard!', 'success');
+            }).catch(() => {
+                showToast('Failed to copy question', 'error');
+            });
+        }
+
+        function openQueryDetails(queryId) {
+            const card = document.querySelector(`[data-query-id="${queryId}"]`);
+            if (!card) return;
+
+            const questionText = card.querySelector('.query-question p').textContent;
+            const responseHtml = card.querySelector('.query-response .query-response-text').innerHTML;
+
+            document.getElementById('modalQuestion').textContent = questionText;
+            document.getElementById('modalResponse').innerHTML = responseHtml;
+
+            // Officer response for this query (if present)
+            const officerResponseEl = card.querySelector('.officer-response .query-response-text');
+            const modalEscSection = document.getElementById('modalEscalationSection');
+            const modalEscContent = document.getElementById('modalEscalationContent');
+
+            if (officerResponseEl && modalEscSection && modalEscContent) {
+                modalEscContent.innerHTML = officerResponseEl.innerHTML;
+                modalEscSection.style.display = 'block';
+            } else if (modalEscSection && modalEscContent) {
+                modalEscSection.style.display = 'none';
+                modalEscContent.innerHTML = '';
+            }
+
+            // NEW: fill modal status tag + timeline using full query object
+            const fullQuery = recentQueries.find(q => String(q.id) === String(queryId));
+            const statusTagEl = document.getElementById('modalStatusTag');
+            const timelineEl = document.getElementById('modalTimeline');
+
+            if (fullQuery && statusTagEl && timelineEl) {
+                const tagInfo = getStatusTagInfo(fullQuery);
+                statusTagEl.className = tagInfo.className;
+                statusTagEl.textContent = `${tagInfo.symbol} ${tagInfo.label}`;
+                timelineEl.textContent = buildTimelineText(fullQuery) || (fullQuery.timeAgo || '');
+            } else if (statusTagEl && timelineEl) {
+                statusTagEl.className = 'status-tag status-tag--normal';
+                statusTagEl.textContent = '⚪ Normal AI reply';
+                timelineEl.textContent = '';
+            }
+
+            document.getElementById('queryModal').classList.add('show');
+        }
+
+        function closeQueryDetails() {
+            document.getElementById('queryModal').classList.remove('show');
+        }
+
+        function showToast(message, type = 'info') {
+            const toast = document.createElement('div');
+            toast.style.cssText = `
+                position: fixed;
+                top: 18px;
+                right: 18px;
+                z-index: 10000;
+                background: ${type === 'success' ? '#16a34a' : type === 'error' ? '#ef4444' : '#3b82f6'};
+                color: white;
+                padding: 0.8rem 1.2rem;
+                border-radius: 999px;
+                font-size: 0.85rem;
+                font-weight: 500;
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+                opacity: 0;
+                transform: translateY(-10px);
+                transition: opacity 0.2s ease, transform 0.2s ease;
+            `;
+
+            toast.innerHTML = `<i class="fas fa-info-circle"></i> ${message}`;
+            document.body.appendChild(toast);
+
+            requestAnimationFrame(() => {
+                toast.style.opacity = '1';
+                toast.style.transform = 'translateY(0)';
+            });
+
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateY(-8px)';
+                setTimeout(() => toast.remove(), 200);
+            }, 2600);
+        }
+
+        function refreshPastQueries() {
+            setTimeout(loadPastQueries, 1500);
+        }
+
+        function handleMarketQuery(cropName) {
+            if (!cropName) return;
+            const question = `What is the current market situation for ${cropName}? Should I sell now or wait for better prices?`;
+            const input = document.getElementById('questionInput');
+            if (input) {
+                input.value = question;
+            }
+            sendQuery();
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const urlParams = new URLSearchParams(window.location.search);
+            const cropName = urlParams.get('crop');
+
+            if (cropName) {
+                const questionInput = document.getElementById('questionInput');
+                if (questionInput) {
+                    questionInput.value = `Tell me about ${cropName} farming and market prices. Should I grow this crop?`;
+                    questionInput.focus();
+                }
+            }
+        });
+
+        function setActiveNavigation() {
+            const currentPage = window.location.pathname.split('/').pop() || 'dashboard.html';
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach(item => item.classList.remove('active'));
+
+            let activeSelector = '';
+
+            if (!currentPage || currentPage === '/' || currentPage === 'dashboard.html') {
+                activeSelector = 'a[href="dashboard.html"]';
+            } else if (currentPage === 'weather-alerts.html') {
+                activeSelector = 'a[href="weather-alerts.html"]';
+            } else if (currentPage === 'ask-query.html') {
+                activeSelector = 'a[href="ask-query.html"]';
+            } else if (currentPage === 'crop-diagnosis.html') {
+                activeSelector = 'a[href="crop-diagnosis.html"]';
+            } else if (currentPage === 'Schemes.html') {
+                activeSelector = 'a[href="Schemes.html"]';
+            } else if (currentPage === 'smart-farming.html') {
+                activeSelector = 'a[href="smart-farming.html"]';
+            } else if (currentPage === 'market-prices.html') {
+                activeSelector = 'a[href="market-prices.html"]';
+            } else if (currentPage === 'farmer-community.html') {
+                activeSelector = 'a[href="farmer-community.html"]';
+            } else if (currentPage === 'profile.html') {
+                activeSelector = 'a[href="profile.html"]';
+            }
+
+            if (activeSelector) {
+                const activeItem = document.querySelector(activeSelector);
+                if (activeItem) activeItem.classList.add('active');
+            }
+        }
+
+        // ----------------- Theme -----------------
+        let isDarkMode = localStorage.getItem('darkMode') === 'true';
+
+        function initializeTheme() {
+            if (isDarkMode) {
+                document.body.classList.add('dark');
+                const themeIcon = document.querySelector('.theme-toggle-sidebar i');
+                const themeText = document.querySelector('.theme-toggle-sidebar span');
+                if (themeIcon) themeIcon.className = 'fas fa-moon';
+                if (themeText) themeText.textContent = 'Light Mode';
+            }
+        }
+
+        function toggleTheme() {
+            isDarkMode = !isDarkMode;
+            document.body.classList.toggle('dark');
+
+            const themeIcon = document.querySelector('.theme-toggle-sidebar i');
+            const themeText = document.querySelector('.theme-toggle-sidebar span');
+
+            if (isDarkMode) {
+                if (themeIcon) themeIcon.className = 'fas fa-moon';
+                if (themeText) themeText.textContent = 'Light Mode';
+            } else {
+                if (themeIcon) themeIcon.className = 'fas fa-sun';
+                if (themeText) themeText.textContent = 'Toggle Theme';
+            }
+
+            localStorage.setItem('darkMode', isDarkMode);
+        }
+
+        // ----------------- Chat rendering -----------------
+        function addMessage(message, isUser = false) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${isUser ? 'user-message' : 'bot-message'}`;
+
+            if (isUser) {
+                messageDiv.innerHTML = `
+                    <div class="message-avatar user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="message-content">
+                        <div class="message-text"><strong>${message}</strong></div>
+                        <div class="message-time">${new Date().toLocaleTimeString('en-IN', {
+                    hour: '2-digit',
+                    minute: '2-digit'
+                })}</div>
+                    </div>
+                `;
+            } else {
+                const formatted = formatAIResponse(message);
+                messageDiv.innerHTML = `
+                    <div class="message-avatar bot-avatar">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="message-content">
+                        <div class="message-text">${formatted}</div>
+                        <div class="message-time">${new Date().toLocaleTimeString('en-IN', {
+                    hour: '2-digit',
+                    minute: '2-digit'
+                })}</div>
+                    </div>
+                `;
+                lastBotResponseText = message;
+            }
+
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        async function sendQuery() {
+            const question = questionInput.value.trim();
+            if (!question) {
+                updateStatus('ask.statusReady', true);
+                return;
+            }
+
+            sendBtn.disabled = true;
+            sendBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+            addMessage(question, true);
+            questionInput.value = '';
+
+            updateStatus('Getting farming advice...', false);
+
+            try {
+                const response = await fetch(API_BASE_URL + '/api/query/ask', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
+                    body: JSON.stringify({
+                        question: question,
+                        language: aiLanguage || 'en'
+                    })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.message || 'Failed to get response');
+                }
+
+                addMessage(data.response);
+                updateStatus('ask.statusReady', true);
+                incrementQueryCount();
+                refreshPastQueries();
+            } catch (error) {
+                console.error('Query error:', error);
+                updateStatus('Please try again', false);
+                incrementQueryCount();
+            } finally {
+                sendBtn.disabled = false;
+                sendBtn.innerHTML = '<i class="fas fa-paper-plane"></i>';
+                questionInput.focus();
+            }
+        }
+
+        if (sendBtn) {
+            sendBtn.addEventListener('click', sendQuery);
+        }
+
+        if (questionInput) {
+            questionInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendQuery();
+                }
+            });
+
+            questionInput.addEventListener('input', function () {
+                this.style.height = 'auto';
+                this.style.height = Math.min(this.scrollHeight, 130) + 'px';
+            });
+        }
+
+        if (clearBtn) {
+            clearBtn.addEventListener('click', () => {
+                const dict = translations[uiLanguage] || translations.en;
+                chatMessages.innerHTML = `
+                    <div class="welcome-hero">
+                        <img src="images/banner.png" alt="AI Farming Assistant Banner" />
+                    </div>
+                    <div class="sample-questions">
+                        <div class="sample-questions-title">${dict["ask.sampleTitle"] || "Try asking:"}</div>
+                        <div class="sample-question">
+                            <i class="fas fa-circle"></i>
+                            <span>${dict["ask.sampleQ1"] || "How to control leaf curl in chilli?"}</span>
+                        </div>
+                        <div class="sample-question">
+                            <i class="fas fa-circle"></i>
+                            <span>${dict["ask.sampleQ2"] || "What fertilizer schedule is best for paddy?"}</span>
+                        </div>
+                    </div>
+                `;
+                questionInput.value = '';
+                updateStatus('ask.statusReady', true);
+                lastBotResponseText = '';
+            });
+        }
+
+        // ----------------- Auth & user info -----------------
+        async function checkAuth() {
+            try {
+                const res = await fetch(API_BASE_URL + '/api/user/check-auth', { credentials: 'include' });
+                if (!res.ok) throw new Error('Unauthorized');
+            } catch {
+                alert('Please login to access this page');
+                window.location.href = 'index.html';
+            }
+        }
+
+        async function loadUserInfo() {
+            try {
+                const res = await fetch(API_BASE_URL + '/api/user/profile', { credentials: 'include' });
+                if (res.ok) {
+                    const user = await res.json();
+                    const el = document.getElementById('userInfo');
+                    if (el) {
+                        el.innerHTML = `
+                            <div style="font-weight: 600;">${user.username}</div>
+                            <div style="font-size: 0.8rem; opacity: 0.8;">${user.email}</div>
+                        `;
+                    }
+                }
+            } catch {
+                console.error('Failed to load user info');
+            }
+        }
+
+        const logoutBtn = document.getElementById('logoutBtn');
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', async () => {
+                if (!confirm('Are you sure you want to logout?')) return;
+                try {
+                    await fetch(API_BASE_URL + '/api/auth/logout', { method: 'POST', credentials: 'include' });
+                    window.location.href = 'index.html';
+                } catch {
+                    window.location.href = 'index.html';
+                }
+            });
+        }
+
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+        }
+
+        document.addEventListener('click', function (event) {
+            const sidebar = document.getElementById('sidebar');
+            const menuBtn = document.querySelector('.mobile-menu-btn');
+
+            if (window.innerWidth <= 768 &&
+                sidebar.classList.contains('open') &&
+                !sidebar.contains(event.target) &&
+                !menuBtn.contains(event.target)) {
+                sidebar.classList.remove('open');
+            }
+        });
+
+        function incrementQueryCount() {
+            const current = parseInt(localStorage.getItem('farmerQueryCount')) || 0;
+            const next = current + 1;
+            localStorage.setItem('farmerQueryCount', next.toString());
+
+            window.dispatchEvent(new StorageEvent('storage', {
+                key: 'farmerQueryCount',
+                newValue: next.toString(),
+                oldValue: current.toString()
+            }));
+        }
+
+        window.toggleSidebar = toggleSidebar;
+        window.openQueryDetails = openQueryDetails;
+        window.closeQueryDetails = closeQueryDetails;
+        window.escalateQuery = escalateQuery;
+
+        // ----------------- Page init -----------------
+        window.addEventListener('load', () => {
+            checkAuth();
+            loadUserInfo();
+            initializeTheme();
+            initLanguageFromDashboard();      // UI text from dashboard selection
+            initSpeechRecognition();          // Voice input
+            initAiLanguageButtons();          // AI language selector
+            setActiveNavigation();
+
+            if (questionInput) questionInput.focus();
+            loadPastQueries();
+        });
+    </script>
+    <script>
+        if ("serviceWorker" in navigator) {
+            navigator.serviceWorker.register("service-worker.js");
+        }
+    </script>
+
+    <body>
+        <style>
+            elevenlabs-convai {
+                position: fixed;
+                bottom: 10px;
+                right: 10px;
+                z-index: 4000;
+                --convai-btn-bg: #059669;
+                /* Farm green color */
+            }
+        </style>
+
+        <elevenlabs-convai agent-id="agent_3201kb2x8ga6ef0rtn917kkzjsm8"
+            first-message="Namaskaram! Hello! I am Krishi. You can speak to me in Malayalam or English."></elevenlabs-convai>
+
+        <script src="https://unpkg.com/@elevenlabs/convai-widget-embed" async type="text/javascript"></script>
+    </body>
+
+</html>

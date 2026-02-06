@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Government Schemes – Krishi Mitra</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet" />
+
+    <style>
+        :root {
+            --primary: #0f766e;
+            --primary-soft: #ecfdf5;
+            --primary-dark: #115e59;
+            --accent: #2563eb;
+            --bg: #f9fafb;
+            --bg-card: #ffffff;
+            --border: #e5e7eb;
+            --text-main: #111827;
+            --text-muted: #6b7280;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text-main);
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* ---------- Header ---------- */
+
+        .page-header {
+            border-bottom: 1px solid var(--border);
+            background: #ffffff;
+        }
+
+        .page-header-inner {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 1.2rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1.5rem;
+        }
+
+        .brand-block {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .brand-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            font-size: 1.3rem;
+        }
+
+        .brand-text h1 {
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .brand-text p {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .btn-outline {
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            padding: 0.5rem 0.9rem;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: #ffffff;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            border-radius: 999px;
+            border: none;
+            padding: 0.55rem 1.1rem;
+            font-size: 0.82rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            background: var(--primary);
+            color: #ffffff;
+            cursor: pointer;
+        }
+
+        .btn-primary i {
+            font-size: 0.9rem;
+        }
+
+        .btn-outline i {
+            font-size: 0.9rem;
+        }
+
+        /* ---------- Layout ---------- */
+
+        .page-body {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 1.5rem;
+        }
+
+        .layout-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1.8fr) minmax(0, 1.2fr);
+            gap: 1.5rem;
+            align-items: flex-start;
+        }
+
+        @media (max-width: 900px) {
+            .layout-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ---------- Left Column: Schemes ---------- */
+
+        .panel {
+            border-radius: 16px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 1.25rem 1.3rem;
+        }
+
+        .panel-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .panel-title {
+            display: flex;
+            flex-direction: column;
+            gap: 0.15rem;
+        }
+
+        .panel-title h2 {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .panel-title span {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+        }
+
+        .search-box {
+            width: 230px;
+            max-width: 100%;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            padding: 0.45rem 2.1rem 0.45rem 0.85rem;
+            font-size: 0.8rem;
+            outline: none;
+        }
+
+        .search-box i {
+            position: absolute;
+            right: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .schemes-list {
+            margin-top: 0.5rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 0.9rem;
+        }
+
+        .scheme-card {
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            padding: 0.9rem 0.9rem 0.8rem;
+            background: #ffffff;
+            display: flex;
+            flex-direction: column;
+            gap: 0.45rem;
+            cursor: pointer;
+            transition: box-shadow 0.15s ease, border-color 0.15s ease,
+                transform 0.1s ease;
+        }
+
+        .scheme-card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 8px 18px rgba(15, 118, 110, 0.08);
+            transform: translateY(-1px);
+        }
+
+        .scheme-card.active {
+            border-color: var(--primary-dark);
+            box-shadow: 0 0 0 1px rgba(15, 118, 110, 0.2);
+        }
+
+        .scheme-name {
+            font-size: 0.95rem;
+            font-weight: 600;
+            line-height: 1.3;
+        }
+
+        .scheme-meta {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .scheme-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.2rem;
+        }
+
+        .btn-text {
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            padding: 0.35rem 0.7rem;
+            font-size: 0.78rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            background: #ffffff;
+            cursor: pointer;
+            flex: 1;
+            justify-content: center;
+        }
+
+        .btn-text.primary {
+            border-color: var(--primary);
+            background: var(--primary-soft);
+            color: var(--primary-dark);
+        }
+
+        .btn-text i {
+            font-size: 0.8rem;
+        }
+
+        .empty-state {
+            padding: 1.5rem 0.25rem;
+            text-align: center;
+            font-size: 0.86rem;
+            color: var(--text-muted);
+        }
+
+        /* ---------- Right Column: AI Panel ---------- */
+
+        .ai-panel {
+            border-radius: 16px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 1.25rem 1.3rem;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            min-height: 260px;
+        }
+
+        .ai-panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .ai-title-block {
+            display: flex;
+            flex-direction: column;
+            gap: 0.15rem;
+        }
+
+        .ai-title-block h2 {
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        .ai-title-block span {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+        }
+
+        .ai-tag {
+            border-radius: 999px;
+            padding: 0.25rem 0.6rem;
+            border: 1px solid var(--border);
+            font-size: 0.74rem;
+            color: var(--text-muted);
+        }
+
+        .ai-panel-body {
+            margin-top: 0.3rem;
+            flex: 1;
+            min-height: 160px;
+            border-radius: 10px;
+            border: 1px dashed #d1d5db;
+            padding: 0.85rem 0.9rem;
+            background: #f9fafb;
+            overflow-y: auto;
+            font-size: 0.86rem;
+            line-height: 1.6;
+        }
+
+        .ai-placeholder {
+            font-size: 0.86rem;
+            color: var(--text-muted);
+        }
+
+        .ai-placeholder strong {
+            color: var(--text-main);
+            font-weight: 600;
+        }
+
+        /* Clean AI summary HTML */
+
+        .ai-summary {
+            font-size: 0.88rem;
+            line-height: 1.6;
+        }
+
+        .ai-summary h2.ai-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.35rem;
+            color: var(--primary-dark);
+        }
+
+        .ai-summary .ai-section {
+            margin-top: 0.65rem;
+        }
+
+        .ai-summary .ai-section h3 {
+            font-size: 0.86rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+            color: #111827;
+        }
+
+        .ai-summary .ai-section p {
+            margin-bottom: 0.25rem;
+        }
+
+        .ai-summary .ai-section ul {
+            margin-left: 1.1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .ai-summary .ai-section li {
+            margin-bottom: 0.15rem;
+        }
+
+        /* ---------- Toast ---------- */
+
+        .toast {
+            position: fixed;
+            bottom: 18px;
+            right: 18px;
+            padding: 0.7rem 1rem;
+            border-radius: 999px;
+            background: #111827;
+            color: #f9fafb;
+            font-size: 0.78rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 10px 25px rgba(15, 23, 42, 0.25);
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(6px);
+            transition: opacity 0.15s ease, transform 0.15s ease;
+            z-index: 1000;
+        }
+
+        .toast.show {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0);
+        }
+
+        .toast i {
+            font-size: 0.85rem;
+        }
+
+        /* ---------- Loading bar ---------- */
+
+        .linear-loading {
+            height: 2px;
+            width: 100%;
+            background: transparent;
+            border-radius: 999px;
+            overflow: hidden;
+            margin-bottom: 0.4rem;
+            display: none;
+        }
+
+        .linear-loading-inner {
+            height: 100%;
+            width: 40%;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            animation: loading-slide 1s infinite;
+        }
+
+        @keyframes loading-slide {
+            0% {
+                transform: translateX(-100%);
+            }
+
+            50% {
+                transform: translateX(50%);
+            }
+
+            100% {
+                transform: translateX(200%);
+            }
+        }
+    </style>
+    <script src="config.js"></script>
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="page-header">
+        <div class="page-header-inner">
+            <div class="brand-block">
+                <div class="brand-icon">
+                    <i class="fas fa-landmark"></i>
+                </div>
+                <div class="brand-text">
+                    <h1>Government Schemes Explorer</h1>
+                    <p>Agriculture & Farmers Welfare – Official PDF based</p>
+                </div>
+            </div>
+            <div class="header-actions">
+                <a href="dashboard.html" class="btn-outline">
+                    <i class="fas fa-arrow-left"></i>
+                    <span>Back to Dashboard</span>
+                </a>
+                <button class="btn-primary" type="button" onclick="window.location.reload()">
+                    <i class="fas fa-rotate-right"></i>
+                    <span>Refresh Schemes</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Body -->
+    <main class="page-body">
+        <div class="layout-grid">
+            <!-- Left: Schemes -->
+            <section class="panel" id="schemesPanel">
+                <div class="panel-header">
+                    <div class="panel-title">
+                        <h2>Available Schemes (PDF-based)</h2>
+                        <span>These schemes are loaded from official government PDF documents.</span>
+                    </div>
+                    <div class="search-box">
+                        <input type="text" id="schemeSearch" placeholder="Search scheme name..." />
+                        <i class="fas fa-magnifying-glass"></i>
+                    </div>
+                </div>
+
+                <div class="linear-loading" id="schemesLoadingBar">
+                    <div class="linear-loading-inner"></div>
+                </div>
+
+                <div id="schemesList" class="schemes-list">
+                    <!-- Populated by JS -->
+                </div>
+
+                <div id="schemesEmpty" class="empty-state" style="display: none;">
+                    No schemes found. Make sure PDF files are placed in <code>frontend/pdfs</code>.
+                </div>
+            </section>
+
+            <!-- Right: AI Panel -->
+            <section class="ai-panel">
+                <div class="ai-panel-header">
+                    <div class="ai-title-block">
+                        <h2>Krishi Mitra – AI Scheme Assistant</h2>
+                        <span>Reads official scheme PDF and explains in simple language.</span>
+                    </div>
+                    <div class="ai-tag" id="aiSchemeInfo">
+                        No scheme selected
+                    </div>
+                </div>
+
+                <div class="ai-panel-body" id="aiPanelBody">
+                    <div class="ai-placeholder">
+                        <strong>Select a scheme</strong> from the left and click “Summarize with AI”.<br />
+                        Krishi Mitra will read the official PDF and explain:
+                        overview, benefits, eligibility, documents, and how to apply – in a simple format.
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Toast -->
+    <div class="toast" id="toast">
+        <i class="fas fa-circle-check"></i>
+        <span id="toastText">Saved</span>
+    </div>
+
+    <script>
+        let schemesData = [];
+        let filteredSchemes = [];
+        let selectedFileName = null;
+
+        const schemesList = document.getElementById('schemesList');
+        const schemesEmpty = document.getElementById('schemesEmpty');
+        const schemesLoadingBar = document.getElementById('schemesLoadingBar');
+        const schemeSearch = document.getElementById('schemeSearch');
+
+        const aiPanelBody = document.getElementById('aiPanelBody');
+        const aiSchemeInfo = document.getElementById('aiSchemeInfo');
+        const toast = document.getElementById('toast');
+        const toastText = document.getElementById('toastText');
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadSchemes();
+            setupSearch();
+        });
+
+        function showToast(message, isError = false) {
+            toastText.textContent = message;
+            toast.style.background = isError ? '#b91c1c' : '#111827';
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2300);
+        }
+
+        function setLoadingSchemes(isLoading) {
+            schemesLoadingBar.style.display = isLoading ? 'block' : 'none';
+        }
+
+        async function loadSchemes() {
+            try {
+                setLoadingSchemes(true);
+                schemesList.innerHTML = '';
+                schemesEmpty.style.display = 'none';
+
+                const res = await fetch(API_BASE_URL + '/api/schemes');
+                const data = await res.json();
+
+                if (!data.success) {
+                    throw new Error(data.message || 'Failed to load schemes');
+                }
+
+                schemesData = data.schemes || [];
+                filteredSchemes = schemesData.slice();
+                renderSchemes();
+            } catch (err) {
+                console.error('Error loading schemes:', err);
+                schemesList.innerHTML = '';
+                schemesEmpty.style.display = 'block';
+                showToast('Unable to load schemes list', true);
+            } finally {
+                setLoadingSchemes(false);
+            }
+        }
+
+        function setupSearch() {
+            schemeSearch.addEventListener('input', () => {
+                const val = schemeSearch.value.trim().toLowerCase();
+                if (!val) {
+                    filteredSchemes = schemesData.slice();
+                } else {
+                    filteredSchemes = schemesData.filter(s =>
+                        s.schemeName.toLowerCase().includes(val)
+                    );
+                }
+                renderSchemes();
+            });
+        }
+
+        function renderSchemes() {
+            schemesList.innerHTML = '';
+
+            if (!filteredSchemes.length) {
+                schemesEmpty.style.display = 'block';
+                return;
+            }
+
+            schemesEmpty.style.display = 'none';
+
+            filteredSchemes.forEach(s => {
+                const card = document.createElement('article');
+                card.className = 'scheme-card';
+                if (selectedFileName === s._id) {
+                    card.classList.add('active');
+                }
+
+                card.innerHTML = `
+          <div class="scheme-name">${s.schemeName}</div>
+          <div class="scheme-meta">
+            <span>${s.department || 'Agriculture & Farmers Welfare'}</span>
+            <span>${s.region || 'Central / State'}</span>
+          </div>
+          <div class="scheme-actions">
+            <button class="btn-text" type="button" data-open-pdf>
+              <i class="fas fa-file-pdf"></i>
+              <span>Open PDF</span>
+            </button>
+            <button class="btn-text primary" type="button" data-ai>
+              <i class="fas fa-robot"></i>
+              <span>Summarize with AI</span>
+            </button>
+          </div>
+        `;
+
+                // Entire card highlight on click
+                card.addEventListener('click', () => {
+                    selectedFileName = s._id;
+                    updateSelectedCard();
+                });
+
+                // Open PDF button
+                card.querySelector('[data-open-pdf]').addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    if (s.pdfUrl) {
+                        window.open(s.pdfUrl, '_blank', 'noopener');
+                    } else {
+                        showToast('No PDF available for this scheme', true);
+                    }
+                });
+
+                // AI summarize button
+                card.querySelector('[data-ai]').addEventListener('click', async (e) => {
+                    e.stopPropagation();
+                    selectedFileName = s._id;
+                    updateSelectedCard();
+                    await loadAiSummary(s._id, s.schemeName);
+                });
+
+                schemesList.appendChild(card);
+            });
+        }
+
+        function updateSelectedCard() {
+            const cards = document.querySelectorAll('.scheme-card');
+            cards.forEach(card => card.classList.remove('active'));
+
+            const index = filteredSchemes.findIndex(s => s._id === selectedFileName);
+            if (index !== -1) {
+                const targetCard = schemesList.children[index];
+                if (targetCard) targetCard.classList.add('active');
+            }
+        }
+
+        async function loadAiSummary(fileName, schemeName) {
+            aiSchemeInfo.textContent = schemeName || 'Selected scheme';
+
+            aiPanelBody.innerHTML = `
+        <div class="ai-placeholder">
+          Generating explanation from the official PDF...
+        </div>
+      `;
+
+            try {
+                const res = await fetch(
+                    `/api/schemes/${encodeURIComponent(fileName)}/ai-summary?lang=en`
+                );
+                const data = await res.json();
+
+                if (!data.success) {
+                    const msg = data.message || 'Failed to load AI summary';
+                    throw new Error(msg);
+                }
+
+                aiPanelBody.innerHTML = data.summaryHtml || '<p>No summary available.</p>';
+                showToast('AI summary generated from PDF');
+            } catch (err) {
+                console.error('AI summary error:', err);
+                aiPanelBody.innerHTML = `
+          <div class="ai-placeholder">
+            Unable to generate AI summary for this PDF right now.<br/>
+            <small>${err.message}</small>
+          </div>
+        `;
+                showToast('Failed to load AI summary', true);
+            }
+        }
+    </script>
+</body>
+
+</html>

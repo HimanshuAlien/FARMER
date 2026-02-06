@@ -1,0 +1,2830 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title> FarmSure</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+
+    <style>
+        :root {
+            --primary: #16a34a;
+            --primary-dark: #15803d;
+            --primary-light: #86efac;
+            --secondary: #0ea5e9;
+            --accent: #8b5cf6;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --success: #10b981;
+            --bg-light: #f1f5f9;
+            --bg-dark: #0f172a;
+            --card-light: #ffffff;
+            --card-dark: #1e293b;
+            --text-light: #1e293b;
+            --text-dark: #f1f5f9;
+            --text-secondary-light: #64748b;
+            --text-secondary-dark: #94a3b8;
+            --border-light: #e2e8f0;
+            --border-dark: #334155;
+            --sidebar-light: #ffffff;
+            --sidebar-dark: #1e293b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-light);
+            color: var(--text-light);
+            overflow-x: hidden;
+            transition: all 0.3s ease;
+            line-height: 1.6;
+        }
+
+        body.dark {
+            background: var(--bg-dark);
+            color: var(--text-dark);
+        }
+
+        body.lang-ml {
+            font-size: 0.9rem !important;
+            /* reduce overall size slightly */
+            line-height: 1.3 !important;
+            /* tighten spacing */
+        }
+
+        body.lang-ml .sidebar .nav-item span {
+            font-size: 0.85rem !important;
+            /* specifically fix sidebar */
+        }
+
+        body.lang-ml .section-title,
+        body.lang-ml .ds-title,
+        body.lang-ml .feature-title {
+            font-size: 1.1rem !important;
+            /* headings slightly reduced */
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100vh;
+            width: 280px;
+            background: var(--sidebar-light);
+            z-index: 1000;
+            transition: transform 0.3s ease, background 0.3s ease;
+            box-shadow: 4px 0 15px rgba(15, 23, 42, 0.12);
+            border-right: 1px solid var(--border-light);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        body.dark .sidebar {
+            background: var(--sidebar-dark);
+            border-right-color: var(--border-dark);
+            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.6);
+        }
+
+        .sidebar-header {
+            padding: 1.6rem 1.5rem;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.35);
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(59, 130, 246, 0.08));
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .logo-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 0.9rem;
+            object-fit: contain;
+            background: #ecfdf5;
+            padding: 4px;
+        }
+
+        body.dark .logo-icon {
+            background: #022c22;
+        }
+
+        /* Popup Background */
+        .mh-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.55);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.4s ease-out;
+            z-index: 9999;
+        }
+
+        /* Modal Box */
+        .mh-modal {
+            background: #ffffff;
+            width: 380px;
+            padding: 25px;
+            border-radius: 14px;
+            box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.18);
+            animation: slideUp 0.35s ease-out;
+        }
+
+        /* Title */
+        .mh-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #1b5e20;
+            margin-bottom: 5px;
+            text-align: center;
+        }
+
+        /* Subtitle */
+        .mh-sub {
+            color: #555;
+            font-size: 14px;
+            margin-bottom: 18px;
+            text-align: center;
+        }
+
+        /* === Tutorial Video Modal === */
+        .tutorial-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.70);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 11000;
+            animation: fadeIn 0.25s ease-out;
+        }
+
+        .tutorial-modal {
+            background: #ffffff;
+            width: 90%;
+            max-width: 720px;
+            border-radius: 16px;
+            padding: 20px 20px 16px;
+            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.35);
+            position: relative;
+        }
+
+        body.dark .tutorial-modal {
+            background: #020617;
+            color: #e5e7eb;
+        }
+
+        .tutorial-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .tutorial-subtitle {
+            font-size: 0.85rem;
+            color: #64748b;
+            margin-bottom: 10px;
+        }
+
+        body.dark .tutorial-subtitle {
+            color: #9ca3af;
+        }
+
+        .tutorial-video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            border-radius: 12px;
+            margin-bottom: 10px;
+        }
+
+        .tutorial-video-wrapper iframe {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+            border-radius: 12px;
+        }
+
+        .tutorial-close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            border: none;
+            background: rgba(15, 23, 42, 0.06);
+            border-radius: 999px;
+            width: 30px;
+            height: 30px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        body.dark .tutorial-close-btn {
+            background: rgba(15, 23, 42, 0.6);
+            color: #e5e7eb;
+        }
+
+        .tutorial-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 0.75rem;
+            margin-top: 4px;
+        }
+
+        .tutorial-checkbox {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            font-size: 0.8rem;
+            color: #4b5563;
+        }
+
+        body.dark .tutorial-checkbox {
+            color: #9ca3af;
+        }
+
+        .tutorial-btn {
+            border: none;
+            background: var(--primary);
+            color: #ffffff;
+            padding: 0.5rem 1.2rem;
+            border-radius: 999px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+        }
+
+        .tutorial-btn i {
+            font-size: 0.8rem;
+        }
+
+
+        /* Group Label */
+        .mh-group {
+            margin-bottom: 18px;
+        }
+
+        .mh-group label {
+            display: flex;
+            justify-content: space-between;
+            font-weight: 600;
+            color: #333;
+        }
+
+        /* Slider */
+        .mh-slider {
+            width: 100%;
+            margin-top: 8px;
+            accent-color: #1b5e20;
+            /* Kerala green */
+        }
+
+        /* Button */
+        .mh-btn {
+            width: 100%;
+            padding: 12px;
+            background: #1b5e20;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .mh-btn:hover {
+            background: #2e7d32;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(30px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .logo-brand {
+            display: flex;
+            gap: 0.2rem;
+            align-items: baseline;
+            letter-spacing: 0.02em;
+        }
+
+        .logo-text-krishi {
+            color: var(--primary);
+            font-weight: 800;
+            font-size: 1.25rem;
+        }
+
+        .logo-text-mitr {
+            color: #020617;
+            font-weight: 800;
+            font-size: 1.25rem;
+        }
+
+        body.dark .logo-text-mitr {
+            color: #f9fafb;
+        }
+
+        .nav-menu {
+            flex: 1;
+            overflow-y: auto;
+            padding: 0.5rem 0;
+        }
+
+        .nav-section {
+            margin-bottom: 1rem;
+        }
+
+        .nav-section-title {
+            padding: 0 1.5rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: #4b5563;
+            margin-bottom: 0.6rem;
+        }
+
+        body.dark .nav-section-title {
+            color: var(--text-secondary-dark);
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 0.9rem;
+            text-decoration: none;
+            padding: 0.75rem 1.5rem;
+            color: #111827;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            border-left: 3px solid transparent;
+            font-size: 0.95rem;
+        }
+
+        body.dark .nav-item {
+            color: #e5e7eb;
+        }
+
+        .nav-item i {
+            font-size: 1.1rem;
+            width: 20px;
+        }
+
+        .nav-item:hover {
+            color: var(--primary);
+            border-left-color: var(--primary);
+            background: rgba(16, 185, 129, 0.06);
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+            font-weight: 600;
+            border-left-color: var(--primary);
+            background: rgba(16, 185, 129, 0.08);
+        }
+
+        .sidebar-footer {
+            flex-shrink: 0;
+            width: 100%;
+            padding: 0.2rem 1.5rem 0.3rem;
+            border-top: 1px solid var(--border-light);
+            background: var(--sidebar-light);
+            display: flex;
+            flex-direction: column;
+            gap: 0.7rem;
+        }
+
+        body.dark .sidebar-footer {
+            background: var(--sidebar-dark);
+            border-top-color: var(--border-dark);
+        }
+
+        .user-info {
+            color: var(--text-secondary-light);
+            font-size: 0.85rem;
+        }
+
+        body.dark .user-info {
+            color: var(--text-secondary-dark);
+        }
+
+        .theme-toggle-sidebar,
+        .logout-btn {
+            width: 100%;
+            border-radius: 999px;
+            padding: 0.65rem 0.8rem;
+            font-size: 0.8rem;
+            cursor: pointer;
+            border: 1px solid transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.45rem;
+            transition: all 0.2s ease;
+            font-weight: 500;
+        }
+
+        .theme-toggle-sidebar {
+            background: rgba(16, 185, 129, 0.06);
+            color: var(--primary);
+            border-color: rgba(16, 185, 129, 0.25);
+        }
+
+        .theme-toggle-sidebar:hover {
+            background: rgba(16, 185, 129, 0.12);
+        }
+
+        .logout-btn {
+            background: rgba(239, 68, 68, 0.06);
+            color: var(--danger);
+            border-color: rgba(239, 68, 68, 0.25);
+        }
+
+        .logout-btn:hover {
+            background: rgba(239, 68, 68, 0.12);
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 260px;
+                transform: translateX(-100%);
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0 !important;
+                width: 100% !important;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .sidebar {
+                width: 240px;
+            }
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 280px;
+            min-height: 100vh;
+            background: var(--bg-light);
+            transition: margin-left 0.3s ease;
+        }
+
+        body.dark .main-content {
+            background: var(--bg-dark);
+        }
+
+        .content-area {
+            padding: 2rem;
+            max-width: 100%;
+        }
+
+        /* ========== TOP BAR ========== */
+        .simple-topbar {
+            background: var(--card-light);
+            padding: 1.5rem 2.3rem;
+            box-shadow: 0 1px 3px rgba(15, 23, 42, 0.12);
+            border-bottom: 1px solid var(--border-light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        body.dark .simple-topbar {
+            background: var(--card-dark);
+            border-bottom-color: var(--border-dark);
+        }
+
+        .topbar-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .topbar-logo {
+            width: 40px;
+            height: 40px;
+            border-radius: 0.9rem;
+            object-fit: contain;
+            background: #ecfdf5;
+            padding: 4px;
+        }
+
+        body.dark .topbar-logo {
+            background: #022c22;
+        }
+
+        .simple-title {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--text-light);
+            margin: 0;
+        }
+
+        body.dark .simple-title {
+            color: var(--text-dark);
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .status-badge {
+            background: rgba(22, 163, 74, 0.08);
+            color: var(--primary);
+            padding: 0.45rem 1.1rem;
+            border-radius: 999px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            border: 1px solid rgba(22, 163, 74, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--primary);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.6rem;
+            border-radius: 0.7rem;
+            cursor: pointer;
+            font-size: 1.1rem;
+        }
+
+        /* 🔤 Language switcher styles */
+        .language-switcher {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-light);
+            background: var(--card-light);
+            overflow: hidden;
+        }
+
+        body.dark .language-switcher {
+            background: var(--card-dark);
+            border-color: var(--border-dark);
+        }
+
+        .lang-select {
+            border: none;
+            padding: 0.5rem 0.9rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            background: var(--card-light);
+            color: var(--text-light);
+            font-weight: 600;
+            transition: all 0.3s ease;
+            appearance: none;
+            padding-right: 1.8rem;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2316a34a' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.6rem center;
+            background-size: 1rem;
+        }
+
+        body.dark .lang-select {
+            background-color: var(--card-dark);
+            color: var(--text-dark);
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23f1f5f9' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+        }
+
+        .lang-select:hover {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(22, 163, 74, 0.1);
+        }
+
+        .lang-select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.15);
+        }
+
+        .lang-select option {
+            background: var(--card-light);
+            color: var(--text-light);
+            padding: 0.5rem;
+        }
+
+        body.dark .lang-select option {
+            background: var(--card-dark);
+            color: var(--text-dark);
+        }
+
+        /* Compact Welcome Banner */
+        .welcome-banner {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            border-radius: 16px;
+            padding: 1.5rem 2rem;
+            margin-bottom: 2rem;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 12px rgba(22, 163, 74, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .welcome-banner::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 300px;
+            height: 300px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 50%;
+        }
+
+        .welcome-banner::after {
+            content: '';
+            position: absolute;
+            bottom: -40%;
+            left: 20%;
+            width: 200px;
+            height: 200px;
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 50%;
+        }
+
+        .welcome-text {
+            position: relative;
+            z-index: 2;
+        }
+
+        .welcome-text h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .welcome-text p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .welcome-meta {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            font-size: 0.9rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            backdrop-filter: blur(10px);
+        }
+
+        /* Two Column Layout */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1.8fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Stats Cards Grid - Enhanced */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.25rem;
+        }
+
+        .stat-card {
+            background: var(--card-light);
+            border-radius: 16px;
+            padding: 1.75rem;
+            border: 1px solid var(--border-light);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            min-height: 160px;
+        }
+
+        body.dark .stat-card {
+            background: var(--card-dark);
+            border-color: var(--border-dark);
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            right: -20px;
+            width: 70px;
+            height: 70px;
+            background: var(--primary);
+            opacity: 0;
+            border-radius: 50%;
+            transition: all 0.4s ease;
+        }
+
+        .stat-card::after {
+            content: '';
+            position: absolute;
+            bottom: -20px;
+            left: -20px;
+            width: 50px;
+            height: 50px;
+            background: var(--primary);
+            opacity: 0;
+            border-radius: 50%;
+            transition: all 0.4s ease;
+        }
+
+        .stat-card:hover::before {
+            opacity: 0.06;
+            top: -10px;
+            right: -10px;
+        }
+
+        .stat-card:hover::after {
+            opacity: 0.04;
+            bottom: -10px;
+            left: -10px;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            border-color: var(--primary);
+        }
+
+        .stat-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .stat-info h3 {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-secondary-light);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+        }
+
+        body.dark .stat-info h3 {
+            color: var(--text-secondary-dark);
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--text-light);
+            line-height: 1;
+        }
+
+        body.dark .stat-value {
+            color: var(--text-dark);
+        }
+
+        .stat-icon-box {
+            width: 70px;
+            height: 70px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            overflow: hidden;
+            background: transparent;
+        }
+
+        .stat-icon-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .stat-trend {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--success);
+            margin-top: 0.5rem;
+        }
+
+        /* Modern Govt Schemes Card (reused weather-card class) */
+        .weather-card {
+            background: var(--card-light);
+            border-radius: 16px;
+            padding: 1.75rem;
+            color: var(--text-light);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            height: 100%;
+            box-shadow: 0 4px 18px rgba(15, 23, 42, 0.06);
+            border: 1px solid rgba(148, 163, 184, 0.6);
+        }
+
+        body.dark .weather-card {
+            background: var(--card-dark);
+            color: var(--text-dark);
+            border-color: var(--border-dark);
+        }
+
+        .weather-card::before {
+            content: '';
+            position: absolute;
+            top: -30px;
+            right: -30px;
+            width: 120px;
+            height: 120px;
+            background: radial-gradient(circle, rgba(22, 163, 74, 0.18), transparent 65%);
+            opacity: 1;
+            border-radius: 999px;
+        }
+
+        .weather-card::after {
+            content: '';
+            position: absolute;
+            bottom: -40px;
+            left: -40px;
+            width: 140px;
+            height: 140px;
+            background: radial-gradient(circle, rgba(234, 179, 8, 0.18), transparent 65%);
+            opacity: 1;
+            border-radius: 999px;
+        }
+
+        .weather-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 26px rgba(15, 23, 42, 0.12);
+            border-color: var(--primary);
+        }
+
+        .weather-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Dashboard Schemes Card (inside weather-card) */
+        .dashboard-schemes-header {
+            margin-bottom: 1rem;
+        }
+
+        .dashboard-schemes-title-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 0.75rem;
+        }
+
+        .ds-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+
+        .ds-subtitle {
+            font-size: 0.8rem;
+            opacity: 0.9;
+            margin-top: 0.2rem;
+        }
+
+        .ds-badge-wrapper {
+            display: flex;
+            align-items: center;
+        }
+
+        .ds-new-pulse {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.8rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.09em;
+            color: #ffffff;
+            background: #dc2626;
+            /* solid red */
+            padding: 0.3rem 0.9rem;
+            border-radius: 999px;
+            border: 1px solid #b91c1c;
+            box-shadow:
+                0 0 0 1px rgba(248, 113, 113, 0.8),
+                0 8px 18px rgba(248, 113, 113, 0.55);
+            animation: dsBlink 0.9s ease-in-out infinite;
+        }
+
+        .ds-new-pulse i {
+            font-size: 0.9rem;
+        }
+
+        /* Stronger blinking / glow effect */
+        @keyframes dsBlink {
+
+            0%,
+            100% {
+                transform: translateY(0) scale(1);
+                box-shadow:
+                    0 0 0 0 rgba(248, 113, 113, 0.9),
+                    0 8px 18px rgba(248, 113, 113, 0.6);
+            }
+
+            50% {
+                transform: translateY(-1px) scale(1.04);
+                box-shadow:
+                    0 0 14px 2px rgba(248, 113, 113, 1),
+                    0 12px 26px rgba(248, 113, 113, 0.8);
+            }
+        }
+
+        .dashboard-schemes-list {
+            margin-top: 0.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .ds-item {
+            background: rgba(22, 163, 74, 0.08);
+            border-radius: 12px;
+            padding: 0.7rem 0.85rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+            border: 1px solid rgba(22, 163, 74, 0.5);
+            backdrop-filter: blur(4px);
+        }
+
+        body.dark .ds-item {
+            background: rgba(15, 23, 42, 0.6);
+            border-color: rgba(148, 163, 184, 0.6);
+        }
+
+        .ds-item-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .ds-name {
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .ds-chip {
+            font-size: 0.7rem;
+            padding: 0.15rem 0.55rem;
+            border-radius: 999px;
+            border: 1px solid rgba(148, 163, 184, 0.7);
+            opacity: 0.9;
+        }
+
+        .ds-meta {
+            font-size: 0.75rem;
+            opacity: 0.9;
+            display: flex;
+            justify-content: space-between;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .ds-empty {
+            font-size: 0.8rem;
+            opacity: 0.9;
+        }
+
+        .dashboard-schemes-footer {
+            margin-top: 1.1rem;
+            border-top: 1px solid rgba(148, 163, 184, 0.35);
+            padding-top: 0.7rem;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .ds-view-all {
+            font-size: 0.82rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            opacity: 0.95;
+        }
+
+        .ds-view-all::after {
+            content: '↗';
+            font-size: 0.8rem;
+        }
+
+        /* Features Section */
+        .features-section {
+            margin-top: 2rem;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--text-light);
+        }
+
+        body.dark .section-title {
+            color: var(--text-dark);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .feature-card {
+            background: var(--card-light);
+            border-radius: 16px;
+            padding: 2rem;
+            border: 1px solid var(--border-light);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        body.dark .feature-card {
+            background: var(--card-dark);
+            border-color: var(--border-dark);
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100px;
+            height: 100px;
+            opacity: 0.05;
+            border-radius: 50%;
+            transform: translate(30%, -30%);
+        }
+
+        .feature-card:nth-child(1)::before {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .feature-card:nth-child(2)::before {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        .feature-card:nth-child(3)::before {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .feature-card:nth-child(4)::before {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            border-color: var(--primary);
+        }
+
+        .feature-icon-wrapper {
+            width: 80px;
+            height: 80px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            margin-bottom: 1.25rem;
+            overflow: hidden;
+            background: transparent !important;
+        }
+
+        .feature-icon-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .feature-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text-light);
+            margin-bottom: 0.75rem;
+        }
+
+        body.dark .feature-title {
+            color: var(--text-dark);
+        }
+
+        .feature-description {
+            color: var(--text-secondary-light);
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+        }
+
+        body.dark .feature-description {
+            color: var(--text-secondary-dark);
+        }
+
+        .feature-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .feature-btn:hover {
+            background: var(--primary-dark);
+            transform: translateX(4px);
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 1024px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 260px;
+                transform: translateX(-100%);
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0 !important;
+            }
+
+            .mobile-menu-btn {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .simple-topbar {
+                padding: 1.1rem 1.1rem;
+            }
+
+            .simple-title {
+                font-size: 1.25rem;
+            }
+
+            .topbar-logo {
+                width: 34px;
+                height: 34px;
+            }
+
+            .welcome-banner {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .welcome-meta {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.75rem;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .content-area {
+                padding: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stat-value {
+                font-size: 1.75rem;
+            }
+
+            .stat-icon-box {
+                width: 48px;
+                height: 48px;
+                font-size: 1.5rem;
+            }
+        }
+
+        /* Animation */
+        .animate-fade-in {
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
+    <script src="config.js"></script>
+</head>
+
+<body>
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <img src="images/logo.png" alt="KrishiMitr logo" class="logo-icon">
+                <div class="logo-brand">
+                    <span class="logo-text-krishi">Krishi</span>
+                    <span class="logo-text-mitr">Mitr</span>
+                </div>
+            </div>
+        </div>
+        <div class="nav-menu">
+            <div class="nav-section">
+                <div class="nav-section-title" data-i18n="sidebar.mainMenu">Main Menu</div>
+                <a href="dashboard.html" class="nav-item active">
+                    <i class="fas fa-home"></i>
+                    <span data-i18n="sidebar.dashboard">Dashboard</span>
+                </a>
+                <a href="ask-query.html" class="nav-item">
+                    <i class="fas fa-robot"></i>
+                    <span data-i18n="sidebar.askQuery">Ask Query</span>
+                </a>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title" data-i18n="sidebar.tools">Tools</div>
+                <a href="crops.html" class="nav-item">
+                    <i class="fa-solid fa-carrot"></i>
+                    <span data-i18n="sidebar.yourcrop">Your Crops</span>
+                </a>
+                <a href="crop-diagnosis.html" class="nav-item">
+                    <i class="fa-solid fa-briefcase-medical"></i>
+                    <span data-i18n="sidebar.cropDiagnosis">Crop Diagnosis</span>
+                </a>
+                <a href="weather-alerts.html" class="nav-item">
+                    <i class="fas fa-cloud-sun"></i>
+                    <span data-i18n="sidebar.weatherAlerts">Weather & Alerts</span>
+                </a>
+                <a href="Schemes.html" class="nav-item">
+                    <i class="fa-solid fa-building-ngo"></i>
+                    <span data-i18n="sidebar.schemes">Govt Schemes</span>
+                </a>
+                <a href="helpline.html" class="nav-item">
+                    <i class="fa-solid fa-phone"></i>
+                    <span data-i18n="sidebar.helpline">Helpline Number</span>
+                </a>
+                <a href="smart-farming.html" class="nav-item">
+                    <i class="fa-solid fa-briefcase"></i>
+                    <span data-i18n="sidebar.agriSwasthya">Agri Swasthya</span>
+                </a>
+                <a href="market-prices.html" class="nav-item">
+                    <i class="fa-solid fa-dollar-sign"></i>
+                    <span data-i18n="sidebar.marketPrices">Market Prices</span>
+                </a>
+                <a href="iot.html" class="nav-item">
+                    <i class="fa-solid fa-screwdriver-wrench"></i>
+                    <span data-i18n="sidebar.IOT">IOT</span>
+                </a>
+                <a href="satellite.html" class="nav-item">
+                    <i class="fa-solid fa-satellite"></i>
+                    <span data-i18n="sidebar.satellite">Satellite Monitoring</span>
+                </a>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title" data-i18n="sidebar.communitySection">Community</div>
+                <a href="farmer-community.html" class="nav-item">
+                    <i class="fas fa-users"></i>
+                    <span data-i18n="sidebar.community">Community</span>
+                </a>
+                <a href="profile.html" class="nav-item">
+                    <i class="fas fa-user"></i>
+                    <span data-i18n="sidebar.profile">Profile</span>
+                </a>
+            </div>
+        </div>
+        <div class="sidebar-footer">
+            <div id="userInfo" class="user-info" style="display:none;"></div>
+            <button class="theme-toggle-sidebar" onclick="toggleTheme()">
+                <i class="fas fa-sun"></i>
+                <span data-i18n="sidebar.toggleTheme">Toggle Theme</span>
+            </button>
+            <button id="logoutBtn" class="logout-btn">
+                <i class="fas fa-sign-out-alt"></i>
+                <span data-i18n="sidebar.logout">Logout</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Top Bar -->
+        <div class="simple-topbar">
+            <div class="topbar-left">
+                <button class="mobile-menu-btn" onclick="toggleSidebar()">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <img src="images/krishi-officer.png" alt="KrishiMitr logo" class="topbar-logo" />
+                <h1 class="simple-title" data-i18n="header.title">FarmSure</h1>
+            </div>
+            <div class="topbar-right">
+                <!-- 🔤 Language toggle button -->
+                <div class="language-switcher">
+                    <select id="languageSelect" class="lang-select" onchange="changeLanguage(this.value)">
+                        <option value="en">English</option>
+                        <option value="hi">हिंदी (Hindi)</option>
+                        <option value="ml">മലയാളം (Malayalam)</option>
+                        <option value="ta">தமிழ் (Tamil)</option>
+                        <option value="kn">ಕನ್ನಡ (Kannada)</option>
+                        <option value="te">తెలుగు (Telugu)</option>
+                    </select>
+                </div>
+
+                <span class="status-badge">
+                    <span class="status-dot"></span>
+                    <span data-i18n="status.online">System Online</span>
+                </span>
+            </div>
+        </div>
+
+        <div class="content-area">
+            <!-- Welcome Banner -->
+            <div class="welcome-banner animate-fade-in">
+                <div class="welcome-text">
+                    <h1 data-i18n="welcome.title">Welcome Back, Farmer</h1>
+                    <p data-i18n="welcome.subtitle">Here's what's happening with your farm today</p>
+                </div>
+                <div class="welcome-meta">
+                    <div class="meta-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span data-i18n="meta.location">Kochi, Kerala</span>
+                    </div>
+                    <div class="meta-item">
+                        <i class="fas fa-clock"></i>
+                        <span id="currentTime">--:--</span>
+                    </div>
+                    <div class="meta-item">
+                        <i class="fas fa-temperature-high"></i>
+                        <span id="bannerTemp">--°C</span>
+                    </div>
+                    <div class="meta-item">
+                        <i class="fas fa-wind"></i>
+                        <span id="bannerWind">-- km/h</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dashboard Grid -->
+            <div class="dashboard-grid animate-fade-in">
+                <!-- Stats Cards -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-card-header">
+                            <div class="stat-info">
+                                <h3 data-i18n="stat.totalQueries">Total Queries</h3>
+                                <div class="stat-value" id="queryCount">0</div>
+                                <div class="stat-trend">
+                                    <i class="fas fa-arrow-up"></i>
+                                    <span id="queryTrend">+12%</span>
+                                </div>
+                            </div>
+                            <div class="stat-icon-box">
+                                <img src="images/crop-diagnosis.png" alt="Queries">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-card-header">
+                            <div class="stat-info">
+                                <h3 data-i18n="stat.temperature">Temperature</h3>
+                                <div class="stat-value" id="currentTemp">--</div>
+                                <div class="stat-trend" id="tempTrend">
+                                    <i class="fas fa-check-circle"></i>
+                                    <span data-i18n="stat.tempStatus">Perfect for crops</span>
+                                </div>
+                            </div>
+                            <div class="stat-icon-box">
+                                <img src="images/weather.png" alt="Temperature">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-card-header">
+                            <div class="stat-info">
+                                <h3 data-i18n="stat.cropsMonitored">Crops Monitored</h3>
+                                <div class="stat-value" id="cropsCount">0</div>
+                                <div class="stat-trend">
+                                    <i class="fas fa-arrow-up"></i>
+                                    <span data-i18n="stat.cropsNew">2 new this week</span>
+                                </div>
+                            </div>
+                            <div class="stat-icon-box">
+                                <img src="images/market-prices.png" alt="Crops">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-card-header">
+                            <div class="stat-info">
+                                <h3 data-i18n="stat.activeAlerts">Active Alerts</h3>
+                                <div class="stat-value" id="alertsCount">0</div>
+                                <div class="stat-trend">
+                                    <i class="fas fa-info-circle"></i>
+                                    <span id="alertsStatus" data-i18n="alerts.statusNormal">All systems normal</span>
+                                </div>
+                            </div>
+                            <div class="stat-icon-box">
+                                <img src="images/alerts.png" alt="Alerts">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Latest Govt Schemes Card -->
+                <div class="weather-card" onclick="window.location.href='Schemes.html'">
+                    <div class="weather-content">
+                        <div class="dashboard-schemes-header">
+                            <div class="dashboard-schemes-title-row">
+                                <div>
+                                    <div class="ds-title" data-i18n="schemes.latestTitle">Latest Govt Schemes</div>
+                                    <div class="ds-subtitle" id="dashboardSchemesSubtitle" data-i18n="schemes.subtitle">
+                                        Recently added benefits for farmers
+                                    </div>
+                                </div>
+                                <div class="ds-badge-wrapper">
+                                    <span class="ds-new-pulse">
+                                        <i class="fas fa-bolt"></i>
+                                        <span data-i18n="schemes.newUpdates">New updates</span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="dashboardSchemesList" class="dashboard-schemes-list">
+                            <div class="ds-empty">Loading latest schemes...</div>
+                        </div>
+
+                        <div class="dashboard-schemes-footer">
+                            <span class="ds-view-all" data-i18n="schemes.viewAll">View all schemes</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Features Section -->
+            <div class="features-section animate-fade-in">
+                <div class="section-header">
+                    <h2 class="section-title" data-i18n="features.quickActions">Quick Actions</h2>
+                </div>
+
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon-wrapper">
+                            <img src="images/ai-assistant.png" alt="AI Assistant">
+                        </div>
+                        <h3 class="feature-title" data-i18n="features.aiAssistant.title">AI Farming Assistant</h3>
+                        <p class="feature-description" data-i18n="features.aiAssistant.desc">
+                            Get instant answers to your farming questions. Ask about pest control, crop diseases,
+                            fertilizers, and best practices.
+                        </p>
+                        <button class="feature-btn" onclick="window.location.href='ask-query.html'">
+                            <span data-i18n="features.aiAssistant.btn">Ask Question</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon-wrapper">
+                            <img src="images/crop-diagnosis.png" alt="Crop Diagnosis">
+                        </div>
+                        <h3 class="feature-title" data-i18n="features.cropDiagnosis.title">Crop Diagnosis</h3>
+                        <p class="feature-description" data-i18n="features.cropDiagnosis.desc">
+                            Upload crop images to detect diseases, pests, and nutrient deficiencies using advanced AI
+                            technology.
+                        </p>
+                        <button class="feature-btn" onclick="window.location.href='crop-diagnosis.html'">
+                            <span data-i18n="features.cropDiagnosis.btn">Upload Image</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon-wrapper">
+                            <img src="images/market-prices.png" alt="Market Prices">
+                        </div>
+                        <h3 class="feature-title" data-i18n="features.marketPrices.title">Market Prices</h3>
+                        <p class="feature-description" data-i18n="features.marketPrices.desc">
+                            Access real-time vegetable prices with AI-powered recommendations and market analysis for
+                            better decisions.
+                        </p>
+                        <button class="feature-btn" onclick="window.location.href='market-prices.html'">
+                            <span data-i18n="features.marketPrices.btn">View Prices</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon-wrapper">
+                            <img src="images/weather-alert.png" alt="Weather Alerts">
+                        </div>
+                        <h3 class="feature-title" data-i18n="features.weatherAlerts.title">Weather Alerts</h3>
+                        <p class="feature-description" data-i18n="features.weatherAlerts.desc">
+                            Get detailed forecasts, rainfall predictions, and farming-specific alerts for your location
+                            and crops.
+                        </p>
+                        <button class="feature-btn" onclick="window.location.href='weather-alerts.html'">
+                            <span data-i18n="features.weatherAlerts.btn">View Alerts</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tutorial Video Popup -->
+        <div id="tutorialOverlay" class="tutorial-overlay">
+            <div class="tutorial-modal">
+                <button class="tutorial-close-btn" onclick="closeTutorialModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+
+                <h2 class="tutorial-title">Quick Tour of KrishiMitr Dashboard</h2>
+                <p class="tutorial-subtitle">
+                    Watch this 2-minute walkthrough to understand how to use the main features.
+                </p>
+
+                <div class="tutorial-video-wrapper">
+                    <iframe id="tutorialIframe" src="" title="KrishiMitr Dashboard Tutorial"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowfullscreen>
+                    </iframe>
+                </div>
+
+                <div class="tutorial-footer">
+                    <label class="tutorial-checkbox">
+                        <input type="checkbox" id="tutorialDontShow">
+                        <span>Don’t show this again for this user</span>
+                    </label>
+                    <button class="tutorial-btn" onclick="handleTutorialDone()">
+                        Got it
+                        <i class="fas fa-check"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+
+
+        <!-- survey popup -->
+        <div id="mhSurveyPopup" class="mh-overlay">
+            <div class="mh-modal">
+                <h2 class="mh-title">Monthly Mental Health Survey</h2>
+                <p class="mh-sub">Your responses help us support you better.</p>
+
+                <div class="mh-group">
+                    <label>Sleep Quality <span id="val_sleep_quality">5</span></label>
+                    <input type="range" min="1" max="10" id="sleep_quality" class="mh-slider"
+                        oninput="updateVal('sleep_quality')">
+                </div>
+
+                <div class="mh-group">
+                    <label>Stress Level <span id="val_stress_level">5</span></label>
+                    <input type="range" min="1" max="10" id="stress_level" class="mh-slider"
+                        oninput="updateVal('stress_level')">
+                </div>
+
+                <div class="mh-group">
+                    <label>Hopelessness Feeling <span id="val_hopelessness">5</span></label>
+                    <input type="range" min="1" max="10" id="hopelessness" class="mh-slider"
+                        oninput="updateVal('hopelessness')">
+                </div>
+
+                <div class="mh-group">
+                    <label>Overall Mood <span id="val_mood">5</span></label>
+                    <input type="range" min="1" max="10" id="mood" class="mh-slider" oninput="updateVal('mood')">
+                </div>
+
+                <button class="mh-btn" onclick="submitSurvey()">Submit</button>
+            </div>
+        </div>
+    </main>
+
+    <!-- 🔤 Language JS (front-end only, no backend needed) -->
+    <script>
+        const translations = {
+            en: {
+                "sidebar.iot": "IOT",
+                "sidebar.satellite": "Satellite Monitoring",
+                "sidebar.mainMenu": "Main Menu",
+                "sidebar.dashboard": "Dashboard",
+                "sidebar.askQuery": "Ask Query",
+                "sidebar.tools": "Tools",
+                "sidebar.cropDiagnosis": "Crop Diagnosis",
+                "sidebar.weatherAlerts": "Weather & Alerts",
+                "sidebar.schemes": "Govt Schemes",
+                "sidebar.helpline": "Helpline Number",
+                "sidebar.agriSwasthya": "Agri Swasthya",
+                "sidebar.marketPrices": "Market Prices",
+                "sidebar.communitySection": "Community",
+                "sidebar.community": "Community",
+                "sidebar.profile": "Profile",
+                "sidebar.toggleTheme": "Toggle Theme",
+                "sidebar.logout": "Logout",
+                "sidebar.yourcrop": "Your Crops",
+
+                "header.title": "FarmSure",
+                "status.online": "System Online",
+
+                "welcome.title": "Welcome Back, Farmer",
+                "welcome.subtitle": "Here's what's happening with your farm today",
+                "meta.location": "Kochi, Kerala",
+
+                "stat.totalQueries": "Total Queries",
+                "stat.temperature": "Temperature",
+                "stat.cropsMonitored": "Crops Monitored",
+                "stat.activeAlerts": "Active Alerts",
+                "stat.tempStatus": "Perfect for crops",
+                "stat.cropsNew": "2 new this week",
+                "alerts.statusNormal": "All systems normal",
+
+                "schemes.latestTitle": "Latest Govt Schemes",
+                "schemes.subtitle": "Recently added benefits for farmers",
+                "schemes.viewAll": "View all schemes",
+                "schemes.newUpdates": "New updates",
+
+                "features.quickActions": "Quick Actions",
+                "features.aiAssistant.title": "AI Farming Assistant",
+                "features.aiAssistant.desc": "Get instant answers to your farming questions. Ask about pest control, crop diseases, fertilizers, and best practices.",
+                "features.aiAssistant.btn": "Ask Question",
+
+                "features.cropDiagnosis.title": "Crop Diagnosis",
+                "features.cropDiagnosis.desc": "Upload crop images to detect diseases, pests, and nutrient deficiencies using advanced AI technology.",
+                "features.cropDiagnosis.btn": "Upload Image",
+
+                "features.marketPrices.title": "Market Prices",
+                "features.marketPrices.desc": "Access real-time vegetable prices with AI-powered recommendations and market analysis for better decisions.",
+                "features.marketPrices.btn": "View Prices",
+
+                "features.weatherAlerts.title": "Weather Alerts",
+                "features.weatherAlerts.desc": "Get detailed forecasts, rainfall predictions, and farming-specific alerts for your location and crops.",
+                "features.weatherAlerts.btn": "View Alerts"
+            },
+
+            hi: {
+                "sidebar.iot": "आईओटी",
+                "sidebar.satellite": "उपग्रह निगरानी",
+                "sidebar.mainMenu": "मुख्य मेनू",
+                "sidebar.dashboard": "डैशबोर्ड",
+                "sidebar.askQuery": "प्रश्न पूछें",
+                "sidebar.tools": "उपकरण",
+                "sidebar.cropDiagnosis": "फसल रोग निदान",
+                "sidebar.weatherAlerts": "मौसम और अलर्ट",
+                "sidebar.schemes": "सरकारी योजनाएँ",
+                "sidebar.helpline": "हेल्पलाइन नंबर",
+                "sidebar.agriSwasthya": "कृषि स्वास्थ्य",
+                "sidebar.marketPrices": "बाज़ार भाव",
+                "sidebar.communitySection": "समुदाय",
+                "sidebar.community": "किसान समुदाय",
+                "sidebar.profile": "प्रोफ़ाइल",
+                "sidebar.toggleTheme": "थीम बदलें",
+                "sidebar.logout": "लॉगआउट",
+                "sidebar.yourcrop": "आपकी फसलें",
+
+                "header.title": "फार्मसुरक्षा",
+                "status.online": "सिस्टम ऑनलाइन",
+
+                "welcome.title": "स्वागत है, किसान",
+                "welcome.subtitle": "आज आपके खेत में क्या हो रहा है, जानिए",
+                "meta.location": "कोच्चि, केरल",
+
+                "stat.totalQueries": "कुल प्रश्न",
+                "stat.temperature": "तापमान",
+                "stat.cropsMonitored": "निगरानी की जा रही फसलें",
+                "stat.activeAlerts": "सक्रिय अलर्ट",
+                "stat.tempStatus": "फसलों के लिए उपयुक्त",
+                "stat.cropsNew": "इस सप्ताह 2 नई",
+                "alerts.statusNormal": "सभी सिस्टम सामान्य हैं",
+
+                "schemes.latestTitle": "नई सरकारी योजनाएँ",
+                "schemes.subtitle": "किसानों के लिए नए लाभ",
+                "schemes.viewAll": "सभी योजनाएँ देखें",
+                "schemes.newUpdates": "नई अपडेट्स",
+
+                "features.quickActions": "त्वरित कार्य",
+                "features.aiAssistant.title": "एआई कृषि सहायक",
+                "features.aiAssistant.desc": "कृषि से जुड़े आपके सवालों के तुरंत जवाब। कीट नियंत्रण, फसल रोग, उर्वरक और सर्वोत्तम कृषि पद्धतियों के बारे में पूछें।",
+                "features.aiAssistant.btn": "प्रश्न पूछें",
+
+                "features.cropDiagnosis.title": "फसल रोग निदान",
+                "features.cropDiagnosis.desc": "फसल की तस्वीर अपलोड करें और एआई तकनीक से रोग, कीट और पोषक तत्वों की कमी का पता लगाएँ।",
+                "features.cropDiagnosis.btn": "छवि अपलोड करें",
+
+                "features.marketPrices.title": "बाज़ार भाव",
+                "features.marketPrices.desc": "रीयल-टाइम सब्ज़ी कीमतें और एआई आधारित बाज़ार विश्लेषण प्राप्त करें।",
+                "features.marketPrices.btn": "भाव देखें",
+
+                "features.weatherAlerts.title": "मौसम अलर्ट",
+                "features.weatherAlerts.desc": "आपके क्षेत्र और फसलों के लिए वर्षा पूर्वानुमान, तापमान और कृषि-विशेष मौसम जानकारी।",
+                "features.weatherAlerts.btn": "अलर्ट देखें"
+            },
+
+            ml: {
+                "sidebar.iot": "ഐഒടി",
+                "sidebar.satellite": "സാറ്റലൈറ്റ് നിരീക്ഷണം",
+                "sidebar.mainMenu": "പ്രധാന മെനു",
+                "sidebar.dashboard": "ഡാഷ്ബോർഡ്",
+                "sidebar.askQuery": "ചോദ്യം ചോദിക്കുക",
+                "sidebar.tools": "ഉപകരണങ്ങൾ",
+                "sidebar.cropDiagnosis": "വിളയ്‌ക്കുടൽ രോഗ നിർണയം",
+                "sidebar.weatherAlerts": "കാലാവസ്ഥ ഉണ്ണനുകൾ",
+                "sidebar.schemes": "സർക്കാർ പദ്ധതികൾ",
+                "sidebar.helpline": "സഹായ സംഖ്യ",
+                "sidebar.agriSwasthya": "കാർഷിക ആരോഗ്യമാണ്",
+                "sidebar.marketPrices": "വിപണി വിലകൾ",
+                "sidebar.communitySection": "കമ്മ്യൂണിറ്റി",
+                "sidebar.community": "കർഷക സമുദായം",
+                "sidebar.profile": "പ്രൊഫൈൽ",
+                "sidebar.toggleTheme": "തീം മാറ്റുക",
+                "sidebar.logout": "ലോഗ out ട്",
+                "sidebar.yourcrop": "നിങ്ങളുടെ വിളകൾ",
+
+                "header.title": "കാർഷിക സുരക്ഷ",
+                "status.online": "സിസ്റ്റം ഓൺലൈൻ",
+
+                "welcome.title": "സ്വാഗതം, കർഷകനേ",
+                "welcome.subtitle": "ഇന്ന് നിങ്ങളുടെ കൃഷിയിൽ എന്താണ് നടക്കുന്നതെന്ന് കാണുക",
+                "meta.location": "കൊച്ചി, കേരളം",
+
+                "stat.totalQueries": "ആകെ ചോദ്യങ്ങൾ",
+                "stat.temperature": "താപനില",
+                "stat.cropsMonitored": "നിരീക്ഷിക്കപ്പെടുന്ന വിളകൾ",
+                "stat.activeAlerts": "സജീവ അലർട്ടുകൾ",
+                "stat.tempStatus": "വിളകൾക്ക് അനുയോജ്യം",
+                "stat.cropsNew": "ഈ ആഴ്ച 2 പുതിയവ",
+                "alerts.statusNormal": "സകല സിസ്റ്റങ്ങളും സാധാരണ",
+
+                "schemes.latestTitle": "സര്വ്വസാധാരണ സര്‍ക്കാര് പദ്ധതികള്",
+                "schemes.subtitle": "കർഷകർക്കുള്ള പുതിയ ഗുണങ്ങൾ",
+                "schemes.viewAll": "എല്ലാ പദ്ധതികളും കാണുക",
+                "schemes.newUpdates": "പുതിയ അപ്ഡേറ്റുകൾ",
+
+                "features.quickActions": "വേഗത്തിലുള്ള പ്രവർത്തനങ്ങൾ",
+                "features.aiAssistant.title": "എഐ കാർഷിക സഹായി",
+                "features.aiAssistant.desc": "കാർഷിക ചോദ്യങ്ങൾക്ക് ഉടനടി ഉത്തരം നൽകുക. കീടനിയന്ത്രണം, വിളരോഗം, വളം, മികച്ച കൃഷിരീതികൾ എന്നിവയെക്കുറിച്ച് ചോദിക്കുക.",
+                "features.aiAssistant.btn": "ചോദ്യം ചോദിക്കുക",
+
+                "features.cropDiagnosis.title": "വിളയ്‌ക്കുടൽ രോഗ നിർണയം",
+                "features.cropDiagnosis.desc": "വിളയുടെ ചിത്രം അപ്‌ലോഡ് ചെയ്ത് എഐ സാങ്കേതികവിദ്യ ഉപയോഗിച്ച് രോഗം, കീടം, പോഷകാഭാവം കണ്ടെത്തുക.",
+                "features.cropDiagnosis.btn": "ചിത്രം അപ്‌ലോഡ് ചെയ്യുക",
+
+                "features.marketPrices.title": "വിപണി വിലകൾ",
+                "features.marketPrices.desc": "തത്സമയ പച്ചക്കറി വിലകൾ ഐഐ-ആധാരിത വിപണി വിശകലനം നിങ്ങളെ അറിയിക്കുന്നു.",
+                "features.marketPrices.btn": "വിലകൾ കാണുക",
+
+                "features.weatherAlerts.title": "കാലാവസ്ഥ അലർട്ടുകൾ",
+                "features.weatherAlerts.desc": "നിങ്ങളുടെ സ്ഥലത്ത് വർഷാപാതം, താപനില, കാർഷിക-നിർദ്ദിഷ്ട കാലാവസ്ഥ വിവരങ്ങൾ ലഭിക്കുന്നു.",
+                "features.weatherAlerts.btn": "അലർട്ടുകൾ കാണുക"
+            },
+
+            ta: {
+                "sidebar.iot": "ஐயோடி",
+                "sidebar.satellite": "செயற்கைக்கோள் கண்காணிப்பு",
+                "sidebar.mainMenu": "முக்கிய மெனு",
+                "sidebar.dashboard": "டாஷ்போர்டு",
+                "sidebar.askQuery": "கேள்வி கேளுங்கள்",
+                "sidebar.tools": "கருவிகள்",
+                "sidebar.cropDiagnosis": "பயிர் நோய் கண்டறிதல்",
+                "sidebar.weatherAlerts": "வானிலை எச்சரிக்கைகள்",
+                "sidebar.schemes": "அரசு திட்டங்கள்",
+                "sidebar.helpline": "உதவி எண்",
+                "sidebar.agriSwasthya": "விவசாய சுகாதாரம்",
+                "sidebar.marketPrices": "சந்தை விலைகள்",
+                "sidebar.communitySection": "சமூகம்",
+                "sidebar.community": "விவசாயி சமூகம்",
+                "sidebar.profile": "சுயவிவரம்",
+                "sidebar.toggleTheme": "கருப்பொருள் மாற்றவும்",
+                "sidebar.logout": "வெளியேறு",
+                "sidebar.yourcrop": "உங்கள் பயிர்கள்",
+
+                "header.title": "விவசாய பாதுகாப்பு",
+                "status.online": "கணினி இணைப்பு உள்ளது",
+
+                "welcome.title": "வரவேற்கிறோம், விவசாயி",
+                "welcome.subtitle": "இன்று உங்கள் பண்ணையில் என்ன நடக்கிறது என்பதை பார்க்கவும்",
+                "meta.location": "கோச்சி, கேரளம்",
+
+                "stat.totalQueries": "மொத்த கேள்விகள்",
+                "stat.temperature": "வெப்பநிலை",
+                "stat.cropsMonitored": "கண்காணிக்கப்படும் பயிர்கள்",
+                "stat.activeAlerts": "செயல்படும் எச்சரிக்கைகள்",
+                "stat.tempStatus": "பயிர்களுக்கு சரியானது",
+                "stat.cropsNew": "இந்த வாரம் 2 புதியவை",
+                "alerts.statusNormal": "அனைத்து அமைப்புகளும் சாதாரணம்",
+
+                "schemes.latestTitle": "சமீபத்திய அரசு திட்டங்கள்",
+                "schemes.subtitle": "விவசாயிகளுக்கான புதிய பலன்கள்",
+                "schemes.viewAll": "அனைத்து திட்டங்களையும் பார்க்கவும்",
+                "schemes.newUpdates": "புதிய புதுப்பிப்புகள்",
+
+                "features.quickActions": "விரைவான நடவடிக்கைகள்",
+                "features.aiAssistant.title": "கிராமிய நுண்ணறிவு உதவி",
+                "features.aiAssistant.desc": "விவசாய கேள்விகளுக்கு உடனடி பதிலை பெறுங்கள். பூச்சி கட்டுப்பாடு, பயிர் நோய়, உரங்கள் மற்றும் சிறந்த விவசாய நடைமுறைகள் பற்றி கேளுங்கள்.",
+                "features.aiAssistant.btn": "கேள்வி கேளுங்கள்",
+
+                "features.cropDiagnosis.title": "பயிர் நோய் கண்டறிதல்",
+                "features.cropDiagnosis.desc": "பயிரின் படத்தை பதிவேற்றி கிராமிய நுண்ணறிவு தொழில்நுட்பத்தைப் பயன்படுத்தி நோய், பூச்சி மற்றும் പോഷக குறையைக் கண்டறியவும்.",
+                "features.cropDiagnosis.btn": "படத்தை பதிவேற்றவும்",
+
+                "features.marketPrices.title": "சந்தை விலைகள்",
+                "features.marketPrices.desc": "நேரடி காய்கறி விலைகள் மற்றும் கிராமிய நுண்ணறிவு-ஆதாரிt சந்தை பகுப்பாய்வு பெறுங்கள்.",
+                "features.marketPrices.btn": "விலைகளை பார்க்கவும்",
+
+                "features.weatherAlerts.title": "வானிலை எச்சரிக்கைகள்",
+                "features.weatherAlerts.desc": "உங்கள் இடத்திற்கும் பயிர்களுக்கும் விரிவான முன்னறிவிப்பு, மழைபொழிப்பு முன்னறிவிப்பு மற்றும் வேளாண்-குறிப்பிட்ட எச்சரிக்கைகளைப் பெறுங்கள்.",
+                "features.weatherAlerts.btn": "எச்சரிக்கைகளை பார்க்கவும்"
+            },
+
+            kn: {
+                "sidebar.iot": "ಐಓಟಿ",
+                "sidebar.satellite": "ಉಪಗ್ರಹ ಕೈಗಾರಿಕೆ",
+                "sidebar.mainMenu": "ಮುಖ್ಯ ಮೆನು",
+                "sidebar.dashboard": "ಡ್ಯಾಶ್‌ಬೋರ್ಡ್",
+                "sidebar.askQuery": "ಪ್ರಶ್ನೆ ಕೇಳಿ",
+                "sidebar.tools": "ಸಾಧನಗಳು",
+                "sidebar.cropDiagnosis": "ಫಸಲು ರೋಗ ನಿರ್ಣಯ",
+                "sidebar.weatherAlerts": "ಹವಾಮಾನ ಎಚ್ಚರಿಕೆಗಳು",
+                "sidebar.schemes": "ಸರ್ಕಾರಿ ಯೋಜನೆಗಳು",
+                "sidebar.helpline": "ಸಹಾಯ ಸಂಖ್ಯೆ",
+                "sidebar.agriSwasthya": "ಕೃಷಿ ಸ್ವಾಸ್ಥ್ಯ",
+                "sidebar.marketPrices": "ಮಾರುಕಟ್ಟೆ ಬೆಲೆಗಳು",
+                "sidebar.communitySection": "ಸಮುದಾಯ",
+                "sidebar.community": "ರೈತ ಸಮುದಾಯ",
+                "sidebar.profile": "ಪ್ರೊಫೈಲ್",
+                "sidebar.toggleTheme": "ಥೀಮ್ ಬದಲಾಯಿಸಿ",
+                "sidebar.logout": "ಲಾಗ್ ಔಟ್",
+                "sidebar.yourcrop": "ನಿಮ್ಮ ಫಸಲುಗಳು",
+
+                "header.title": "ಕೃಷಿ ಸುರಕ್ಷೆ",
+                "status.online": "ವ್ಯವಸ್ಥೆ ಆನ್‌ಲೈನ್",
+
+                "welcome.title": "ಸ್ವಾಗತ, ರೈತರೇ",
+                "welcome.subtitle": "ಇಂದು ನಿಮ್ಮ ಕೃಷಿ ಜಮೀನಿನಲ್ಲಿ ಏನು ನಡೆಯುತ್ತಿದೆ ಎನ್ನುವುದನ್ನು ನೋಡಿ",
+                "meta.location": "ಕೋಚ್ಚಿ, ಕೇರಳ",
+
+                "stat.totalQueries": "ಒಟ್ಟು ಪ್ರಶ್ನೆಗಳು",
+                "stat.temperature": "ತಾಪಮಾನ",
+                "stat.cropsMonitored": "ಮೇಲ್ವಿಚಾರಣೆ ಮಾಡಿದ ಫಸಲುಗಳು",
+                "stat.activeAlerts": "ಸಕ್ರಿಯ ಎಚ್ಚರಿಕೆಗಳು",
+                "stat.tempStatus": "ಫಸಲುಗಳಿಗೆ ಸೂಕ್ತ",
+                "stat.cropsNew": "ಈ ವಾರ 2 ಹೊಸವು",
+                "alerts.statusNormal": "ಎಲ್ಲಾ ಕ್ರಮವು ಸಾಮಾನ್ಯ",
+
+                "schemes.latestTitle": "ಇತ್ತೀಚಿನ ಸರ್ಕಾರಿ ಯೋಜನೆಗಳು",
+                "schemes.subtitle": "ರೈತರಿಗೆ ಹೊಸ ಪ್ರಯೋಜನಗಳು",
+                "schemes.viewAll": "ಎಲ್ಲಾ ಯೋಜನೆಗಳನ್ನು ನೋಡಿ",
+                "schemes.newUpdates": "ಹೊಸ ನವೀಕರಣಗಳು",
+
+                "features.quickActions": "ತ್ವರಿತ ನಡವಳಿಕೆಗಳು",
+                "features.aiAssistant.title": "ಎಐ ಕೃಷಿ ಸಹಾಯಕ",
+                "features.aiAssistant.desc": "ನಿಮ್ಮ ಕೃಷಿ ಪ್ರಶ್ನೆಗಳಿಗೆ ತಕ್ಷಣ ಪ್ರತಿಕ್ರಿಯೆ ಪಡೆಯಿರಿ. ಕೀಟ ನಿಯಂತ್ರಣ, ಫಸಲು ರೋಗ, ಸಾರಜನಕ ಮತ್ತು ಸಿದ್ಧಾಂತೀಯ ಕೃಷಿ ವಿಧಾನಗಳ ಬಗ್ಗೆ ಕೇಳಿ.",
+                "features.aiAssistant.btn": "ಪ್ರಶ್ನೆ ಕೇಳಿ",
+
+                "features.cropDiagnosis.title": "ಫಸಲು ರೋಗ ನಿರ್ಣಯ",
+                "features.cropDiagnosis.desc": "ಫಸಲಿನ ಚಿತ್ರವನ್ನು ಅಪ್‌ಲೋಡ್ ಮಾಡಿ ಮತ್ತು ಎಐ ತಂತ್ರಜ್ಞಾನವನ್ನು ಬಳಸಿ ರೋಗ, ಕೀಟ ಮತ್ತು ಪಿ ಅಭಾವ ಪತ್ತೆ ಮಾಡಿ.",
+                "features.cropDiagnosis.btn": "ಚಿತ್ರ ಅಪ್‌ಲೋಡ್ ಮಾಡಿ",
+
+                "features.marketPrices.title": "ಮಾರುಕಟ್ಟೆ ಬೆಲೆಗಳು",
+                "features.marketPrices.desc": "ನೈಜ-ಸಮಯ ತರಕಾರಿ ಬೆಲೆಗಳು ಮತ್ತು ಎಐ-ಆಧಾರಿತ ಮಾರುಕಟ್ಟೆ ವಿಶ್ಲೇಷಣೆ ಪಡೆಯಿರಿ.",
+                "features.marketPrices.btn": "ಬೆಲೆಗಳನ್ನು ನೋಡಿ",
+
+                "features.weatherAlerts.title": "ಹವಾಮಾನ ಎಚ್ಚರಿಕೆಗಳು",
+                "features.weatherAlerts.desc": "ನಿಮ್ಮ ಸ್ಥಳ ಮತ್ತು ಫಸಲುಗಳಿಗೆ ವಿಶದ ಮುನ್ನೋಚನೆ, ಮಳೆಯ ಭವಿಷ್ಯವಾಣಿ ಮತ್ತು ಕೃಷಿ-ನಿರ್ದಿಷ್ಟ ಎಚ್ಚರಿಕೆಗಳನ್ನು ಪಡೆಯಿರಿ.",
+                "features.weatherAlerts.btn": "ಎಚ್ಚರಿಕೆಗಳನ್ನು ನೋಡಿ"
+            },
+
+            te: {
+                "sidebar.iot": "ఐఓటీ",
+                "sidebar.satellite": "ఉపగ్రహ పర్యవేక్ష",
+                "sidebar.mainMenu": "ప్రధాన మెనూ",
+                "sidebar.dashboard": "డ్యాష్‌బోర్డ్",
+                "sidebar.askQuery": "ప్రశ్న అడగండి",
+                "sidebar.tools": "సాధనాలు",
+                "sidebar.cropDiagnosis": "పంట వ్యాధి నిర్ధారణ",
+                "sidebar.weatherAlerts": "వాతావరణ హెచ్చరికలు",
+                "sidebar.schemes": "ప్రభుత్వ పథకాలు",
+                "sidebar.helpline": "సహాయక సంఖ్య",
+                "sidebar.agriSwasthya": "కృషి ఆరోగ్యం",
+                "sidebar.marketPrices": "మార్కెట్ ధరలు",
+                "sidebar.communitySection": "సమాజం",
+                "sidebar.community": "రైతు సమాజం",
+                "sidebar.profile": "ప్రొఫైల్",
+                "sidebar.toggleTheme": "థీమ్ మార్చండి",
+                "sidebar.logout": "లాగ్ out ట్",
+                "sidebar.yourcrop": "మీ పంటలు",
+
+                "header.title": "కృషి సురక్ష",
+                "status.online": "సిస్టమ్ ఆన్‌లైన్",
+
+                "welcome.title": "స్వాగతం, రైతు",
+                "welcome.subtitle": "ఈ రోజు మీ క్షేత్రంలో ఏమి జరుగుతుందో చూడండి",
+                "meta.location": "కోచ్చీ, కేరళ",
+
+                "stat.totalQueries": "మొత్తం ప్రశ్నలు",
+                "stat.temperature": "ఉష్ణోగ్రత",
+                "stat.cropsMonitored": "పర్యవేక్ష చేయబడిన పంటలు",
+                "stat.activeAlerts": "సక్రియ హెచ్చరికలు",
+                "stat.tempStatus": "పంటలకు సరైనది",
+                "stat.cropsNew": "ఈ వారం 2 కొత్తవి",
+                "alerts.statusNormal": "సమస్త వ్యవస్థలు సాధారణం",
+
+                "schemes.latestTitle": "సమీప ప్రభుత్వ పథకాలు",
+                "schemes.subtitle": "రైతుల కోసం కొత్త ప్రయోజనాలు",
+                "schemes.viewAll": "అన్ని పథకాలను చూడండి",
+                "schemes.newUpdates": "కొత్త నవీకరణలు",
+
+                "features.quickActions": "త్వరిత చర్యలు",
+                "features.aiAssistant.title": "AI కృషి సహాయకుడు",
+                "features.aiAssistant.desc": "మీ కృషి ప్రశ్నలకు తక్షణ సమాధానాలు పొందండి. కీటల నియంత్రణ, పంట వ్యాధులు, సారం మరియు ఉత్తమ కృషి పద్ధతుల గురించి అడగండి.",
+                "features.aiAssistant.btn": "ప్రశ్న అడగండి",
+
+                "features.cropDiagnosis.title": "పంట వ్యాధి నిర్ధారణ",
+                "features.cropDiagnosis.desc": "పంటల చిత్రాన్ని అప్‌లోడ్ చేసి AI సాంకేతికతను ఉపయోగించి వ్యాధులు, కీటలు మరియు పోషక కొరతను గుర్తించండి.",
+                "features.cropDiagnosis.btn": "చిత్రం అప్‌లోడ్ చేయండి",
+
+                "features.marketPrices.title": "మార్కెట్ ధరలు",
+                "features.marketPrices.desc": "రియల్-టైమ్ కూరగాయల ధరలు మరియు AI-ఆధారిత మార్కెట్ విశ్లేషణ పొందండి.",
+                "features.marketPrices.btn": "ధరలను చూడండి",
+
+                "features.weatherAlerts.title": "వాతావరణ హెచ్చరికలు",
+                "features.weatherAlerts.desc": "మీ ప్రదేశం మరియు పంటల కోసం వివరణాత్మక సూచన, వర్షపాత సూచన మరియు కృషి-నిర్దిష్ట హెచ్చరికలు పొందండి.",
+                "features.weatherAlerts.btn": "హెచ్చరికలను చూడండి"
+            }
+        };
+
+        function applyTranslations(lang) {
+            const elements = document.querySelectorAll("[data-i18n]");
+            elements.forEach(el => {
+                const key = el.getAttribute("data-i18n");
+                const translation = translations[lang] && translations[lang][key];
+                if (translation) {
+                    el.textContent = translation;
+                }
+            });
+        }
+
+        function updateLangSelector(lang) {
+            const selector = document.getElementById("languageSelect");
+            if (selector) {
+                selector.value = lang;
+            }
+        }
+
+        function changeLanguage(lang) {
+            setLanguage(lang);
+        }
+
+        function setLanguage(lang) {
+            localStorage.setItem("appLanguage", lang);
+            applyTranslations(lang);
+            updateLangSelector(lang);
+            document.body.classList.remove("lang-ml", "lang-hi", "lang-ta", "lang-kn", "lang-te");
+            document.body.classList.add(`lang-${lang}`);
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const savedLang = localStorage.getItem("appLanguage") || "en";
+            setLanguage(savedLang);
+        });
+    </script>
+
+    <body>
+        <style>
+            elevenlabs-convai {
+                position: fixed;
+                bottom: 10px;
+                right: 10px;
+                z-index: 4000;
+                --convai-btn-bg: #059669;
+                /* Farm green color */
+            }
+        </style>
+
+        <elevenlabs-convai agent-id="agent_3201kb2x8ga6ef0rtn917kkzjsm8"
+            first-message="Namaskaram! Hello! I am Krishi. You can speak to me in Malayalam or English."></elevenlabs-convai>
+
+        <script src="https://unpkg.com/@elevenlabs/convai-widget-embed" async type="text/javascript"></script>
+    </body>
+
+</html>
+
+
+<script>
+    // ================== TUTORIAL VIDEO LOGIC ==================
+    const TUTORIAL_VIDEO_URL = "https://www.youtube.com/embed/yu1HWNcIGIc?autoplay=1"; // TODO: set your video id
+    let tutorialSeenKey = null;
+
+    function openTutorialModal() {
+        const overlay = document.getElementById("tutorialOverlay");
+        const iframe = document.getElementById("tutorialIframe");
+
+        if (!overlay || !iframe) return;
+
+        overlay.style.display = "flex";
+
+        // Load video only when opened to avoid extra network usage
+        // if (!iframe.src) {
+        //     iframe.src = TUTORIAL_VIDEO_URL;
+        // }
+        iframe.src = TUTORIAL_VIDEO_URL;
+    }
+
+    function closeTutorialModal() {
+        const overlay = document.getElementById("tutorialOverlay");
+        const iframe = document.getElementById("tutorialIframe");
+
+        if (overlay) {
+            overlay.style.display = "none";
+        }
+
+        // Stop video by resetting src
+        if (iframe && iframe.src) {
+            const base = TUTORIAL_VIDEO_URL.split("?")[0];
+            iframe.src = "";
+            setTimeout(() => {
+                // keep it ready for manual re-open from “help” in future if you add that
+                iframe.src = base;
+            }, 50);
+        }
+    }
+
+    function handleTutorialDone() {
+        const dontShow = document.getElementById("tutorialDontShow");
+        if (dontShow && dontShow.checked && tutorialSeenKey) {
+            localStorage.setItem(tutorialSeenKey, "true");
+        }
+        closeTutorialModal();
+    }
+
+    /**
+     * Show tutorial if this user hasn’t seen it on this device yet.
+     * Uses localStorage key: tutorial_seen_<username>
+     */
+    function handleTutorialForUser(username) {
+        // Per-user key (per browser)
+        tutorialSeenKey = username
+            ? `tutorial_seen_${username}`
+            : "tutorial_seen_generic";
+
+        const hasSeen = localStorage.getItem(tutorialSeenKey) === "true";
+
+        if (!hasSeen) {
+            openTutorialModal();
+        }
+    }
+
+    // MARKET PREVIEW
+    async function loadMarketPreview() {
+        try {
+            const response = await fetch(API_BASE_URL + '/api/market/live-prices', {
+                credentials: 'include'
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+
+                const vegetableCountElement = document.getElementById('marketVegetableCount');
+                const marketCountElement = document.getElementById('marketCount');
+
+                if (vegetableCountElement && data.stats) {
+                    vegetableCountElement.textContent = data.stats.totalVegetables || '50+';
+                }
+
+                if (marketCountElement && data.stats) {
+                    marketCountElement.textContent = data.stats.totalMarkets || '15+';
+                }
+
+                console.log('✅ Market preview loaded on dashboard');
+            }
+        } catch (error) {
+            console.log('Market preview not available:', error.message);
+        }
+    }
+
+    // GLOBAL STATE
+    let isDarkMode = localStorage.getItem('darkMode') === 'true';
+    let dashboardQueryCount = parseInt(localStorage.getItem('farmerQueryCount')) || 0;
+
+    // THEME
+    function initializeTheme() {
+        if (isDarkMode) {
+            document.body.classList.add('dark');
+            const themeIcon = document.querySelector('.theme-toggle-sidebar i');
+            const themeText = document.querySelector('.theme-toggle-sidebar span');
+            if (themeIcon) themeIcon.className = 'fas fa-moon';
+            if (themeText) themeText.textContent = 'Light Mode';
+        }
+    }
+
+    function toggleTheme() {
+        isDarkMode = !isDarkMode;
+        document.body.classList.toggle('dark');
+
+        const themeIcon = document.querySelector('.theme-toggle-sidebar i');
+        const themeText = document.querySelector('.theme-toggle-sidebar span');
+
+        if (isDarkMode) {
+            if (themeIcon) themeIcon.className = 'fas fa-moon';
+            if (themeText) themeText.textContent = 'Light Mode';
+        } else {
+            if (themeIcon) themeIcon.className = 'fas fa-sun';
+            if (themeText) themeText.textContent = 'Dark Mode';
+        }
+
+        localStorage.setItem('darkMode', isDarkMode);
+    }
+
+    // TIME
+    function updateTime() {
+        const now = new Date();
+        const timeString = now.toLocaleTimeString('en-IN', {
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+
+        const dateString = now.toLocaleDateString('en-IN', {
+            weekday: 'short',
+            month: 'short',
+            day: 'numeric'
+        });
+
+        const timeElement = document.getElementById('currentTime');
+        if (timeElement) timeElement.textContent = timeString;
+
+        const dateTimeElement = document.getElementById('currentDateTime');
+        const welcomeTimeElement = document.getElementById('welcomeTime');
+
+        if (dateTimeElement) dateTimeElement.textContent = `${dateString} • ${timeString}`;
+        if (welcomeTimeElement) welcomeTimeElement.textContent = timeString;
+    }
+
+    // PROFILE
+    async function loadProfile() {
+        try {
+            const res = await fetch(API_BASE_URL + '/api/user/profile', {
+                method: 'GET',
+                credentials: 'include'
+            });
+
+            if (!res.ok) throw new Error('Unauthorized');
+
+            const user = await res.json();
+            const userInfoElement = document.getElementById('userInfo');
+            if (userInfoElement) {
+                userInfoElement.style.display = 'block';
+                userInfoElement.innerHTML = `
+                    <div style="font-weight: 500;">${user.username}</div>
+                    <div style="font-size: 0.8rem; opacity: 0.8;">${user.email}</div>
+                `;
+            }
+
+            // NEW: show tutorial once per user (per browser)
+            if (user && user.username) {
+                handleTutorialForUser(user.username);
+            } else {
+                handleTutorialForUser(null);
+            }
+
+        } catch (error) {
+            const userInfoElement = document.getElementById('userInfo');
+            if (userInfoElement) {
+                userInfoElement.style.display = 'block';
+                userInfoElement.innerHTML = `
+                    <div style="font-weight: 500;">KrishiMitr User</div>
+                    <div style="font-size: 0.8rem; opacity: 0.8;">farmer@example.com</div>
+                `;
+            }
+
+            // Fallback: treat as generic user
+            handleTutorialForUser(null);
+        }
+    }
+
+    // QUERY COUNTER (DB + local)
+    function initializeQueryCounter() {
+        loadDatabaseQueryStats();
+        updateQueryCountDisplay(dashboardQueryCount);
+
+        window.addEventListener('storage', function (e) {
+            if (e.key === 'farmerQueryCount') {
+                const newCount = parseInt(e.newValue) || 0;
+                dashboardQueryCount = newCount;
+                updateQueryCountDisplay(newCount);
+            }
+        });
+
+        setInterval(() => {
+            loadDatabaseQueryStats();
+
+            const latestCount = parseInt(localStorage.getItem('farmerQueryCount')) || 0;
+            if (latestCount !== dashboardQueryCount) {
+                dashboardQueryCount = latestCount;
+                updateQueryCountDisplay(latestCount);
+            }
+        }, 30000);
+    }
+
+    async function loadDatabaseQueryStats() {
+        try {
+            const response = await fetch(API_BASE_URL + '/api/query/stats', {
+                credentials: 'include'
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                const stats = data.stats;
+
+                const databaseCount = stats.total || 0;
+                if (databaseCount !== dashboardQueryCount) {
+                    dashboardQueryCount = databaseCount;
+                    updateQueryCountDisplay(databaseCount);
+                    localStorage.setItem('farmerQueryCount', databaseCount.toString());
+                }
+
+                console.log('✅ Database query stats loaded:', stats);
+            }
+        } catch (error) {
+            console.error('Error loading database query stats:', error);
+            const localCount = parseInt(localStorage.getItem('farmerQueryCount')) || 0;
+            dashboardQueryCount = localCount;
+            updateQueryCountDisplay(localCount);
+        }
+    }
+
+    function updateQueryCountDisplay(count) {
+        const queryCountElement = document.getElementById('queryCount');
+        const queryTrendElement = document.getElementById('queryTrend');
+
+        if (queryCountElement) {
+            animateNumber(queryCountElement, parseInt(queryCountElement.textContent) || 0, count, true);
+        }
+
+        if (queryTrendElement) {
+            const trend = Math.max(5, Math.min(50, Math.floor(count / 5 + 10)));
+            queryTrendElement.textContent = `+${trend}%`;
+        }
+    }
+
+    function animateNumber(element, start, end, addSuffixCelsius = false) {
+        const duration = 1000;
+        const startTime = performance.now();
+
+        function updateNumber(currentTime) {
+            const elapsed = currentTime - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            const easeOut = 1 - Math.pow(1 - progress, 3);
+            const current = Math.round(start + (end - start) * easeOut);
+
+            element.textContent = addSuffixCelsius ? current : current;
+
+            if (progress < 1) {
+                requestAnimationFrame(updateNumber);
+            }
+        }
+
+        requestAnimationFrame(updateNumber);
+    }
+
+    // WEATHER (live, still used for banner + temp card + alerts)
+    async function loadLiveDashboardWeather() {
+        try {
+            console.log('Loading live weather for dashboard...');
+
+            const response = await fetch(API_BASE_URL + '/api/weather/current/Kochi, Kerala', {
+                credentials: 'include'
+            });
+
+            if (response.ok) {
+                const weatherData = await response.json();
+                console.log('Dashboard weather data received:', weatherData);
+                updateDashboardWeatherDisplay(weatherData);
+            } else {
+                console.log('Weather API failed, using fallback');
+                useFallbackWeather();
+            }
+
+        } catch (error) {
+            console.error('Dashboard weather error:', error);
+            useFallbackWeather();
+        }
+    }
+
+    function useFallbackWeather() {
+        const fallbackWeather = {
+            current: {
+                temp: 28,
+                humidity: 75,
+                wind_speed: 12,
+                weather_code: 2
+            }
+        };
+        updateDashboardWeatherDisplay(fallbackWeather);
+    }
+
+    function updateDashboardWeatherDisplay(data) {
+        const current = data.current;
+
+        // These IDs used to be in the old weather card, kept safe by checks
+        const tempElement = document.getElementById('weatherTemp');
+        const conditionElement = document.getElementById('weatherCondition');
+        const humidityElement = document.getElementById('humidity');
+        const windElement = document.getElementById('windSpeed');
+        const rainElement = document.getElementById('rainfall');
+
+        if (tempElement) tempElement.textContent = `${current.temp}°`;
+        if (conditionElement) conditionElement.textContent = getWeatherDescription(current.weather_code);
+        if (humidityElement) humidityElement.textContent = `${current.humidity}%`;
+        if (windElement) windElement.textContent = `${current.wind_speed} km/h`;
+        if (rainElement) {
+            const rainChance = current.humidity > 80 ? Math.min(current.humidity - 20, 90) : Math.max(0, current.humidity - 40);
+            rainElement.textContent = `${Math.round(rainChance)}%`;
+        }
+
+        const bannerTemp = document.getElementById('bannerTemp');
+        const bannerWind = document.getElementById('bannerWind');
+        if (bannerTemp) bannerTemp.textContent = `${current.temp}°C`;
+        if (bannerWind) bannerWind.textContent = `${current.wind_speed} km/h`;
+
+        updateTemperatureStatCard(current.temp);
+        updateAlertsCount(current);
+    }
+
+    function updateTemperatureStatCard(temp) {
+        const tempStatElement = document.getElementById('currentTemp');
+        const tempTrendElement = document.getElementById('tempTrend');
+
+        if (tempStatElement) {
+            animateNumber(tempStatElement, parseInt(tempStatElement.textContent) || 0, temp);
+            setTimeout(() => {
+                if (tempStatElement.textContent && !tempStatElement.textContent.includes('°C')) {
+                    tempStatElement.textContent = temp + '°C';
+                }
+            }, 1100);
+        }
+
+        if (tempTrendElement) {
+            if (temp > 32) {
+                tempTrendElement.textContent = 'Hot';
+                tempTrendElement.style.color = '#ef4444';
+            } else if (temp < 18) {
+                tempTrendElement.textContent = 'Cool';
+                tempTrendElement.style.color = '#3b82f6';
+            } else {
+                tempTrendElement.textContent = 'Perfect';
+                tempTrendElement.style.color = '#10b981';
+            }
+        }
+    }
+
+    function updateAlertsCount(current) {
+        let alertsCount = 0;
+
+        if (current.temp > 35) alertsCount++;
+        if (current.temp < 10) alertsCount++;
+        if (current.humidity > 85) alertsCount++;
+        if (current.wind_speed > 30) alertsCount++;
+
+        const alertsElement = document.getElementById('alertsCount');
+        const alertsStatusElement = document.getElementById('alertsStatus');
+
+        if (alertsElement) {
+            animateNumber(alertsElement, parseInt(alertsElement.textContent) || 0, alertsCount);
+        }
+
+        if (alertsStatusElement) {
+            if (alertsCount > 0) {
+                alertsStatusElement.textContent = 'Active';
+                alertsStatusElement.style.color = '#ef4444';
+            } else {
+                alertsStatusElement.textContent = 'Normal';
+                alertsStatusElement.style.color = '#10b981';
+            }
+        }
+    }
+
+    function getWeatherDescription(code) {
+        const descriptions = {
+            0: 'Clear sky',
+            1: 'Mainly clear',
+            2: 'Partly cloudy',
+            3: 'Overcast',
+            45: 'Foggy',
+            61: 'Light rain',
+            63: 'Moderate rain',
+            65: 'Heavy rain',
+            95: 'Thunderstorm'
+        };
+        return descriptions[code] || 'Partly cloudy';
+    }
+
+    // =============== DASHBOARD – LATEST SCHEMES ===============
+    async function loadLatestSchemesDashboard() {
+        const container = document.getElementById('dashboardSchemesList');
+        const subtitle = document.getElementById('dashboardSchemesSubtitle');
+
+        if (!container) return;
+
+        try {
+            container.innerHTML = '<div class="ds-empty">Loading latest schemes...</div>';
+
+            const res = await fetch(API_BASE_URL + '/api/schemes', {
+                credentials: 'include'
+            });
+
+            const data = await res.json();
+
+            if (!data.success || !Array.isArray(data.schemes)) {
+                throw new Error(data.message || 'Failed to load schemes');
+            }
+
+            // assume newest first; take top 2
+            const latest = data.schemes.slice(0, 2);
+
+            if (!latest.length) {
+                container.innerHTML = '<div class="ds-empty">No schemes available yet.</div>';
+                if (subtitle) {
+                    subtitle.textContent = 'No schemes found. Tap to open full list.';
+                }
+                return;
+            }
+
+            renderDashboardSchemes(latest);
+            if (subtitle) {
+                subtitle.textContent = 'Recently added farmer schemes from official PDFs';
+            }
+        } catch (err) {
+            console.error('Dashboard schemes error:', err);
+            if (container) {
+                container.innerHTML = '<div class="ds-empty">Unable to load schemes right now.</div>';
+            }
+            if (subtitle) {
+                subtitle.textContent = 'Tap to view full schemes list.';
+            }
+        }
+    }
+
+    function renderDashboardSchemes(schemes) {
+        const container = document.getElementById('dashboardSchemesList');
+        if (!container) return;
+
+        container.innerHTML = schemes.map((s, index) => {
+            const dept = s.department || 'Agriculture & Farmers Welfare';
+            const region = s.region || 'Central / State';
+
+            return `
+                    <div class="ds-item">
+                        <div class="ds-item-top">
+                            <span class="ds-name">${s.schemeName}</span>
+                            <span class="ds-chip">${index === 0 ? 'New' : 'Updated'}</span>
+                        </div>
+                        <div class="ds-meta">
+                            <span>${dept}</span>
+                            <span>${region}</span>
+                        </div>
+                    </div>
+                `;
+        }).join('');
+    }
+
+    // NAV ACTIVE STATE
+    function setActiveNavigation() {
+        const currentPage = window.location.pathname.split('/').pop() || 'dashboard.html';
+        const navItems = document.querySelectorAll('.nav-item');
+
+        navItems.forEach(item => item.classList.remove('active'));
+
+        let activeSelector = '';
+
+        if (currentPage === 'dashboard.html' || currentPage === '' || currentPage === '/') {
+            activeSelector = 'a[href="dashboard.html"]';
+        } else if (currentPage === 'weather-alerts.html') {
+            activeSelector = 'a[href="weather-alerts.html"]';
+        } else if (currentPage === 'ask-query.html') {
+            activeSelector = 'a[href="ask-query.html"]';
+        } else if (currentPage === 'crop-diagnosis.html') {
+            activeSelector = 'a[href="crop-diagnosis.html"]';
+        } else if (currentPage === 'market-prices.html') {
+            activeSelector = 'a[href="market-prices.html"]';
+        }
+
+        if (activeSelector) {
+            const activeItem = document.querySelector(activeSelector);
+            if (activeItem) {
+                activeItem.classList.add('active');
+            }
+        }
+    }
+
+    // LOGOUT
+    function setupLogout() {
+        const logoutBtn = document.getElementById('logoutBtn');
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', async () => {
+                if (confirm('Are you sure you want to logout?')) {
+                    try {
+                        await fetch(API_BASE_URL + '/api/auth/logout', {
+                            method: 'POST',
+                            credentials: 'include'
+                        });
+                        window.location.href = 'index.html';
+                    } catch {
+                        window.location.href = 'index.html';
+                    }
+                }
+            });
+        }
+    }
+
+    // SIDEBAR (mobile)
+    function toggleSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        if (sidebar) {
+            sidebar.classList.toggle('active');
+        }
+    }
+
+    function setupMobileNavigation() {
+        document.addEventListener('click', function (event) {
+            const sidebar = document.getElementById('sidebar');
+            const menuBtn = document.querySelector('.mobile-menu-btn');
+
+            if (window.innerWidth <= 768 &&
+                sidebar && sidebar.classList.contains('active') &&
+                !sidebar.contains(event.target) &&
+                (!menuBtn || !menuBtn.contains(event.target))) {
+                sidebar.classList.remove('active');
+            }
+        });
+    }
+
+    // NOTIFICATION
+    function showNotification(message, type = 'info') {
+        const notification = document.createElement('div');
+        notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${type === 'success' ? 'var(--success)' : 'var(--primary)'};
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+                z-index: 10000;
+                animation: slideIn 0.3s ease;
+                max-width: 300px;
+                font-size: 0.9rem;
+            `;
+        notification.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <i class="fas fa-${type === 'success' ? 'check-circle' : 'info-circle'}"></i>
+                    <span>${message}</span>
+                </div>
+            `;
+        document.body.appendChild(notification);
+
+        setTimeout(() => {
+            notification.remove();
+        }, 4000);
+    }
+
+    // CARD HOVER ANIMATIONS
+    function setupCardAnimations() {
+        document.querySelectorAll('.stat-card, .feature-card').forEach(card => {
+            card.addEventListener('mouseenter', function () {
+                this.style.transform = 'translateY(-6px)';
+            });
+
+            card.addEventListener('mouseleave', function () {
+                this.style.transform = 'translateY(0)';
+            });
+        });
+
+        const animatedElements = document.querySelectorAll('.animate-fade-in');
+        animatedElements.forEach((el, index) => {
+            el.style.animationDelay = `${index * 0.1}s`;
+        });
+    }
+
+    // MAIN INIT
+    document.addEventListener('DOMContentLoaded', function () {
+        console.log('Dashboard initializing...');
+
+        initializeTheme();
+        loadProfile();
+        updateTime();
+        setActiveNavigation();
+        initializeQueryCounter();
+        loadLiveDashboardWeather();
+        loadMarketPreview();
+        loadLatestSchemesDashboard();
+        setupLogout();
+        setupMobileNavigation();
+        setupCardAnimations();
+
+        setInterval(updateTime, 60000);
+        setInterval(loadLiveDashboardWeather, 10 * 60 * 1000);
+
+        //  setTimeout(() => {
+        //    showNotification('Welcome to KrishiMitr Smart Farming! 🌱', 'success');
+        //}, 1500);
+
+        console.log('Dashboard initialized successfully');
+    });
+    /// //////////////////////////////////////////////
+    // Show popup only once every month
+    //////////////////////////////////////////////
+
+
+
+    //////////////////////////////////////////////
+    // Update slider values LIVE
+    //////////////////////////////////////////////
+    function updateVal(id) {
+        document.getElementById("val_" + id).textContent =
+            document.getElementById(id).value;
+    }
+
+
+    //////////////////////////////////////////////
+    // Submit Survey
+    //////////////////////////////////////////////
+    async function submitSurvey() {
+        const data = {
+            sleep_quality: parseInt(document.getElementById("sleep_quality").value),
+            stress_level: parseInt(document.getElementById("stress_level").value),
+            hopelessness: parseInt(document.getElementById("hopelessness").value),
+            mood: parseInt(document.getElementById("mood").value)
+        };
+
+        // Calculate Score
+        const score = (
+            (data.sleep_quality * 0.25) +
+            (10 - data.stress_level) * 0.25 +
+            (10 - data.hopelessness) * 0.25 +
+            (data.mood * 0.25)
+        ).toFixed(1);
+
+        data.total_score = score;
+
+        try {
+            const res = await fetch(API_BASE_URL + "/api/mental-health", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(data)
+            });
+
+            const result = await res.json();
+
+            if (result.success) {
+                alert("Survey submitted successfully! Your Mental Health Score: " + score);
+
+                // Store timestamp for monthly check
+                const now = new Date();
+                const currentMonth = now.getFullYear() + "-" + (now.getMonth() + 1);
+                localStorage.setItem("mh_last_filled", currentMonth);
+
+                document.getElementById("mhSurveyPopup").style.display = "none";
+            } else {
+                alert("Error submitting survey. Please try again.");
+            }
+        } catch (err) {
+            console.error("Survey Error:", err);
+            alert("Server error. Please try again later.");
+        }
+    }
+</script>
+</body>
+
+</html>

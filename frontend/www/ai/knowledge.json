@@ -1,0 +1,194 @@
+[
+    {
+        "keywords": [
+            "nitrogen",
+            "urea",
+            "leafy",
+            "spinach",
+            "excess fertilizer"
+        ],
+        "answer": "Excess nitrogen lowers micronutrient density in leafy vegetables.",
+        "why": "Rapid vegetative growth dilutes iron and zinc concentration.",
+        "action": "Reduce urea by 10–15% in later growth stages."
+    },
+    {
+        "keywords": [
+            "phosphorus",
+            "root",
+            "flowering",
+            "imbalance"
+        ],
+        "answer": "Phosphorus imbalance affects roots and flowering.",
+        "why": "Excess phosphorus blocks zinc and iron uptake.",
+        "action": "Apply phosphorus only after soil testing."
+    },
+    {
+        "keywords": [
+            "potassium",
+            "crop quality",
+            "stress tolerance"
+        ],
+        "answer": "Potassium improves crop quality and stress resistance.",
+        "why": "It regulates enzyme activity and water balance.",
+        "action": "Maintain potassium during fruiting stages."
+    },
+    {
+        "keywords": [
+            "over irrigation",
+            "waterlogging",
+            "too much water"
+        ],
+        "answer": "Over-irrigation damages roots and nutrient uptake.",
+        "why": "Lack of oxygen in waterlogged soil harms roots.",
+        "action": "Irrigate based on soil moisture, not schedule."
+    },
+    {
+        "keywords": [
+            "harvest timing",
+            "late harvest",
+            "early harvest"
+        ],
+        "answer": "Wrong harvest timing reduces nutrition.",
+        "why": "Over-maturity increases fiber and lowers vitamins.",
+        "action": "Harvest at recommended maturity stage."
+    },
+    {
+        "keywords": [
+            "organic matter",
+            "compost",
+            "manure"
+        ],
+        "answer": "Organic matter improves soil fertility.",
+        "why": "It supports microbes and micronutrient retention.",
+        "action": "Add compost or FYM regularly."
+    },
+    {
+        "keywords": [
+            "crop rotation",
+            "same crop",
+            "soil health"
+        ],
+        "answer": "Crop rotation improves soil and reduces pests.",
+        "why": "Different crops balance nutrient usage.",
+        "action": "Rotate cereals with legumes."
+    },
+    {
+        "keywords": [
+            "pesticide",
+            "residue",
+            "chemical spray"
+        ],
+        "answer": "Excess pesticides increase food residue risk.",
+        "why": "Chemicals accumulate if sprayed near harvest.",
+        "action": "Follow waiting period strictly."
+    },
+    {
+        "keywords": [
+            "low gi",
+            "glycemic index",
+            "diabetes food"
+        ],
+        "answer": "Low GI foods help control blood sugar.",
+        "why": "They release glucose slowly.",
+        "action": "Choose leafy vegetables and gourds."
+    },
+    {
+        "keywords": [
+            "fiber",
+            "digestion",
+            "gut health"
+        ],
+        "answer": "Fiber improves digestion and gut health.",
+        "why": "It supports bowel movement and microbiota.",
+        "action": "Include vegetables and legumes daily."
+    },
+    {
+        "keywords": [
+            "iron",
+            "zinc",
+            "micronutrients"
+        ],
+        "answer": "Iron and zinc are vital for immunity and energy.",
+        "why": "Deficiency causes anemia and weakness.",
+        "action": "Consume leafy greens and avoid overcooking."
+    },
+    {
+        "keywords": [
+            "nitrate",
+            "health risk",
+            "leafy vegetables"
+        ],
+        "answer": "High nitrate intake is risky, especially for children.",
+        "why": "Excess nitrogen fertilizer increases nitrate buildup.",
+        "action": "Avoid excess urea and timely harvest."
+    },
+    {
+        "keywords": [
+            "overcooking",
+            "boiling",
+            "nutrient loss"
+        ],
+        "answer": "Overcooking reduces vitamin content.",
+        "why": "Heat destroys water-soluble vitamins.",
+        "action": "Use steaming or minimal cooking."
+    },
+    {
+        "keywords": [
+            "fresh",
+            "stored",
+            "old vegetables"
+        ],
+        "answer": "Fresh vegetables retain more nutrients.",
+        "why": "Storage causes vitamin degradation.",
+        "action": "Consume vegetables soon after harvest."
+    },
+    {
+        "keywords": [
+            "diabetes",
+            "safe vegetables"
+        ],
+        "answer": "Some vegetables are safer for diabetics.",
+        "why": "They have low glycemic load.",
+        "action": "Prefer spinach, bottle gourd, ridge gourd."
+    },
+    {
+        "keywords": [
+            "anemia",
+            "hemoglobin",
+            "iron deficiency"
+        ],
+        "answer": "Iron-rich foods help manage anemia.",
+        "why": "Iron supports hemoglobin formation.",
+        "action": "Include spinach, beetroot, legumes."
+    },
+    {
+        "keywords": [
+            "children",
+            "pregnancy",
+            "food safety"
+        ],
+        "answer": "Children and pregnant women need low-residue food.",
+        "why": "They are sensitive to chemical exposure.",
+        "action": "Avoid heavily sprayed produce."
+    },
+    {
+        "keywords": [
+            "elderly",
+            "digestion",
+            "age"
+        ],
+        "answer": "Elderly people need easy-to-digest food.",
+        "why": "Digestive efficiency reduces with age.",
+        "action": "Use cooked, balanced-fiber vegetables."
+    },
+    {
+        "keywords": [
+            "immunity",
+            "health",
+            "nutrition"
+        ],
+        "answer": "Balanced nutrition supports immunity.",
+        "why": "Micronutrients strengthen immune response.",
+        "action": "Ensure dietary diversity."
+    }
+]

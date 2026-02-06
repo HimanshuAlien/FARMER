@@ -1,0 +1,1358 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Kerala Govt Mandi Prices – AI Advisory</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #1d4ed8;
+            --primary-dark: #0b39b3;
+            --primary-soft: #e0ebff;
+            --accent: #16a34a;
+            --accent-soft: #dcfce7;
+            --bg-main: #f3f4ff;
+            --card-bg: #ffffff;
+            --border-soft: #dde3f2;
+            --text-main: #0f172a;
+            --text-muted: #6b7280;
+            --danger: #dc2626;
+            --shadow-soft: 0 18px 35px rgba(15, 35, 90, 0.16);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+            background: radial-gradient(circle at top left, #f5f7ff 0, #eef3ff 40%, #e7f3ff 100%);
+            color: var(--text-main);
+        }
+
+        .page-shell {
+            padding: 1.5rem 1.4rem 2rem;
+        }
+
+        /* ---------- HEADER ---------- */
+
+        .header-card {
+            border-radius: 22px;
+            background: linear-gradient(120deg, #020617 0%, #032a81 28%, #1457ff 55%, #22c55e 100%);
+            box-shadow: var(--shadow-soft);
+            color: #f9fafb;
+            padding: 1.15rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1.4rem;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-box {
+            width: 60px;
+            height: 60px;
+            border-radius: 18px;
+            background: radial-gradient(circle at 30% 20%, rgba(248, 250, 252, 0.22), transparent 60%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            border: 1px solid rgba(248, 250, 252, 0.2);
+        }
+
+        .logo-box img {
+            max-width: 46px;
+            max-height: 46px;
+        }
+
+        .header-text small {
+            display: block;
+            font-size: 0.74rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            opacity: 0.9;
+        }
+
+        .header-text h1 {
+            margin: 0.18rem 0 0.15rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .header-text p {
+            margin: 0;
+            font-size: 0.9rem;
+            opacity: 0.96;
+            max-width: 500px;
+        }
+
+        .header-right {
+            text-align: right;
+            font-size: 0.8rem;
+            opacity: 0.98;
+        }
+
+        .source-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            padding: 0.3rem 0.8rem;
+            border-radius: 999px;
+            background: rgba(15, 23, 42, 0.35);
+            font-size: 0.78rem;
+        }
+
+        #dataTimestamp {
+            margin-top: 0.45rem;
+            font-size: 0.8rem;
+            opacity: 0.9;
+        }
+
+        @media (max-width: 900px) {
+            .header-card {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .header-right {
+                text-align: left;
+            }
+
+            .page-shell {
+                padding-inline: 1rem;
+            }
+        }
+
+        /* ---------- MAIN LAYOUT ---------- */
+
+        .layout-grid {
+            margin-top: 1rem;
+            display: grid;
+            grid-template-columns: minmax(0, 2.3fr) minmax(0, 1.5fr);
+            gap: 1.2rem;
+            align-items: flex-start;
+        }
+
+        @media (max-width: 992px) {
+            .layout-grid {
+                grid-template-columns: minmax(0, 1fr);
+            }
+        }
+
+        .card-shell {
+            background: var(--card-bg);
+            border-radius: 18px;
+            border: 1px solid var(--border-soft);
+            box-shadow: 0 14px 30px rgba(15, 23, 42, 0.06);
+            padding: 0.95rem 1.05rem 1.05rem;
+        }
+
+        .card-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.6rem;
+        }
+
+        .card-title-block {
+            display: flex;
+            flex-direction: column;
+            gap: 0.1rem;
+        }
+
+        .card-title {
+            font-size: 0.98rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.45rem;
+        }
+
+        .card-title-icon {
+            width: 26px;
+            height: 26px;
+            border-radius: 999px;
+            background: var(--primary-soft);
+            color: var(--primary-dark);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.86rem;
+        }
+
+        .card-subtitle {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+        }
+
+        .chip-small {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.6rem;
+            border-radius: 999px;
+            background: #eef2ff;
+            color: #111827;
+            border: 1px solid #d4ddff;
+        }
+
+        /* ---------- FILTERS + STATS ---------- */
+
+        .filters-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 0.6rem;
+            margin-bottom: 0.55rem;
+        }
+
+        @media (max-width: 1100px) {
+            .filters-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 650px) {
+            .filters-grid {
+                grid-template-columns: minmax(0, 1fr);
+            }
+        }
+
+        .filter-label {
+            font-size: 0.74rem;
+            color: var(--text-muted);
+            margin-bottom: 0.1rem;
+        }
+
+        .filters-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.45rem;
+            margin-bottom: 0.4rem;
+        }
+
+        .btn-gov {
+            font-size: 0.78rem;
+            border-radius: 999px;
+            padding: 0.35rem 0.9rem;
+            border-width: 1px;
+        }
+
+        .btn-gov-primary {
+            background: linear-gradient(135deg, #1d4ed8, #16a34a);
+            border-color: #1d4ed8;
+            color: #fff;
+        }
+
+        .btn-gov-secondary {
+            background: #f3f4ff;
+            border-color: #d5dcff;
+            color: #111827;
+        }
+
+        .stats-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            margin-bottom: 0.45rem;
+        }
+
+        .stats-row span.value {
+            font-weight: 600;
+            color: var(--primary-dark);
+            margin-left: 0.2rem;
+        }
+
+        /* ---------- TABLE ---------- */
+
+        .table-shell {
+            border-radius: 14px;
+            border: 1px solid var(--border-soft);
+            overflow: hidden;
+        }
+
+        .table-header-strip {
+            background: #eff4ff;
+            padding: 0.4rem 0.7rem;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .table-scroll {
+            max-height: 470px;
+            overflow: auto;
+            background: #ffffff;
+        }
+
+        table.market-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.8rem;
+        }
+
+        table.market-table thead {
+            position: sticky;
+            top: 0;
+            background: #eff4ff;
+            z-index: 2;
+        }
+
+        table.market-table th,
+        table.market-table td {
+            padding: 0.48rem 0.55rem;
+            border-bottom: 1px solid #e2e6f1;
+            white-space: nowrap;
+        }
+
+        table.market-table th {
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: #6b7280;
+        }
+
+        table.market-table tbody tr {
+            cursor: pointer;
+            transition: background 0.12s ease, transform 0.04s ease;
+        }
+
+        table.market-table tbody tr:nth-child(even) {
+            background: #f9fafb;
+        }
+
+        table.market-table tbody tr:hover {
+            background: #e0edff;
+        }
+
+        table.market-table tbody tr.selected {
+            background: #dbeafe;
+            transform: translateY(-1px);
+        }
+
+        .pill-range {
+            border-radius: 999px;
+            padding: 0.16rem 0.55rem;
+            font-size: 0.72rem;
+            font-weight: 600;
+        }
+
+        .pill-high {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
+        .pill-low {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .pill-mid {
+            background: #e0f2fe;
+            color: #075985;
+        }
+
+        /* ---------- AI PANEL (clean) ---------- */
+
+        .ai-shell {
+            position: relative;
+            overflow: hidden;
+            background: #ffffff;
+        }
+
+        .ai-inner {
+            position: relative;
+            z-index: 1;
+        }
+
+        .ai-status-strip {
+            border-radius: 14px;
+            padding: 0.55rem 0.8rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.55rem;
+            font-size: 0.8rem;
+            color: #0b1120;
+        }
+
+        /* ========= MODERN GOVT HEADER ========= */
+
+        .govt-header {
+            width: 100%;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid var(--border-strong);
+            background: #ffffff;
+            box-shadow: var(--shadow-soft);
+        }
+
+        /* Top emblem bar */
+        .govt-topbar {
+            background: linear-gradient(90deg, #0f172a, #1d4ed8);
+            padding: 16px 26px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            color: #e5e7eb;
+        }
+
+        .govt-emblem {
+            width: 44px;
+            height: 44px;
+            background: url('https://upload.wikimedia.org/wikipedia/commons/5/55/Emblem_of_India.svg') center/contain no-repeat;
+            filter: brightness(100%) invert(1);
+            flex-shrink: 0;
+        }
+
+        .india-title strong {
+            font-size: 19px;
+            font-weight: 600;
+            letter-spacing: 0.32px;
+        }
+
+        .india-title .sub {
+            font-size: 13px;
+            opacity: 0.96;
+            display: block;
+            margin-bottom: 3px;
+        }
+
+        /* Lower portal banner */
+        .portal-banner {
+            padding: 22px 26px 22px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 14px;
+            background:
+                radial-gradient(circle at top left, #e0f2fe 0, transparent 55%),
+                radial-gradient(circle at bottom right, #e0fbff 0, #ffffff 65%);
+        }
+
+        .portal-left h1 {
+            margin: 0 0 6px;
+            font-size: 26px;
+            font-weight: 700;
+            color: #0f172a;
+            letter-spacing: 0.02em;
+        }
+
+        .portal-left p {
+            margin: 0;
+            color: #4b5563;
+            font-size: 15px;
+        }
+
+        .portal-right {
+            text-align: right;
+            font-size: 13px;
+            color: #6b7280;
+        }
+
+        .portal-right .meta {
+            display: block;
+            margin-top: 4px;
+        }
+
+        @media (max-width: 720px) {
+            .portal-banner {
+                align-items: flex-start;
+            }
+
+            .portal-right {
+                text-align: left;
+            }
+        }
+
+        .ai-status-label {
+            font-size: 0.74rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            opacity: 0.85;
+        }
+
+        .ai-status-main {
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .ai-status-sub {
+            font-size: 0.78rem;
+            opacity: 0.9;
+        }
+
+        .ai-status-chip {
+            font-size: 0.78rem;
+            padding: 0.25rem 0.65rem;
+            border-radius: 999px;
+            background: rgba(15, 23, 42, 0.08);
+        }
+
+        .ai-mini-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 0.4rem 0.75rem;
+            margin-top: 0.4rem;
+            font-size: 0.8rem;
+        }
+
+        .ai-mini-label {
+            font-size: 0.74rem;
+            color: var(--text-muted);
+        }
+
+        .ai-mini-value {
+            font-size: 0.86rem;
+            font-weight: 600;
+        }
+
+        .ai-quick {
+            margin-top: 0.7rem;
+            border-radius: 12px;
+            padding: 0.55rem 0.65rem;
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            font-size: 0.8rem;
+        }
+
+        .ai-quick-title {
+            font-weight: 600;
+            margin-bottom: 0.2rem;
+        }
+
+        .ai-body {
+            margin-top: 0.65rem;
+            font-size: 0.83rem;
+            line-height: 1.5;
+            min-height: 96px;
+        }
+
+        .ai-body p {
+            margin-bottom: 0.45rem;
+        }
+
+        .ai-body strong {
+            font-weight: 650;
+        }
+
+        .ai-placeholder {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .ai-loading {
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            padding: 1rem 0.2rem;
+        }
+
+        .ai-spinner {
+            width: 28px;
+            height: 28px;
+            border-radius: 999px;
+            border: 3px solid rgba(20, 87, 255, 0.2);
+            border-top-color: #1457ff;
+            margin: 0 auto 0.4rem;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* ALERTS */
+
+        .alert-strip {
+            margin-top: 0.75rem;
+            font-size: 0.8rem;
+        }
+    </style>
+    <script src="config.js"></script>
+</head>
+
+<body>
+    <div class="page-shell">
+        <!-- MODERN GOVT HEADER (without SIH text) -->
+        <header class="govt-header">
+            <div class="govt-topbar">
+                <div class="govt-emblem"></div>
+                <div class="india-title">
+                    <span class="sub">Government of INDIA</span>
+                    <strong>Department of Agriculture Development &amp; Farmers' Welfare</strong>
+                </div>
+            </div>
+
+            <div class="portal-banner">
+                <div class="portal-left">
+                    <h1>India Agriculture Mandi Portal</h1>
+                    <p>City , Districts , AI advisory</p>
+                </div>
+
+                <div class="portal-right">
+                    <strong>Agriculture Mandir &amp; AI Advisory</strong>
+                    <span class="meta">Updated every week</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- ALERTS -->
+        <div id="alertContainer" class="alert-strip"></div>
+
+        <!-- MAIN GRID -->
+        <main class="layout-grid">
+            <!-- LEFT: TABLE -->
+            <section class="card-shell">
+                <div class="card-head">
+                    <div class="card-title-block">
+                        <div class="card-title">
+                            <span class="card-title-icon"><i class="fas fa-store"></i></span>
+                            <span id="tableTitle">India Market Prices (Live)</span>
+                        </div>
+                        <div class="card-subtitle" id="tableSubtitle">
+                            Filter by commodity, district or market. Select a row to view AI advice on the right.
+                        </div>
+                    </div>
+                    <span class="chip-small" id="tableSource"></span>
+                </div>
+
+                <!-- Filters -->
+                <div class="filters-grid">
+                    <div>
+                        <div class="filter-label" id="lblCommodity">Commodity</div>
+                        <select id="filterCommodity" class="form-select form-select-sm">
+                            <option value="">All commodities</option>
+                        </select>
+                    </div>
+                    <div>
+                        <div class="filter-label" id="lblDistrict">District</div>
+                        <select id="filterDistrict" class="form-select form-select-sm">
+                            <option value="">All districts</option>
+                        </select>
+                    </div>
+                    <div>
+                        <div class="filter-label" id="lblMarket">Market</div>
+                        <select id="filterMarket" class="form-select form-select-sm">
+                            <option value="">All markets</option>
+                        </select>
+                    </div>
+                    <div>
+                        <div class="filter-label" id="lblSearch">Search</div>
+                        <div class="input-group input-group-sm">
+                            <input id="searchInput" type="text" class="form-control"
+                                placeholder="Bhindi, Harippad, Ernakulam…">
+                            <button id="btnSearch" class="btn btn-outline-secondary" type="button">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="filters-actions">
+                    <button id="btnApplyFilters" class="btn btn-gov btn-gov-primary" type="button">
+                        <i class="fas fa-filter me-1"></i><span id="btnApplyText">Apply filters</span>
+                    </button>
+                    <button id="btnResetFilters" class="btn btn-gov btn-gov-secondary" type="button">
+                        <i class="fas fa-rotate-left me-1"></i><span id="btnResetText">Reset</span>
+                    </button>
+                </div>
+
+                <!-- Mini stats -->
+                <div class="stats-row">
+                    <div><span id="statMarketsLabel">Markets:</span><span class="value" id="statMarkets">–</span></div>
+                    <div><span id="statCommoditiesLabel">Commodities:</span><span class="value"
+                            id="statCommodities">–</span></div>
+                    <div><span id="statAvgLabel">Average modal price:</span><span class="value"
+                            id="statAvgModal">–</span></div>
+                </div>
+
+                <!-- Table -->
+                <div class="table-shell">
+                    <div class="table-header-strip">
+                        <span><span id="thShowing">Showing</span> <strong id="tableCount">0</strong> <span
+                                id="thRecords">records</span></span>
+                    </div>
+                    <div class="table-scroll">
+                        <table class="market-table">
+                            <thead>
+                                <tr>
+                                    <th id="thCommodity">Commodity</th>
+                                    <th id="thDistrict">District</th>
+                                    <th id="thMarket">Market</th>
+                                    <th id="thMin">Min (₹)</th>
+                                    <th id="thModal">Modal (₹)</th>
+                                    <th id="thMax">Max (₹)</th>
+                                    <th id="thRange">Range</th>
+                                </tr>
+                            </thead>
+                            <tbody id="marketTableBody">
+                                <tr>
+                                    <td colspan="7" class="text-center py-3 small">
+                                        <i class="fas fa-spinner fa-spin me-2"></i>
+                                        <span id="tblLoading">Loading live Indian market data…</span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- RIGHT: AI PANEL -->
+            <aside class="card-shell ai-shell">
+                <div class="ai-inner">
+                    <div class="card-head" style="margin-bottom:0.4rem;">
+                        <div class="card-title-block">
+                            <div class="card-title">
+                                <span class="card-title-icon"><i class="fas fa-chart-line"></i></span>
+                                <span id="aiTitle">AI Advisory – Today’s Action</span>
+                            </div>
+                            <div class="card-subtitle" id="aiSubtitle">
+                                Select a commodity row on the left to view what the system recommends for today.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Status strip -->
+                    <div id="aiStatusStrip" class="ai-status-strip" style="display:none;">
+                        <div>
+                            <div class="ai-status-label" id="aiStatusLabel">Recommendation</div>
+                            <div class="ai-status-main" id="aiStatusMain">Monitor</div>
+                            <div class="ai-status-sub" id="aiStatusSub">System will analyse once you select a row.
+                            </div>
+                        </div>
+                        <div class="ai-status-chip" id="aiStatusChip">–</div>
+                    </div>
+
+                    <!-- Quick metrics -->
+                    <div class="ai-mini-grid">
+                        <div>
+                            <div class="ai-mini-label" id="aiLblModal">Current modal price</div>
+                            <div class="ai-mini-value" id="aiCurrentPrice">–</div>
+                        </div>
+                        <div>
+                            <div class="ai-mini-label" id="aiLblRange">Today’s price range</div>
+                            <div class="ai-mini-value" id="aiRange">–</div>
+                        </div>
+                        <div>
+                            <div class="ai-mini-label" id="aiLblPos">Position in range</div>
+                            <div class="ai-mini-value" id="aiPosition">–</div>
+                        </div>
+                        <div>
+                            <div class="ai-mini-label" id="aiLblTrend">Trend</div>
+                            <div class="ai-mini-value" id="aiTrend">–</div>
+                        </div>
+                    </div>
+
+                    <!-- Quick summary -->
+                    <div id="aiQuick" class="ai-quick" style="display:none;">
+                        <div class="ai-quick-title" id="aiQuickTitle">Quick summary</div>
+                        <div id="aiQuickText"></div>
+                    </div>
+
+                    <!-- Detailed text -->
+                    <div id="aiBody" class="ai-body">
+                        <div class="ai-placeholder" id="aiPlaceholder">
+                            Namaskaram, Krishikan! This panel will tell you in simple language whether today looks like
+                            a
+                            good time to SELL, if you can HOLD for a few days, or if you should MONITOR the market.
+                            Start by selecting any row from the left table.
+                        </div>
+                    </div>
+                </div>
+            </aside>
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // ---------- LANGUAGE SYNC HELPERS ----------
+
+        function getStoredLang() {
+            const raw =
+                localStorage.getItem('appLanguage') || // primary key used by dashboard
+                localStorage.getItem('appLang') ||
+                localStorage.getItem('lang') ||
+                localStorage.getItem('language');
+
+            return raw === 'ml' ? 'ml' : 'en';
+        }
+
+        function setStoredLang(lang) {
+            const v = (lang === 'ml') ? 'ml' : 'en';
+
+            // Keep everything in sync:
+            localStorage.setItem('appLanguage', v); // dashboard uses this
+            localStorage.setItem('appLang', v);
+            localStorage.setItem('lang', v);
+            localStorage.setItem('language', v);
+
+            return v;
+        }
+
+
+        let currentLang = getStoredLang();
+        let allRecords = [];
+        let filteredRecords = [];
+        let selectedRecord = null;
+
+        window.addEventListener('storage', (e) => {
+            if (!['appLanguage', 'lang', 'language', 'appLang'].includes(e.key)) return;
+            syncLanguageFromStorage();
+        });
+
+
+        // Global functions so dashboard can call directly
+        function setLanguage(lang) {
+            currentLang = setStoredLang(lang);
+            applyLanguageTexts();
+            renderTable(filteredRecords);
+            if (selectedRecord) loadAiForRecord(selectedRecord);
+            else clearAiPanel();
+        }
+        window.setLanguage = setLanguage;
+        window.setMandiLanguage = setLanguage; // alias
+
+        // Polling fallback (same page SPA where storage event may not fire)
+        function syncLanguageFromStorage() {
+            const stored = getStoredLang();
+            if (stored !== currentLang) {
+                currentLang = stored;
+                applyLanguageTexts();
+                renderTable(filteredRecords);
+                if (selectedRecord) loadAiForRecord(selectedRecord);
+                else clearAiPanel();
+            }
+        }
+        setInterval(syncLanguageFromStorage, 1500);
+
+        // ---------------- LANGUAGE TEXT ----------------
+        function applyLanguageTexts() {
+            if (currentLang === 'ml') {
+                document.getElementById('tableTitle').textContent = 'കേരള മാർക്കറ്റ് വില – തത്സമയ ഡാറ്റ';
+                document.getElementById('tableSubtitle').textContent =
+                    'ഉത്പന്നം, ജില്ല, മാർക്കറ്റ് എന്നിവയിലൂടെ ഫിൽറ്റർ ചെയ്ത്, AI ഉപദേശം ലഭിക്കാൻ ഒരു നിര തിരഞ്ഞെടുക്കുക.';
+                document.getElementById('lblCommodity').textContent = 'ഉത്പന്നം';
+                document.getElementById('lblDistrict').textContent = 'ജില്ല';
+                document.getElementById('lblMarket').textContent = 'മാർക്കറ്റ്';
+                document.getElementById('lblSearch').textContent = 'ദ്രുത തിരയൽ';
+                document.getElementById('filterCommodity').options[0].textContent = 'എല്ലാ ഉത്പന്നങ്ങളും';
+                document.getElementById('filterDistrict').options[0].textContent = 'എല്ലാ ജില്ലകളും';
+                document.getElementById('filterMarket').options[0].textContent = 'എല്ലാ മാർക്കറ്റുകളും';
+                document.getElementById('btnApplyText').textContent = 'ഫിൽറ്റർ പ്രയോഗിക്കുക';
+                document.getElementById('btnResetText').textContent = 'പുതുക്കുക';
+                document.getElementById('statMarketsLabel').textContent = 'മാർക്കറ്റുകൾ:';
+                document.getElementById('statCommoditiesLabel').textContent = 'ഉത്പന്നങ്ങൾ:';
+                document.getElementById('statAvgLabel').textContent = 'ശരാശരി മോഡൽ വില:';
+                document.getElementById('thShowing').textContent = 'കാണിക്കുന്നത്';
+                document.getElementById('thRecords').textContent = 'റെക്കോർഡുകൾ';
+                document.getElementById('thCommodity').textContent = 'ഉത്പന്നം';
+                document.getElementById('thDistrict').textContent = 'ജില്ല';
+                document.getElementById('thMarket').textContent = 'മാർക്കറ്റ്';
+                document.getElementById('thMin').textContent = 'കുറഞ്ഞ (₹)';
+                document.getElementById('thModal').textContent = 'മോഡൽ (₹)';
+                document.getElementById('thMax').textContent = 'കൂടുതൽ (₹)';
+                document.getElementById('thRange').textContent = 'ശ്രേണി';
+                document.getElementById('tblLoading').textContent = 'കേരള സർക്കാർ മാർക്കറ്റ് ഡാറ്റ ലോഡ് ചെയ്യുന്നു…';
+
+                document.getElementById('aiTitle').textContent = 'AI ഉപദേശം – ഇന്നത്തെ നടപടി';
+                document.getElementById('aiSubtitle').textContent =
+                    'ഇന്നത്തെ ഉപദേശം കാണാൻ ഇടതു ഭാഗത്തെ പട്ടികയിൽ നിന്ന് ഒരു നിര തിരഞ്ഞെടുക്കുക.';
+                document.getElementById('aiLblModal').textContent = 'ഇന്നത്തെ മോഡൽ വില';
+                document.getElementById('aiLblRange').textContent = 'ഇന്നത്തെ കുറഞ്ഞ–കൂടുതൽ ശ്രേണി';
+                document.getElementById('aiLblPos').textContent = 'ശ്രേണിയിലെ സ്ഥാനം';
+                document.getElementById('aiLblTrend').textContent = 'ട്രെൻഡ്';
+                const ph = document.getElementById('aiPlaceholder');
+                if (ph) {
+                    ph.textContent =
+                        'നമസ്കാരം, കർഷകാ! തിരഞ്ഞെടുക്കുന്ന ഉത്പന്നത്തിനും മാർക്കറ്റിനും ഇന്ന് എന്ത് ചെയ്യണം എന്നതിൽ ഈ പാനൽ ലളിതമായ ഉപദേശം നൽകും.';
+                }
+            } else {
+                document.getElementById('tableTitle').textContent = 'Indian Market Prices (Live)';
+                document.getElementById('tableSubtitle').textContent =
+                    'Filter by commodity, district or market. Select a row to view AI advice on the right.';
+                document.getElementById('lblCommodity').textContent = 'Commodity';
+                document.getElementById('lblDistrict').textContent = 'District';
+                document.getElementById('lblMarket').textContent = 'Market';
+                document.getElementById('lblSearch').textContent = 'Search';
+                document.getElementById('filterCommodity').options[0].textContent = 'All commodities';
+                document.getElementById('filterDistrict').options[0].textContent = 'All districts';
+                document.getElementById('filterMarket').options[0].textContent = 'All markets';
+                document.getElementById('btnApplyText').textContent = 'Apply filters';
+                document.getElementById('btnResetText').textContent = 'Reset';
+                document.getElementById('statMarketsLabel').textContent = 'Markets:';
+                document.getElementById('statCommoditiesLabel').textContent = 'Commodities:';
+                document.getElementById('statAvgLabel').textContent = 'Average modal price:';
+                document.getElementById('thShowing').textContent = 'Showing';
+                document.getElementById('thRecords').textContent = 'records';
+                document.getElementById('thCommodity').textContent = 'Commodity';
+                document.getElementById('thDistrict').textContent = 'District';
+                document.getElementById('thMarket').textContent = 'Market';
+                document.getElementById('thMin').textContent = 'Min (₹)';
+                document.getElementById('thModal').textContent = 'Modal (₹)';
+                document.getElementById('thMax').textContent = 'Max (₹)';
+                document.getElementById('thRange').textContent = 'Range';
+                document.getElementById('tblLoading').textContent = 'Loading live Indian market data…';
+
+                document.getElementById('aiTitle').textContent = 'AI Advisory – Today’s Action';
+                document.getElementById('aiSubtitle').textContent =
+                    'Select a commodity row on the left to view what the system recommends for today.';
+                document.getElementById('aiLblModal').textContent = 'Current modal price';
+                document.getElementById('aiLblRange').textContent = 'Today’s price range';
+                document.getElementById('aiLblPos').textContent = 'Position in range';
+                document.getElementById('aiLblTrend').textContent = 'Trend';
+                const ph = document.getElementById('aiPlaceholder');
+                if (ph) {
+                    ph.textContent =
+                        'Namaskaram, Krishikan! This panel will tell you whether today looks like a good time to SELL, if you can HOLD for a few days, or if you should MONITOR the market.';
+                }
+            }
+        }
+
+        // ---------------- UTIL ----------------
+        function formatDateTime(ts) {
+            if (!ts) return '';
+            const d = new Date(ts);
+            return d.toLocaleString('en-IN', {
+                day: '2-digit',
+                month: 'short',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        function computePosition(min, max, modal) {
+            min = Number(min); max = Number(max); modal = Number(modal);
+            if (max <= min) return 50;
+            return ((modal - min) / (max - min)) * 100;
+        }
+
+        function getRangeTag(pos) {
+            if (pos >= 70) return { cls: 'pill-high', label: 'HIGH' };
+            if (pos <= 30) return { cls: 'pill-low', label: 'LOW' };
+            return { cls: 'pill-mid', label: 'MODERATE' };
+        }
+
+        function showAlert(type, msg) {
+            const wrap = document.getElementById('alertContainer');
+            wrap.innerHTML = `<div class="alert alert-${type} py-2 px-3" role="alert" style="border-radius:999px;">${msg}</div>`;
+            setTimeout(() => wrap.innerHTML = '', 4500);
+        }
+
+        // ---------------- DATA ----------------
+        async function fetchJsonWithFallback(url1, url2) {
+            try {
+                const res = await fetch(url1, { credentials: 'include' });
+                if (res.ok) return res.json();
+                if (url2) {
+                    const res2 = await fetch(url2, { credentials: 'include' });
+                    if (res2.ok) return res2.json();
+                }
+                throw new Error('Both endpoints failed');
+            } catch (e) {
+                throw e;
+            }
+        }
+
+        async function loadLiveData() {
+            const tbody = document.getElementById('marketTableBody');
+            applyLanguageTexts();
+            tbody.innerHTML = `
+      <tr><td colspan="7" class="text-center py-3 small">
+        <i class="fas fa-spinner fa-spin me-2"></i>${document.getElementById('tblLoading').textContent}
+      </td></tr>`;
+
+            try {
+                const data = await fetchJsonWithFallback('/api/market/live-prices', '/market/live-prices');
+                if (data.success === false) throw new Error(data.message || 'Failed');
+
+                allRecords = Array.isArray(data.vegetables) ? data.vegetables : [];
+                filteredRecords = [...allRecords];
+
+                const stats = data.stats || {};
+                const ts = data.timestamp;
+                const marketsCount = stats.totalMarkets ?? '–';
+                const commoditiesCount = stats.totalCommodities ?? stats.totalVegetables ?? '–';
+                const avgModal = stats.avgModalPrice ?? stats.avgPrice;
+
+                document.getElementById('statMarkets').textContent = marketsCount;
+                document.getElementById('statCommodities').textContent = commoditiesCount;
+                document.getElementById('statAvgModal').textContent =
+                    typeof avgModal === 'number' ? avgModal.toFixed(1) : '–';
+                document.getElementById('tableSource').textContent = data.source ? data.source : '';
+
+                const tsEl = document.getElementById('dataTimestamp');
+                if (tsEl) {
+                    tsEl.textContent =
+                        (currentLang === 'ml'
+                            ? `ഡാറ്റ: ${formatDateTime(ts)}`
+                            : `Data as on: ${formatDateTime(ts)}`);
+                }
+
+                populateFilters(allRecords);
+                renderTable(filteredRecords);
+            } catch (err) {
+                console.error('loadLiveData error', err);
+                const msg = currentLang === 'ml'
+                    ? 'കേരള മാർക്കറ്റ് ഡാറ്റ ലോഡുചെയ്യാൻ കഴിഞ്ഞില്ല.'
+                    : 'Unable to load Kerala market data.';
+                showAlert('danger', msg);
+                tbody.innerHTML = `
+        <tr><td colspan="7" class="text-center py-3 small text-danger">
+          ${currentLang === 'ml' ? 'വിവരങ്ങൾ ഇപ്പോൾ ലഭ്യമല്ല.' : 'Data currently unavailable.'}
+        </td></tr>`;
+            }
+        }
+
+        // --------- LOCAL FALLBACK SEARCH ----------
+        function performLocalSearch(term) {
+            const t = term.toLowerCase();
+            filteredRecords = allRecords.filter(r => {
+                return [r.commodity, r.district, r.market]
+                    .some(f => f && String(f).toLowerCase().includes(t));
+            });
+            renderTable(filteredRecords);
+            clearAiPanel();
+
+            if (!filteredRecords.length) {
+                const msg = currentLang === 'ml'
+                    ? 'നിലവിലുള്ള ഡാറ്റയിൽ തിരച്ചിൽ ഫലങ്ങൾ ഒന്നുമില്ല.'
+                    : 'No matching records found in currently loaded data.';
+                showAlert('warning', msg);
+            } else {
+                const msg = currentLang === 'ml'
+                    ? 'API തിരയൽ ലഭ്യമല്ല. ലോഡുചെയ്ത ഡാറ്റയിൽ നിന്നുള്ള ഫലങ്ങൾ മാത്രം കാണിക്കുന്നു.'
+                    : 'Search API unavailable. Showing matches only from loaded data.';
+                showAlert('info', msg);
+            }
+        }
+
+        async function performSearch() {
+            const term = document.getElementById('searchInput').value.trim();
+            if (!term) {
+                applyFilters();
+                return;
+            }
+            try {
+                const data = await fetchJsonWithFallback(
+                    `/api/market/search/${encodeURIComponent(term)}`,
+                    `/market/search/${encodeURIComponent(term)}`
+                );
+                if (data.success === false || !Array.isArray(data.results)) {
+                    performLocalSearch(term);
+                    return;
+                }
+                filteredRecords = data.results;
+                renderTable(filteredRecords);
+                clearAiPanel();
+            } catch (err) {
+                console.error('search error', err);
+                performLocalSearch(term);
+            }
+        }
+
+        // ---------------- FILTERS & TABLE ----------------
+        function populateFilters(records) {
+            const commoditySet = new Set();
+            const districtSet = new Set();
+            const marketSet = new Set();
+
+            records.forEach(r => {
+                if (r.commodity) commoditySet.add(r.commodity);
+                if (r.district) districtSet.add(r.district);
+                if (r.market) marketSet.add(r.market);
+            });
+
+            const commoditySel = document.getElementById('filterCommodity');
+            const districtSel = document.getElementById('filterDistrict');
+            const marketSel = document.getElementById('filterMarket');
+
+            commoditySel.length = 1;
+            districtSel.length = 1;
+            marketSel.length = 1;
+
+            Array.from(commoditySet).sort().forEach(c => {
+                const o = document.createElement('option');
+                o.value = o.textContent = c;
+                commoditySel.appendChild(o);
+            });
+            Array.from(districtSet).sort().forEach(d => {
+                const o = document.createElement('option');
+                o.value = o.textContent = d;
+                districtSel.appendChild(o);
+            });
+            Array.from(marketSet).sort().forEach(m => {
+                const o = document.createElement('option');
+                o.value = o.textContent = m;
+                marketSel.appendChild(o);
+            });
+        }
+
+        function applyFilters() {
+            const c = document.getElementById('filterCommodity').value;
+            const d = document.getElementById('filterDistrict').value;
+            const m = document.getElementById('filterMarket').value;
+            filteredRecords = allRecords.filter(r => {
+                if (c && r.commodity !== c) return false;
+                if (d && r.district !== d) return false;
+                if (m && r.market !== m) return false;
+                return true;
+            });
+            renderTable(filteredRecords);
+            clearAiPanel();
+        }
+
+        function resetFilters() {
+            document.getElementById('filterCommodity').value = '';
+            document.getElementById('filterDistrict').value = '';
+            document.getElementById('filterMarket').value = '';
+            document.getElementById('searchInput').value = '';
+            filteredRecords = [...allRecords];
+            renderTable(filteredRecords);
+            clearAiPanel();
+        }
+
+        function renderTable(records) {
+            const tbody = document.getElementById('marketTableBody');
+            if (!records.length) {
+                tbody.innerHTML = `
+        <tr><td colspan="7" class="text-center py-3 small">
+          ${currentLang === 'ml'
+                        ? 'തിരഞ്ഞെടുത്ത ഫിൽറ്ററുകൾക്ക് യാതൊരു വിവരവും ലഭ്യമല്ല.'
+                        : 'No records found for the selected filters.'}
+        </td></tr>`;
+                document.getElementById('tableCount').textContent = '0';
+                return;
+            }
+
+            const rows = records.map((r, idx) => {
+                const pos = computePosition(r.min_price, r.max_price, r.modal_price);
+                const tag = getRangeTag(pos);
+                return `
+        <tr data-index="${idx}">
+          <td>${r.commodity || '-'}</td>
+          <td>${r.district || '-'}</td>
+          <td>${r.market || '-'}</td>
+          <td>${Number(r.min_price || 0).toFixed(1)}</td>
+          <td>${Number(r.modal_price || 0).toFixed(1)}</td>
+          <td>${Number(r.max_price || 0).toFixed(1)}</td>
+          <td><span class="pill-range ${tag.cls}">${tag.label} (${pos.toFixed(1)}%)</span></td>
+        </tr>`;
+            }).join('');
+
+            tbody.innerHTML = rows;
+            document.getElementById('tableCount').textContent = String(records.length);
+
+            Array.from(tbody.querySelectorAll('tr')).forEach(tr => {
+                tr.addEventListener('click', () => {
+                    tbody.querySelectorAll('tr').forEach(row => row.classList.remove('selected'));
+                    tr.classList.add('selected');
+                    const idx = Number(tr.getAttribute('data-index'));
+                    selectedRecord = records[idx];
+                    loadAiForRecord(selectedRecord);
+                });
+            });
+        }
+
+        // ---------------- AI PANEL ----------------
+        function clearAiPanel() {
+            selectedRecord = null;
+            document.getElementById('aiCurrentPrice').textContent = '–';
+            document.getElementById('aiRange').textContent = '–';
+            document.getElementById('aiPosition').textContent = '–';
+            document.getElementById('aiTrend').textContent = '–';
+            document.getElementById('aiStatusStrip').style.display = 'none';
+            document.getElementById('aiQuick').style.display = 'none';
+            document.getElementById('aiBody').innerHTML =
+                `<div class="ai-placeholder" id="aiPlaceholder">${currentLang === 'ml'
+                    ? 'നമസ്കാരം, കർഷകാ! തിരഞ്ഞെടുക്കുന്ന ഉത്പന്നത്തിനും മാർക്കറ്റിനും ഇന്ന് എന്ത് ചെയ്യണം എന്നതിൽ ഈ പാനൽ ലളിതമായ ഉപദേശം നൽകും.'
+                    : 'Namaskaram, Krishikan! This panel will tell you whether today looks like a good time to SELL, if you can HOLD for a few days, or if you should MONITOR the market.'}</div>`;
+        }
+
+        function setStatusStrip(decision, trend, pricePosition) {
+            const strip = document.getElementById('aiStatusStrip');
+            const main = document.getElementById('aiStatusMain');
+            const sub = document.getElementById('aiStatusSub');
+            const chip = document.getElementById('aiStatusChip');
+
+            let bg, mainText, chipText, quickText;
+
+            if (currentLang === 'ml') {
+                if (decision === 'SELL') {
+                    mainText = 'ഇന്ന് വിൽക്കുക';
+                    chipText = 'SELL';
+                    quickText = 'ഇന്നത്തെ ശ്രേണിയിലെ ഉയർന്ന ഭാഗത്താണ് വില. സംഭരണം കുറവാണെങ്കിൽ കൂടുതലായി വിൽക്കുന്നത് നല്ലത്.';
+                } else if (decision === 'HOLD') {
+                    mainText = 'താമസിക്കാം';
+                    chipText = 'HOLD';
+                    quickText = 'വില ശ്രേണിയിലെ താഴ്ന്ന ഭാഗത്താണ്. സുരക്ഷിത സംഭരണം ഉണ്ടെങ്കിൽ കുറച്ച് ദിവസം കാത്തിരിക്കാം.';
+                } else {
+                    mainText = 'വിപണി ശ്രദ്ധിക്കുക';
+                    chipText = 'MONITOR';
+                    quickText = 'വില മിതമായ നിരക്കിലാണ്. പണം ആവശ്യമാണ് എങ്കിൽ കുറച്ച് വിൽക്കാം, അല്ലെങ്കിൽ അടുത്ത 1–2 ദിവസത്തെ ട്രെൻഡ് നോക്കുക.';
+                }
+            } else {
+                if (decision === 'SELL') {
+                    mainText = 'Sell today';
+                    chipText = 'SELL';
+                    quickText = 'Price is in the higher band of today’s range. If you are not planning long storage, selling most of your stock today is favourable.';
+                } else if (decision === 'HOLD') {
+                    mainText = 'You can hold';
+                    chipText = 'HOLD';
+                    quickText = 'Price is in the lower band of today’s range. If you have safe storage, waiting for a better price may help.';
+                } else {
+                    mainText = 'Monitor market';
+                    chipText = 'MONITOR';
+                    quickText = 'Price is around the middle range. Sell if you need cash flow, otherwise monitor the next 1–2 days.';
+                }
+            }
+
+            if (decision === 'SELL') bg = 'linear-gradient(120deg,#bbf7d0,#4ade80)';
+            else if (decision === 'HOLD') bg = 'linear-gradient(120deg,#fef9c3,#fde68a)';
+            else bg = 'linear-gradient(120deg,#e0f2fe,#bfdbfe)';
+
+            strip.style.background = bg;
+            strip.style.display = 'flex';
+            sub.textContent =
+                (currentLang === 'ml'
+                    ? `ഇന്നത്തെ ശ്രേണിയിൽ ~${pricePosition.toFixed(1)}% സ്ഥാനത്ത്.`
+                    : `Current price is at ~${pricePosition.toFixed(1)}% of today’s range.`);
+            main.textContent = mainText;
+            chip.textContent = chipText;
+
+            const trendEl = document.getElementById('aiTrend');
+            if (currentLang === 'ml') {
+                trendEl.textContent =
+                    trend === 'HIGH' ? 'ഇന്ന് ഉയർന്ന നില' :
+                        trend === 'LOW' ? 'ഇന്ന് കുറഞ്ഞ നില' :
+                            'ഇന്ന് മിതമായ നില';
+            } else {
+                trendEl.textContent =
+                    trend === 'HIGH' ? 'High today' :
+                        trend === 'LOW' ? 'Low today' :
+                            'Moderate today';
+            }
+
+            const quick = document.getElementById('aiQuick');
+            document.getElementById('aiQuickTitle').textContent =
+                currentLang === 'ml' ? 'സംക്ഷിപ്ത നിർദ്ദേശം' : 'Quick summary';
+            document.getElementById('aiQuickText').textContent = quickText;
+            quick.style.display = 'block';
+        }
+
+        // --------- FORMAT AI TEXT: line by line, bold heading ----------
+        function formatRecommendationText(raw) {
+            if (!raw) return '';
+            const text = raw.replace(/\r\n/g, '\n').trim();
+
+            const sections = [];
+            const regex = /(\d+)\.\s*([A-Z][A-Z\s]+?):\s*([\s\S]*?)(?=\n\d+\.\s*[A-Z][A-Z\s]+?:|$)/g;
+            let match;
+            while ((match = regex.exec(text)) !== null) {
+                sections.push({
+                    title: match[2].trim(),
+                    body: match[3].trim()
+                });
+            }
+
+            if (!sections.length) {
+                return `<p>${text.replace(/\n+/g, '<br>')}</p>`;
+            }
+
+            let html = '';
+            sections.forEach(sec => {
+                const bodyHtml = sec.body.replace(/\n+/g, '<br>');
+                html += `<p><strong>${sec.title}</strong><br>${bodyHtml}</p>`;
+            });
+            return html;
+        }
+
+        async function loadAiForRecord(rec) {
+            const pos = computePosition(rec.min_price, rec.max_price, rec.modal_price);
+            const tag = getRangeTag(pos);
+
+            document.getElementById('aiCurrentPrice').textContent =
+                `₹${Number(rec.modal_price || 0).toFixed(1)}`;
+            document.getElementById('aiRange').textContent =
+                `₹${Number(rec.min_price || 0).toFixed(1)} – ₹${Number(rec.max_price || 0).toFixed(1)}`;
+            document.getElementById('aiPosition').textContent = `${pos.toFixed(1)}%`;
+            document.getElementById('aiBody').innerHTML = `
+      <div class="ai-loading">
+        <div class="ai-spinner"></div>
+        ${currentLang === 'ml'
+                    ? 'ഇന്നത്തെ വില വിശകലനം ചെയ്യുന്നു…'
+                    : 'Analysing today’s price and preparing advisory…'}
+      </div>`;
+
+            try {
+                const res = await fetch(API_BASE_URL + '/api/market/ai-recommendations', {
+                    method: 'POST',
+                    credentials: 'include',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        vegetable: rec.commodity,
+                        currentPrice: rec.modal_price,
+                        minPrice: rec.min_price,
+                        maxPrice: rec.max_price,
+                        market: rec.market,
+                        district: rec.district,
+                        date: rec.arrival_date,
+                        lang: currentLang
+                    })
+                });
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                const data = await res.json();
+                if (data.success === false) throw new Error(data.message || 'AI error');
+
+                const decision = data.decision?.label || 'MONITOR';
+                const trend = data.decision?.trend ||
+                    (tag.label === 'HIGH' ? 'HIGH' : tag.label === 'LOW' ? 'LOW' : 'MODERATE');
+                const pricePos = data.decision?.pricePosition ?? pos;
+
+                setStatusStrip(decision, trend, pricePos);
+
+                const formatted = formatRecommendationText(data.recommendation);
+                document.getElementById('aiBody').innerHTML = formatted;
+            } catch (err) {
+                console.error('AI error', err);
+                showAlert('warning',
+                    currentLang === 'ml' ? 'AI ഉപദേശം ലഭിച്ചില്ല. പിന്നീട് വീണ്ടും ശ്രമിക്കുക.' : 'AI advisory could not be generated. Please try again.');
+                clearAiPanel();
+            }
+        }
+
+        // ---------------- INIT ----------------
+        document.addEventListener('DOMContentLoaded', () => {
+            currentLang = getStoredLang(); // ensure initial read
+            applyLanguageTexts();
+            loadLiveData();
+
+            document.getElementById('btnApplyFilters').addEventListener('click', applyFilters);
+            document.getElementById('btnResetFilters').addEventListener('click', resetFilters);
+            document.getElementById('btnSearch').addEventListener('click', performSearch);
+            document.getElementById('searchInput').addEventListener('keypress', e => {
+                if (e.key === 'Enter') performSearch();
+            });
+        });
+    </script>
+</body>
+
+</html>

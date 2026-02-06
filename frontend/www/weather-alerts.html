@@ -1,0 +1,2981 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Weather & Alerts - KrishiMitr</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+
+    <!-- Leaflet CSS (no integrity so browser doesn't block it) -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+    <!-- MarkerCluster CSS (added) -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
+
+    <style>
+        :root {
+            --primary: #10b981;
+            --primary-dark: #059669;
+            --secondary: #3b82f6;
+            --accent: #8b5cf6;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --success: #10b981;
+            --bg-light: #f8fafc;
+            --bg-dark: #0f172a;
+            --card-light: #ffffff;
+            --card-dark: #1e293b;
+            --text-light: #0f172a;
+            --text-dark: #f9fafb;
+            --text-secondary-light: #64748b;
+            --text-secondary-dark: #94a3b8;
+            --border-light: #e2e8f0;
+            --border-dark: #334155;
+            --sidebar-light: #ffffff;
+            --sidebar-dark: #1e293b;
+            --good-bg: rgba(22, 163, 74, 0.06);
+            --good-border: rgba(22, 163, 74, 0.4);
+            --warn-bg: rgba(245, 158, 11, 0.08);
+            --warn-border: rgba(245, 158, 11, 0.5);
+            --bad-bg: rgba(239, 68, 68, 0.08);
+            --bad-border: rgba(239, 68, 68, 0.5);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-light);
+            color: var(--text-light);
+            overflow-x: hidden;
+            transition: all 0.3s ease;
+            line-height: 1.6;
+        }
+
+        body.dark {
+            background: var(--bg-dark);
+            color: var(--text-dark);
+        }
+
+        /* =============== SIDEBAR =============== */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100vh;
+            width: 280px;
+            background: var(--sidebar-light);
+            z-index: 1000;
+            transition: transform 0.3s ease, background 0.3s ease;
+            box-shadow: 4px 0 15px rgba(15, 23, 42, 0.12);
+            border-right: 1px solid var(--border-light);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        body.dark .sidebar {
+            background: var(--sidebar-dark);
+            border-right-color: var(--border-dark);
+            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.6);
+        }
+
+        .sidebar-header {
+            padding: 1.6rem 1.5rem;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.35);
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(59, 130, 246, 0.08));
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .logo-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 0.9rem;
+            object-fit: contain;
+            background: #ecfdf5;
+            padding: 4px;
+        }
+
+        body.dark .logo-icon {
+            background: #022c22;
+        }
+
+        .logo-brand {
+            display: flex;
+            gap: 0.2rem;
+            align-items: baseline;
+            letter-spacing: 0.02em;
+        }
+
+        .logo-text-krishi {
+            color: var(--primary);
+            font-weight: 800;
+            font-size: 1.25rem;
+        }
+
+        .logo-text-mitr {
+            color: #020617;
+            font-weight: 800;
+            font-size: 1.25rem;
+        }
+
+        body.dark .logo-text-mitr {
+            color: #f9fafb;
+        }
+
+        .nav-menu {
+            flex: 1;
+            overflow-y: auto;
+            padding: 0.5rem 0;
+        }
+
+        .nav-section {
+            margin-bottom: 1rem;
+        }
+
+        .nav-section-title {
+            padding: 0 1.5rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: #4b5563;
+            margin-bottom: 0.6rem;
+        }
+
+        body.dark .nav-section-title {
+            color: var(--text-secondary-dark);
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 0.9rem;
+            text-decoration: none;
+            padding: 0.75rem 1.5rem;
+            color: #111827;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            border-left: 3px solid transparent;
+            font-size: 0.95rem;
+        }
+
+        body.dark .nav-item {
+            color: #e5e7eb;
+        }
+
+        .nav-item i {
+            font-size: 1.1rem;
+            width: 20px;
+        }
+
+        .nav-item:hover {
+            color: var(--primary);
+            border-left-color: var(--primary);
+            background: rgba(16, 185, 129, 0.06);
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+            font-weight: 600;
+            border-left-color: var(--primary);
+            background: rgba(16, 185, 129, 0.08);
+        }
+
+        .sidebar-footer {
+            flex-shrink: 0;
+            width: 100%;
+            padding: 1.2rem 1.5rem 1.5rem;
+            border-top: 1px solid var(--border-light);
+            background: var(--sidebar-light);
+            display: flex;
+            flex-direction: column;
+            gap: 0.7rem;
+        }
+
+        body.dark .sidebar-footer {
+            background: var(--sidebar-dark);
+            border-top-color: var(--border-dark);
+        }
+
+        .user-info {
+            color: var(--text-secondary-light);
+            font-size: 0.85rem;
+        }
+
+        body.dark .user-info {
+            color: var(--text-secondary-dark);
+        }
+
+        .theme-toggle-sidebar,
+        .logout-btn {
+            width: 100%;
+            border-radius: 999px;
+            padding: 0.65rem 0.8rem;
+            font-size: 0.8rem;
+            cursor: pointer;
+            border: 1px solid transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.45rem;
+            transition: all 0.2s ease;
+            font-weight: 500;
+        }
+
+        .theme-toggle-sidebar {
+            background: rgba(16, 185, 129, 0.06);
+            color: var(--primary);
+            border-color: rgba(16, 185, 129, 0.25);
+        }
+
+        .theme-toggle-sidebar:hover {
+            background: rgba(16, 185, 129, 0.12);
+        }
+
+        .logout-btn {
+            background: rgba(239, 68, 68, 0.06);
+            color: var(--danger);
+            border-color: rgba(239, 68, 68, 0.25);
+        }
+
+        .logout-btn:hover {
+            background: rgba(239, 68, 68, 0.12);
+        }
+
+        /* small button styling (used by pin UI) */
+        .small-btn {
+            background: transparent;
+            border: 1px solid rgba(148, 163, 184, 0.35);
+            padding: 0.35rem 0.6rem;
+            border-radius: 999px;
+            font-size: 0.82rem;
+            cursor: pointer;
+        }
+
+        .small-btn.active {
+            background: var(--primary);
+            color: #fff;
+            border-color: transparent;
+        }
+
+        .addr-list {
+            max-height: 180px;
+            overflow-y: auto;
+            margin-top: 0.6rem;
+            padding-right: 6px;
+        }
+
+        .addr-item {
+            display: flex;
+            justify-content: space-between;
+            gap: 0.5rem;
+            padding: 0.45rem 0;
+            border-bottom: 1px dashed rgba(226, 232, 240, 0.5);
+            align-items: center;
+            font-size: 0.85rem;
+        }
+
+        body.dark .addr-item {
+            border-bottom-color: rgba(51, 65, 85, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 260px;
+                transform: translateX(-100%);
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0 !important;
+                width: 100% !important;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .sidebar {
+                width: 240px;
+            }
+        }
+
+        /* =============== MAIN CONTENT + TOPBAR =============== */
+        .main-content {
+            margin-left: 280px;
+            min-height: 100vh;
+            transition: margin-left 0.3s ease;
+            background: var(--bg-light);
+        }
+
+        body.dark .main-content {
+            background: var(--bg-dark);
+        }
+
+        .simple-topbar {
+            background: var(--card-light);
+            padding: 1rem 2.2rem;
+            border-bottom: 1px solid var(--border-light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        body.dark .simple-topbar {
+            background: var(--card-dark);
+            border-bottom-color: var(--border-dark);
+        }
+
+        .topbar-left {
+            display: flex;
+            align-items: center;
+            gap: 0.9rem;
+        }
+
+        .topbar-logo {
+            width: 30px;
+            height: 30px;
+            border-radius: 0.7rem;
+            object-fit: contain;
+            background: #ecfdf5;
+            padding: 3px;
+        }
+
+        body.dark .topbar-logo {
+            background: #022c22;
+        }
+
+        .simple-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text-light);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        body.dark .simple-title {
+            color: var(--text-dark);
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.5rem 0.7rem;
+            border-radius: 0.6rem;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .simple-topbar {
+                padding: 0.9rem 1rem;
+            }
+
+            .simple-title {
+                font-size: 1.1rem;
+            }
+
+            .mobile-menu-btn {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+            }
+        }
+
+        .content-area {
+            padding: 2rem 2.25rem 3rem;
+            max-width: 100%;
+            margin: 0 auto;
+        }
+
+        @media (max-width: 768px) {
+            .content-area {
+                padding: 1.3rem 1rem 2.2rem;
+            }
+        }
+
+        .location-selector {
+            background: var(--card-light);
+            border: 1px solid var(--border-light);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        body.dark .location-selector {
+            background: var(--card-dark);
+            border-color: var(--border-dark);
+            color: var(--text-dark);
+        }
+
+        /* =============== LAYOUT ROWS =============== */
+        .weather-layout {
+            display: flex;
+            flex-direction: column;
+            gap: 1.8rem;
+        }
+
+        .top-weather-row {
+            display: grid;
+            grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.1fr);
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 960px) {
+            .top-weather-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .middle-row {
+            display: grid;
+            grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 960px) {
+            .middle-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* =============== TODAY SUMMARY CARD =============== */
+        .today-summary-card {
+            background: radial-gradient(circle at top left, rgba(56, 189, 248, 0.18), transparent 55%),
+                var(--card-light);
+            border-radius: 20px;
+            border: 1px solid var(--border-light);
+            padding: 1.4rem 1.5rem;
+            box-shadow: 0 12px 30px rgba(15, 23, 42, 0.09);
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 1.2rem;
+            align-items: center;
+        }
+
+        body.dark .today-summary-card {
+            background: radial-gradient(circle at top left, rgba(59, 130, 246, 0.25), transparent 60%),
+                var(--card-dark);
+            border-color: var(--border-dark);
+            box-shadow: 0 16px 40px rgba(15, 23, 42, 0.7);
+        }
+
+        .today-main-temp {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .today-temp-value {
+            font-size: 3.4rem;
+            font-weight: 800;
+            letter-spacing: -0.04em;
+        }
+
+        .today-condition {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-secondary-light);
+        }
+
+        body.dark .today-condition {
+            color: var(--text-secondary-dark);
+        }
+
+        .today-location {
+            font-size: 0.8rem;
+            color: var(--text-secondary-light);
+        }
+
+        body.dark .today-location {
+            color: var(--text-secondary-dark);
+        }
+
+        .today-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+        }
+
+        .today-title-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .today-title-row h2 {
+            font-size: 1rem;
+            font-weight: 700;
+        }
+
+        .today-badge {
+            font-size: 0.7rem;
+            padding: 0.2rem 0.6rem;
+            border-radius: 999px;
+            border: 1px solid rgba(148, 163, 184, 0.6);
+            color: var(--text-secondary-light);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            background: rgba(15, 23, 42, 0.02);
+        }
+
+        body.dark .today-badge {
+            color: var(--text-secondary-dark);
+            background: rgba(15, 23, 42, 0.7);
+        }
+
+        .today-stats-row {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 0.6rem;
+            margin-top: 0.2rem;
+        }
+
+        .mini-stat {
+            padding: 0.55rem 0.7rem;
+            border-radius: 12px;
+            border: 1px solid var(--border-light);
+            background: #f9fafb;
+            font-size: 0.75rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.15rem;
+        }
+
+        body.dark .mini-stat {
+            background: #020617;
+            border-color: var(--border-dark);
+        }
+
+        .mini-label {
+            color: var(--text-secondary-light);
+            font-size: 0.7rem;
+        }
+
+        body.dark .mini-label {
+            color: var(--text-secondary-dark);
+        }
+
+        .mini-value {
+            font-weight: 600;
+        }
+
+        /* =============== TODAY ADVICE CARD (AI-BASED) =============== */
+        .today-advice-card {
+            background: radial-gradient(circle at top right, rgba(16, 185, 129, 0.2), transparent 55%),
+                var(--card-light);
+            border-radius: 20px;
+            border: 1px solid var(--border-light);
+            padding: 1.4rem 1.5rem;
+            box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        body.dark .today-advice-card {
+            background: radial-gradient(circle at top right, rgba(34, 197, 94, 0.3), transparent 65%),
+                var(--card-dark);
+            border-color: var(--border-dark);
+            box-shadow: 0 18px 40px rgba(15, 23, 42, 0.8);
+        }
+
+        .today-advice-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .today-advice-header h3 {
+            font-size: 1rem;
+            font-weight: 700;
+        }
+
+        .today-advice-tag-chip {
+            font-size: 0.7rem;
+            padding: 0.25rem 0.7rem;
+            border-radius: 999px;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            font-weight: 600;
+        }
+
+        .tag-good {
+            background: var(--good-bg);
+            color: #16a34a;
+            border: 1px solid var(--good-border);
+        }
+
+        .tag-normal {
+            background: var(--warn-bg);
+            color: #d97706;
+            border: 1px solid var(--warn-border);
+        }
+
+        .tag-bad {
+            background: var(--bad-bg);
+            color: #dc2626;
+            border: 1px solid var(--bad-border);
+        }
+
+        .today-advice-body {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 0.9rem;
+            align-items: center;
+        }
+
+        @media (max-width: 640px) {
+            .today-advice-body {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .today-advice-image {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .today-farmer-img {
+            width: 86px;
+            height: 86px;
+            border-radius: 20px;
+            object-fit: cover;
+            border: 2px solid rgba(15, 23, 42, 0.15);
+            background: #0f172a;
+        }
+
+        body.dark .today-farmer-img {
+            border-color: rgba(148, 163, 184, 0.6);
+        }
+
+        .today-advice-note {
+            font-size: 0.7rem;
+            color: var(--text-secondary-light);
+            text-align: center;
+        }
+
+        body.dark .today-advice-note {
+            color: var(--text-secondary-dark);
+        }
+
+        .today-advice-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.45rem;
+            font-size: 0.82rem;
+        }
+
+        .today-advice-item {
+            display: flex;
+            gap: 0.45rem;
+            align-items: flex-start;
+        }
+
+        .today-advice-item i {
+            font-size: 0.75rem;
+            margin-top: 0.12rem;
+            color: var(--primary);
+        }
+
+        .today-advice-item span {
+            line-height: 1.4;
+        }
+
+        /* =============== FORECAST =============== */
+        .forecast-section {
+            background: var(--card-light);
+            border-radius: 20px;
+            border: 1px solid var(--border-light);
+            padding: 1.4rem 1.5rem 1.3rem;
+            box-shadow: 0 8px 22px rgba(15, 23, 42, 0.05);
+        }
+
+        body.dark .forecast-section {
+            background: var(--card-dark);
+            border-color: var(--border-dark);
+        }
+
+        .section-title-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 0.6rem;
+            margin-bottom: 1rem;
+        }
+
+        .section-title-row h2 {
+            font-size: 1rem;
+            font-weight: 700;
+        }
+
+        .section-sub {
+            font-size: 0.75rem;
+            color: var(--text-secondary-light);
+        }
+
+        body.dark .section-sub {
+            color: var(--text-secondary-dark);
+        }
+
+        .forecast-grid {
+            display: grid;
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+            gap: 0.75rem;
+        }
+
+        @media (max-width: 900px) {
+            .forecast-grid {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 640px) {
+            .forecast-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        .forecast-card {
+            border-radius: 14px;
+            padding: 0.9rem 0.85rem;
+            border: 1px solid var(--border-light);
+            font-size: 0.8rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+            transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease;
+        }
+
+        body.dark .forecast-card {
+            border-color: var(--border-dark);
+        }
+
+        .forecast-card:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 10px 24px rgba(15, 23, 42, 0.12);
+        }
+
+        .forecast-good {
+            background: var(--good-bg);
+            border-color: var(--good-border);
+        }
+
+        .forecast-warn {
+            background: var(--warn-bg);
+            border-color: var(--warn-border);
+        }
+
+        .forecast-bad {
+            background: var(--bad-bg);
+            border-color: var(--bad-border);
+        }
+
+        .forecast-day {
+            font-weight: 600;
+            font-size: 0.8rem;
+        }
+
+        .forecast-date {
+            font-size: 0.7rem;
+            color: var(--text-secondary-light);
+        }
+
+        body.dark .forecast-date {
+            color: var(--text-secondary-dark);
+        }
+
+        .forecast-main-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.4rem;
+        }
+
+        .forecast-icon {
+            font-size: 1.3rem;
+        }
+
+        .forecast-temp {
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .forecast-desc {
+            font-size: 0.72rem;
+            color: var(--text-secondary-light);
+        }
+
+        body.dark .forecast-desc {
+            color: var(--text-secondary-dark);
+        }
+
+        .forecast-extra {
+            font-size: 0.7rem;
+            color: #0ea5e9;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        /* =============== ALERTS =============== */
+        .alerts-section {
+            background: var(--card-light);
+            border-radius: 20px;
+            border: 1px solid var(--border-light);
+            padding: 1.4rem 1.5rem 1.3rem;
+            box-shadow: 0 8px 22px rgba(15, 23, 42, 0.05);
+            display: flex;
+            flex-direction: column;
+            gap: 0.9rem;
+        }
+
+        body.dark .alerts-section {
+            background: var(--card-dark);
+            border-color: var(--border-dark);
+        }
+
+        .alerts-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .alerts-toggle {
+            display: flex;
+            align-items: center;
+            gap: 0.45rem;
+            background: rgba(15, 23, 42, 0.02);
+            padding: 0.5rem 0.7rem;
+            border-radius: 999px;
+            border: 1px dashed var(--border-light);
+            cursor: pointer;
+            font-size: 0.75rem;
+        }
+
+        body.dark .alerts-toggle {
+            border-color: var(--border-dark);
+            background: rgba(15, 23, 42, 0.6);
+        }
+
+        .toggle-switch {
+            width: 38px;
+            height: 20px;
+            background: #cbd5f5;
+            border-radius: 999px;
+            position: relative;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 16px;
+            height: 16px;
+            background: white;
+            border-radius: 50%;
+            transition: transform 0.2s ease;
+        }
+
+        .toggle-switch.active {
+            background: #22c55e;
+        }
+
+        .toggle-switch.active::after {
+            transform: translateX(16px);
+        }
+
+        .alerts-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            max-height: 260px;
+            overflow-y: auto;
+            padding-right: 0.25rem;
+        }
+
+        .alert-card {
+            border-radius: 14px;
+            padding: 0.75rem 0.85rem;
+            border-left: 4px solid var(--border-light);
+            background: #f9fafb;
+            display: flex;
+            gap: 0.6rem;
+            align-items: flex-start;
+            font-size: 0.8rem;
+        }
+
+        body.dark .alert-card {
+            background: #020617;
+            border-left-color: var(--border-dark);
+        }
+
+        .alert-card.high {
+            border-left-color: var(--danger);
+            background: var(--bad-bg);
+        }
+
+        .alert-card.medium {
+            border-left-color: var(--warning);
+            background: var(--warn-bg);
+        }
+
+        .alert-card.low {
+            border-left-color: var(--primary);
+            background: var(--good-bg);
+        }
+
+        .alert-icon {
+            font-size: 1rem;
+            margin-top: 0.1rem;
+        }
+
+        .alert-content {
+            flex: 1;
+        }
+
+        .alert-title {
+            font-weight: 600;
+            margin-bottom: 0.15rem;
+        }
+
+        .alert-message {
+            font-size: 0.78rem;
+            color: var(--text-secondary-light);
+        }
+
+        body.dark .alert-message {
+            color: var(--text-secondary-dark);
+        }
+
+        /* =============== MAP =============== */
+        .map-shell {
+            background: var(--card-light);
+            border-radius: 20px;
+            border: 1px solid var(--border-light);
+            padding: 1.2rem 1.3rem 1.1rem;
+            box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        body.dark .map-shell {
+            background: var(--card-dark);
+            border-color: var(--border-dark);
+            box-shadow: 0 18px 40px rgba(15, 23, 42, 0.8);
+        }
+
+        .map-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 0.8rem;
+            font-size: 0.85rem;
+            flex-wrap: wrap;
+        }
+
+        .map-header-left {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .map-dot {
+            width: 32px;
+            height: 32px;
+            border-radius: 999px;
+            background: #0f172a;
+            color: #e5e7eb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+        }
+
+        body.dark .map-dot {
+            background: #020617;
+        }
+
+        .map-header-left span {
+            font-size: 0.75rem;
+            color: var(--text-secondary-light);
+        }
+
+        body.dark .map-header-left span {
+            color: var(--text-secondary-dark);
+        }
+
+        .map-chip {
+            font-size: 0.7rem;
+            padding: 0.2rem 0.55rem;
+            border-radius: 999px;
+            background: rgba(15, 23, 42, 0.03);
+            border: 1px solid rgba(148, 163, 184, 0.5);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            white-space: nowrap;
+            cursor: pointer;
+        }
+
+        body.dark .map-chip {
+            background: var(--primary);
+            color: #f9fafb;
+            border-color: var(--primary);
+        }
+
+        .map-controls-right {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+            align-items: flex-end;
+            flex-wrap: wrap;
+        }
+
+        .map-search-box {
+            display: flex;
+            gap: 0.4rem;
+            align-items: center;
+            font-size: 0.75rem;
+        }
+
+        .map-search-input {
+            padding: 0.25rem 0.55rem;
+            border-radius: 999px;
+            border: 1px solid var(--border-light);
+            font-size: 0.75rem;
+            width: 160px;
+        }
+
+        body.dark .map-search-input {
+            background: #020617;
+            color: var(--text-dark);
+            border-color: var(--border-dark);
+        }
+
+        .map-search-btn {
+            border-radius: 999px;
+            border: none;
+            padding: 0.25rem 0.6rem;
+            font-size: 0.7rem;
+            background: var(--primary);
+            color: #f9fafb;
+            cursor: pointer;
+        }
+
+        #weatherMap {
+            width: 100%;
+            height: 480px;
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .map-legend-strip {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 0.7rem;
+            font-size: 0.7rem;
+            flex-wrap: wrap;
+        }
+
+        .map-legend-left {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+        }
+
+        /* =============== LOADING & ERROR =============== */
+        .loading {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: var(--text-secondary-light);
+        }
+
+        .error {
+            text-align: center;
+            padding: 2.2rem 1.4rem;
+            color: var(--danger);
+            background: var(--card-light);
+            border-radius: 16px;
+            margin: 1.5rem 0;
+            border: 1px solid rgba(248, 113, 113, 0.4);
+        }
+
+        body.dark .error {
+            background: var(--card-dark);
+        }
+
+        @media (max-width: 768px) {
+            #weatherMap {
+                height: 360px;
+            }
+        }
+
+        /* =============== AI ADVICE PANEL =============== */
+        .ai-advice-panel {
+            position: fixed;
+            right: 1.5rem;
+            bottom: 1.5rem;
+            width: 320px;
+            max-height: 65vh;
+            background: var(--card-light);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
+            border-radius: 14px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            z-index: 9999;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+        }
+
+        body.dark .ai-advice-panel {
+            background: var(--card-dark);
+            border-color: var(--border-dark);
+        }
+
+        .ai-advice-panel.hidden {
+            display: none;
+        }
+
+        .ai-advice-header {
+            padding: 0.75rem 0.9rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.5rem;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.35);
+            background: rgba(16, 185, 129, 0.08);
+        }
+
+        body.dark .ai-advice-header {
+            background: rgba(16, 185, 129, 0.2);
+        }
+
+        .ai-close-btn {
+            border: none;
+            background: transparent;
+            font-size: 1.2rem;
+            cursor: pointer;
+            line-height: 1;
+            color: inherit;
+        }
+
+        .ai-advice-messages {
+            padding: 0.75rem;
+            overflow-y: auto;
+            flex: 1;
+            font-size: 0.85rem;
+            background: rgba(0, 0, 0, 0.01);
+        }
+
+        body.dark .ai-advice-messages {
+            background: rgba(15, 23, 42, 0.8);
+        }
+
+        .ai-msg {
+            max-width: 90%;
+            margin-bottom: 0.4rem;
+            padding: 0.45rem 0.6rem;
+            border-radius: 10px;
+        }
+
+        .ai-msg-user {
+            margin-left: auto;
+            background: #10b981;
+            color: white;
+            border-bottom-right-radius: 2px;
+        }
+
+        .ai-msg-bot {
+            margin-right: auto;
+            background: #f1f5f9;
+            border-bottom-left-radius: 2px;
+        }
+
+        body.dark .ai-msg-bot {
+            background: #0f172a;
+            color: #e5e7eb;
+        }
+
+        .ai-advice-input-row {
+            padding: 0.55rem;
+            display: flex;
+            gap: 0.4rem;
+            border-top: 1px solid rgba(148, 163, 184, 0.35);
+            background: #f8fafc;
+        }
+
+        body.dark .ai-advice-input-row {
+            background: #020617;
+            border-top-color: var(--border-dark);
+        }
+
+        .ai-advice-input-row input {
+            flex: 1;
+            padding: 0.45rem 0.6rem;
+            border-radius: 8px;
+            border: 1px solid rgba(148, 163, 184, 0.6);
+            font-size: 0.85rem;
+        }
+
+        body.dark .ai-advice-input-row input {
+            background: #020617;
+            color: #f9fafb;
+            border-color: var(--border-dark);
+        }
+
+        .ai-advice-input-row button {
+            padding: 0.45rem 0.7rem;
+            border-radius: 8px;
+            border: none;
+            background: #10b981;
+            color: #fff;
+            font-size: 0.85rem;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .ai-advice-input-row button:disabled {
+            opacity: 0.6;
+            cursor: default;
+        }
+
+        /* Malayalam font scaling so things don't blow up */
+        body.lang-ml {
+            font-size: 0.9rem;
+            line-height: 1.35;
+        }
+
+        body.lang-ml .sidebar .nav-item span {
+            font-size: 0.85rem;
+        }
+
+        body.lang-ml .simple-title span {
+            font-size: 1.1rem;
+        }
+
+        body.lang-ml .today-title-row h2 {
+            font-size: 0.95rem;
+        }
+
+        body.lang-ml .section-title-row h2 {
+            font-size: 0.95rem;
+        }
+
+        #savedAddressesPanel .map-chip {
+            font-size: 0.75rem;
+            padding: 6px 8px;
+            border-radius: 8px;
+        }
+
+        #savedAddressesPanel button.map-chip {
+            background: var(--primary);
+            color: #fff;
+            border: none;
+        }
+    </style>
+    <script src="config.js"></script>
+</head>
+
+<body>
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <img src="images/logo.png" alt="KrishiMitr Logo" class="logo-icon" />
+                <div class="logo-brand">
+                    <span class="logo-text-krishi">Krishi</span>
+                    <span class="logo-text-mitr">Mitr</span>
+                </div>
+            </div>
+        </div>
+        <div class="nav-menu">
+            <div class="nav-section">
+                <div class="nav-section-title" data-i18n="sidebar.mainMenu">Main Menu</div>
+                <a href="dashboard.html" class="nav-item">
+                    <i class="fas fa-home"></i>
+                    <span data-i18n="sidebar.dashboard">Dashboard</span>
+                </a>
+                <a href="ask-query.html" class="nav-item">
+                    <i class="fas fa-robot"></i>
+                    <span data-i18n="sidebar.askQuery">Ask Query</span>
+                </a>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title" data-i18n="sidebar.tools">Tools</div>
+                <a href="crops.html" class="nav-item">
+                    <i class="fa-solid fa-carrot"></i>
+                    <span data-i18n="sidebar.yourcrop">Your Crops</span>
+                </a>
+                <a href="crop-diagnosis.html" class="nav-item">
+                    <i class="fa-solid fa-briefcase-medical"></i>
+                    <span data-i18n="sidebar.cropDiagnosis">Crop Diagnosis</span>
+                </a>
+                <a href="weather-alerts.html" class="nav-item">
+                    <i class="fas fa-cloud-sun"></i>
+                    <span data-i18n="sidebar.weatherAlerts">Weather & Alerts</span>
+                </a>
+                <a href="Schemes.html" class="nav-item">
+                    <i class="fa-solid fa-building-ngo"></i>
+                    <span data-i18n="sidebar.schemes">Govt Schemes</span>
+                </a>
+                <a href="helpline.html" class="nav-item">
+                    <i class="fa-solid fa-phone"></i>
+                    <span data-i18n="sidebar.helpline">Helpline Number</span>
+                </a>
+                <a href="smart-farming.html" class="nav-item">
+                    <i class="fa-solid fa-briefcase"></i>
+                    <span data-i18n="sidebar.agriSwasthya">Agri Swasthya</span>
+                </a>
+                <a href="market-prices.html" class="nav-item">
+                    <i class="fa-solid fa-dollar-sign"></i>
+                    <span data-i18n="sidebar.marketPrices">Market Prices</span>
+                </a>
+                <a href="iot.html" class="nav-item">
+                    <i class="fa-solid fa-screwdriver-wrench"></i>
+                    <span data-i18n="sidebar.IOT">IOT</span>
+                </a>
+                <a href="satellite.html" class="nav-item">
+                    <i class="fa-solid fa-satellite"></i>
+                    <span data-i18n="sidebar.satellite">Satellite Monitoring</span>
+                </a>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title" data-i18n="sidebar.communitySection">Community</div>
+                <a href="farmer-community.html" class="nav-item">
+                    <i class="fas fa-users"></i>
+                    <span data-i18n="sidebar.community">Community</span>
+                </a>
+                <a href="profile.html" class="nav-item">
+                    <i class="fas fa-user"></i>
+                    <span data-i18n="sidebar.profile">Profile</span>
+                </a>
+            </div>
+        </div>
+        <div class="sidebar-footer">
+            <div id="userInfo" class="user-info">
+                <div style="font-weight:600;" data-i18n="sidebar.user.loadingTitle">Loading...</div>
+                <div style="font-size:0.8rem;opacity:0.8;" data-i18n="sidebar.user.loadingSubtitle">
+                    Fetching profile
+                </div>
+            </div>
+            <!-- ======= /Pin controls (ADDED) ======= -->
+
+            <button class="theme-toggle-sidebar" onclick="toggleTheme()">
+                <i class="fas fa-sun"></i>
+                <span data-i18n="sidebar.toggleTheme">Toggle Theme</span>
+            </button>
+            <button id="logoutBtn" class="logout-btn">
+                <i class="fas fa-sign-out-alt"></i>
+                <span data-i18n="sidebar.logout">Logout</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="simple-topbar">
+            <div class="topbar-left">
+                <button class="mobile-menu-btn" onclick="toggleSidebar()">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1 class="simple-title">
+                    <img src="images/weather-alerts.png" alt="Weather & Alerts" class="topbar-logo">
+                    <span data-i18n="weather.title">Weather & Alerts</span>
+                </h1>
+            </div>
+            <div class="topbar-right">
+                <input type="text" id="locationInput" class="location-selector"
+                    placeholder="Enter location (e.g., Kochi, Kerala)" value="Kochi, Kerala"
+                    data-i18n-placeholder="weather.location.placeholder">
+                <button onclick="refreshWeather()"
+                    style="background: var(--primary); color: white; border: none; padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer;">
+                    <i class="fas fa-sync-alt"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="content-area">
+            <!-- Loading State -->
+            <div id="loadingState" class="loading">
+                <i class="fas fa-spinner fa-spin" style="font-size: 2rem; margin-bottom: 1rem;"></i>
+                <p data-i18n="weather.loading.text">Loading weather data...</p>
+            </div>
+
+            <!-- Error State -->
+            <div id="errorState" class="error" style="display: none;">
+                <i class="fas fa-exclamation-triangle" style="font-size: 2rem; margin-bottom: 0.7rem;"></i>
+                <h3 style="margin-bottom:0.3rem;" data-i18n="weather.error.title">Failed to load weather data</h3>
+                <p id="errorMessage" style="font-size:0.85rem;"></p>
+                <button onclick="refreshWeather()"
+                    style="margin-top: 1rem; background: var(--primary); color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 8px; cursor: pointer; font-size:0.85rem;"
+                    data-i18n="weather.error.retry">
+                    Try Again
+                </button>
+            </div>
+
+            <!-- Weather Content -->
+            <div id="weatherContent" class="weather-layout" style="display: none;">
+                <!-- TOP ROW -->
+                <section class="top-weather-row">
+                    <!-- Today summary -->
+                    <div class="today-summary-card">
+                        <div class="today-main-temp">
+                            <div id="weatherTemp" class="today-temp-value">--°C</div>
+                            <div id="weatherCondition" class="today-condition">Loading...</div>
+                            <div id="weatherLocation" class="today-location">--</div>
+                        </div>
+                        <div class="today-meta">
+                            <div class="today-title-row">
+                                <h2 data-i18n="weather.today.title">Today in your village</h2>
+                                <span class="today-badge">
+                                    <i class="fas fa-circle" style="font-size:0.5rem; color:#22c55e;"></i>
+                                    <span data-i18n="weather.today.badge">Live from KrishiMitr</span>
+                                </span>
+                            </div>
+                            <div class="today-stats-row">
+                                <div class="mini-stat">
+                                    <span class="mini-label" data-i18n="weather.today.humidity">Humidity</span>
+                                    <span class="mini-value" id="humidity">--%</span>
+                                </div>
+                                <div class="mini-stat">
+                                    <span class="mini-label" data-i18n="weather.today.wind">Wind</span>
+                                    <span class="mini-value" id="windSpeed">-- km/h</span>
+                                </div>
+                                <div class="mini-stat">
+                                    <span class="mini-label" data-i18n="weather.today.feelsLike">Feels like</span>
+                                    <span class="mini-value" id="feelsLike">--°C</span>
+                                </div>
+                                <div class="mini-stat">
+                                    <span class="mini-label" data-i18n="weather.today.visibility">Visibility</span>
+                                    <span class="mini-value" id="visibility">-- km</span>
+                                </div>
+                                <div class="mini-stat">
+                                    <span class="mini-label" data-i18n="weather.today.pressure">Pressure</span>
+                                    <span class="mini-value" id="pressure">-- hPa</span>
+                                </div>
+                                <div class="mini-stat">
+                                    <span class="mini-label" data-i18n="weather.today.sky">Sky</span>
+                                    <span class="mini-value"><i id="mainWeatherIcon" class="fas fa-sun"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Today advice -->
+                    <div class="today-advice-card">
+                        <div class="today-advice-header">
+                            <h3 data-i18n="weather.todayAdvice.title">Today's weather-based advice</h3>
+                            <span id="todayAdviceTag" class="today-advice-tag-chip tag-normal">
+                                <i class="fas fa-seedling"></i>
+                                <span data-i18n="weather.todayAdvice.tag.normal">Normal farming day</span>
+                            </span>
+                        </div>
+                        <div class="today-advice-body">
+                            <div class="today-advice-image">
+                                <img id="todayFarmerImage" src="images/farmer-normal.png" alt="Farmer"
+                                    class="today-farmer-img">
+                                <div class="today-advice-note" data-i18n="weather.todayAdvice.note">
+                                    Generated automatically from live weather & forecast.
+                                </div>
+                            </div>
+                            <div id="todayAdvice" class="today-advice-list">
+                                <!-- advice bullets inserted here -->
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- MIDDLE ROW: FORECAST + ALERTS -->
+                <section class="middle-row">
+                    <!-- Forecast -->
+                    <div class="forecast-section">
+                        <div class="section-title-row">
+                            <div>
+                                <h2 data-i18n="weather.forecast.title">Next 5 days forecast</h2>
+                                <div class="section-sub" data-i18n="weather.forecast.sub">
+                                    Use colours: green = good, yellow = average, red = risky
+                                </div>
+                            </div>
+                        </div>
+                        <div id="forecastGrid" class="forecast-grid"></div>
+                    </div>
+
+                    <!-- Alerts -->
+                    <div class="alerts-section">
+                        <div class="alerts-header">
+                            <div>
+                                <h2 style="font-size:1rem; font-weight:700;" data-i18n="weather.alerts.title">
+                                    Weather alerts
+                                </h2>
+                                <div class="section-sub" data-i18n="weather.alerts.sub">
+                                    We highlight risky days for your crop
+                                </div>
+                            </div>
+                            <div class="alerts-toggle" onclick="toggleAlerts()">
+                                <span data-i18n="weather.alerts.sms">SMS alerts</span>
+                                <div id="alertsToggle" class="toggle-switch"></div>
+                            </div>
+                        </div>
+                        <div id="alertsGrid" class="alerts-grid"></div>
+                    </div>
+                </section>
+
+                <!-- MAP ROW -->
+                <section class="map-shell">
+                    <div class="map-header">
+                        <div class="map-header-left">
+                            <div class="map-dot">
+                                <i class="fas fa-map-marked-alt"></i>
+                            </div>
+                            <div>
+                                <div style="font-size:0.9rem; font-weight:600;" data-i18n="weather.map.title">
+                                    Kerala weather on map
+                                </div>
+                                <span data-i18n="weather.map.subtitle">
+                                    Pan, zoom & click on map to get AI-based advice for that spot
+                                </span>
+                            </div>
+                        </div>
+                        <div class="map-controls-right">
+                            <div class="map-search-box">
+                                <input type="text" id="mapSearchInput" class="map-search-input"
+                                    placeholder="Search village / town"
+                                    data-i18n-placeholder="weather.map.searchPlaceholder" />
+                                <button class="map-search-btn" onclick="searchOnMap()">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </div>
+                            <div style="display:flex; gap:0.4rem; flex-wrap:wrap; justify-content:flex-end;">
+                                <button type="button" class="map-chip map-layer-chip active" data-layer="rain"
+                                    onclick="toggleMapLayer('rain')">
+                                    <i class="fas fa-cloud-rain"></i>
+                                    <span data-i18n="weather.map.layer.rain">Rain</span>
+                                </button>
+                                <button type="button" class="map-chip map-layer-chip active" data-layer="clouds"
+                                    onclick="toggleMapLayer('clouds')">
+                                    <i class="fas fa-cloud"></i>
+                                    <span data-i18n="weather.map.layer.clouds">Clouds</span>
+                                </button>
+                                <button type="button" class="map-chip map-layer-chip" data-layer="temp"
+                                    onclick="toggleMapLayer('temp')">
+                                    <i class="fas fa-temperature-high"></i>
+                                    <span data-i18n="weather.map.layer.temp">Temp</span>
+                                </button>
+                                <button type="button" class="map-chip map-layer-chip" data-layer="storm"
+                                    onclick="toggleMapLayer('storm')">
+                                    <i class="fas fa-bolt"></i>
+                                    <span data-i18n="weather.map.layer.storm">Storm / Pressure</span>
+                                </button>
+                                <button type="button" class="map-chip map-layer-chip" data-layer="soil"
+                                    onclick="toggleMapLayer('soil')">
+                                    <i class="fas fa-seedling"></i>
+                                    <span data-i18n="weather.map.layer.soil">Soil (0–10 cm)</span>
+                                </button>
+                                <button type="button" class="map-chip map-layer-chip" data-layer="wind"
+                                    onclick="toggleMapLayer('wind')">
+                                    <i class="fas fa-wind"></i>
+                                    <span data-i18n="weather.map.layer.wind">Wind</span>
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+                    <!-- ADD: Saved Addresses button & list toggle -->
+                    <div style="display:flex; flex-direction:column; align-items:flex-end; gap:0.4rem; margin-top:6px;">
+                        <button id="toggleAddressesBtn" class="map-chip" title="Saved addresses" type="button">
+                            <i class="fas fa-bookmark"></i> <span>Addresses</span>
+                        </button>
+
+                        <!-- Addresses list dropdown (hidden by default) -->
+                        <div id="savedAddressesPanel" style="display:none; width:260px; max-height:280px; overflow:auto; margin-top:6px; 
+       background:var(--card-light); border-radius:10px; border:1px solid var(--border-light); padding:8px;">
+                            <div
+                                style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                                <strong>Saved addresses</strong>
+                                <button id="addCurrentBtn" class="map-chip" style="padding:6px 8px;">Save here</button>
+                            </div>
+                            <div id="savedAddressesList" style="display:flex; flex-direction:column; gap:6px;">
+                                <!-- entries appended here -->
+                            </div>
+                            <div style="font-size:0.8rem; opacity:0.8; margin-top:8px;">
+                                <small>Saved locally if no server is available.</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="weatherMap"></div>
+
+                    <div class="map-legend-strip">
+                        <div class="map-legend-left">
+                            <span class="map-chip">
+                                <i class="fas fa-circle"></i>
+                                <span data-i18n="weather.map.legend.temp">
+                                    Circle = today's temperature at your village
+                                </span>
+                            </span>
+                            <span class="map-chip">
+                                <i class="fas fa-cloud-rain"></i>
+                                <span data-i18n="weather.map.legend.rain">
+                                    Darker blue = heavier rainfall
+                                </span>
+                            </span>
+                        </div>
+                        <span class="map-chip">
+                            <i class="fas fa-hand-pointer"></i>
+                            <span data-i18n="weather.map.legend.action">
+                                Drag, zoom & click on map to ask AI about that area
+                            </span>
+                        </span>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <!-- AI Advice Panel -->
+    <div id="aiAdvicePanel" class="ai-advice-panel hidden">
+        <div class="ai-advice-header">
+            <div>
+                <div style="font-weight:600; font-size:0.95rem;" data-i18n="weather.ai.title">
+                    AI Farming Assistant
+                </div>
+                <div id="aiLocationLabel" style="font-size:0.8rem; opacity:0.8;" data-i18n="weather.ai.locationLabel">
+                    Click on the map to select a location
+                </div>
+            </div>
+            <button id="aiPanelCloseBtn" class="ai-close-btn">&times;</button>
+        </div>
+
+        <div id="aiAdviceMessages" class="ai-advice-messages">
+            <!-- Messages will be appended here -->
+        </div>
+
+        <div class="ai-advice-input-row">
+            <input type="text" id="aiAdviceInput" placeholder="Ask about irrigation, spraying, sowing, etc..."
+                data-i18n-placeholder="weather.ai.inputPlaceholder" />
+            <button id="aiAdviceSendBtn" data-i18n="weather.ai.button">Ask</button>
+        </div>
+    </div>
+
+    <!-- Language sync script -->
+    <script>
+        // ===================== ADDRESS / PIN MANAGEMENT =====================
+        // Storage: tries server endpoints, falls back to localStorage
+        const ADDR_STORAGE_KEY = 'krishi_saved_addresses';
+        window._savedAddressMarkers = window._savedAddressMarkers || {}; // id -> marker
+
+        // Toggle addresses panel
+        document.addEventListener('click', (ev) => {
+            const btn = document.getElementById('toggleAddressesBtn');
+            if (!btn) return;
+            if (ev.target === btn || btn.contains(ev.target)) {
+                const panel = document.getElementById('savedAddressesPanel');
+                panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+                if (panel.style.display === 'block') renderSavedAddressList();
+                return;
+            }
+
+            // click outside -> close panel
+            const panel = document.getElementById('savedAddressesPanel');
+            if (panel && panel.style.display === 'block' && !panel.contains(ev.target) && ev.target !== btn) {
+                panel.style.display = 'none';
+            }
+        });
+
+        // Save current lastAiLocation (or center) when user clicks "Save here"
+        const addCurrentBtn = document.getElementById('addCurrentBtn');
+        if (addCurrentBtn) {
+            addCurrentBtn.addEventListener('click', async () => {
+                // if user clicked map before, lastAiLocation exists
+                let latlon = lastAiLocation;
+                if (!latlon && window.weatherMap) {
+                    const c = window.weatherMap.getCenter();
+                    latlon = { lat: c.lat, lon: c.lng };
+                }
+                if (!latlon) {
+                    alert('Please click on the map to select a location first.');
+                    return;
+                }
+
+                const name = prompt('Enter a name for this address (village / field name):', '');
+                const addr = {
+                    id: generateId(),
+                    name: name || `Pin ${new Date().toLocaleString()}`,
+                    lat: latlon.lat,
+                    lon: latlon.lon,
+                    createdAt: new Date().toISOString()
+                };
+
+                try {
+                    await saveAddress(addr);
+                    addAddressMarker(addr);
+                    renderSavedAddressList();
+                    alert('Address saved.');
+                } catch (err) {
+                    console.error('Failed to save address:', err);
+                    alert('Failed to save address locally.');
+                }
+            });
+        }
+
+        // Generate short id
+        function generateId() {
+            return 'a_' + Math.random().toString(36).slice(2, 9);
+        }
+
+        // Add marker on map for an address (keeps reference for deletion)
+        function addAddressMarker(addr) {
+            if (!window.weatherMap) return;
+            // remove existing marker with same id
+            if (window._savedAddressMarkers[addr.id]) {
+                try { window.weatherMap.removeLayer(window._savedAddressMarkers[addr.id]); } catch (e) { }
+            }
+
+            const m = L.marker([addr.lat, addr.lon], { title: addr.name, riseOnHover: true })
+                .addTo(window.weatherMap)
+                .bindPopup(`<strong>${escapeHtml(addr.name)}</strong><br/>${addr.lat.toFixed(5)}, ${addr.lon.toFixed(5)}<br/>
+      <button onclick="focusAndOpenPopup('${addr.id}')">Open</button>
+      <button onclick="deleteAddress('${addr.id}')">Delete</button>`);
+
+            window._savedAddressMarkers[addr.id] = m;
+        }
+
+        // Helper to escape HTML in popups
+        function escapeHtml(str) {
+            return (str + '').replace(/[&<>"']/g, (m) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]));
+        }
+
+        // Focus a saved address marker and open popup
+        function focusAndOpenPopup(id) {
+            const m = window._savedAddressMarkers[id];
+            if (!m || !window.weatherMap) return;
+            window.weatherMap.setView(m.getLatLng(), Math.max(window.weatherMap.getZoom(), 12));
+            m.openPopup();
+        }
+
+        // Remove marker from map + storage
+        async function deleteAddress(id) {
+            if (!confirm('Delete this saved address?')) return;
+            try {
+                // try server delete
+                if (typeof fetch === 'function') {
+                    try {
+                        const res = await fetch(`/api/addresses/${id}`, { method: 'DELETE', credentials: 'include' });
+                        if (res.ok) {
+                            // success
+                        } else {
+                            // server not available or returned error — fall back to local
+                            console.warn('Server delete returned', res.status);
+                        }
+                    } catch (e) {
+                        // network failure -> local
+                        console.warn('Server delete failed, using localStorage fallback', e.message);
+                    }
+                }
+
+                // local deletion
+                const saved = loadSavedAddressesFromLocal();
+                const filtered = saved.filter(a => a.id !== id);
+                localStorage.setItem(ADDR_STORAGE_KEY, JSON.stringify(filtered));
+                // remove marker
+                if (window._savedAddressMarkers[id]) {
+                    try { window.weatherMap.removeLayer(window._savedAddressMarkers[id]); } catch (e) { }
+                    delete window._savedAddressMarkers[id];
+                }
+                renderSavedAddressList();
+            } catch (err) {
+                console.error(err);
+                alert('Failed to delete address.');
+            }
+        }
+
+        // Render saved addresses list into panel
+        function renderSavedAddressList() {
+            const container = document.getElementById('savedAddressesList');
+            if (!container) return;
+            container.innerHTML = ''; // clear
+
+            loadSavedAddresses().then(list => {
+                if (!list || list.length === 0) {
+                    container.innerHTML = '<div style="opacity:0.8;">No saved addresses yet.</div>';
+                    return;
+                }
+
+                list.forEach(addr => {
+                    // ensure marker exists
+                    addAddressMarker(addr);
+
+                    const row = document.createElement('div');
+                    row.style.display = 'flex';
+                    row.style.justifyContent = 'space-between';
+                    row.style.alignItems = 'center';
+                    row.style.padding = '6px';
+                    row.style.borderRadius = '8px';
+                    row.style.border = '1px solid rgba(0,0,0,0.04)';
+                    row.style.background = 'transparent';
+
+                    const left = document.createElement('div');
+                    left.style.cursor = 'pointer';
+                    left.innerHTML = `<div style="font-weight:600;">${escapeHtml(addr.name)}</div>
+                        <div style="font-size:0.78rem; opacity:0.8;">${addr.lat.toFixed(4)}, ${addr.lon.toFixed(4)}</div>`;
+                    left.addEventListener('click', () => {
+                        // pan to marker and open
+                        const m = window._savedAddressMarkers[addr.id];
+                        if (m) {
+                            window.weatherMap.setView(m.getLatLng(), 12);
+                            m.openPopup();
+                        } else {
+                            addAddressMarker(addr);
+                            window.weatherMap.setView([addr.lat, addr.lon], 12);
+                        }
+                    });
+
+                    const right = document.createElement('div');
+                    right.style.display = 'flex';
+                    right.style.gap = '6px';
+                    const btnFocus = document.createElement('button');
+                    btnFocus.className = 'map-chip';
+                    btnFocus.style.padding = '6px 8px';
+                    btnFocus.textContent = 'Open';
+                    btnFocus.addEventListener('click', (ev) => {
+                        ev.stopPropagation();
+                        const m = window._savedAddressMarkers[addr.id];
+                        if (m) {
+                            window.weatherMap.setView(m.getLatLng(), 12);
+                            m.openPopup();
+                        }
+                    });
+
+                    const btnDel = document.createElement('button');
+                    btnDel.className = 'map-chip';
+                    btnDel.style.padding = '6px 8px';
+                    btnDel.textContent = 'Delete';
+                    btnDel.addEventListener('click', (ev) => {
+                        ev.stopPropagation();
+                        deleteAddress(addr.id);
+                    });
+
+                    right.appendChild(btnFocus);
+                    right.appendChild(btnDel);
+
+                    row.appendChild(left);
+                    row.appendChild(right);
+
+                    container.appendChild(row);
+                });
+            });
+        }
+
+        // Load addresses (tries server; else localStorage)
+        async function loadSavedAddresses() {
+            // try server endpoint GET /api/addresses
+            try {
+                const res = await fetch(API_BASE_URL + '/api/addresses', { method: 'GET', credentials: 'include' });
+                if (res.ok) {
+                    const json = await res.json();
+                    // normalize: ensure id, name, lat, lon
+                    return (json || []).map(a => ({
+                        id: a.id || generateId(),
+                        name: a.name || (a.address || 'Saved address'),
+                        lat: a.lat || a.latitude,
+                        lon: a.lon || a.longitude,
+                        createdAt: a.createdAt || a.created_at || new Date().toISOString()
+                    })).filter(a => typeof a.lat === 'number' && typeof a.lon === 'number');
+                }
+            } catch (e) {
+                // network/server not present
+                // console.warn('Server addresses not available', e.message);
+            }
+
+            // fallback to localStorage
+            return loadSavedAddressesFromLocal();
+        }
+
+        function loadSavedAddressesFromLocal() {
+            try {
+                const raw = localStorage.getItem(ADDR_STORAGE_KEY);
+                if (!raw) return [];
+                const parsed = JSON.parse(raw);
+                if (!Array.isArray(parsed)) return [];
+                return parsed;
+            } catch (e) {
+                console.error('Failed to load addresses from localStorage', e);
+                return [];
+            }
+        }
+
+        // Save address (tries server POST /api/addresses, otherwise localStorage)
+        async function saveAddress(addr) {
+            // try server
+            try {
+                const res = await fetch(API_BASE_URL + '/api/addresses', {
+                    method: 'POST',
+                    credentials: 'include',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(addr)
+                });
+                if (res.ok) {
+                    const saved = await res.json();
+                    // if server assigns id, use it. keep marker id mapping.
+                    addr.id = saved.id || addr.id;
+                    // also keep local fallback copy
+                    const localSaved = loadSavedAddressesFromLocal();
+                    localSaved.push(addr);
+                    localStorage.setItem(ADDR_STORAGE_KEY, JSON.stringify(localSaved));
+                    return addr;
+                } else {
+                    // server returned error, fall back to local save
+                    console.warn('Server returned', res.status);
+                }
+            } catch (e) {
+                // server not reachable -> fallback
+                console.warn('Server save failed, fallback to localStorage', e && e.message);
+            }
+
+            // local save
+            const list = loadSavedAddressesFromLocal();
+            list.push(addr);
+            localStorage.setItem(ADDR_STORAGE_KEY, JSON.stringify(list));
+            return addr;
+        }
+
+        // On map init, load existing addresses and render markers
+        async function initSavedAddressesOnMap() {
+            const list = await loadSavedAddresses();
+            list.forEach(a => addAddressMarker(a));
+            // pre-render list if panel open
+            const panel = document.getElementById('savedAddressesPanel');
+            if (panel && panel.style.display === 'block') renderSavedAddressList();
+        }
+
+        // Make sure we call initSavedAddressesOnMap after map is created
+        // Insert a safe hook: if initWeatherMap runs later, call from there.
+        // Otherwise call once with small delay if map exists.
+        (function attachSavedAddressesLoader() {
+            const origInit = window.initWeatherMap;
+            if (typeof origInit === 'function') {
+                // Wrap existing initWeatherMap so saved addresses load automatically
+                window.initWeatherMap = function (data) {
+                    try { origInit(data); } catch (e) { console.error(e); }
+                    // now init saved addresses
+                    setTimeout(() => initSavedAddressesOnMap(), 300);
+                };
+            } else {
+                // fallback: try to load in 1s if map created by other means
+                setTimeout(() => initSavedAddressesOnMap(), 1000);
+            }
+        })();
+
+        const translations = {
+            en: {
+                // Sidebar / global
+                "sidebar.mainMenu": "Main Menu",
+                "sidebar.dashboard": "Dashboard",
+                "sidebar.askQuery": "Ask Query",
+                "sidebar.tools": "Tools",
+                "sidebar.cropDiagnosis": "Crop Diagnosis",
+                "sidebar.weatherAlerts": "Weather & Alerts",
+                "sidebar.schemes": "Govt Schemes",
+                "sidebar.helpline": "Helpline Number",
+                "sidebar.agriSwasthya": "Agri Swasthya",
+                "sidebar.marketPrices": "Market Prices",
+                "sidebar.communitySection": "Community",
+                "sidebar.community": "Community",
+                "sidebar.profile": "Profile",
+                "sidebar.toggleTheme": "Toggle Theme",
+                "sidebar.logout": "Logout",
+                "sidebar.user.loadingTitle": "Loading...",
+                "sidebar.user.loadingSubtitle": "Fetching profile",
+
+                // Weather page
+                "weather.title": "Weather & Alerts",
+                "weather.location.placeholder": "Enter location (e.g., Kochi, Kerala)",
+                "weather.loading.text": "Loading weather data...",
+                "weather.error.title": "Failed to load weather data",
+                "weather.error.retry": "Try Again",
+
+                "weather.today.title": "Today in your village",
+                "weather.today.badge": "Live from KrishiMitr",
+                "weather.today.humidity": "Humidity",
+                "weather.today.wind": "Wind",
+                "weather.today.feelsLike": "Feels like",
+                "weather.today.visibility": "Visibility",
+                "weather.today.pressure": "Pressure",
+                "weather.today.sky": "Sky",
+
+                "weather.todayAdvice.title": "Today's weather-based advice",
+                "weather.todayAdvice.tag.normal": "Normal farming day",
+                "weather.todayAdvice.tag.good": "Very good conditions",
+                "weather.todayAdvice.tag.bad": "Risky for field work",
+                "weather.todayAdvice.note": "Generated automatically from live weather & forecast.",
+
+                "weather.forecast.title": "Next 5 days forecast",
+                "weather.forecast.sub": "Use colours: green = good, yellow = average, red = risky",
+
+                "weather.alerts.title": "Weather alerts",
+                "weather.alerts.sub": "We highlight risky days for your crop",
+                "weather.alerts.sms": "SMS alerts",
+
+                "weather.map.title": "Kerala weather on map",
+                "weather.map.subtitle": "Pan, zoom & click on map to get AI-based advice for that spot",
+                "weather.map.searchPlaceholder": "Search village / town",
+                "weather.map.layer.rain": "Rain",
+                "weather.map.layer.clouds": "Clouds",
+                "weather.map.layer.temp": "Temp",
+                "weather.map.layer.storm": "Storm / Pressure",
+                "weather.map.layer.soil": "Soil (0–10 cm)",
+                "weather.map.layer.wind": "Wind",
+                "weather.map.legend.temp": "Circle = today's temperature at your village",
+                "weather.map.legend.rain": "Darker blue = heavier rainfall",
+                "weather.map.legend.action": "Drag, zoom & click on map to ask AI about that area",
+
+                "weather.ai.title": "AI Farming Assistant",
+                "weather.ai.locationLabel": "Click on the map to select a location",
+                "weather.ai.inputPlaceholder": "Ask about irrigation, spraying, sowing, etc...",
+                "weather.ai.button": "Ask"
+            },
+            ml: {
+                // Sidebar / global
+                "sidebar.mainMenu": "പ്രധാന മെനു",
+                "sidebar.dashboard": "ഡാഷ്ബോർഡ്",
+                "sidebar.askQuery": "ചോദ്യം ചോദിക്കുക",
+                "sidebar.tools": "ഉപകരണങ്ങൾ",
+                "sidebar.cropDiagnosis": "വിള രോഗനിർണയം",
+                "sidebar.weatherAlerts": "കാലാവസ്ഥ & മുന്നറിയിപ്പുകൾ",
+                "sidebar.schemes": "സർക്കാർ പദ്ധതികൾ",
+                "sidebar.helpline": "ഹെൽപ്‌ലൈൻ നമ്പർ",
+                "sidebar.agriSwasthya": "അഗ്രീ ആരോഗ്യം",
+                "sidebar.marketPrices": "ചന്ത വിലകൾ",
+                "sidebar.communitySection": "കമ്മ്യൂണിറ്റി",
+                "sidebar.community": "കർഷക സമുദായം",
+                "sidebar.profile": "പ്രൊഫൈൽ",
+                "sidebar.toggleTheme": "തീം മാറ്റുക",
+                "sidebar.logout": "ലോഗൗട്ട്",
+                "sidebar.user.loadingTitle": "ലോഡ് ചെയ്യുന്നു...",
+                "sidebar.user.loadingSubtitle": "പ്രൊഫൈൽ വിവരങ്ങൾ ലഭ്യമാക്കുന്നു",
+
+                // Weather page
+                "weather.title": "കാലാവസ്ഥ & മുന്നറിയിപ്പുകൾ",
+                "weather.location.placeholder": "സ്ഥലം ചേർക്കുക (ഉദാ: കൊച്ചി, കേരളം)",
+                "weather.loading.text": "കാലാവസ്ഥാ വിവരങ്ങൾ ലോഡ് ചെയ്യുന്നു...",
+                "weather.error.title": "കാലാവസ്ഥാ ഡാറ്റ ലഭ്യമാക്കാൻ കഴിഞ്ഞില്ല",
+                "weather.error.retry": "വീണ്ടും ശ്രമിക്കുക",
+
+                "weather.today.title": "ഇന്നത്തെ നിങ്ങളുടെ പ്രദേശത്തെ കാലാവസ്ഥ",
+                "weather.today.badge": "ക്രിഷിമിത്രയിൽ നിന്നും തത്സമയ ഡാറ്റ",
+                "weather.today.humidity": "നനവ് (Humidity)",
+                "weather.today.wind": "കാറ്റ് (Wind)",
+                "weather.today.feelsLike": "തോന്നുന്ന താപനില",
+                "weather.today.visibility": "കാണുന്ന ദൂരം",
+                "weather.today.pressure": "മർദ്ദം",
+                "weather.today.sky": "ആകാശം",
+
+                "weather.todayAdvice.title": "ഇന്നത്തെ കാലാവസ്ഥയെ അടിസ്ഥാനമാക്കി കർഷക നിർദ്ദേശങ്ങൾ",
+                "weather.todayAdvice.tag.normal": "സാധാരണ കൃഷി ദിവസം",
+                "weather.todayAdvice.tag.good": "വളരെ നല്ല കൃഷി സാഹചര്യങ്ങൾ",
+                "weather.todayAdvice.tag.bad": "വയലിൽ ജോലിക്ക് അപകടസാധ്യത",
+                "weather.todayAdvice.note": "തത്സമയ കാലാവസ്ഥയും പ്രവചനവും ചേർത്ത് ഓട്ടോമാറ്റിക് ആയി തയ്യാറാക്കിയ നിർദ്ദേശങ്ങൾ.",
+
+                "weather.forecast.title": "അടുത്ത 5 ദിവസത്തെ കാലാവസ്ഥാ പ്രവചനം",
+                "weather.forecast.sub": "നിറങ്ങൾ ഉപയോഗിച്ച് മനസിലാക്കാം: പച്ച = നല്ലത്, മഞ്ഞ = ശരാശരി, ചുവപ്പ് = അപകടസാധ്യത",
+
+                "weather.alerts.title": "കാലാവസ്ഥ മുന്നറിയിപ്പുകൾ",
+                "weather.alerts.sub": "നിങ്ങളുടെ വിളയ്ക്കു അപകടസുമ്പോൾ ദിവസങ്ങൾ ഞങ്ങൾ ഹൈലൈറ്റ് ചെയ്യും",
+                "weather.alerts.sms": "എസ്സെംഎസ് അലർട്ടുകൾ",
+
+                "weather.map.title": "കേരളത്തിന്റെ കാലാവസ്ഥ – മാപ്പിലൂടെ",
+                "weather.map.subtitle": "മാപ്പിൽ പാൻ, സൂം, ക്ലിക്ക് ചെയ്ത് ആ ഭാഗത്തേക്കുള്ള എ.ഐ നിർദ്ദേശം നേടുക",
+                "weather.map.searchPlaceholder": "ഗ്രാമം / പട്ടണം തിരയുക",
+                "weather.map.layer.rain": "മഴ",
+                "weather.map.layer.clouds": "മേഘം",
+                "weather.map.layer.temp": "താപനില",
+                "weather.map.layer.storm": "ഇടിമിന്നൽ / മർദ്ദം",
+                "weather.map.layer.soil": "മണ്ണ് (0–10 സെം)",
+                "weather.map.layer.wind": "കാറ്റ്",
+                "weather.map.legend.temp": "ചക്രം = ഇന്ന് നിങ്ങളുടെ പഞ്ചായത്തിലെ താപനില",
+                "weather.map.legend.rain": "കൂടുതൽ ഇരുണ്ട നീല = കൂടുതൽ മഴ",
+                "weather.map.legend.action": "മാപ്പിൽ ഡ്രാഗ്, സൂം, ക്ലിക്ക് ചെയ്ത് ആ പ്രദേശത്തെ കുറിച്ച് എ.ഐയെ ചോദിക്കാം",
+
+                "weather.ai.title": "എ.ഐ കർഷക സഹായി",
+                "weather.ai.locationLabel": "മാപ്പിൽ ഒരു സ്ഥലം ക്ലിക്ക് ചെയ്ത് തെരഞ്ഞെടുക്കുക",
+                "weather.ai.inputPlaceholder": "നനവ്, പായൽ, വിത്ത് വിതയ്‌ക്കൽ, സ്പ്രേയിംഗ് എന്നിവയെ കുറിച്ച് ചോദിക്കൂ...",
+                "weather.ai.button": "ചോദിക്കുക"
+            }
+        };
+
+        function applyTranslations(lang) {
+            document.querySelectorAll("[data-i18n]").forEach(el => {
+                const key = el.getAttribute("data-i18n");
+                const val = translations[lang] && translations[lang][key];
+                if (val) el.textContent = val;
+            });
+
+            document.querySelectorAll("[data-i18n-placeholder]").forEach(el => {
+                const key = el.getAttribute("data-i18n-placeholder");
+                const val = translations[lang] && translations[lang][key];
+                if (val) el.placeholder = val;
+            });
+        }
+
+        function updateLangButtons(lang) {
+            // In case any shared header has .lang-btn
+            document.querySelectorAll(".lang-btn").forEach(btn => {
+                btn.classList.toggle("active", btn.dataset.lang === lang);
+            });
+        }
+
+        function setLanguage(lang) {
+            localStorage.setItem("appLanguage", lang);
+            applyTranslations(lang);
+            updateLangButtons(lang);
+            document.body.classList.toggle("lang-ml", lang === "ml");
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const savedLang = localStorage.getItem("appLanguage") || "en";
+            setLanguage(savedLang);
+        });
+    </script>
+</body>
+
+</html>
+
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<!-- MarkerCluster JS (ADDED) -->
+<script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+
+<script>
+    // ---------- NAVIGATION ACTIVE ----------
+    function setActiveNavigation() {
+        const currentPage = window.location.pathname.split('/').pop() || 'dashboard.html';
+        const navItems = document.querySelectorAll('.nav-item');
+
+        navItems.forEach(item => item.classList.remove('active'));
+
+        let activeSelector = '';
+        if (currentPage === 'dashboard.html' || currentPage === '' || currentPage === '/') {
+            activeSelector = 'a[href="dashboard.html"]';
+        } else if (currentPage === 'weather-alerts.html') {
+            activeSelector = 'a[href="weather-alerts.html"]';
+        } else if (currentPage === 'ask-query.html') {
+            activeSelector = 'a[href="ask-query.html"]';
+        } else if (currentPage === 'crop-diagnosis.html') {
+            activeSelector = 'a[href="crop-diagnosis.html"]';
+        } else if (currentPage === 'market-prices.html') {
+            activeSelector = 'a[href="market-prices.html"]';
+        }
+
+        if (activeSelector) {
+            const activeItem = document.querySelector(activeSelector);
+            if (activeItem) activeItem.classList.add('active');
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        setActiveNavigation();
+    });
+
+    // ---------- THEME / AUTH / USER ----------
+    let isDarkMode = localStorage.getItem('darkMode') === 'true';
+    let alertsEnabled = false;
+
+    function initializeTheme() {
+        if (isDarkMode) {
+            document.body.classList.add('dark');
+            const themeIcon = document.querySelector('.theme-toggle-sidebar i');
+            const themeText = document.querySelector('.theme-toggle-sidebar span');
+            if (themeIcon) themeIcon.className = 'fas fa-moon';
+            if (themeText) themeText.textContent = 'Light Mode';
+        }
+    }
+
+    function toggleTheme() {
+        isDarkMode = !isDarkMode;
+        document.body.classList.toggle('dark');
+        const themeIcon = document.querySelector('.theme-toggle-sidebar i');
+        const themeText = document.querySelector('.theme-toggle-sidebar span');
+        if (isDarkMode) {
+            if (themeIcon) themeIcon.className = 'fas fa-moon';
+            if (themeText) themeText.textContent = 'Light Mode';
+        } else {
+            if (themeIcon) themeIcon.className = 'fas fa-sun';
+            if (themeText) themeText.textContent = 'Toggle Theme';
+        }
+        localStorage.setItem('darkMode', isDarkMode);
+    }
+
+    async function checkAuth() {
+        try {
+            const res = await fetch(API_BASE_URL + '/api/user/check-auth', { credentials: 'include' });
+            if (!res.ok) throw new Error('Unauthorized');
+        } catch {
+            console.log('Demo mode - auth skipped');
+        }
+    }
+
+    async function loadUserInfo() {
+        try {
+            const res = await fetch(API_BASE_URL + '/api/user/profile', { credentials: 'include' });
+            if (res.ok) {
+                const user = await res.json();
+                document.getElementById('userInfo').innerHTML = `
+            <div style="font-weight: 600;">${user.username}</div>
+            <div style="font-size: 0.8rem; opacity: 0.8;">${user.email}</div>
+          `;
+                return;
+            }
+        } catch (error) {
+        }
+        document.getElementById('userInfo').innerHTML = `
+        <div style="font-weight: 600;">Demo User</div>
+        <div style="font-size: 0.8rem; opacity: 0.8;">farmer@kerala.gov.in</div>
+      `;
+    }
+
+    // ---------- WEATHER CONDITION HELPER ----------
+    function getWeatherCondition(code) {
+        const conditions = {
+            0: { desc: 'Clear sky', icon: 'sun' },
+            1: { desc: 'Mainly clear', icon: 'sun' },
+            2: { desc: 'Partly cloudy', icon: 'cloud-sun' },
+            3: { desc: 'Overcast', icon: 'cloud' },
+            61: { desc: 'Light rain', icon: 'cloud-rain' },
+            63: { desc: 'Moderate rain', icon: 'cloud-rain' },
+            65: { desc: 'Heavy rain', icon: 'cloud-showers-heavy' },
+            95: { desc: 'Thunderstorm', icon: 'bolt' }
+        };
+        return conditions[code] || { desc: 'Partly cloudy', icon: 'cloud-sun' };
+    }
+
+    // ---------- LOAD WEATHER DATA ----------
+    async function loadWeatherData() {
+        const location = document.getElementById('locationInput').value || 'Kochi, Kerala';
+
+        try {
+            console.log(`Loading weather for: ${location}`);
+            document.getElementById('loadingState').style.display = 'block';
+            document.getElementById('errorState').style.display = 'none';
+            document.getElementById('weatherContent').style.display = 'none';
+
+            const response = await fetch(`/api/weather/current/${encodeURIComponent(location)}`, {
+                credentials: 'include'
+            });
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(`HTTP ${response.status}: ${errorText}`);
+            }
+
+            const weatherData = await response.json();
+            console.log('Weather data received:', weatherData);
+
+            displayWeatherData(weatherData);
+
+            document.getElementById('loadingState').style.display = 'none';
+            document.getElementById('weatherContent').style.display = 'flex';
+
+        } catch (error) {
+            console.error('Weather loading error:', error);
+            document.getElementById('loadingState').style.display = 'none';
+            document.getElementById('errorState').style.display = 'block';
+            document.getElementById('errorMessage').textContent = error.message;
+        }
+    }
+
+    function displayWeatherData(data) {
+        console.log('Displaying weather data:', data);
+
+        const current = data.current;
+        const condition = getWeatherCondition(current.weather_code);
+
+        document.getElementById('weatherTemp').textContent = `${current.temp}°C`;
+        document.getElementById('weatherCondition').textContent = condition.desc;
+        document.getElementById('weatherLocation').textContent = `${data.location.name}, ${data.location.country}`;
+
+        document.getElementById('humidity').textContent = `${current.humidity}%`;
+        document.getElementById('windSpeed').textContent = `${current.wind_speed} km/h`;
+        document.getElementById('visibility').textContent = `${current.visibility} km`;
+        document.getElementById('feelsLike').textContent = `${current.feels_like}°C`;
+        document.getElementById('pressure').textContent = `${current.pressure} hPa`;
+        document.getElementById('mainWeatherIcon').className = `fas fa-${condition.icon}`;
+
+        displayForecast(data.forecast);
+        displayAlerts(data.alerts, data.forecast);
+        displayAiFarmingAdvice(data.forecast, current);
+        initWeatherMap(data);
+    }
+
+    // ---------- FORECAST (NEXT 5 REAL DAYS) ----------
+    function displayForecast(forecast) {
+        const forecastGrid = document.getElementById('forecastGrid');
+
+        if (!forecast || !forecast.temperature_2m_max || forecast.temperature_2m_max.length === 0) {
+            forecastGrid.innerHTML = '<p style="font-size:0.8rem; color:var(--text-secondary-light);">Forecast not available.</p>';
+            return;
+        }
+
+        const today = new Date();
+        const cards = [];
+        const totalDays = Math.min(6, forecast.temperature_2m_max.length); // we'll show indices 1..5
+
+        for (let i = 1; i < totalDays; i++) {
+            const labelDate = new Date();
+            labelDate.setDate(today.getDate() + i); // always future days from now
+
+            const dayName = labelDate.toLocaleDateString('en-IN', { weekday: 'short' });
+            const monthDay = labelDate.toLocaleDateString('en-IN', { month: 'short', day: 'numeric' });
+
+            const maxT = Math.round(forecast.temperature_2m_max[i]);
+            const minT = Math.round(forecast.temperature_2m_min[i]);
+            const code = forecast.weather_code[i];
+            const cond = getWeatherCondition(code);
+            const rain = forecast.precipitation_sum ? Math.round(forecast.precipitation_sum[i] || 0) : 0;
+
+            // Severity: red / yellow / green
+            let severityClass = 'forecast-good'; // green
+            if (maxT > 34 || rain > 20 || code >= 63) {
+                severityClass = 'forecast-bad';    // red
+            } else if (maxT > 32 || rain > 5 || code >= 61) {
+                severityClass = 'forecast-warn';   // yellow
+            }
+
+            cards.push(`
+          <div class="forecast-card ${severityClass}">
+            <div class="forecast-day">${dayName}</div>
+            <div class="forecast-date">${monthDay}</div>
+            <div class="forecast-main-row">
+              <div class="forecast-icon"><i class="fas fa-${cond.icon}"></i></div>
+              <div class="forecast-temp">${maxT}° / ${minT}°</div>
+            </div>
+            <div class="forecast-desc">${cond.desc}</div>
+            ${rain > 0 ? `<div class="forecast-extra"><i class="fas fa-droplet"></i>${rain} mm rain</div>` : ''}
+          </div>
+        `);
+        }
+
+        forecastGrid.innerHTML = cards.join('');
+    }
+
+    // ---------- ALERTS + HEAVY RAIN FROM FORECAST ----------
+    function displayAlerts(alerts, forecast) {
+        const alertsGrid = document.getElementById('alertsGrid');
+        let html = '';
+
+        if (!alerts || alerts.length === 0) {
+            html += `
+          <div class="alert-card low">
+            <div class="alert-icon">✅</div>
+            <div class="alert-content">
+              <div class="alert-title">No active IMD alerts</div>
+              <div class="alert-message">Weather looks stable. Check coloured forecast cards for planning.</div>
+            </div>
+          </div>
+        `;
+        } else {
+            html += alerts.map(alert => `
+          <div class="alert-card ${alert.severity || 'medium'}">
+            <div class="alert-icon">${alert.icon || '⚠️'}</div>
+            <div class="alert-content">
+              <div class="alert-title">${alert.title}</div>
+              <div class="alert-message">${alert.message}</div>
+            </div>
+          </div>
+        `).join('');
+        }
+
+        // EXTRA: auto heavy rainfall alert from forecast (next 5 days)
+        if (forecast && forecast.temperature_2m_max && forecast.precipitation_sum) {
+            let heavy = null;
+            const today = new Date();
+            const totalDays = Math.min(6, forecast.temperature_2m_max.length);
+            for (let i = 1; i < totalDays; i++) {
+                const rain = forecast.precipitation_sum[i] || 0;
+                if (rain >= 20) {
+                    const d = new Date();
+                    d.setDate(today.getDate() + i);
+                    const label = d.toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short' });
+                    heavy = { label, rain };
+                    break;
+                }
+            }
+
+            if (heavy) {
+                const heavyHtml = `
+            <div class="alert-card high">
+              <div class="alert-icon">🚨</div>
+              <div class="alert-content">
+                <div class="alert-title">Heavy rainfall expected on ${heavy.label}</div>
+                <div class="alert-message">
+                  Forecast shows ~${heavy.rain} mm rain. Avoid spraying chemicals, ensure field drainage and protect stored grains.
+                </div>
+              </div>
+            </div>
+          `;
+                html = heavyHtml + html;
+            }
+        }
+
+        alertsGrid.innerHTML = html;
+    }
+
+
+    // ---------- AI-LIKE TODAY ADVICE (from current + forecast) ----------
+    function displayAiFarmingAdvice(forecast, current) {
+        const container = document.getElementById('todayAdvice');
+        const tagEl = document.getElementById('todayAdviceTag');
+        const imgEl = document.getElementById('todayFarmerImage');
+
+        const temp = current?.temp ?? 30;
+        const humidity = current?.humidity ?? 70;
+        const wind = current?.wind_speed ?? 5;
+
+        const rainToday = forecast?.precipitation_sum ? (forecast.precipitation_sum[0] || 0) : 0;
+        const codeToday = forecast?.weather_code ? forecast.weather_code[0] : current?.weather_code;
+        const cond = getWeatherCondition(codeToday || 2);
+
+        const items = [];
+        let riskScore = 0;
+
+        // Temperature rules
+        if (temp <= 30 && rainToday === 0) {
+            items.push("Good day for routine field work like weeding, basin cleaning and light intercultivation.");
+        }
+        if (temp > 34) {
+            items.push("Avoid spraying sensitive pesticides in afternoon heat; if needed, spray only early morning or late evening.");
+            riskScore += 2;
+        } else if (temp > 32) {
+            items.push("Prefer morning hours for transplanting or pruning to reduce plant stress from heat.");
+            riskScore += 1;
+        }
+
+        // Rainfall rules
+        if (rainToday >= 20) {
+            items.push("Heavy rain expected — keep drainage channels clear and avoid fresh fertilizer application today.");
+            riskScore += 3;
+        } else if (rainToday >= 5) {
+            items.push("Moderate rain likely — postpone spraying and keep seedlings on slightly higher ground.");
+            riskScore += 2;
+        } else if (rainToday === 0 && humidity > 60) {
+            items.push("No rain today but humidity is high — watch for fungal diseases on leaves and check lower canopy.");
+        }
+
+        // Wind rules
+        if (wind >= 20) {
+            items.push("Winds are strong — avoid light mulching sheets or loose covers that can fly away; support weak plants.");
+            riskScore += 2;
+        } else if (wind >= 10) {
+            items.push("Mild breeze helps drying after rain; you can use this time for field inspection and pest scouting.");
+        }
+
+        // Condition rule
+        if (cond.icon === 'cloud-rain' || cond.icon === 'cloud-showers-heavy') {
+            items.push("Keep harvest produce covered with tarpaulin and avoid sun-drying today due to rain chances.");
+        }
+
+        if (items.length === 0) {
+            items.push("Conditions are normal — continue regular irrigation schedule and keep an eye on forecast colours for coming days.");
+        }
+
+        let severity = 'normal';
+        if (riskScore >= 4) severity = 'bad';
+        else if (riskScore <= 1) severity = 'good';
+
+        if (severity === 'good') {
+            tagEl.textContent = 'Good day for field work';
+            tagEl.className = 'today-advice-tag-chip tag-good';
+            imgEl.src = 'images/farmer-good.png';
+        } else if (severity === 'bad') {
+            tagEl.textContent = 'Be cautious today';
+            tagEl.className = 'today-advice-tag-chip tag-bad';
+            imgEl.src = 'images/farmer-bad.png';
+        } else {
+            tagEl.textContent = 'Normal farming day';
+            tagEl.className = 'today-advice-tag-chip tag-normal';
+            imgEl.src = 'images/farmer-normal.png';
+        }
+
+        container.innerHTML = items.map(text => `
+        <div class="today-advice-item">
+          <i class="fas fa-check-circle"></i>
+          <span>${text}</span>
+        </div>
+      `).join('');
+    }
+
+    // ---------- MAP (KERALA-FOCUS, WEATHER LAYERS + EXTRA) ----------
+    let weatherMap;
+    let baseLayer;
+    const OPENWEATHER_API_KEY = '7818f281fdd41baf85033a1c73b31085'; // <-- PUT YOUR REAL KEY
+
+    function initWeatherMap(data) {
+        const mapContainer = document.getElementById('weatherMap');
+        if (!mapContainer) {
+            console.warn('weatherMap container not found');
+            return;
+        }
+
+        // ---- 1) Get center from API or fallback to Kerala ----
+        const loc = data.location || {};
+        let lat = null;
+        let lon = null;
+
+        if (typeof loc.lat === 'number' && typeof loc.lon === 'number') {
+            lat = loc.lat;
+            lon = loc.lon;
+        } else if (typeof loc.latitude === 'number' && typeof loc.longitude === 'number') {
+            lat = loc.latitude;
+            lon = loc.longitude;
+        }
+
+        if (lat == null || lon == null) {
+            console.log('Using Kerala center fallback for map');
+            lat = 10.352874;   // Kerala approx center
+            lon = 76.512039;
+        }
+
+        const center = [lat, lon];
+
+        if (typeof L === 'undefined') {
+            console.error('Leaflet (L) is not defined. Make sure leaflet.js is loaded correctly.');
+            return;
+        }
+
+        // ---- 2) Create or reuse map safely ----
+        const hasValidMap =
+            window.weatherMap &&
+            typeof window.weatherMap.setView === 'function' &&
+            typeof window.weatherMap.addLayer === 'function';
+
+        if (!hasValidMap) {
+            // Create a fresh map instance
+            window.weatherMap = L.map('weatherMap', {
+                center,
+                zoom: 8,
+                minZoom: 6,
+                maxZoom: 12
+            });
+
+            // also keep in normal variable if you use it
+            weatherMap = window.weatherMap;
+
+            // Base OSM layer
+            window.baseLayer = L.tileLayer(
+                'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                {
+                    attribution: '&copy; OpenStreetMap contributors'
+                }
+            ).addTo(window.weatherMap);
+
+            // Rough Kerala bounds
+            const keralaBounds = L.latLngBounds(
+                [8.17, 74.85],   // South-West
+                [12.97, 77.70]   // North-East
+            );
+            window.weatherMap.fitBounds(keralaBounds, { padding: [20, 20] });
+
+            // 🔗 Attach AI click handler (for AI panel) ONCE
+            if (typeof handleMapClickForAi === 'function' && !window._aiMapClickBound) {
+                window.weatherMap.on('click', handleMapClickForAi);
+                window._aiMapClickBound = true;
+            }
+        } else {
+            // Reuse existing map
+            window.weatherMap.setView(center, 8);
+            weatherMap = window.weatherMap;
+
+            if (typeof handleMapClickForAi === 'function' && !window._aiMapClickBound) {
+                window.weatherMap.on('click', handleMapClickForAi);
+                window._aiMapClickBound = true;
+            }
+        }
+
+        // ---- 3) Marker / circle for farmer location ----
+        if (window.locationMarker && typeof window.weatherMap.removeLayer === 'function') {
+            window.weatherMap.removeLayer(window.locationMarker);
+        }
+        if (window.locationCircle && typeof window.weatherMap.removeLayer === 'function') {
+            window.weatherMap.removeLayer(window.locationCircle);
+        }
+
+        window.locationMarker = L.marker(center).addTo(window.weatherMap);
+        window.locationCircle = L.circle(center, {
+            radius: 15000, // 15 km
+            color: '#10b981',
+            weight: 1.2,
+            fillColor: '#10b981',
+            fillOpacity: 0.18
+        }).addTo(window.weatherMap);
+
+        const tempLabel = data.current ? `${data.current.temp}°C` : '--°C';
+        const placeLabel = `${loc.name || 'Your area'}, ${loc.country || ''}`.trim();
+
+        window.locationMarker.bindPopup(
+            `<strong>${placeLabel}</strong><br/>Current: ${tempLabel}`
+        );
+
+        // ---- 4) Weather overlays (Rain / Clouds / Temp / Storm / Soil / Wind) ----
+        if (!window.mapLayers) {
+            window.mapLayers = {
+                rain: null,
+                clouds: null,
+                temp: null,
+                storm: null,
+                soil: null,
+                wind: null
+            };
+        }
+
+        if (typeof OPENWEATHER_API_KEY !== 'undefined' && OPENWEATHER_API_KEY) {
+            const key = OPENWEATHER_API_KEY;
+            window.OPENWEATHER_API_KEY = key;
+
+            // --- 1.0 classic layers (free plan friendly) ---
+            if (!window.mapLayers.rain) {
+                window.mapLayers.rain = L.tileLayer(
+                    `https://tile.openweathermap.org/map/precipitation_new/{z}/{x}/{y}.png?appid=${key}`,
+                    { opacity: 0.8 }
+                );
+            }
+            if (!window.mapLayers.clouds) {
+                window.mapLayers.clouds = L.tileLayer(
+                    `https://tile.openweathermap.org/map/clouds_new/{z}/{x}/{y}.png?appid=${key}`,
+                    { opacity: 0.75 }
+                );
+            }
+            if (!window.mapLayers.temp) {
+                window.mapLayers.temp = L.tileLayer(
+                    `https://tile.openweathermap.org/map/temp_new/{z}/{x}/{y}.png?appid=${key}`,
+                    { opacity: 0.7 }
+                );
+            }
+
+            // ✅ Storm = pressure map (1.0)
+            if (!window.mapLayers.storm) {
+                window.mapLayers.storm = L.tileLayer(
+                    `https://tile.openweathermap.org/map/pressure_new/{z}/{x}/{y}.png?appid=${key}`,
+                    { opacity: 0.6 }
+                );
+            }
+
+            // ✅ Wind = wind map (1.0)
+            if (!window.mapLayers.wind) {
+                window.mapLayers.wind = L.tileLayer(
+                    `https://tile.openweathermap.org/map/wind_new/{z}/{x}/{y}.png?appid=${key}`,
+                    { opacity: 0.8 }
+                );
+            }
+
+            // 🌱 Soil 0–10 cm = TS0 (2.0) – might require higher plan; if blank, that's why
+            if (!window.mapLayers.soil) {
+                window.mapLayers.soil = L.tileLayer(
+                    `https://maps.openweathermap.org/maps/2.0/weather/TS0/{z}/{x}/{y}?appid=${key}`,
+                    { opacity: 0.7 }
+                );
+            }
+
+            // ---- Default ON: Rain + Clouds, others OFF ----
+            Object.values(window.mapLayers).forEach(layer => {
+                if (layer && window.weatherMap.hasLayer(layer)) {
+                    window.weatherMap.removeLayer(layer);
+                }
+            });
+
+            window.mapLayers.rain.addTo(window.weatherMap);
+            window.mapLayers.clouds.addTo(window.weatherMap);
+
+            // Sync chips
+            document
+                .querySelectorAll('.map-layer-chip')
+                .forEach((chip) => chip.classList.remove('active'));
+
+            const rainChip = document.querySelector('.map-layer-chip[data-layer="rain"]');
+            const cloudsChip = document.querySelector('.map-layer-chip[data-layer="clouds"]');
+
+            if (rainChip) rainChip.classList.add('active');
+            if (cloudsChip) cloudsChip.classList.add('active');
+        } else {
+            console.warn(
+                'OpenWeatherMap API key missing. Only base map will be visible, no weather overlays.'
+            );
+        }
+    }
+
+
+    function toggleMapLayer(type) {
+        if (!window.weatherMap || !window.mapLayers || !window.mapLayers[type]) return;
+
+        const chip = document.querySelector(`.map-layer-chip[data-layer="${type}"]`);
+        if (!chip) return;
+
+        const layer = window.mapLayers[type];
+        const isActive = chip.classList.contains('active');
+
+        if (isActive) {
+            // Turn OFF
+            if (window.weatherMap.hasLayer(layer)) {
+                window.weatherMap.removeLayer(layer);
+            }
+            chip.classList.remove('active');
+        } else {
+            // Turn ON
+            layer.addTo(window.weatherMap);
+            chip.classList.add('active');
+        }
+    }
+
+    // Small search on map using Nominatim (no extra library)
+    async function searchOnMap() {
+        const input = document.getElementById('mapSearchInput');
+        const q = input.value.trim();
+        if (!q || !window.weatherMap) return;
+
+        try {
+            const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(q + ', Kerala, India')}`);
+            const data = await res.json();
+            if (data && data.length > 0) {
+                const place = data[0];
+                const lat = parseFloat(place.lat);
+                const lon = parseFloat(place.lon);
+                const latLng = [lat, lon];
+
+                window.weatherMap.flyTo(latLng, 10, { duration: 0.8 });
+
+                if (window.weatherMap._searchMarker) {
+                    window.weatherMap.removeLayer(window.weatherMap._searchMarker);
+                }
+                window.weatherMap._searchMarker = L.marker(latLng).addTo(window.weatherMap)
+                    .bindPopup(`<strong>${place.display_name.split(',')[0]}</strong><br/>Tap coloured layers to see weather.`)
+                    .openPopup();
+            } else {
+                alert('Location not found. Try nearby town / village name.');
+            }
+        } catch (err) {
+            console.error('Map search error:', err);
+        }
+    }
+
+    // ---------- AI ADVICE PANEL (MAP + CHAT) ----------
+    let lastAiLocation = null; // { lat, lon }
+
+    function showAiPanel() {
+        const panel = document.getElementById('aiAdvicePanel');
+        if (panel) panel.classList.remove('hidden');
+    }
+
+    function hideAiPanel() {
+        const panel = document.getElementById('aiAdvicePanel');
+        if (panel) panel.classList.add('hidden');
+    }
+
+    function appendAiMessage(text, who = 'bot') {
+        const container = document.getElementById('aiAdviceMessages');
+        if (!container) return;
+
+        const div = document.createElement('div');
+        div.classList.add('ai-msg');
+        div.classList.add(who === 'user' ? 'ai-msg-user' : 'ai-msg-bot');
+        div.textContent = text;
+
+        container.appendChild(div);
+        container.scrollTop = container.scrollHeight;
+    }
+
+    async function sendAiQuestion() {
+        const input = document.getElementById('aiAdviceInput');
+        const btn = document.getElementById('aiAdviceSendBtn');
+        if (!input || !btn) return;
+
+        const question = input.value.trim();
+        if (!question) return;
+
+        if (!lastAiLocation) {
+            appendAiMessage('Please click somewhere on the map first to select your farm location.', 'bot');
+            return;
+        }
+
+        appendAiMessage(question, 'user');
+        input.value = '';
+
+        btn.disabled = true;
+        appendAiMessage('Thinking about conditions in your area...', 'bot');
+
+        try {
+            const res = await fetch(API_BASE_URL + '/api/weather/ai/farm-advice', {   // 👈 FIXED URL
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
+                body: JSON.stringify({
+                    lat: lastAiLocation.lat,
+                    lon: lastAiLocation.lon,
+                    question
+                })
+            });
+
+            if (!res.ok) {
+                throw new Error('AI server error');
+            }
+
+            const data = await res.json();
+            const reply = data.answer || 'I could not generate advice right now. Please try again later.';
+            appendAiMessage(reply, 'bot');
+        } catch (err) {
+            console.error(err);
+            appendAiMessage('Unable to contact AI server. Please try again later.', 'bot');
+        } finally {
+            btn.disabled = false;
+        }
+    }
+
+
+    // Called when user clicks on map
+    function handleMapClickForAi(e) {
+        const lat = e.latlng.lat;
+        const lon = e.latlng.lng;
+        lastAiLocation = { lat, lon };
+
+        showAiPanel();
+
+        const labelEl = document.getElementById('aiLocationLabel');
+        if (labelEl) {
+            labelEl.textContent = `Location selected: ${lat.toFixed(3)}, ${lon.toFixed(3)}`;
+        }
+
+        // Optional: add a temporary marker for selected location
+        if (window.aiClickMarker && window.weatherMap) {
+            window.weatherMap.removeLayer(window.aiClickMarker);
+        }
+        if (window.weatherMap) {
+            window.aiClickMarker = L.marker([lat, lon], {
+                opacity: 0.9
+            }).addTo(window.weatherMap);
+        }
+    }
+
+    // ---------- ALERTS TOGGLE ----------
+    async function toggleAlerts() {
+        try {
+            alertsEnabled = !alertsEnabled;
+            const toggle = document.getElementById('alertsToggle');
+            toggle.classList.toggle('active', alertsEnabled);
+
+            if (alertsEnabled && 'Notification' in window) {
+                const permission = await Notification.requestPermission();
+                if (permission === 'granted') {
+                    new Notification('✅ Weather Alerts Enabled', {
+                        body: 'You will receive notifications for severe weather.',
+                        icon: '/favicon.ico'
+                    });
+                }
+            }
+
+            await fetch(API_BASE_URL + '/api/weather/alerts/toggle', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
+                body: JSON.stringify({ enabled: alertsEnabled })
+            });
+        } catch (error) {
+            console.error('Failed to toggle alerts:', error);
+        }
+    }
+
+    function refreshWeather() {
+        loadWeatherData();
+    }
+
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+        if (confirm('Logout?')) {
+            window.location.href = 'index.html';
+        }
+    });
+
+    function toggleSidebar() {
+        document.getElementById('sidebar').classList.toggle('active');
+    }
+
+    document.getElementById('locationInput').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            loadWeatherData();
+        }
+    });
+
+    // AI panel events
+    const aiCloseBtn = document.getElementById('aiPanelCloseBtn');
+    if (aiCloseBtn) {
+        aiCloseBtn.addEventListener('click', hideAiPanel);
+    }
+    const aiSendBtn = document.getElementById('aiAdviceSendBtn');
+    if (aiSendBtn) {
+        aiSendBtn.addEventListener('click', sendAiQuestion);
+    }
+    const aiInput = document.getElementById('aiAdviceInput');
+    if (aiInput) {
+        aiInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendAiQuestion();
+            }
+        });
+    }
+
+    // ---------- INIT ----------
+    window.onload = () => {
+        console.log('Weather Alerts page loaded');
+        checkAuth();
+        loadUserInfo();
+        initializeTheme();
+        setActiveNavigation();
+
+        setTimeout(() => {
+            loadWeatherData();
+        }, 400);
+    };
+</script>
+</body>
+
+</html>

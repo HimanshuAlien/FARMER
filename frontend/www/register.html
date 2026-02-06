@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>KrishiMitr - Register</title>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap"
+        rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+
+    <style>
+        :root {
+            --text: #000000;
+            --muted: #000000;
+            --accent: #6b4a2c;
+            --glass-border: rgba(255, 255, 255, 0.45);
+            --input-border: rgba(0, 0, 0, 0.14);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            height: 100%;
+        }
+
+        body {
+            font-family: "Inter", sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            color: var(--text);
+            background: url("images/bg1.png") center/cover no-repeat;
+        }
+
+        /* dark overlay for readability */
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background: rgba(12, 18, 27, 0.22);
+            z-index: 0;
+        }
+
+        .card {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 580px;
+            background: rgba(255, 255, 255, 0);
+            border-radius: 18px;
+            padding: 2rem 1.7rem;
+            border: 1px solid var(--glass-border);
+
+        }
+
+        .brand {
+            display: flex;
+            gap: 0.9rem;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .brand-logo-wrap {
+            width: 60px;
+            height: 60px;
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.90);
+            border: 1px solid var(--glass-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .brand-logo-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .brand-text h1 {
+            font-family: "Playfair Display", serif;
+            font-size: 1.55rem;
+            color: #000000;
+        }
+
+        .brand-text p {
+            font-size: 0.86rem;
+            color: var(--muted);
+        }
+
+        .subtitle {
+            color: var(--muted);
+            margin-bottom: 1.2rem;
+            font-size: 0.9rem;
+        }
+
+        /* ROLE TOGGLE */
+        .role-toggle {
+            display: inline-flex;
+            padding: 0.25rem;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.55);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(6px);
+            margin-bottom: 1.2rem;
+        }
+
+        .role-btn {
+            padding: 0.45rem 1rem;
+            min-width: 120px;
+            border: none;
+            background: transparent;
+            border-radius: 999px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: var(--muted);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
+        }
+
+        .role-btn.active {
+            background: #0f1724;
+            color: white;
+        }
+
+        /* FORM */
+        .form-group {
+            margin-bottom: 0.9rem;
+        }
+
+        .form-label {
+            font-size: 0.86rem;
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+        }
+
+        .input-wrap {
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9aa0a6;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.78rem 1rem 0.78rem 2.6rem;
+            border-radius: 10px;
+            border: 1px solid var(--input-border);
+            background: rgba(255, 255, 255, 0.88);
+            font-size: 0.95rem;
+        }
+
+        .form-input:focus {
+            outline: none;
+            background: white;
+            border-color: var(--accent);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.07);
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 0.8rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #9aa0a6;
+        }
+
+        .password-hint {
+            font-size: 0.75rem;
+            margin-top: 0.15rem;
+            color: #000000;
+        }
+
+        /* OFFICER SECTION */
+        .officer-section {
+            border: 1px dashed rgba(0, 0, 0, 0.22);
+            padding: 0.8rem;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.45);
+            display: none;
+        }
+
+        .officer-section.show {
+            display: block;
+        }
+
+        .officer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.45rem;
+        }
+
+        .officer-badge span {
+            background: #dbece1;
+            padding: 0.22rem 0.55rem;
+            border-radius: 999px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: #14532d;
+        }
+
+        .officer-note {
+            font-size: 0.72rem;
+            color: var(--muted);
+        }
+
+        .officer-grid {
+            margin-top: 0.4rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.65rem;
+        }
+
+        .officer-grid .form-input {
+            padding-left: 0.8rem;
+        }
+
+        /* FORM FEEDBACK */
+        .form-status {
+            min-height: 18px;
+            margin-top: 0.4rem;
+            font-size: 0.82rem;
+        }
+
+        .form-status.error {
+            color: #dc2626;
+        }
+
+        .form-status.success {
+            color: #16a34a;
+        }
+
+        /* SUBMIT BUTTON */
+        .submit-btn {
+            width: 100%;
+            padding: 0.9rem;
+            background: #0f1724;
+            color: white;
+            border: none;
+            border-radius: 999px;
+            margin-top: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .submit-btn .spinner {
+            width: 16px;
+            height: 16px;
+            border-radius: 999px;
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            border-top-color: white;
+            animation: spin 0.9s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .login-link {
+            margin-top: 1.1rem;
+            text-align: center;
+            font-size: 0.86rem;
+            color: var(--muted);
+        }
+
+        .login-link a {
+            color: #000000;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width:640px) {
+            .card {
+                padding: 1.4rem;
+            }
+
+            .officer-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    <script src="config.js"></script>
+</head>
+
+<body>
+
+    <div class="card">
+        <!-- BRANDING -->
+        <div class="brand">
+            <div class="brand-logo-wrap">
+                <img src="images/ashok.png" />
+            </div>
+            <div class="brand-text">
+                <h1>KrishiMitr</h1>
+                <p>Kerala Farmer Advisory System</p>
+            </div>
+        </div>
+
+        <p class="subtitle">
+            Register as a <strong>Farmer</strong> or <strong>Agriculture Officer</strong>.
+        </p>
+
+        <!-- ROLE SWITCH -->
+        <div class="role-toggle">
+            <button type="button" class="role-btn active" data-role="farmer">
+                <i class="fas fa-tractor"></i> Farmer
+            </button>
+            <button type="button" class="role-btn" data-role="officer">
+                <i class="fas fa-user-tie"></i> Officer
+            </button>
+        </div>
+
+        <!-- FORM START -->
+        <form id="registerForm" novalidate>
+            <input type="hidden" id="roleInput" value="farmer" />
+
+            <div class="form-group">
+                <label class="form-label">Full Name</label>
+                <div class="input-wrap">
+                    <i class="fas fa-user input-icon"></i>
+                    <input type="text" id="username" class="form-input" placeholder="Enter your full name" required />
+                </div>
+                <div id="usernameError" class="error-message"></div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Email</label>
+                <div class="input-wrap">
+                    <i class="fas fa-envelope input-icon"></i>
+                    <input type="email" id="email" class="form-input" placeholder="yourname@example.com" required />
+                </div>
+                <div id="emailError" class="error-message"></div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Password</label>
+                <div class="input-wrap">
+                    <i class="fas fa-lock input-icon"></i>
+                    <input type="password" id="password" class="form-input" placeholder="Create a password" />
+                    <button type="button" class="password-toggle" id="togglePasswordBtn">
+                        <i class="fas fa-eye" id="togglePasswordIcon"></i>
+                    </button>
+                </div>
+                <div class="password-hint">At least 6 characters.</div>
+                <div id="passwordError" class="error-message"></div>
+            </div>
+
+            <!-- OFFICER SECTION -->
+            <div class="officer-section" id="officerSection">
+                <div class="officer-header">
+                    <div class="officer-badge"><span>Officer Details</span></div>
+                    <div class="officer-note">Required for official verification</div>
+                </div>
+
+                <div class="officer-grid">
+                    <input type="text" id="officerDesignation" class="form-input" placeholder="Designation" />
+                    <input type="text" id="officerOfficeName" class="form-input" placeholder="Office Name" />
+                    <input type="text" id="officerDistrict" class="form-input" placeholder="District" />
+                    <input type="text" id="officerBlock" class="form-input" placeholder="Block" />
+                    <input type="text" id="officerPanchayat" class="form-input" placeholder="Panchayat" />
+                    <input type="text" id="officerPhone" class="form-input" placeholder="Official Phone" />
+                    <input type="email" id="officerOfficialEmail" class="form-input" placeholder="Official Email" />
+                    <input type="text" id="officerDepartment" class="form-input" placeholder="Department" />
+                </div>
+            </div>
+
+            <div id="formStatus" class="form-status"></div>
+
+            <button type="submit" class="submit-btn" id="registerBtn">
+                <span class="spinner" style="display:none;"></span>
+                <span class="btn-text"><i class="fas fa-user-plus"></i> Create account</span>
+            </button>
+        </form>
+
+        <div class="login-link">
+            Already have an account? <a href="index.html">Sign in</a>
+        </div>
+    </div>
+
+    <!-- JS (UNCHANGED) -->
+    <script>
+        // your entire exact JS logic is preserved, not modified
+        const roleButtons = document.querySelectorAll(".role-btn");
+        const roleInput = document.getElementById("roleInput");
+        const officerSection = document.getElementById("officerSection");
+        const registerForm = document.getElementById("registerForm");
+        const registerBtn = document.getElementById("registerBtn");
+        const formStatus = document.getElementById("formStatus");
+
+        roleButtons.forEach(btn => {
+            btn.addEventListener("click", () => {
+                roleButtons.forEach(b => b.classList.remove("active"));
+                btn.classList.add("active");
+                const role = btn.dataset.role;
+                roleInput.value = role;
+                if (role === "officer") officerSection.classList.add("show");
+                else officerSection.classList.remove("show");
+            });
+        });
+
+        const togglePasswordBtn = document.getElementById("togglePasswordBtn");
+        const togglePasswordIcon = document.getElementById("togglePasswordIcon");
+        const passwordInput = document.getElementById("password");
+
+        togglePasswordBtn.addEventListener("click", () => {
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+                togglePasswordIcon.classList.replace("fa-eye", "fa-eye-slash");
+            } else {
+                passwordInput.type = "password";
+                togglePasswordIcon.classList.replace("fa-eye-slash", "fa-eye");
+            }
+        });
+
+        function setStatus(msg, type) {
+            formStatus.textContent = msg || "";
+            formStatus.className = "form-status " + (type || "");
+        }
+
+        function showError(id, msg) {
+            document.getElementById(id).textContent = msg;
+        }
+
+        function clearErrors() {
+            ["usernameError", "emailError", "passwordError"].forEach(id => {
+                document.getElementById(id).textContent = "";
+            });
+            setStatus("");
+        }
+
+        registerForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            clearErrors();
+
+            const username = document.getElementById("username").value.trim();
+            const email = document.getElementById("email").value.trim();
+            const password = passwordInput.value;
+            const role = roleInput.value;
+
+            let valid = true;
+
+            if (username.length < 3) {
+                showError("usernameError", "Name must be at least 3 characters.");
+                valid = false;
+            }
+
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                showError("emailError", "Invalid email format.");
+                valid = false;
+            }
+
+            if (password.length < 6) {
+                showError("passwordError", "Password must be at least 6 characters.");
+                valid = false;
+            }
+
+            let officerDetails;
+            if (role === "officer") {
+                const designation = document.getElementById("officerDesignation").value.trim();
+                const officeName = document.getElementById("officerOfficeName").value.trim();
+                const district = document.getElementById("officerDistrict").value.trim();
+
+                if (!designation || !officeName || !district) {
+                    setStatus("Please fill Officer Designation, Office, and District.", "error");
+                    valid = false;
+                } else {
+                    officerDetails = {
+                        designation,
+                        officeName,
+                        district,
+                        block: document.getElementById("officerBlock").value.trim(),
+                        panchayat: document.getElementById("officerPanchayat").value.trim(),
+                        officialPhone: document.getElementById("officerPhone").value.trim(),
+                        officialEmail: document.getElementById("officerOfficialEmail").value.trim(),
+                        department: document.getElementById("officerDepartment").value.trim()
+                    };
+                }
+            }
+
+            if (!valid) return;
+
+            const spinner = registerBtn.querySelector(".spinner");
+            spinner.style.display = "inline-block";
+            registerBtn.disabled = true;
+            setStatus("Creating your account...");
+
+            try {
+                const res = await fetch(API_BASE_URL + "/api/auth/register", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    credentials: "include",
+                    body: JSON.stringify({ username, email, password, role, officerDetails })
+                });
+
+                const data = await res.json();
+
+                if (!res.ok) {
+                    setStatus(data.message || "Registration failed.", "error");
+                } else {
+                    setStatus("Account created! Redirecting...", "success");
+                    setTimeout(() => window.location.href = "index.html", 1000);
+                }
+            } catch (err) {
+                setStatus("Network error.", "error");
+            } finally {
+                spinner.style.display = "none";
+                registerBtn.disabled = false;
+            }
+        });
+    </script>
+</body>
+
+</html>

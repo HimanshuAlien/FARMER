@@ -1,0 +1,647 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <title>Satellite Monitoring — NDVI + Crop Recommendations</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Roboto:wght@400;700&display=swap"
+    rel="stylesheet">
+  <style>
+    /* Original styling preserved */
+    body {
+      font-family: Inter, Roboto, sans-serif;
+      margin: 0;
+      background: radial-gradient(circle at top left, #e2f3ff 0, #f9fbff 40%, #eef4ff 80%, #dde7ff 100%);
+      color: #0f172a;
+    }
+
+    header {
+      background: radial-gradient(circle at 0% 0%, #1a73e8 0, #0b5a4c 32%, #06272c 100%);
+      color: #fff;
+      padding: 14px 20px;
+    }
+
+    .layout {
+      display: flex;
+      gap: 16px;
+      padding: 16px;
+      height: calc(100vh - 72px)
+    }
+
+    #map {
+      flex: 3;
+      border-radius: 16px;
+      min-height: 520px;
+      height: 100%;
+    }
+
+    #panel {
+      flex: 1;
+      min-width: 340px;
+      padding: 18px;
+      border-radius: 12px;
+      background: #fff;
+      overflow: auto
+    }
+
+    .small {
+      font-size: 13px;
+      font-weight: 600
+    }
+
+    .ghost {
+      background: #f9fafb;
+      border: 1px solid rgba(26, 115, 232, 0.12);
+      padding: 10px;
+      border-radius: 10px
+    }
+
+    .primary {
+      background: linear-gradient(135deg, #1a73e8, #2563eb);
+      color: #fff;
+      padding: 11px;
+      border-radius: 11px;
+      border: 0
+    }
+
+    #crop-recs {
+      margin-top: 12px;
+      display: none;
+    }
+
+    .rec-card {
+      border-radius: 10px;
+      padding: 10px;
+      margin-bottom: 8px;
+      background: #fff;
+      border: 1px solid #e6eefb;
+      box-shadow: 0 6px 14px rgba(15, 23, 42, 0.04)
+    }
+
+    .score-pill {
+      font-weight: 700;
+      padding: 6px 8px;
+      border-radius: 999px;
+      background: #eef6ff;
+      color: #0b3e8a
+    }
+
+    pre.raw {
+      white-space: pre-wrap;
+      background: #fafafa;
+      padding: 8px;
+      border-radius: 6px;
+      border: 1px solid #eee;
+      max-height: 160px;
+      overflow: auto;
+    }
+
+    /* Walk mode styles */
+    .tool-buttons {
+      display: flex;
+      gap: 8px;
+      margin: 12px 0;
+    }
+
+    .mode-btn {
+      flex: 1;
+      padding: 12px;
+      border: 2px solid #1a73e8;
+      background: rgba(26, 115, 232, 0.1);
+      color: #1a73e8;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .mode-btn.active {
+      background: #1a73e8;
+      color: white;
+    }
+
+    .walk-info {
+      background: rgba(26, 115, 232, 0.1);
+      border: 1px solid #1a73e8;
+      padding: 12px;
+      border-radius: 8px;
+      margin: 12px 0;
+      display: none;
+      font-size: 13px;
+    }
+
+    .walk-info.active {
+      display: block;
+    }
+
+    /* GPS button */
+    .gps-btn {
+      background: #10b981;
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 8px;
+      width: 100%;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .layout {
+        flex-direction: column;
+        padding: 12px;
+        gap: 12px;
+        height: calc(100vh - 90px);
+      }
+
+      #map {
+        flex: none;
+        min-height: 50vh;
+        order: 2;
+      }
+
+      #panel {
+        flex: none;
+        min-width: auto;
+        order: 1;
+        padding: 16px;
+      }
+
+      header {
+        padding: 12px 16px;
+      }
+
+      .tool-buttons {
+        flex-direction: column;
+      }
+
+      input {
+        padding: 12px !important;
+        font-size: 16px;
+      }
+    }
+  </style>
+    <script src="config.js"></script>
+</head>
+
+<body>
+  <header>
+    <div style="display:flex;gap:12px;align-items:center">
+      <div
+        style="width:42px;height:42px;border-radius:10px;background:#fff;color:#08353b;display:flex;align-items:center;justify-content:center;font-weight:800">
+        AG</div>
+      <div>
+        <div style="font-weight:700;font-size:18px">NDVI Field Analyzer</div>
+        <div style="font-size:12px;color:rgba(255,255,255,0.9)">Sentinel-2 • GEE • Gemini AI</div>
+      </div>
+    </div>
+  </header>
+
+  <div class="layout">
+    <div id="map"></div>
+
+    <div id="panel">
+      <h2>Field Tools & Results</h2>
+      <p class="desc">Draw a polygon on the map, click <strong>Generate NDVI</strong>. Then click <strong>Recommend
+          crops</strong> to get AI-backed crop suggestions for the site.</p>
+
+      <!-- Walk mode buttons -->
+      <div class="tool-buttons">
+        <button id="draw-mode-btn" class="mode-btn active">Draw Polygon</button>
+        <button id="walk-mode-btn" class="mode-btn">Walk Boundary</button>
+      </div>
+
+      <div id="walk-info" class="walk-info">
+        Tap points around your field. Finish/Cancel buttons appear top-right.
+      </div>
+
+      <div class="search-tools">
+        <label class="small">Locate</label>
+        <div style="display:flex;gap:6px;margin-top:6px">
+          <input id="search-input" type="text" placeholder="Search location (city, village...)"
+            style="flex:1;padding:8px;border-radius:8px;border:1px solid #e5e7eb" />
+          <button id="search-btn" class="ghost">Search</button>
+        </div>
+        <button id="locate-btn" class="ghost" style="margin-top:6px">Use current location</button>
+        <button id="gps-walk-btn" class="gps-btn" style="display:none">Start GPS Walk</button>
+      </div>
+
+      <div style="margin-top:8px;display:flex;gap:8px">
+        <button id="btn-ndvi" class="primary">Generate NDVI</button>
+        <button id="btn-recommend" class="ghost">Recommend crops</button>
+      </div>
+
+      <div style="margin-top:10px">
+        <label class="small">Soil notes (optional)</label>
+        <div style="display:flex;gap:6px;margin-top:6px">
+          <input id="soil-texture" type="text" placeholder="texture (e.g., loam)"
+            style="flex:1;padding:8px;border-radius:8px;border:1px solid #e5e7eb" />
+          <input id="soil-ph" type="number" step="0.1" placeholder="pH"
+            style="width:76px;padding:8px;border-radius:8px;border:1px solid #e5e7eb" />
+        </div>
+      </div>
+
+      <div id="loading" style="display:none;margin-top:10px;font-weight:700;color:#0b8043;">⏳ Requesting...</div>
+
+      <img id="ndvi-image" alt="NDVI result (fallback)"
+        style="width:100%;border-radius:10px;margin-top:12px;display:none" />
+
+      <div id="stats" style="display:none;margin-top:12px"></div>
+
+      <div id="crop-recs"></div>
+
+      <div class="legend" style="margin-top:12px">
+        <div style="font-weight:700">NDVI — Color meaning</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px">
+          <div><span
+              style="display:inline-block;width:18px;height:14px;background:#2b7bbf;border-radius:3px;margin-right:6px;"></span>
+            Very Low / Water / Bare</div>
+          <div><span
+              style="display:inline-block;width:18px;height:14px;background:#1a9850;border-radius:3px;margin-right:6px;"></span>
+            High Vegetation</div>
+        </div>
+        <div style="font-size:12px;color:#6b7280;margin-top:8px">Tip: For cloud-prone areas, increase the date range.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer style="padding:10px;text-align:center;font-size:12px;color:#6b7280">Ministry of Agriculture • GIS Analytics
+  </footer>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
+  <script src="https://unpkg.com/leaflet.heat/dist/leaflet-heat.js"></script>
+
+  <script type="module">
+    const DEFAULT_NDVI_ENDPOINT = '/api/insights/ndvi';
+    const RECOMMEND_ENDPOINT = '/api/insights/recommend-crops';
+
+    // map init
+    window.map = L.map('map').setView([10.85, 76.27], 8);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(map);
+
+    const imageryLayer = L.tileLayer(
+      'https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+      { maxZoom: 19, attribution: 'Imagery © Esri & partners', opacity: 1 }
+    ).addTo(map);
+
+    // drawing
+    const drawnItems = new L.FeatureGroup().addTo(map);
+    let drawControl = null;
+    let walkControl = null;
+    let currentFeature = null;
+    let walkModePoints = [];
+    let walkModeActive = false;
+    let gpsWatchId = null;
+
+    // Mode buttons
+    const drawBtn = document.getElementById('draw-mode-btn');
+    const walkBtn = document.getElementById('walk-mode-btn');
+    const walkInfo = document.getElementById('walk-info');
+    const gpsBtn = document.getElementById('gps-walk-btn');
+
+    function setDrawMode() {
+      if (drawControl) {
+        map.removeControl(drawControl);
+      }
+      drawControl = new L.Control.Draw({
+        draw: { polyline: false, rectangle: false, circle: false, circlemarker: false, marker: false, polygon: { allowIntersection: false, showArea: true, shapeOptions: { color: '#1b8f4b' } } },
+        edit: { featureGroup: drawnItems, remove: true }
+      });
+      map.addControl(drawControl);
+
+      drawBtn.classList.add('active');
+      walkBtn.classList.remove('active');
+      walkInfo.classList.remove('active');
+      gpsBtn.style.display = 'none';
+      walkModeActive = false;
+
+      if (walkControl) {
+        map.removeControl(walkControl);
+        walkControl = null;
+      }
+      map.off('click', handleWalkClick);
+      if (gpsWatchId) {
+        navigator.geolocation.clearWatch(gpsWatchId);
+        gpsWatchId = null;
+      }
+    }
+
+    function setWalkMode() {
+      if (drawControl) {
+        map.removeControl(drawControl);
+        drawControl = null;
+      }
+
+      // Create walk control with proper event handling
+      walkControl = L.control({ position: 'topright' });
+      walkControl.onAdd = function (map) {
+        const div = L.DomUtil.create('div', 'leaflet-bar leaflet-control-custom walk-control');
+        div.style.cssText = 'background:white;padding:12px;border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,0.1);min-width:120px;font-family:Inter,sans-serif;';
+        div.innerHTML = `
+          <button id="finish-walk-btn" style="background:#1a73e8;color:white;border:none;padding:10px 16px;border-radius:6px;font-size:13px;font-weight:600;width:100%;margin-bottom:6px;cursor:pointer;display:block">✅ Finish</button>
+          <button id="cancel-walk-btn" style="background:#ef4444;color:white;border:none;padding:8px 16px;border-radius:6px;font-size:12px;font-weight:600;width:100%;cursor:pointer;display:block">❌ Cancel</button>
+        `;
+        return div;
+      };
+      map.addControl(walkControl);
+
+      // Add event listeners immediately after creating control
+      setTimeout(() => {
+        const finishBtn = document.getElementById('finish-walk-btn');
+        const cancelBtn = document.getElementById('cancel-walk-btn');
+
+        if (finishBtn) {
+          finishBtn.onclick = finishWalk;
+        }
+        if (cancelBtn) {
+          cancelBtn.onclick = cancelWalk;
+        }
+      }, 100);
+
+      walkBtn.classList.add('active');
+      drawBtn.classList.remove('active');
+      walkInfo.classList.add('active');
+      gpsBtn.style.display = 'block';
+      walkModeActive = true;
+      walkModePoints = [];
+      drawnItems.clearLayers();
+      currentFeature = null;
+      map.on('click', handleWalkClick);
+    }
+
+    function handleWalkClick(e) {
+      if (!walkModeActive) return;
+
+      const point = [e.latlng.lat, e.latlng.lng];
+      walkModePoints.push(point);
+
+      // Live markers + line
+      drawnItems.clearLayers();
+      walkModePoints.forEach(p => {
+        L.circleMarker([p[0], p[1]], {
+          radius: 6,
+          fillColor: '#1a73e8',
+          color: 'white',
+          weight: 2,
+          fillOpacity: 0.8
+        }).addTo(drawnItems);
+      });
+
+      if (walkModePoints.length > 1) {
+        L.polyline(walkModePoints, { color: '#1a73e8', weight: 3 }).addTo(drawnItems);
+      }
+    }
+
+    function finishWalk() {
+      if (walkModePoints.length < 3) {
+        alert('Need at least 3 points for a field boundary');
+        return;
+      }
+
+      currentFeature = L.polygon(walkModePoints, { color: '#1b8f4b', weight: 3, fillOpacity: 0.3 }).toGeoJSON();
+      drawnItems.clearLayers();
+      L.polygon(walkModePoints, { color: '#1b8f4b', weight: 3, fillOpacity: 0.3 }).addTo(drawnItems);
+      map.fitBounds(drawnItems.getBounds(), { maxZoom: 17 });
+      setDrawMode();
+    }
+
+    function cancelWalk() {
+      setDrawMode();
+      drawnItems.clearLayers();
+      walkModePoints = [];
+    }
+
+    // GPS Walking
+    function startGPSWalk() {
+      if (!navigator.geolocation) {
+        alert('GPS not supported on this device');
+        return;
+      }
+
+      gpsWatchId = navigator.geolocation.watchPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          const point = [latitude, longitude];
+
+          if (walkModePoints.length === 0 ||
+            Math.abs(walkModePoints[walkModePoints.length - 1][0] - latitude) > 0.0005 ||
+            Math.abs(walkModePoints[walkModePoints.length - 1][1] - longitude) > 0.0005) {
+            walkModePoints.push(point);
+
+            // Live update markers + line
+            drawnItems.clearLayers();
+            walkModePoints.forEach(p => {
+              L.circleMarker([p[0], p[1]], {
+                radius: 6,
+                fillColor: '#10b981',
+                color: 'white',
+                weight: 2,
+                fillOpacity: 0.9
+              }).addTo(drawnItems);
+            });
+
+            if (walkModePoints.length > 1) {
+              L.polyline(walkModePoints, { color: '#10b981', weight: 3 }).addTo(drawnItems);
+            }
+
+            map.panTo([latitude, longitude]);
+          }
+        },
+        (error) => {
+          alert('GPS error: ' + error.message);
+        },
+        {
+          enableHighAccuracy: true,
+          timeout: 5000,
+          maximumAge: 1000
+        }
+      );
+
+      gpsBtn.textContent = '🟡 GPS Recording...';
+      gpsBtn.disabled = true;
+    }
+
+    drawBtn.addEventListener('click', setDrawMode);
+    walkBtn.addEventListener('click', setWalkMode);
+    gpsBtn.addEventListener('click', startGPSWalk);
+
+    // Original draw events
+    map.on(L.Draw.Event.CREATED, (e) => {
+      drawnItems.clearLayers();
+      const layer = e.layer;
+      drawnItems.addLayer(layer);
+      currentFeature = layer.toGeoJSON();
+      map.fitBounds(layer.getBounds(), { maxZoom: 17 });
+      document.getElementById('stats').style.display = 'none';
+      document.getElementById('crop-recs').style.display = 'none';
+      if (window.ndviHeatLayer) {
+        try { map.removeLayer(window.ndviHeatLayer); }
+        catch (e) { }
+        window.ndviHeatLayer = null;
+      }
+    });
+
+    map.on(L.Draw.Event.EDITED, (e) => e.layers.eachLayer(l => currentFeature = l.toGeoJSON()));
+    map.on(L.Draw.Event.DELETED, () => {
+      currentFeature = null;
+      if (window.ndviHeatLayer) {
+        try { map.removeLayer(window.ndviHeatLayer); }
+        catch (e) { }
+        window.ndviHeatLayer = null;
+      }
+    });
+
+    // Rest of original code unchanged
+    const loadingEl = document.getElementById('loading');
+    const statsEl = document.getElementById('stats');
+    const cropRecsEl = document.getElementById('crop-recs');
+
+    function showLoading(msg = 'Requesting...') { loadingEl.textContent = '⏳ ' + msg; loadingEl.style.display = 'block'; }
+    function hideLoading() { loadingEl.style.display = 'none'; }
+
+    function showStats(data) {
+      statsEl.style.display = 'block';
+      statsEl.innerHTML = `
+        <div style="font-weight:700;color:#0b8043;margin-bottom:6px">Field Summary</div>
+        <div><b>Mean NDVI:</b> ${data.mean_ndvi !== null ? Number(data.mean_ndvi).toFixed(3) : 'N/A'}</div>
+        <div><b>Poor vegetation area:</b> ${data.low_ndvi_percent !== undefined ? data.low_ndvi_percent + '%' : 'N/A'}</div>
+        <div style="margin-top:8px;color:#0b3e2d"><b>Note:</b> ${data.recommendation || ''}</div>
+      `;
+    }
+
+    function renderHeatmapFromPoints(points) {
+      try {
+        if (!points || !Array.isArray(points) || points.length === 0) return;
+        if (window.ndviHeatLayer) {
+          try { map.removeLayer(window.ndviHeatLayer); } catch (e) { }
+        }
+        window.ndviHeatLayer = L.heatLayer(points, { radius: 25, blur: 18, maxZoom: 17 }).addTo(map);
+        if (drawnItems.getLayers().length) map.fitBounds(drawnItems.getBounds());
+      } catch (ex) {
+        console.warn('Heatmap render error', ex);
+      }
+    }
+
+    async function computeNdviOnServer() {
+      if (!currentFeature) { alert('Draw a polygon first'); return null; }
+      showLoading('Requesting NDVI — please wait...');
+      try {
+        const res = await fetch(DEFAULT_NDVI_ENDPOINT, {
+          method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ polygon: currentFeature })
+        });
+        const data = await res.json();
+        hideLoading();
+        if (!data || !data.success) {
+          alert('NDVI request failed: ' + (data?.error || data?.details || res.statusText));
+          return null;
+        }
+        showStats(data);
+        if (data.heatmap_points) {
+          renderHeatmapFromPoints(data.heatmap_points);
+        }
+        return data;
+      } catch (err) {
+        hideLoading();
+        alert('NDVI request error: ' + err.message);
+        return null;
+      }
+    }
+
+    async function recommendCrops() {
+      if (!currentFeature) { alert('Draw a polygon first'); return; }
+      showLoading('Requesting crop recommendations...');
+      try {
+        let ndviData = await computeNdviOnServer();
+        const payload = {
+          polygon: currentFeature,
+          mean_ndvi: ndviData ? ndviData.mean_ndvi : null,
+          soil: { texture: document.getElementById('soil-texture').value || null, ph: document.getElementById('soil-ph').value ? Number(document.getElementById('soil-ph').value) : null },
+          water_availability: null
+        };
+
+        const res = await fetch(RECOMMEND_ENDPOINT, {
+          method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload)
+        });
+
+        const data = await res.json();
+        hideLoading();
+        if (!data || !data.success) {
+          alert('Recommendation failed: ' + (data?.error || data?.details || res.statusText));
+          return;
+        }
+        renderRecommendations(data);
+      } catch (err) {
+        hideLoading();
+        alert('Recommendation error: ' + err.message);
+      }
+    }
+
+    function renderRecommendations(data) {
+      cropRecsEl.style.display = 'block';
+      cropRecsEl.innerHTML = `<div style="font-weight:800;margin-bottom:8px">AI Crop Recommendations</div>`;
+      if (!data.recommendations || data.recommendations.length === 0) {
+        cropRecsEl.innerHTML += `<div style="color:#6b7280">No recommendations available. ${data.notes || ''}</div>`;
+        return;
+      }
+      data.recommendations.forEach(rec => {
+        const card = document.createElement('div');
+        card.className = 'rec-card';
+        card.innerHTML = `
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div>
+              <div style="font-weight:800">${rec.crop}</div>
+              <div style="font-size:13px;color:#6b7280;margin-top:4px">${rec.reason}</div>
+            </div>
+            <div style="text-align:right">
+              <div class="score-pill">${rec.suitability_score}%</div>
+              <div style="font-size:12px;color:#6b7280;margin-top:6px">Confidence: ${(rec.confidence * 100).toFixed(0)}%</div>
+            </div>
+          </div>
+          <div style="margin-top:8px;font-size:13px"><b>Action:</b> ${rec.action || '—'}</div>
+          <div style="margin-top:8px;font-size:12px;color:#6b7280"><b>Soil reqs:</b> pH ${rec.soil_requirements?.ph_min ?? '—'}–${rec.soil_requirements?.ph_max ?? '—'}, texture ${rec.soil_requirements?.texture ?? '—'}</div>
+        `;
+        cropRecsEl.appendChild(card);
+      });
+
+      const raw = document.createElement('pre');
+      raw.className = 'raw';
+      raw.textContent = JSON.stringify({ recommendations: data.recommendations, notes: data.notes, source_data: data.source_data, generated_at: data.generated_at }, null, 2);
+      cropRecsEl.appendChild(raw);
+    }
+
+    document.getElementById('btn-ndvi').addEventListener('click', computeNdviOnServer);
+    document.getElementById('btn-recommend').addEventListener('click', recommendCrops);
+
+    async function searchLocation() {
+      const q = document.getElementById('search-input').value.trim();
+      if (!q) return;
+      try {
+        const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(q)}&limit=1`;
+        const res = await fetch(url, { headers: { 'Accept': 'application/json' } });
+        const arr = await res.json();
+        if (!arr || !arr.length) { alert('Location not found'); return; }
+        map.setView([Number(arr[0].lat), Number(arr[0].lon)], 13);
+      } catch (e) { console.error(e); alert('Search failed'); }
+    }
+    document.getElementById('search-btn').addEventListener('click', searchLocation);
+    document.getElementById('search-input').addEventListener('keydown', (e) => e.key === 'Enter' && searchLocation());
+    document.getElementById('locate-btn').addEventListener('click', () => {
+      if (!navigator.geolocation) return alert('Geolocation not supported');
+      navigator.geolocation.getCurrentPosition(p => { map.setView([p.coords.latitude, p.coords.longitude], 14); L.marker([p.coords.latitude, p.coords.longitude]).addTo(map).bindPopup('You are here').openPopup(); }, e => alert('Unable to obtain location: ' + e.message));
+    });
+
+    // Initialize
+    setDrawMode();
+  </script>
+</body>
+
+</html>

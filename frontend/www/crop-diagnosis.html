@@ -1,0 +1,2233 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Crop Diagnosis - KrishiMitr</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+    <style>
+        :root {
+            --primary: #10b981;
+            --primary-dark: #059669;
+            --secondary: #3b82f6;
+            --accent: #8b5cf6;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --success: #10b981;
+            --bg-light: #f8fafc;
+            --bg-dark: #0f172a;
+            --card-light: #ffffff;
+            --card-dark: #1e293b;
+            --text-light: #334155;
+            --text-dark: #f1f5f9;
+            --text-secondary-light: #64748b;
+            --text-secondary-dark: #94a3b8;
+            --border-light: #e2e8f0;
+            --border-dark: #334155;
+            --sidebar-light: #ffffff;
+            --sidebar-dark: #1e293b;
+            --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --gradient-3: linear-gradient(135deg, #023f74 0%, #00f2fe 100%);
+            --gradient-4: linear-gradient(135deg, #000000 0%, #38f9d7 100%);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-light);
+            color: var(--text-light);
+            overflow-x: hidden;
+            transition: all 0.3s ease;
+            line-height: 1.6;
+        }
+
+        body.dark {
+            background: var(--bg-dark);
+            color: var(--text-dark);
+        }
+
+        /* =============== SIDEBAR =============== */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100vh;
+            width: 280px;
+            background: var(--sidebar-light);
+            z-index: 1000;
+            transition: transform 0.3s ease, background 0.3s ease;
+            box-shadow: 4px 0 15px rgba(15, 23, 42, 0.12);
+            border-right: 1px solid var(--border-light);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        body.dark .sidebar {
+            background: var(--sidebar-dark);
+            border-right-color: var(--border-dark);
+            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.6);
+        }
+
+        .sidebar-header {
+            padding: 1.6rem 1.5rem;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.35);
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(59, 130, 246, 0.08));
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .logo-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 0.9rem;
+            object-fit: contain;
+            background: #ecfdf5;
+            padding: 4px;
+        }
+
+        body.dark .logo-icon {
+            background: #022c22;
+        }
+
+        .logo-brand {
+            display: flex;
+            gap: 0.2rem;
+            align-items: baseline;
+            letter-spacing: 0.02em;
+        }
+
+        .logo-text-krishi {
+            color: var(--primary);
+            font-weight: 800;
+            font-size: 1.25rem;
+        }
+
+        .logo-text-mitr {
+            color: #020617;
+            font-weight: 800;
+            font-size: 1.25rem;
+        }
+
+        body.dark .logo-text-mitr {
+            color: #f9fafb;
+        }
+
+        .nav-menu {
+            flex: 1;
+            overflow-y: auto;
+            padding: 0.5rem 0;
+        }
+
+        .nav-section {
+            margin-bottom: 1rem;
+        }
+
+        .nav-section-title {
+            padding: 0 1.5rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: #4b5563;
+            margin-bottom: 0.6rem;
+        }
+
+        body.dark .nav-section-title {
+            color: var(--text-secondary-dark);
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 0.9rem;
+            text-decoration: none;
+            padding: 0.75rem 1.5rem;
+            color: #111827;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            border-left: 3px solid transparent;
+            font-size: 0.95rem;
+        }
+
+        body.dark .nav-item {
+            color: #e5e7eb;
+        }
+
+        .nav-item i {
+            font-size: 1.1rem;
+            width: 20px;
+        }
+
+        .nav-item:hover {
+            color: var(--primary);
+            border-left-color: var(--primary);
+            background: rgba(16, 185, 129, 0.06);
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+            font-weight: 600;
+            border-left-color: var(--primary);
+            background: rgba(16, 185, 129, 0.08);
+        }
+
+        .sidebar-footer {
+            flex-shrink: 0;
+            width: 100%;
+            padding: 1.2rem 1.5rem 1.5rem;
+            border-top: 1px solid var(--border-light);
+            background: var(--sidebar-light);
+            display: flex;
+            flex-direction: column;
+            gap: 0.7rem;
+        }
+
+        body.dark .sidebar-footer {
+            background: var(--sidebar-dark);
+            border-top-color: var(--border-dark);
+        }
+
+        .user-info {
+            color: var(--text-secondary-light);
+            font-size: 0.85rem;
+        }
+
+        body.dark .user-info {
+            color: var(--text-secondary-dark);
+        }
+
+        .theme-toggle-sidebar,
+        .logout-btn {
+            width: 100%;
+            border-radius: 999px;
+            padding: 0.65rem 0.8rem;
+            font-size: 0.8rem;
+            cursor: pointer;
+            border: 1px solid transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.45rem;
+            transition: all 0.2s ease;
+            font-weight: 500;
+        }
+
+        .theme-toggle-sidebar {
+            background: rgba(16, 185, 129, 0.06);
+            color: var(--primary);
+            border-color: rgba(16, 185, 129, 0.25);
+        }
+
+        .theme-toggle-sidebar:hover {
+            background: rgba(16, 185, 129, 0.12);
+        }
+
+        .logout-btn {
+            background: rgba(239, 68, 68, 0.06);
+            color: var(--danger);
+            border-color: rgba(239, 68, 68, 0.25);
+        }
+
+        .logout-btn:hover {
+            background: rgba(239, 68, 68, 0.12);
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 260px;
+                transform: translateX(-100%);
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0 !important;
+                width: 100% !important;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .sidebar {
+                width: 240px;
+            }
+        }
+
+        /* =============== MAIN CONTENT + TOPBAR =============== */
+        .main-content {
+            margin-left: 280px;
+            min-height: 100vh;
+            transition: margin-left 0.3s ease;
+            background: var(--bg-light);
+        }
+
+        body.dark .main-content {
+            background: var(--bg-dark);
+        }
+
+        .simple-topbar {
+            background: var(--card-light);
+            padding: 1rem 2.2rem;
+            border-bottom: 1px solid var(--border-light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        body.dark .simple-topbar {
+            background: var(--card-dark);
+            border-bottom-color: var(--border-dark);
+        }
+
+        .topbar-left {
+            display: flex;
+            align-items: center;
+            gap: 0.9rem;
+        }
+
+        .topbar-logo {
+            width: 30px;
+            height: 30px;
+            border-radius: 0.7rem;
+            object-fit: contain;
+            background: #ecfdf5;
+            padding: 3px;
+        }
+
+        body.dark .topbar-logo {
+            background: #022c22;
+        }
+
+        .simple-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text-light);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        body.dark .simple-title {
+            color: var(--text-dark);
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .status-badge {
+            background: rgba(22, 163, 74, 0.08);
+            color: #16a34a;
+            padding: 0.35rem 0.9rem;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            border: 1px solid rgba(22, 163, 74, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 0.45rem;
+        }
+
+        body.dark .status-badge {
+            background: rgba(22, 163, 74, 0.18);
+            color: #bbf7d0;
+            border-color: rgba(22, 163, 74, 0.4);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.5rem 0.7rem;
+            border-radius: 0.6rem;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: #22c55e;
+            box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.25);
+            animation: pulse 1.8s infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+
+            50% {
+                transform: scale(0.9);
+                opacity: 0.7;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .simple-topbar {
+                padding: 0.9rem 1rem;
+            }
+
+            .simple-title {
+                font-size: 1.1rem;
+            }
+
+            .mobile-menu-btn {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+            }
+        }
+
+        /* =============== PAGE CONTENT =============== */
+        .content-area {
+            padding: 2rem 2.25rem 3rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* =============== HERO STRIP =============== */
+        .diagnosis-hero {
+            margin-bottom: 1.8rem;
+            display: flex;
+            justify-content: space-between;
+            gap: 1.5rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .diagnosis-hero-main {
+            flex: 1;
+            min-width: 240px;
+        }
+
+        .diagnosis-hero-title {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .diagnosis-hero-title h2 {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--text-light);
+        }
+
+        body.dark .diagnosis-hero-title h2 {
+            color: var(--text-dark);
+        }
+
+        .hero-badge {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.6rem;
+            border-radius: 999px;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.25);
+            color: var(--primary-dark);
+            font-weight: 600;
+        }
+
+        body.dark .hero-badge {
+            background: rgba(16, 185, 129, 0.2);
+            color: #bbf7d0;
+            border-color: rgba(16, 185, 129, 0.5);
+        }
+
+        .diagnosis-hero-subtitle {
+            margin-top: 0.25rem;
+            color: var(--text-secondary-light);
+            font-size: 0.9rem;
+        }
+
+        body.dark .diagnosis-hero-subtitle {
+            color: var(--text-secondary-dark);
+        }
+
+        .hero-langs {
+            margin-top: 0.5rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+        }
+
+        .hero-lang-pill {
+            font-size: 0.75rem;
+            padding: 0.2rem 0.55rem;
+            border-radius: 999px;
+            border: 1px dashed var(--border-light);
+            color: var(--text-secondary-light);
+            background: rgba(248, 250, 252, 0.8);
+        }
+
+        body.dark .hero-lang-pill {
+            border-color: var(--border-dark);
+            color: var(--text-secondary-dark);
+            background: rgba(15, 23, 42, 0.9);
+        }
+
+        .diagnosis-steps-card {
+            min-width: 240px;
+            max-width: 320px;
+            background: var(--card-light);
+            border-radius: 16px;
+            padding: 0.9rem 1rem;
+            border: 1px solid var(--border-light);
+            box-shadow: 0 10px 25px rgba(15, 23, 42, 0.08);
+        }
+
+        body.dark .diagnosis-steps-card {
+            background: var(--card-dark);
+            border-color: var(--border-dark);
+            box-shadow: 0 10px 25px rgba(15, 23, 42, 0.4);
+        }
+
+        .steps-title {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--text-secondary-light);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+
+        body.dark .steps-title {
+            color: var(--text-secondary-dark);
+        }
+
+        .steps-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .step-row {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary-light);
+        }
+
+        body.dark .step-row {
+            color: var(--text-secondary-dark);
+        }
+
+        .step-icon {
+            width: 22px;
+            height: 22px;
+            border-radius: 999px;
+            background: rgba(16, 185, 129, 0.12);
+            border: 1px solid rgba(16, 185, 129, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            color: var(--primary-dark);
+        }
+
+        /* =============== MAIN DIAGNOSIS LAYOUT =============== */
+        .upload-section {
+            background: var(--card-light);
+            border-radius: 24px;
+            padding: 1.8rem;
+            border: 1px solid var(--border-light);
+            box-shadow: 0 18px 45px rgba(15, 23, 42, 0.08);
+        }
+
+        body.dark .upload-section {
+            background: var(--card-dark);
+            border-color: var(--border-dark);
+            box-shadow: 0 18px 45px rgba(15, 23, 42, 0.6);
+        }
+
+        .diagnosis-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.2fr);
+            gap: 1.7rem;
+            align-items: stretch;
+        }
+
+        /* LEFT */
+        .diagnosis-left {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .hero-image-card {
+            border-radius: 18px;
+            overflow: hidden;
+            background: #020617;
+            position: relative;
+            min-height: 360px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        body.dark .hero-image-card {
+            background: #020617;
+        }
+
+        .hero-image-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            aspect-ratio: 9/16;
+            display: block;
+        }
+
+        .hero-image-label {
+            position: absolute;
+            bottom: 0.85rem;
+            left: 0.85rem;
+            padding: 0.45rem 0.7rem;
+            border-radius: 999px;
+            background: rgba(15, 23, 42, 0.8);
+            color: #e5e7eb;
+            font-size: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .hero-image-label i {
+            color: var(--primary);
+        }
+
+        .hero-tips-card {
+            border-radius: 16px;
+            padding: 0.9rem 1rem;
+            background: var(--card-light);
+            border: 1px dashed var(--border-light);
+            color: var(--text-secondary-light);
+            font-size: 0.8rem;
+        }
+
+        body.dark .hero-tips-card {
+            background: var(--card-dark);
+            border-color: var(--border-dark);
+            color: var(--text-secondary-dark);
+        }
+
+        .hero-tips-card strong {
+            color: var(--primary-dark);
+            font-weight: 700;
+        }
+
+        .hero-tips-card ul {
+            list-style: none;
+            margin-top: 0.35rem;
+        }
+
+        .hero-tips-card li {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            margin-top: 0.15rem;
+        }
+
+        .hero-tips-card li i {
+            color: var(--primary);
+            font-size: 0.75rem;
+        }
+
+        /* RIGHT */
+        .diagnosis-right {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .panel-card {
+            border-radius: 18px;
+            padding: 1.1rem 1.2rem;
+            border: 1px solid var(--border-light);
+            background: var(--card-light);
+        }
+
+        body.dark .panel-card {
+            background: var(--card-dark);
+            border-color: var(--border-dark);
+        }
+
+        .panel-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 0.75rem;
+        }
+
+        .panel-header h3 {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--text-light);
+        }
+
+        body.dark .panel-header h3 {
+            color: var(--text-dark);
+        }
+
+        .panel-tag {
+            font-size: 0.7rem;
+            padding: 0.2rem 0.55rem;
+            border-radius: 999px;
+            background: rgba(248, 250, 252, 0.9);
+            border: 1px solid var(--border-light);
+            color: var(--text-secondary-light);
+        }
+
+        body.dark .panel-tag {
+            background: rgba(15, 23, 42, 0.95);
+            border-color: var(--border-dark);
+            color: var(--text-secondary-dark);
+        }
+
+        .image-upload-area {
+            position: relative;
+        }
+
+        .upload-zone {
+            border: 2px dashed var(--border-light);
+            border-radius: 14px;
+            padding: 1.4rem 1.2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            background: rgba(248, 250, 252, 0.9);
+            min-height: 165px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        body.dark .upload-zone {
+            background: rgba(15, 23, 42, 0.95);
+            border-color: var(--border-dark);
+        }
+
+        .upload-zone:hover,
+        .upload-zone.drag-over {
+            border-color: var(--primary);
+            background: rgba(16, 185, 129, 0.05);
+            transform: translateY(-1px);
+        }
+
+        .upload-icon {
+            font-size: 2.1rem;
+            color: var(--text-secondary-light);
+            margin-bottom: 0.4rem;
+        }
+
+        body.dark .upload-icon {
+            color: var(--text-secondary-dark);
+        }
+
+        .upload-text {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            margin-bottom: 0.15rem;
+        }
+
+        body.dark .upload-text {
+            color: var(--text-dark);
+        }
+
+        .upload-subtext {
+            font-size: 0.75rem;
+            color: var(--text-secondary-light);
+        }
+
+        body.dark .upload-subtext {
+            color: var(--text-secondary-dark);
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .preview-image {
+            max-width: 100%;
+            max-height: 270px;
+            border-radius: 12px;
+            display: none;
+        }
+
+        .upload-zone.has-image {
+            padding: 0.8rem;
+        }
+
+        .remove-image {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 32px;
+            height: 32px;
+            border-radius: 999px;
+            border: none;
+            background: var(--danger);
+            color: #f9fafb;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            box-shadow: 0 8px 22px rgba(239, 68, 68, 0.6);
+        }
+
+        .form-fields {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 0.9rem 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        .field-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+        }
+
+        .field-group.full {
+            grid-column: 1 / -1;
+        }
+
+        .field-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-light);
+        }
+
+        body.dark .field-label {
+            color: var(--text-dark);
+        }
+
+        .field-input,
+        .field-select,
+        .field-textarea {
+            padding: 0.7rem 0.75rem;
+            border-radius: 10px;
+            border: 1px solid var(--border-light);
+            background: var(--card-light);
+            color: var(--text-light);
+            font-size: 0.85rem;
+            font-family: 'Inter', sans-serif;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+        }
+
+        body.dark .field-input,
+        body.dark .field-select,
+        body.dark .field-textarea {
+            background: var(--card-dark);
+            border-color: var(--border-dark);
+            color: var(--text-dark);
+        }
+
+        .field-textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+
+        .field-input::placeholder,
+        .field-textarea::placeholder {
+            color: var(--text-secondary-light);
+        }
+
+        body.dark .field-input::placeholder,
+        body.dark .field-textarea::placeholder {
+            color: var(--text-secondary-dark);
+        }
+
+        .field-input:focus,
+        .field-select:focus,
+        .field-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 1px rgba(16, 185, 129, 0.6);
+        }
+
+        .analyze-btn {
+            margin-top: 0.6rem;
+            width: 100%;
+            border-radius: 999px;
+            border: none;
+            padding: 0.8rem 1.2rem;
+            background: var(--gradient-4);
+            color: #f9fafb;
+            font-size: 0.95rem;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            box-shadow: 0 12px 28px rgba(16, 185, 129, 0.35);
+            transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.2s ease;
+        }
+
+        .analyze-btn i {
+            font-size: 1rem;
+        }
+
+        .analyze-btn:hover:not(:disabled) {
+            transform: translateY(-1px);
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+        }
+
+        .analyze-btn:active:not(:disabled) {
+            transform: translateY(0);
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+        }
+
+        .analyze-btn:disabled {
+            background: #16181d;
+            box-shadow: none;
+            cursor: not-allowed;
+        }
+
+        /* =============== LOADING & RESULTS =============== */
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 2.4rem 1.4rem;
+            background: var(--card-light);
+            border-radius: 20px;
+            border: 1px solid var(--border-light);
+            margin-top: 1.8rem;
+            color: var(--text-light);
+            box-shadow: 0 10px 25px rgba(15, 23, 42, 0.08);
+        }
+
+        body.dark .loading {
+            background: var(--card-dark);
+            border-color: var(--border-dark);
+            color: var(--text-dark);
+            box-shadow: 0 10px 25px rgba(15, 23, 42, 0.5);
+        }
+
+        .loading-spinner {
+            width: 44px;
+            height: 44px;
+            border-radius: 999px;
+            border: 4px solid rgba(148, 163, 184, 0.6);
+            border-top-color: var(--primary);
+            margin: 0 auto 1rem;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .results-section {
+            display: none;
+            background: var(--card-light);
+            border-radius: 22px;
+            border: 1px solid var(--border-light);
+            margin-top: 1.9rem;
+            padding: 1.8rem 1.6rem 2rem;
+            color: var(--text-light);
+            box-shadow: 0 16px 40px rgba(15, 23, 42, 0.1);
+        }
+
+        body.dark .results-section {
+            background: var(--card-dark);
+            border-color: var(--border-dark);
+            color: var(--text-dark);
+            box-shadow: 0 16px 40px rgba(15, 23, 42, 0.6);
+        }
+
+        .results-header {
+            display: flex;
+            align-items: center;
+            gap: 0.9rem;
+            padding-bottom: 0.9rem;
+            border-bottom: 1px solid var(--border-light);
+            margin-bottom: 1.4rem;
+        }
+
+        body.dark .results-header {
+            border-bottom-color: var(--border-dark);
+        }
+
+        .result-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 16px;
+            background: var(--gradient-4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #f9fafb;
+            font-size: 1.4rem;
+            box-shadow: 0 12px 30px rgba(16, 185, 129, 0.45);
+        }
+
+        .results-header h3 {
+            font-size: 1.2rem;
+            font-weight: 800;
+        }
+
+        .results-header p {
+            font-size: 0.85rem;
+            color: var(--text-secondary-light);
+        }
+
+        body.dark .results-header p {
+            color: var(--text-secondary-dark);
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 1rem;
+        }
+
+        @media (max-width: 1024px) {
+            .results-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 720px) {
+            .results-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .result-card {
+            border-radius: 16px;
+            padding: 1.1rem 1.1rem 1.2rem;
+            background: var(--card-light);
+            border: 1px solid var(--border-light);
+            transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+        }
+
+        body.dark .result-card {
+            background: var(--card-dark);
+            border-color: var(--border-dark);
+        }
+
+        .result-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 35px rgba(15, 23, 42, 0.16);
+            border-color: var(--primary);
+        }
+
+        .result-card-header {
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+            margin-bottom: 0.7rem;
+        }
+
+        .result-card-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #f9fafb;
+            font-size: 1rem;
+        }
+
+        .diagnosis-icon {
+            background: var(--gradient-1);
+        }
+
+        .treatment-icon {
+            background: var(--gradient-2);
+        }
+
+        .prevention-icon {
+            background: var(--gradient-3);
+        }
+
+        .result-card-title {
+            font-size: 0.95rem;
+            font-weight: 700;
+        }
+
+        .result-card-content {
+            font-size: 0.85rem;
+        }
+
+        .result-card-content ul {
+            margin-left: 1rem;
+            margin-top: 0.35rem;
+        }
+
+        .result-card-content li {
+            margin-bottom: 0.35rem;
+        }
+
+        .severity-badge {
+            display: inline-block;
+            margin-top: 0.6rem;
+            padding: 0.25rem 0.65rem;
+            border-radius: 999px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+
+        .severity-mild {
+            background: rgba(34, 197, 94, 0.18);
+            color: #16a34a;
+        }
+
+        .severity-moderate {
+            background: rgba(245, 158, 11, 0.18);
+            color: #d97706;
+        }
+
+        .severity-severe {
+            background: rgba(239, 68, 68, 0.2);
+            color: #dc2626;
+        }
+
+        /* MOBILE RESPONSIVE CSS - PASTE THIS IN YOUR <style> SECTION */
+
+        /* MOBILE RESPONSIVE - NOTHING REMOVED, JUST ADDED */
+        @media (max-width: 768px) {
+            body {
+                background: linear-gradient(135deg, #e2f3ff 0%, #f9fbff 50%, #dde7ff 100%);
+            }
+
+            header {
+                padding: 12px 16px;
+            }
+
+            .header-content {
+                flex-wrap: wrap;
+            }
+
+            .header-content>div:first-child {
+                font-size: 16px;
+            }
+
+            .header-content>div:last-child {
+                font-size: 11px;
+            }
+
+            .layout {
+                flex-direction: column !important;
+                padding: 12px;
+                gap: 12px;
+                height: calc(100vh - 90px);
+                padding-bottom: 20px;
+            }
+
+            #map {
+                flex: none !important;
+                order: 2;
+                height: 60vh;
+                min-height: 400px;
+                width: 100%;
+                max-width: 100%;
+                border-radius: 12px;
+            }
+
+            #panel {
+                flex: none !important;
+                order: 1;
+                min-width: auto !important;
+                padding: 20px;
+                width: 100%;
+                max-width: 100%;
+                border-radius: 12px;
+                box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12);
+            }
+
+            .tool-buttons {
+                flex-direction: column !important;
+                gap: 10px;
+            }
+
+            .mode-btn,
+            .primary,
+            .ghost,
+            .gps-btn {
+                padding: 16px 12px !important;
+                font-size: 16px !important;
+                width: 100%;
+                box-sizing: border-box;
+            }
+
+            input {
+                padding: 16px !important;
+                font-size: 16px !important;
+                border-radius: 12px !important;
+                border: 2px solid #e5e7eb !important;
+                width: 100%;
+                box-sizing: border-box;
+                margin-bottom: 8px;
+            }
+
+            .search-tools>div {
+                flex-direction: column !important;
+            }
+
+            .search-tools>div>input {
+                margin-bottom: 8px;
+            }
+
+            .search-tools>div>button {
+                width: 100%;
+            }
+
+            div[style*="display:flex;gap:6px;margin-top:6px"] {
+                flex-direction: column !important;
+            }
+
+            div[style*="display:flex;gap:8px"] {
+                flex-direction: column !important;
+            }
+
+            div[style*="display:flex;gap:6px;margin-top:6px"] input {
+                width: 100% !important;
+            }
+
+            .legend-grid {
+                grid-template-columns: 1fr !important;
+                gap: 12px;
+            }
+
+            h2 {
+                font-size: 20px;
+                margin-top: 0;
+            }
+
+            .desc {
+                font-size: 15px;
+                line-height: 1.5;
+            }
+
+            .rec-card {
+                padding: 16px;
+            }
+
+            pre.raw {
+                font-size: 11px;
+                max-height: 120px;
+            }
+
+            #loading {
+                font-size: 15px;
+                padding: 12px;
+                background: rgba(16, 185, 129, 0.1);
+                border-radius: 10px;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .layout {
+                padding: 8px;
+            }
+
+            #panel {
+                padding: 16px;
+            }
+
+            #map {
+                height: 55vh;
+                min-height: 350px;
+            }
+
+            .primary,
+            .ghost,
+            .gps-btn {
+                padding: 18px !important;
+            }
+        }
+
+        @media (min-width: 769px) {
+            .layout {
+                max-width: 1400px;
+                margin: 0 auto;
+            }
+        }
+
+        /* Sticky header for mobile */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        /* =============== RESPONSIVE =============== */
+        @media (max-width: 1024px) {
+            .diagnosis-grid {
+                grid-template-columns: minmax(0, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .content-area {
+                padding: 1.3rem 1rem 2.2rem;
+            }
+
+            .diagnosis-hero {
+                align-items: flex-start;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .diagnosis-grid {
+                gap: 1.2rem;
+            }
+        }
+
+        /* Malayalam font scaling */
+        body.lang-ml {
+            font-size: 0.9rem;
+            line-height: 1.3;
+        }
+
+        body.lang-ml .sidebar .nav-item span {
+            font-size: 0.85rem;
+        }
+
+        body.lang-ml .simple-title span {
+            font-size: 1.1rem;
+        }
+
+        body.lang-ml .diagnosis-hero-title h2 {
+            font-size: 1.4rem;
+        }
+    </style>
+    <script src="config.js"></script>
+</head>
+
+<body>
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <img src="images/logo.png" alt="KrishiMitr Logo" class="logo-icon" />
+                <div class="logo-brand">
+                    <span class="logo-text-krishi">Krishi</span>
+                    <span class="logo-text-mitr">Mitr</span>
+                </div>
+            </div>
+        </div>
+        <div class="nav-menu">
+            <div class="nav-section">
+                <div class="nav-section-title" data-i18n="sidebar.mainMenu">Main Menu</div>
+                <a href="dashboard.html" class="nav-item">
+                    <i class="fas fa-home"></i>
+                    <span data-i18n="sidebar.dashboard">Dashboard</span>
+                </a>
+                <a href="ask-query.html" class="nav-item">
+                    <i class="fas fa-robot"></i>
+                    <span data-i18n="sidebar.askQuery">Ask Query</span>
+                </a>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title" data-i18n="sidebar.tools">Tools</div>
+                <a href="crop-diagnosis.html" class="nav-item active">
+                    <i class="fa-solid fa-briefcase-medical"></i>
+                    <span data-i18n="sidebar.cropDiagnosis">Crop Diagnosis</span>
+                </a>
+                <a href="weather-alerts.html" class="nav-item">
+                    <i class="fas fa-cloud-sun"></i>
+                    <span data-i18n="sidebar.weatherAlerts">Weather & Alerts</span>
+                </a>
+                <a href="Schemes.html" class="nav-item">
+                    <i class="fa-solid fa-building-ngo"></i>
+                    <span data-i18n="sidebar.schemes">Govt Schemes</span>
+                </a>
+                <a href="helpline.html" class="nav-item">
+                    <i class="fa-solid fa-phone"></i>
+                    <span data-i18n="sidebar.helpline">Helpline Number</span>
+                </a>
+                <a href="smart-farming.html" class="nav-item">
+                    <i class="fa-solid fa-briefcase"></i>
+                    <span data-i18n="sidebar.agriSwasthya">Agri Swasthya</span>
+                </a>
+                <a href="market-prices.html" class="nav-item">
+                    <i class="fa-solid fa-dollar-sign"></i>
+                    <span data-i18n="sidebar.marketPrices">Market Prices</span>
+                </a>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title" data-i18n="sidebar.communitySection">Community</div>
+                <a href="farmer-community.html" class="nav-item">
+                    <i class="fas fa-users"></i>
+                    <span data-i18n="sidebar.community">Community</span>
+                </a>
+                <a href="profile.html" class="nav-item">
+                    <i class="fas fa-user"></i>
+                    <span data-i18n="sidebar.profile">Profile</span>
+                </a>
+            </div>
+        </div>
+        <div class="sidebar-footer">
+            <div id="userInfo" class="user-info">
+                <div style="font-weight:600;" data-i18n="sidebar.user.loadingTitle">Loading...</div>
+                <div style="font-size:0.8rem;opacity:0.8;" data-i18n="sidebar.user.loadingSubtitle">
+                    Fetching profile
+                </div>
+            </div>
+            <button class="theme-toggle-sidebar" onclick="toggleTheme()">
+                <i class="fas fa-sun"></i>
+                <span data-i18n="sidebar.toggleTheme">Toggle Theme</span>
+            </button>
+            <button id="logoutBtn" class="logout-btn">
+                <i class="fas fa-sign-out-alt"></i>
+                <span data-i18n="sidebar.logout">Logout</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Top Bar -->
+        <div class="simple-topbar">
+            <div class="topbar-left">
+                <button class="mobile-menu-btn" onclick="toggleSidebar()">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1 class="simple-title">
+                    <img src="images/crop-diagnosis.png" alt="Crop Diagnosis" class="topbar-logo">
+                    <span data-i18n="crop.title">Crop Diagnosis</span>
+                </h1>
+            </div>
+            <div class="topbar-right">
+                <span class="status-badge">
+                    <span class="status-dot"></span>
+                    <span data-i18n="crop.status.ready">AI ready for your field</span>
+                </span>
+            </div>
+        </div>
+
+        <div class="content-area">
+            <!-- Hero -->
+            <div class="diagnosis-hero">
+                <div class="diagnosis-hero-main">
+                    <div class="diagnosis-hero-title">
+                        <h2 data-i18n="crop.hero.title">Crop Diagnosis</h2>
+                        <span class="hero-badge" data-i18n="crop.hero.badge">For Kerala farmers</span>
+                    </div>
+                    <p class="diagnosis-hero-subtitle" data-i18n="crop.hero.subtitle">
+                        Upload a clear image of the affected plant part, add a few details and get AI-guided diagnosis.
+                    </p>
+                    <div class="hero-langs">
+                        <div class="hero-lang-pill" data-i18n="langs.en">English</div>
+                        <div class="hero-lang-pill" data-i18n="langs.ml">മലയാളം (Malayalam)</div>
+                        <div class="hero-lang-pill" data-i18n="langs.hi">हिन्दी (Hindi)</div>
+                    </div>
+                </div>
+
+                <div class="diagnosis-steps-card">
+                    <div class="steps-title" data-i18n="crop.steps.title">How this works</div>
+                    <div class="steps-list">
+                        <div class="step-row">
+                            <div class="step-icon"><i class="fas fa-image"></i></div>
+                            <span data-i18n="crop.steps.1">Upload clear photo of leaf / fruit / stem</span>
+                        </div>
+                        <div class="step-row">
+                            <div class="step-icon"><i class="fas fa-clipboard-list"></i></div>
+                            <span data-i18n="crop.steps.2">Fill crop, location & short symptom notes</span>
+                        </div>
+                        <div class="step-row">
+                            <div class="step-icon"><i class="fas fa-seedling"></i></div>
+                            <span data-i18n="crop.steps.3">Get diagnosis, field actions & prevention</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Diagnosis -->
+            <div class="upload-section">
+                <form id="diagnosisForm" class="diagnosis-grid">
+                    <!-- LEFT -->
+                    <div class="diagnosis-left">
+                        <div class="hero-image-card">
+                            <img src="images/doctor.png" alt="Crop health showcase">
+                            <div class="hero-image-label">
+                                <i class="fas fa-circle-info"></i>
+                                <span data-i18n="crop.hero.imageLabel">Sample view – farmer’s field image</span>
+                            </div>
+                        </div>
+
+                        <div class="hero-tips-card">
+                            <strong data-i18n="crop.tips.title">For best AI diagnosis:</strong>
+                            <ul>
+                                <li>
+                                    <i class="fas fa-check"></i>
+                                    <span data-i18n="crop.tips.1">Take photo in daylight (no harsh flash glare)</span>
+                                </li>
+                                <li>
+                                    <i class="fas fa-check"></i>
+                                    <span data-i18n="crop.tips.2">Keep 1–3 affected leaves or fruits clearly
+                                        visible</span>
+                                </li>
+                                <li>
+                                    <i class="fas fa-check"></i>
+                                    <span data-i18n="crop.tips.3">Avoid very far / blurred images</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- RIGHT -->
+                    <div class="diagnosis-right">
+                        <!-- Upload Panel -->
+                        <div class="panel-card">
+                            <div class="panel-header">
+                                <h3 data-i18n="crop.panel.upload.title">1. Upload affected crop image</h3>
+                                <span class="panel-tag" data-i18n="crop.panel.upload.tag">Image required</span>
+                            </div>
+
+                            <div class="image-upload-area">
+                                <div class="upload-zone" id="uploadZone">
+                                    <div class="upload-icon">
+                                        <i class="fas fa-cloud-upload-alt"></i>
+                                    </div>
+                                    <div class="upload-text" data-i18n="crop.upload.text">
+                                        Click to select or drop image here
+                                    </div>
+                                    <div class="upload-subtext" data-i18n="crop.upload.subtext">
+                                        Supports JPEG, PNG, WebP • Max 10 MB
+                                    </div>
+                                </div>
+                                <input type="file" id="fileInput" class="file-input" accept="image/*" required>
+                                <img id="previewImage" class="preview-image" alt="Preview">
+                                <button type="button" id="removeImage" class="remove-image">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Details Panel -->
+                        <div class="panel-card">
+                            <div class="panel-header">
+                                <h3 data-i18n="crop.panel.details.title">2. Field details</h3>
+                                <span class="panel-tag" data-i18n="crop.panel.details.tag">Improves accuracy</span>
+                            </div>
+
+                            <div class="form-fields">
+                                <div class="field-group">
+                                    <label class="field-label" data-i18n="crop.form.cropType.label">Crop type</label>
+                                    <select id="cropType" class="field-select">
+                                        <option value="" data-i18n="crop.form.cropType.placeholder">Select crop</option>
+                                        <option value="rice" data-i18n="crop.form.cropType.rice">Rice</option>
+                                        <option value="tomato" data-i18n="crop.form.cropType.tomato">Tomato</option>
+                                        <option value="pepper" data-i18n="crop.form.cropType.pepper">Chilli / Capsicum
+                                        </option>
+                                        <option value="coconut" data-i18n="crop.form.cropType.coconut">Coconut</option>
+                                        <option value="banana" data-i18n="crop.form.cropType.banana">Banana</option>
+                                        <option value="cardamom" data-i18n="crop.form.cropType.cardamom">Cardamom
+                                        </option>
+                                        <option value="rubber" data-i18n="crop.form.cropType.rubber">Rubber</option>
+                                        <option value="tea" data-i18n="crop.form.cropType.tea">Tea</option>
+                                        <option value="coffee" data-i18n="crop.form.cropType.coffee">Coffee</option>
+                                        <option value="other" data-i18n="crop.form.cropType.other">Other</option>
+                                    </select>
+                                </div>
+
+                                <div class="field-group">
+                                    <label class="field-label" data-i18n="crop.form.location.label">Location</label>
+                                    <input type="text" id="location" class="field-input"
+                                        placeholder="e.g., Wayanad, Kerala"
+                                        data-i18n-placeholder="crop.form.location.placeholder">
+                                </div>
+
+                                <div class="field-group full">
+                                    <label class="field-label" data-i18n="crop.form.symptoms.label">Observed
+                                        symptoms</label>
+                                    <textarea id="symptoms" class="field-textarea"
+                                        placeholder="Short notes: yellowing, brown spots, dry tips, wilting, insects visible, etc."
+                                        data-i18n-placeholder="crop.form.symptoms.placeholder"></textarea>
+                                </div>
+                            </div>
+
+                            <button type="submit" id="analyzeBtn" class="analyze-btn">
+                                <i class="fas fa-microscope"></i>
+                                <span data-i18n="crop.button.analyze">Analyze with AI</span>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Loading Section -->
+            <div class="loading" id="loadingSection">
+                <div class="loading-spinner"></div>
+                <h3 style="margin-bottom: 0.4rem;" data-i18n="crop.loading.title">
+                    Analyzing your crop image…
+                </h3>
+                <p style="font-size: 0.85rem; color: var(--text-secondary-light);" data-i18n="crop.loading.subtitle">
+                    KrishiMitr is checking patterns on leaves / fruits and matching them with known diseases and
+                    deficiencies.
+                </p>
+            </div>
+
+            <!-- Results Section -->
+            <div class="results-section" id="resultsSection">
+                <div class="results-header">
+                    <div class="result-icon">
+                        <i class="fas fa-clipboard-check"></i>
+                    </div>
+                    <div>
+                        <h3 data-i18n="crop.results.title">AI Diagnosis Report</h3>
+                        <p data-i18n="crop.results.subtitle">
+                            Structured summary of diagnosis, actions you can take now, and how to prevent it in future.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="results-grid">
+                    <!-- Diagnosis Card -->
+                    <div class="result-card">
+                        <div class="result-card-header">
+                            <div class="result-card-icon diagnosis-icon">
+                                <i class="fas fa-stethoscope"></i>
+                            </div>
+                            <h4 class="result-card-title" data-i18n="crop.results.diagnosis.title">Diagnosis</h4>
+                        </div>
+                        <div id="diagnosisContent" class="result-card-content">
+                            <!-- AI diagnosis will be inserted here -->
+                        </div>
+                    </div>
+
+                    <!-- Treatment Card -->
+                    <div class="result-card">
+                        <div class="result-card-header">
+                            <div class="result-card-icon treatment-icon">
+                                <i class="fas fa-syringe"></i>
+                            </div>
+                            <h4 class="result-card-title" data-i18n="crop.results.treatment.title">Treatment</h4>
+                        </div>
+                        <div id="treatmentContent" class="result-card-content">
+                            <!-- Treatment recommendations will be inserted here -->
+                        </div>
+                    </div>
+
+                    <!-- Prevention Card -->
+                    <div class="result-card">
+                        <div class="result-card-header">
+                            <div class="result-card-icon prevention-icon">
+                                <i class="fas fa-shield-alt"></i>
+                            </div>
+                            <h4 class="result-card-title" data-i18n="crop.results.prevention.title">Prevention & future
+                                care</h4>
+                        </div>
+                        <div id="preventionContent" class="result-card-content">
+                            <!-- Prevention tips will be inserted here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Language sync script (same pattern as Ask Query) -->
+    <script>
+        const translations = {
+            en: {
+                // Sidebar / global
+                "sidebar.mainMenu": "Main Menu",
+                "sidebar.dashboard": "Dashboard",
+                "sidebar.askQuery": "Ask Query",
+                "sidebar.tools": "Tools",
+                "sidebar.cropDiagnosis": "Crop Diagnosis",
+                "sidebar.weatherAlerts": "Weather & Alerts",
+                "sidebar.schemes": "Govt Schemes",
+                "sidebar.helpline": "Helpline Number",
+                "sidebar.agriSwasthya": "Agri Swasthya",
+                "sidebar.marketPrices": "Market Prices",
+                "sidebar.communitySection": "Community",
+                "sidebar.community": "Community",
+                "sidebar.profile": "Profile",
+                "sidebar.toggleTheme": "Toggle Theme",
+                "sidebar.logout": "Logout",
+                "sidebar.user.loadingTitle": "Loading...",
+                "sidebar.user.loadingSubtitle": "Fetching profile",
+
+                // Hero language pills
+                "langs.en": "English",
+                "langs.ml": "മലയാളം (Malayalam)",
+                "langs.hi": "हिन्दी (Hindi)",
+
+                // Crop page
+                "crop.title": "Crop Diagnosis",
+                "crop.status.ready": "AI ready for your field",
+                "crop.hero.title": "Crop Diagnosis",
+                "crop.hero.badge": "For Kerala farmers",
+                "crop.hero.subtitle": "Upload a clear image of the affected plant part, add a few details and get AI-guided diagnosis.",
+                "crop.hero.imageLabel": "Sample view – farmer’s field image",
+
+                "crop.steps.title": "How this works",
+                "crop.steps.1": "Upload clear photo of leaf / fruit / stem",
+                "crop.steps.2": "Fill crop, location & short symptom notes",
+                "crop.steps.3": "Get diagnosis, field actions & prevention",
+
+                "crop.tips.title": "For best AI diagnosis:",
+                "crop.tips.1": "Take photo in daylight (no harsh flash glare)",
+                "crop.tips.2": "Keep 1–3 affected leaves or fruits clearly visible",
+                "crop.tips.3": "Avoid very far / blurred images",
+
+                "crop.panel.upload.title": "1. Upload affected crop image",
+                "crop.panel.upload.tag": "Image required",
+                "crop.upload.text": "Click to select or drop image here",
+                "crop.upload.subtext": "Supports JPEG, PNG, WebP • Max 10 MB",
+
+                "crop.panel.details.title": "2. Field details",
+                "crop.panel.details.tag": "Improves accuracy",
+
+                "crop.form.cropType.label": "Crop type",
+                "crop.form.cropType.placeholder": "Select crop",
+                "crop.form.cropType.rice": "Rice",
+                "crop.form.cropType.tomato": "Tomato",
+                "crop.form.cropType.pepper": "Chilli / Capsicum",
+                "crop.form.cropType.coconut": "Coconut",
+                "crop.form.cropType.banana": "Banana",
+                "crop.form.cropType.cardamom": "Cardamom",
+                "crop.form.cropType.rubber": "Rubber",
+                "crop.form.cropType.tea": "Tea",
+                "crop.form.cropType.coffee": "Coffee",
+                "crop.form.cropType.other": "Other",
+
+                "crop.form.location.label": "Location",
+                "crop.form.location.placeholder": "e.g., Wayanad, Kerala",
+
+                "crop.form.symptoms.label": "Observed symptoms",
+                "crop.form.symptoms.placeholder": "Short notes: yellowing, brown spots, dry tips, wilting, insects visible, etc.",
+
+                "crop.button.analyze": "Analyze with AI",
+
+                "crop.loading.title": "Analyzing your crop image…",
+                "crop.loading.subtitle": "KrishiMitr is checking patterns on leaves / fruits and matching them with known diseases and deficiencies.",
+
+                "crop.results.title": "AI Diagnosis Report",
+                "crop.results.subtitle": "Structured summary of diagnosis, actions you can take now, and how to prevent it in future.",
+                "crop.results.diagnosis.title": "Diagnosis",
+                "crop.results.treatment.title": "Treatment",
+                "crop.results.prevention.title": "Prevention & future care"
+            },
+            ml: {
+                // Sidebar / global (Hindi text, key remains ml)
+                "sidebar.mainMenu": "मुख्य मेनू",
+                "sidebar.dashboard": "डैशबोर्ड",
+                "sidebar.askQuery": "प्रश्न पूछें",
+                "sidebar.tools": "उपकरण",
+                "sidebar.cropDiagnosis": "फसल रोग निदान",
+                "sidebar.weatherAlerts": "मौसम और अलर्ट",
+                "sidebar.schemes": "सरकारी योजनाएँ",
+                "sidebar.helpline": "हेल्पलाइन नंबर",
+                "sidebar.agriSwasthya": "कृषि स्वास्थ्य",
+                "sidebar.marketPrices": "बाज़ार भाव",
+                "sidebar.communitySection": "समुदाय",
+                "sidebar.community": "किसान समुदाय",
+                "sidebar.profile": "प्रोफ़ाइल",
+                "sidebar.toggleTheme": "थीम बदलें",
+                "sidebar.logout": "लॉगआउट",
+                "sidebar.user.loadingTitle": "लोड हो रहा है...",
+                "sidebar.user.loadingSubtitle": "प्रोफ़ाइल जानकारी प्राप्त की जा रही है",
+
+                "langs.en": "English",
+                "langs.ml": "हिंदी (Hindi)",
+                "langs.hi": "हिंदी (Hindi)",
+
+                "crop.title": "फसल रोग निदान",
+                "crop.status.ready": "आपके खेत के लिए एआई तैयार है",
+                "crop.hero.title": "फसल रोग निदान",
+                "crop.hero.badge": "केरल के किसानों के लिए",
+                "crop.hero.subtitle": "प्रभावित पौधे के हिस्से की स्पष्ट तस्वीर अपलोड करें, कुछ विवरण जोड़ें और एआई-आधारित निदान प्राप्त करें।",
+                "crop.hero.imageLabel": "उदाहरण दृश्य – किसान के खेत की तस्वीर",
+
+                "crop.steps.title": "यह कैसे काम करता है",
+                "crop.steps.1": "पत्ती / फल / तना की स्पष्ट फोटो अपलोड करें",
+                "crop.steps.2": "फसल, स्थान और लक्षणों के संक्षिप्त नोट भरें",
+                "crop.steps.3": "निदान, खेत में करने योग्य कार्य और रोकथाम प्राप्त करें",
+
+                "crop.tips.title": "बेहतर एआई निदान के लिए:",
+                "crop.tips.1": "दिन के उजाले में फोटो लें (तेज़ फ्लैश से बचें)",
+                "crop.tips.2": "1–3 प्रभावित पत्तियाँ या फल स्पष्ट रूप से दिखाई दें",
+                "crop.tips.3": "बहुत दूर से या धुंधली तस्वीरों से बचें",
+
+                "crop.panel.upload.title": "1. प्रभावित फसल की तस्वीर अपलोड करें",
+                "crop.panel.upload.tag": "तस्वीर आवश्यक है",
+                "crop.upload.text": "तस्वीर चुनने के लिए क्लिक करें या यहाँ ड्रॉप करें",
+                "crop.upload.subtext": "JPEG, PNG, WebP समर्थित • अधिकतम 10 MB",
+
+                "crop.panel.details.title": "2. खेत का विवरण",
+                "crop.panel.details.tag": "सटीकता बढ़ाता है",
+
+                "crop.form.cropType.label": "फसल का प्रकार",
+                "crop.form.cropType.placeholder": "फसल चुनें",
+                "crop.form.cropType.rice": "धान / चावल",
+                "crop.form.cropType.tomato": "टमाटर",
+                "crop.form.cropType.pepper": "मिर्च / शिमला मिर्च",
+                "crop.form.cropType.coconut": "नारियल",
+                "crop.form.cropType.banana": "केला",
+                "crop.form.cropType.cardamom": "इलायची",
+                "crop.form.cropType.rubber": "रबर",
+                "crop.form.cropType.tea": "चाय",
+                "crop.form.cropType.coffee": "कॉफी",
+                "crop.form.cropType.other": "अन्य",
+
+                "crop.form.location.label": "स्थान",
+                "crop.form.location.placeholder": "उदा: वायनाड, केरल",
+
+                "crop.form.symptoms.label": "देखे गए लक्षण",
+                "crop.form.symptoms.placeholder": "संक्षेप में: पीलापन, भूरे धब्बे, सूखे सिरे, मुरझाना, कीड़े दिखाई देना आदि।",
+
+                "crop.button.analyze": "एआई से विश्लेषण करें",
+
+                "crop.loading.title": "आपकी फसल की तस्वीर का विश्लेषण हो रहा है…",
+                "crop.loading.subtitle": "पत्तियों/फलों पर पैटर्न और रंगों की जाँच कर ज्ञात रोगों और कमी से मिलान किया जा रहा है।",
+
+                "crop.results.title": "एआई रोग निदान रिपोर्ट",
+                "crop.results.subtitle": "निदान, तुरंत किए जाने वाले खेत कार्य और भविष्य में रोकथाम का संरचित सार।",
+                "crop.results.diagnosis.title": "निदान",
+                "crop.results.treatment.title": "उपचार",
+                "crop.results.prevention.title": "रोकथाम और भविष्य की देखभाल"
+            }
+        };
+
+
+
+        function applyTranslations(lang) {
+            // normal texts
+            document.querySelectorAll("[data-i18n]").forEach(el => {
+                const key = el.getAttribute("data-i18n");
+                const t = translations[lang] && translations[lang][key];
+                if (t) el.textContent = t;
+            });
+
+            // placeholders
+            document.querySelectorAll("[data-i18n-placeholder]").forEach(el => {
+                const key = el.getAttribute("data-i18n-placeholder");
+                const t = translations[lang] && translations[lang][key];
+                if (t) el.placeholder = t;
+            });
+        }
+
+        function updateLangButtons(lang) {
+            // Only affects pages that actually have .lang-btn (dashboard etc.)
+            document.querySelectorAll(".lang-btn").forEach(btn => {
+                btn.classList.toggle("active", btn.dataset.lang === lang);
+            });
+        }
+
+        function setLanguage(lang) {
+            localStorage.setItem("appLanguage", lang);
+            applyTranslations(lang);
+            updateLangButtons(lang);
+            document.body.classList.toggle("lang-ml", lang === "ml");
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const savedLang = localStorage.getItem("appLanguage") || "en";
+            setLanguage(savedLang);
+        });
+    </script>
+</body>
+
+</html>
+
+<script>
+    function setActiveNavigation() {
+        const currentPage = window.location.pathname.split('/').pop() || 'dashboard.html';
+        const navItems = document.querySelectorAll('.nav-item');
+
+        // Remove previous active state from nav items
+        navItems.forEach(item => item.classList.remove('active'));
+
+        let activeSelector = '';
+
+        if (currentPage === 'dashboard.html' || currentPage === '' || currentPage === '/') {
+            activeSelector = 'a[href="dashboard.html"]';
+        } else if (currentPage === 'weather-alerts.html') {
+            activeSelector = 'a[href="weather-alerts.html"]';
+        } else if (currentPage === 'ask-query.html') {
+            activeSelector = 'a[href="ask-query.html"]';
+        } else if (currentPage === 'crop-diagnosis.html') {
+            activeSelector = 'a[href="crop-diagnosis.html"]';
+        } else if (currentPage === 'market-prices.html') {
+            activeSelector = 'a[href="market-prices.html"]';
+        }
+
+        if (activeSelector) {
+            const activeItem = document.querySelector(activeSelector);
+            if (activeItem) {
+                activeItem.classList.add('active');
+            }
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        setActiveNavigation();
+    });
+
+    // Dark mode state
+    let isDarkMode = localStorage.getItem('darkMode') === 'true';
+
+    // Initialize theme on load
+    function initializeTheme() {
+        if (isDarkMode) {
+            document.body.classList.add('dark');
+            const themeIcon = document.querySelector('.theme-toggle-sidebar i');
+            const themeText = document.querySelector('.theme-toggle-sidebar span');
+            if (themeIcon) themeIcon.className = 'fas fa-moon';
+            if (themeText) themeText.textContent = 'Light Mode';
+        }
+    }
+
+    // Toggle theme
+    function toggleTheme() {
+        isDarkMode = !isDarkMode;
+        document.body.classList.toggle('dark');
+
+        const themeIcon = document.querySelector('.theme-toggle-sidebar i');
+        const themeText = document.querySelector('.theme-toggle-sidebar span');
+
+        if (isDarkMode) {
+            if (themeIcon) themeIcon.className = 'fas fa-moon';
+            if (themeText) themeText.textContent = 'Light Mode';
+        } else {
+            if (themeIcon) themeIcon.className = 'fas fa-sun';
+            if (themeText) themeText.textContent = 'Toggle Theme';
+        }
+
+        localStorage.setItem('darkMode', isDarkMode);
+    }
+
+    // Global variables
+    const uploadZone = document.getElementById('uploadZone');
+    const fileInput = document.getElementById('fileInput');
+    const previewImage = document.getElementById('previewImage');
+    const removeImageBtn = document.getElementById('removeImage');
+    const diagnosisForm = document.getElementById('diagnosisForm');
+    const analyzeBtn = document.getElementById('analyzeBtn');
+    const loadingSection = document.getElementById('loadingSection');
+    const resultsSection = document.getElementById('resultsSection');
+
+    let selectedFile = null;
+
+    // Authentication check
+    async function checkAuth() {
+        try {
+            const res = await fetch(API_BASE_URL + '/api/user/check-auth', { credentials: 'include' });
+            if (!res.ok) throw new Error('Unauthorized');
+        } catch {
+            alert('Please login to access this page');
+            window.location.href = 'index.html';
+        }
+    }
+
+    // Load user info
+    async function loadUserInfo() {
+        try {
+            const res = await fetch(API_BASE_URL + '/api/user/profile', { credentials: 'include' });
+            if (res.ok) {
+                const user = await res.json();
+                document.getElementById('userInfo').innerHTML = `
+            <div style="font-weight: 600;">${user.username}</div>
+            <div style="font-size: 0.8rem; opacity: 0.8;">${user.email}</div>
+          `;
+            }
+        } catch (error) {
+            console.error('Failed to load user info');
+        }
+    }
+
+    // File upload handling
+    uploadZone.addEventListener('click', () => fileInput.click());
+
+    uploadZone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        uploadZone.classList.add('drag-over');
+    });
+
+    uploadZone.addEventListener('dragleave', (e) => {
+        e.preventDefault();
+        uploadZone.classList.remove('drag-over');
+    });
+
+    uploadZone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        uploadZone.classList.remove('drag-over');
+        const files = e.dataTransfer.files;
+        if (files.length > 0) {
+            handleFileSelect(files[0]);
+        }
+    });
+
+    fileInput.addEventListener('change', (e) => {
+        if (e.target.files.length > 0) {
+            handleFileSelect(e.target.files[0]);
+        }
+    });
+
+    function handleFileSelect(file) {
+        const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+        if (!allowedTypes.includes(file.type)) {
+            alert('Please select a JPEG, PNG, or WebP image file');
+            return;
+        }
+
+        if (file.size > 10 * 1024 * 1024) {
+            alert('File size must be less than 10MB');
+            return;
+        }
+
+        selectedFile = file;
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            previewImage.src = e.target.result;
+            previewImage.style.display = 'block';
+            removeImageBtn.style.display = 'flex';
+            uploadZone.classList.add('has-image');
+
+            uploadZone.querySelector('.upload-icon').style.display = 'none';
+            uploadZone.querySelector('.upload-text').style.display = 'none';
+            uploadZone.querySelector('.upload-subtext').style.display = 'none';
+        };
+        reader.readAsDataURL(file);
+    }
+
+    removeImageBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        selectedFile = null;
+        fileInput.value = '';
+        previewImage.style.display = 'none';
+        removeImageBtn.style.display = 'none';
+        uploadZone.classList.remove('has-image');
+
+        uploadZone.querySelector('.upload-icon').style.display = 'block';
+        uploadZone.querySelector('.upload-text').style.display = 'block';
+        uploadZone.querySelector('.upload-subtext').style.display = 'block';
+    });
+
+    function parseAIResponse(response) {
+        const sections = {
+            diagnosis: '',
+            treatment: '',
+            prevention: '',
+            severity: 'moderate'
+        };
+
+        const lines = response.split('\n').filter(line => line.trim());
+        let currentSection = null;
+
+        const buffers = {
+            diagnosis: [],
+            treatment: [],
+            prevention: []
+        };
+
+        lines.forEach(line => {
+            const trimmed = line.trim();
+            const lower = trimmed.toLowerCase();
+
+            if (lower.startsWith('diagnosis:')) {
+                currentSection = 'diagnosis';
+                return;
+            }
+            if (lower.startsWith('treatment:')) {
+                currentSection = 'treatment';
+                return;
+            }
+            if (lower.startsWith('prevention:')) {
+                currentSection = 'prevention';
+                return;
+            }
+            if (lower.startsWith('severity')) {
+                if (/severe/i.test(trimmed)) {
+                    sections.severity = 'severe';
+                } else if (/mild/i.test(trimmed)) {
+                    sections.severity = 'mild';
+                } else {
+                    sections.severity = 'moderate';
+                }
+                return;
+            }
+
+            if (!currentSection) {
+                currentSection = 'diagnosis';
+            }
+
+            buffers[currentSection].push(trimmed);
+        });
+
+        sections.diagnosis = buffers.diagnosis.join('\n').trim();
+        sections.treatment = buffers.treatment.join('\n').trim();
+        sections.prevention = buffers.prevention.join('\n').trim();
+
+        if (!sections.diagnosis) {
+            sections.diagnosis = response.substring(0, response.length / 3).trim();
+        }
+        if (!sections.treatment) {
+            sections.treatment = 'Consult with a local agricultural extension officer for specific treatment recommendations.';
+        }
+        if (!sections.prevention) {
+            sections.prevention = 'Follow good agricultural practices and regular monitoring to prevent future issues.';
+        }
+
+        return sections;
+    }
+
+    function formatContent(content, type) {
+        if (!content) return '';
+
+        let formatted = content
+            .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+            .replace(/\*(.*?)\*/g, '<em>$1</em>')
+            .replace(/(\d+\.\s)/g, '<br><strong>$1</strong>')
+            .replace(/(-\s)/g, '<br>• ');
+
+        if (type === 'diagnosis') {
+            const severity = content.toLowerCase().includes('severe') ? 'severe' :
+                content.toLowerCase().includes('mild') ? 'mild' : 'moderate';
+            formatted += `<div class="severity-badge severity-${severity}">Severity: ${severity}</div>`;
+        }
+
+        return formatted;
+    }
+
+    diagnosisForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        if (!selectedFile) {
+            alert('Please select an image to analyze');
+            return;
+        }
+
+        loadingSection.style.display = 'block';
+        resultsSection.style.display = 'none';
+        analyzeBtn.disabled = true;
+        analyzeBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Analyzing...';
+
+        loadingSection.scrollIntoView({ behavior: 'smooth' });
+
+        try {
+            const formData = new FormData();
+            formData.append('cropImage', selectedFile);
+            formData.append('cropType', document.getElementById('cropType').value);
+            formData.append('location', document.getElementById('location').value);
+            formData.append('symptoms', document.getElementById('symptoms').value);
+
+            const response = await fetch(API_BASE_URL + '/api/diagnosis/analyze', {
+                method: 'POST',
+                credentials: 'include',
+                body: formData
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.message || 'Analysis failed');
+            }
+
+            const parsedResults = parseAIResponse(data.diagnosis);
+
+            document.getElementById('diagnosisContent').innerHTML = formatContent(parsedResults.diagnosis, 'diagnosis');
+            document.getElementById('treatmentContent').innerHTML = formatContent(parsedResults.treatment, 'treatment');
+            document.getElementById('preventionContent').innerHTML = formatContent(parsedResults.prevention, 'prevention');
+
+            loadingSection.style.display = 'none';
+            resultsSection.style.display = 'block';
+
+            resultsSection.scrollIntoView({ behavior: 'smooth' });
+
+        } catch (error) {
+            console.error('Analysis error:', error);
+            alert('Failed to analyze crop image: ' + error.message);
+            loadingSection.style.display = 'none';
+        } finally {
+            analyzeBtn.disabled = false;
+            analyzeBtn.innerHTML = '<i class="fas fa-microscope"></i> Analyze Crop with AI';
+        }
+    });
+
+    document.getElementById('logoutBtn').addEventListener('click', async () => {
+        if (confirm('Are you sure you want to logout?')) {
+            try {
+                await fetch(API_BASE_URL + '/api/auth/logout', { method: 'POST', credentials: 'include' });
+                window.location.href = 'index.html';
+            } catch {
+                window.location.href = 'index.html';
+            }
+        }
+    });
+
+    function showComingSoon() {
+        alert('🚀 This feature is coming soon! We\'re working hard to bring you the best farming tools.');
+    }
+
+    // Mobile sidebar toggle
+    function toggleSidebar() {
+        document.getElementById('sidebar').classList.toggle('active');
+    }
+
+    // Close sidebar on outside click (mobile)
+    document.addEventListener('click', function (event) {
+        const sidebar = document.getElementById('sidebar');
+        const menuBtn = document.querySelector('.mobile-menu-btn');
+
+        if (window.innerWidth <= 768 &&
+            sidebar.classList.contains('active') &&
+            !sidebar.contains(event.target) &&
+            !menuBtn.contains(event.target)) {
+            sidebar.classList.remove('active');
+        }
+    });
+
+    // Single, unified onload
+    window.onload = () => {
+        console.log('Page loaded, initializing...');
+        checkAuth();
+        loadUserInfo();
+        initializeTheme();
+        setActiveNavigation();
+
+        // Only call if defined elsewhere
+        if (typeof loadWeatherData === 'function') {
+            setTimeout(() => {
+                loadWeatherData();
+            }, 500);
+        }
+    };
+</script>
+</body>
+
+</html>
