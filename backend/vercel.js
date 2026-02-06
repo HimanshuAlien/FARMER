@@ -10,7 +10,8 @@ module.exports = (req, res) => {
 
     // Handle preflight requests
     if (req.method === 'OPTIONS') {
-        res.status(200).end();
+        res.statusCode = 200;
+        res.end();
         return;
     }
 
