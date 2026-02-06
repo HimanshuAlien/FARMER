@@ -51,17 +51,21 @@ app.use("/api/nqi", nqiRoute);
 
 // Middleware
 app.use(cookieParser());
-app.use(cors({
-    origin: [
-        'http://localhost:5000',
-        'http://127.0.0.1:5000',
-        'http://localhost:5500',
-        'http://127.0.0.1:5500',
-        'https://kerala-farmer-advisory.vercel.app',
-        'https://kerala-farmer-advisory-himanshu-mishras-projects-ed75a6e7.vercel.app'
-    ],
-    credentials: true
-}));
+
+// Only use CORS middleware if NOT in Vercel (vercel.js handles it there)
+if (!process.env.VERCEL) {
+    app.use(cors({
+        origin: [
+            'http://localhost:5000',
+            'http://127.0.0.1:5000',
+            'http://localhost:5500',
+            'http://127.0.0.1:5500',
+            'https://kerala-farmer-advisory.vercel.app',
+            'https://kerala-farmer-advisory-himanshu-mishras-projects-ed75a6e7.vercel.app'
+        ],
+        credentials: true
+    }));
+}
 
 // 🔗 ML API PROXY
 app.use('/api/ml', async (req, res) => {
