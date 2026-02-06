@@ -29,6 +29,9 @@ const cropRoutes = require('./routes/cropRoutes');
 app.use("/api/crops", cropRoutes);
 
 // Connect to MongoDB
+if (!process.env.MONGO_URI) {
+    console.error('❌ MONGO_URI is not defined in environment variables!');
+}
 connectDB();
 
 // PAYLOAD LIMITS
@@ -40,7 +43,7 @@ app.use("/api/nqi", nqiRoute);
 // Middleware
 app.use(cookieParser());
 app.use(cors({
-    origin: ['http://localhost:5000', 'http://127.0.0.1:5000', 'http://localhost:5500', 'http://127.0.0.1:5500'],
+    origin: ['http://localhost:5000', 'http://127.0.0.1:5000', 'http://localhost:5500', 'http://127.0.0.1:5500', 'https://kerala-farmer-advisory-himanshu-mishras-projects-ed75a6e7.vercel.app'],
     credentials: true
 }));
 
