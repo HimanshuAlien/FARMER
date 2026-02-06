@@ -11,6 +11,15 @@ const axios = require('axios');
 const http = require("http");
 const { Server } = require("socket.io");
 
+process.on('unhandledRejection', (reason, promise) => {
+    console.error('❌ Unhandled Rejection at:', promise, 'reason:', reason);
+});
+
+process.on('uncaughtException', (err) => {
+    console.error('❌ Uncaught Exception:', err);
+});
+
+
 const app = express();
 
 // 🔴 CREATE HTTP SERVER + SOCKET
@@ -43,7 +52,14 @@ app.use("/api/nqi", nqiRoute);
 // Middleware
 app.use(cookieParser());
 app.use(cors({
-    origin: ['http://localhost:5000', 'http://127.0.0.1:5000', 'http://localhost:5500', 'http://127.0.0.1:5500', 'https://kerala-farmer-advisory-himanshu-mishras-projects-ed75a6e7.vercel.app'],
+    origin: [
+        'http://localhost:5000',
+        'http://127.0.0.1:5000',
+        'http://localhost:5500',
+        'http://127.0.0.1:5500',
+        'https://kerala-farmer-advisory.vercel.app',
+        'https://kerala-farmer-advisory-himanshu-mishras-projects-ed75a6e7.vercel.app'
+    ],
     credentials: true
 }));
 
@@ -69,10 +85,13 @@ const postsDir = 'uploads/posts';
 const avatarsDir = 'uploads/avatars';
 const pdfDir = path.join(__dirname, '../frontend', 'pdfs');
 
-[uploadsDir, postsDir, avatarsDir].forEach(dir => {
-    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
-});
-if (!fs.existsSync(pdfDir)) fs.mkdirSync(pdfDir, { recursive: true });
+// Create upload dirs (only if NOT on Vercel)
+if (!process.env.VERCEL) {
+    [uploadsDir, postsDir, avatarsDir].forEach(dir => {
+        if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+    });
+    if (!fs.existsSync(pdfDir)) fs.mkdirSync(pdfDir, { recursive: true });
+}
 
 // Static serving
 // Only serve statically if NOT on Vercel (Vercel handles frontend separately)
@@ -108,6 +127,20 @@ app.use((error, req, res, next) => {
 // Root API
 app.get('/api', (req, res) => {
     res.json({ success: true, message: 'Smart Farming API Running' });
+});
+
+// 🔍 DB Test Route
+app.get('/api/test-db', (req, res) => {
+    const uri = process.env.MONGO_URI || '';
+    res.json({
+        success: true,
+        state: mongoose.connection.readyState,
+        uriExists: !!uri,
+        uriLength: uri.length,
+        uriStart: uri.substring(0, 20),
+        uriEnd: uri.substring(uri.length - 15),
+        envKeys: Object.keys(process.env).filter(k => k.includes('MONGO') || k.includes('JWT'))
+    });
 });
 
 // Weather automation
