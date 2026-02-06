@@ -5,7 +5,7 @@
 
 const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
     ? 'http://localhost:5000'
-    : 'https://kerala-farmer-advisory.vercel.app';
+    : 'https://kerala-farmer-advisory-himanshu-mishras-projects-ed75a6e7.vercel.app';
 
 console.log('API Base URL set to:', API_BASE_URL);
 
