@@ -1,2 +1,6 @@
-// RESTORATION COMPLETE: Working Version Restored on 2026-02-07 17:13:16
-// WHEN RUNNING ON ANDROID EMULATOR: Use 'http://10.0.2.2:5000' // WHEN RUNNING ON REAL DEVICE: Use your computer's local IP, e.g., 'http://192.168.1.5:5000' // WHEN DEPLOYED TO VERCEL: Use your Vercel URL, e.g., 'https://your-app-name.vercel.app'  const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'     ? 'http://localhost:5000'     : 'https://kerala-farmer-advisory-himanshu-mishras-projects-ed75a6e7.vercel.app';  console.log('API Base URL set to:', API_BASE_URL); 
+// Configuration for API Endpoints
+const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+    ? 'http://localhost:5000'
+    : ''; // Use relative path on Vercel to avoid CORS
+
+console.log('API Base URL set to:', API_BASE_URL || 'RELATIVE');
