@@ -1379,15 +1379,15 @@
         function createPostHTML(post) {
             const timeAgo = formatTimeAgo(post.timestamp);
 
-            // FIXED: Use profile image with API_BASE_URL or fallback to initials
-            const authorProfileImageUrl = post.authorProfileImage ? (post.authorProfileImage.startsWith('http') ? post.authorProfileImage : (API_BASE_URL + post.authorProfileImage)) : null;
+            // FIXED: Use profile image with API_BASE_URL (Don't prefix if already full URL or base64) or fallback to initials
+            const authorProfileImageUrl = post.authorProfileImage ? (post.authorProfileImage.startsWith('http') || post.authorProfileImage.startsWith('data:') ? post.authorProfileImage : (API_BASE_URL + post.authorProfileImage)) : null;
 
             const authorAvatarHTML = authorProfileImageUrl ?
                 `<img src="${authorProfileImageUrl}" alt="${post.author}" style="width: 44px; height: 44px; border-radius: 50%; object-fit: cover; border: 2px solid white; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">` :
                 `<div class="user-avatar">${post.author.charAt(0).toUpperCase()}</div>`;
 
-            // Fix image URL with API_BASE_URL
-            const postImageUrl = post.image ? (post.image.startsWith('http') ? post.image : (API_BASE_URL + post.image)) : null;
+            // Fix image URL with API_BASE_URL (Don't prefix if it's already a full URL or base64)
+            const postImageUrl = post.image ? (post.image.startsWith('http') || post.image.startsWith('data:') ? post.image : (API_BASE_URL + post.image)) : null;
 
             // Generate tags HTML
             const tagsHTML = post.tags && post.tags.length > 0 ?
@@ -1463,9 +1463,9 @@
                 profileImage: comment.authorProfileImage
             });
 
-            // FIXED: Better fallback handling and API_BASE_URL for images
+            // FIXED: Better fallback handling and API_BASE_URL for images (Don't prefix if already full URL or base64)
             let commentAvatarHTML;
-            const authorProfileImageUrl = comment.authorProfileImage ? (comment.authorProfileImage.startsWith('http') ? comment.authorProfileImage : (API_BASE_URL + comment.authorProfileImage)) : null;
+            const authorProfileImageUrl = comment.authorProfileImage ? (comment.authorProfileImage.startsWith('http') || comment.authorProfileImage.startsWith('data:') ? comment.authorProfileImage : (API_BASE_URL + comment.authorProfileImage)) : null;
 
             if (authorProfileImageUrl) {
                 commentAvatarHTML = `<img src="${authorProfileImageUrl}" alt="${comment.author}" style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 1px solid white;" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">

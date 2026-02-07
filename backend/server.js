@@ -104,6 +104,9 @@ if (!process.env.VERCEL) {
     app.use('/pdfs', express.static(pdfDir));
 }
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+if (process.env.VERCEL) {
+    app.use('/uploads', express.static('/tmp/uploads'));
+}
 
 // Existing routes
 app.use('/api/officer', require('./routes/officer'));
