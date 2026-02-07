@@ -32,6 +32,12 @@
 
             --radius-lg: 24px;
             --radius-md: 16px;
+
+            /* Category Colors */
+            --cat-question: #ef4444;
+            --cat-tip: #10b981;
+            --cat-discussion: #3b82f6;
+            --cat-help: #f59e0b;
         }
 
         * {
@@ -481,10 +487,37 @@
             align-items: start;
         }
 
+        .category-badge {
+            padding: 0.35rem 0.75rem;
+            border-radius: 99px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .category-badge.question {
+            background: var(--cat-question);
+        }
+
+        .category-badge.tip {
+            background: var(--cat-tip);
+        }
+
+        .category-badge.discussion {
+            background: var(--cat-discussion);
+        }
+
+        .category-badge.help {
+            background: var(--cat-help);
+        }
+
         .post-author {
             display: flex;
             align-items: center;
-            gap: 0.75rem;
+            gap: 0.875rem;
         }
 
         .post-author-info h5 {
@@ -513,16 +546,46 @@
 
         .post-content {
             color: var(--text-secondary);
-            line-height: 1.6;
-            margin-bottom: 1rem;
+            line-height: 1.7;
+            margin-bottom: 1.25rem;
+            font-size: 1.05rem;
+        }
+
+        .post-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .tag {
+            padding: 0.25rem 0.625rem;
+            background: var(--primary-50);
+            color: var(--primary-600);
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .tag:hover {
+            background: var(--primary-600);
+            color: white;
         }
 
         .post-image {
             width: 100%;
-            max-height: 400px;
+            max-height: 450px;
             object-fit: cover;
-            border-radius: 12px;
-            margin: 1rem 0;
+            border-radius: 16px;
+            margin: 0.5rem 0 1.25rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .post-image:hover {
+            transform: scale(1.01);
         }
 
         .post-footer {
@@ -1299,14 +1362,25 @@
             postsFeed.innerHTML = posts.map(post => createPostHTML(post)).join('');
         }
 
-        // FIXED: Create post HTML with profile pictures
+        // FIXED: Create post HTML with profile pictures and enhanced details
         function createPostHTML(post) {
             const timeAgo = formatTimeAgo(post.timestamp);
 
             // FIXED: Use profile image or fallback to initials
             const authorAvatarHTML = post.authorProfileImage ?
-                `<img src="${post.authorProfileImage}" alt="${post.author}" style="width: 44px; height: 44px; border-radius: 50%; object-fit: cover; background: linear-gradient(135deg, var(--primary), var(--success)); display: flex; align-items: center; justify-content: center; color: white; font-weight: 700;">` :
+                `<img src="${post.authorProfileImage}" alt="${post.author}" style="width: 44px; height: 44px; border-radius: 50%; object-fit: cover; border: 2px solid white; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">` :
                 `<div class="user-avatar">${post.author.charAt(0).toUpperCase()}</div>`;
+
+            // Fix image URL with API_BASE_URL
+            const postImageUrl = post.image ? (post.image.startsWith('http') ? post.image : (API_BASE_URL + post.image)) : null;
+
+            // Generate tags HTML
+            const tagsHTML = post.tags && post.tags.length > 0 ?
+                `<div class="post-tags">${post.tags.map(tag => `<span class="tag">#${tag}</span>`).join('')}</div>` : '';
+
+            // Category badge
+            const categoryClass = (post.category || 'discussion').toLowerCase();
+            const categoryLabel = post.category ? post.category.charAt(0).toUpperCase() + post.category.slice(1) : 'Discussion';
 
             return `
         <div class="post-card" data-post-id="${post.id}">
@@ -1316,39 +1390,44 @@
                     <div class="post-author-info">
                         <h5>${post.author}</h5>
                         <div class="post-meta">
-                            ${timeAgo}
-                            ${post.authorLocation ? ` • ${post.authorLocation}` : ''}
+                            <i class="far fa-clock"></i> ${timeAgo}
+                            ${post.authorLocation ? ` • <i class="fas fa-location-dot"></i> ${post.authorLocation}` : ''}
                         </div>
                     </div>
                 </div>
+                <div class="category-badge ${categoryClass}">${categoryLabel}</div>
             </div>
             
             <div class="post-body">
                 <h3 class="post-title">${post.title}</h3>
                 <div class="post-content">${post.content}</div>
-                ${post.image ? `<img src="${post.image}" alt="Post image" class="post-image" onerror="this.style.display='none'">` : ''}
+                ${tagsHTML}
+                ${postImageUrl ? `<img src="${postImageUrl}" alt="Post image" class="post-image" onclick="window.open('${postImageUrl}', '_blank')" onerror="this.style.display='none'">` : ''}
             </div>
             
             <div class="post-footer">
                 <div class="post-interactions">
                     <button class="interaction-btn ${post.liked ? 'liked' : ''}" onclick="toggleLike('${post.id}')">
-                        <i class="fas fa-heart"></i>
+                        <i class="${post.liked ? 'fas' : 'far'} fa-heart"></i>
                         <span>${post.likes || 0}</span>
                     </button>
                     <button class="interaction-btn" onclick="toggleComments('${post.id}')">
-                        <i class="fas fa-comment"></i>
+                        <i class="far fa-comment"></i>
                         <span>${post.comments ? post.comments.length : 0}</span>
                     </button>
+                </div>
+                <div class="post-meta" style="font-size: 0.75rem;">
+                    <i class="far fa-eye"></i> ${post.views || 0} views
                 </div>
             </div>
             
             <div class="comments-section" id="comments-${post.id}">
                 <div class="comment-form">
                     ${currentUser.profileImage ?
-                    `<img src="${currentUser.profileImage}" alt="${currentUser.name}" style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover; background: linear-gradient(135deg, var(--secondary), var(--accent)); display: flex; align-items: center; justify-content: center; color: white; font-weight: 600;">` :
+                    `<img src="${currentUser.profileImage}" alt="${currentUser.name}" style="width: 36px; height: 36px; border-radius: 50%; border: 1.5px solid white; box-shadow: 0 1px 4px rgba(0,0,0,0.1); object-fit: cover;">` :
                     `<div class="comment-avatar">${currentUser.avatar}</div>`
                 }
-                    <input type="text" class="comment-input" placeholder="Write a comment..." id="comment-input-${post.id}">
+                    <input type="text" class="comment-input" placeholder="Write a comment..." id="comment-input-${post.id}" onkeypress="if(event.key === 'Enter') addComment('${post.id}')">
                     <button class="comment-submit" onclick="addComment('${post.id}')">
                         <i class="fas fa-paper-plane"></i>
                     </button>
@@ -1372,10 +1451,12 @@
                 profileImage: comment.authorProfileImage
             });
 
-            // FIXED: Better fallback handling
+            // FIXED: Better fallback handling and API_BASE_URL for images
             let commentAvatarHTML;
-            if (comment.authorProfileImage && comment.authorProfileImage.trim() !== '') {
-                commentAvatarHTML = `<img src="${comment.authorProfileImage}" alt="${comment.author}" style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover;" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+            const authorProfileImageUrl = comment.authorProfileImage ? (comment.authorProfileImage.startsWith('http') ? comment.authorProfileImage : (API_BASE_URL + comment.authorProfileImage)) : null;
+
+            if (authorProfileImageUrl) {
+                commentAvatarHTML = `<img src="${authorProfileImageUrl}" alt="${comment.author}" style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 1px solid white;" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
         <div class="comment-avatar" style="display: none;">${comment.author.charAt(0).toUpperCase()}</div>`;
             } else {
                 commentAvatarHTML = `<div class="comment-avatar">${comment.author.charAt(0).toUpperCase()}</div>`;
