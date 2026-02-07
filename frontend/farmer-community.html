@@ -997,6 +997,18 @@
                         placeholder="Share your farming tips, questions, or experiences with fellow farmers..."
                         required></textarea>
 
+                    <div style="display: flex; gap: 1rem; align-items: center;">
+                        <span style="font-size: 0.875rem; font-weight: 600; color: var(--text-muted);">Select
+                            Category:</span>
+                        <select id="postCategory" class="form-input"
+                            style="padding: 0.5rem; width: auto; border-radius: 8px;">
+                            <option value="discussion">Discussion</option>
+                            <option value="question">Question</option>
+                            <option value="tip">Tip</option>
+                            <option value="help">Help</option>
+                        </select>
+                    </div>
+
                     <div class="image-preview" id="imagePreview">
                         <img id="previewImg" src="" alt="Preview">
                         <button type="button" class="remove-image" onclick="removeImage()">
@@ -1249,7 +1261,8 @@
                 const postData = {
                     title: title,
                     content: content,
-                    image: selectedImage
+                    image: selectedImage,
+                    category: document.getElementById('postCategory').value
                 };
 
                 console.log('Sending post data...');
@@ -1366,9 +1379,11 @@
         function createPostHTML(post) {
             const timeAgo = formatTimeAgo(post.timestamp);
 
-            // FIXED: Use profile image or fallback to initials
-            const authorAvatarHTML = post.authorProfileImage ?
-                `<img src="${post.authorProfileImage}" alt="${post.author}" style="width: 44px; height: 44px; border-radius: 50%; object-fit: cover; border: 2px solid white; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">` :
+            // FIXED: Use profile image with API_BASE_URL or fallback to initials
+            const authorProfileImageUrl = post.authorProfileImage ? (post.authorProfileImage.startsWith('http') ? post.authorProfileImage : (API_BASE_URL + post.authorProfileImage)) : null;
+
+            const authorAvatarHTML = authorProfileImageUrl ?
+                `<img src="${authorProfileImageUrl}" alt="${post.author}" style="width: 44px; height: 44px; border-radius: 50%; object-fit: cover; border: 2px solid white; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">` :
                 `<div class="user-avatar">${post.author.charAt(0).toUpperCase()}</div>`;
 
             // Fix image URL with API_BASE_URL
@@ -1415,9 +1430,6 @@
                         <i class="far fa-comment"></i>
                         <span>${post.comments ? post.comments.length : 0}</span>
                     </button>
-                </div>
-                <div class="post-meta" style="font-size: 0.75rem;">
-                    <i class="far fa-eye"></i> ${post.views || 0} views
                 </div>
             </div>
             
