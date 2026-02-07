@@ -1,0 +1,27 @@
+{
+  "success": true,
+  "error": null,
+  "dbName": "test",
+  "host": "ac-6zmb8gq-shard-00-01.rkfsdlh.mongodb.net",
+  "collections": [
+    "markers",
+    "surveys",
+    "sessions",
+    "psychometric_assessments",
+    "crops",
+    "mentalhealths",
+    "farmerprofiles",
+    "mentalhealthassessments",
+    "incidents",
+    "userschemeinteractions",
+    "queries",
+    "posts",
+    "users",
+    "governmentschemes"
+  ],
+  "counts": {
+    "users": 10,
+    "crops": 7,
+    "farmerprofiles": 0
+  }
+}

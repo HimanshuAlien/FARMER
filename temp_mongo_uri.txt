@@ -1,0 +1,1 @@
+mongodb+srv://skullcrusherhimu_db_user:JCE52sqieLwwKCGF@cluster0.rkfsdlh.mongodb.net/kerala-farmer-advisory?retryWrites=true&w=majority&appName=Cluster0
