@@ -16,6 +16,10 @@
             "dest": "/backend/vercel.js"
         },
         {
+            "src": "/pdfs/(.*)",
+            "dest": "/backend/vercel.js"
+        },
+        {
             "src": "/uploads/(.*)",
             "dest": "/backend/vercel.js"
         },

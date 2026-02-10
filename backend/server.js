@@ -87,18 +87,17 @@ app.use('/api/ml', async (req, res) => {
 const uploadsDir = 'uploads';
 const postsDir = 'uploads/posts';
 const avatarsDir = 'uploads/avatars';
-// Helper to find the correct PDF directory (especially for Vercel)
+// Helper to find the correct PDF directory
 function getPDFDir() {
     const checkPaths = [
-        path.join(__dirname, '../frontend/pdfs'),
-        path.join(process.cwd(), 'frontend/pdfs'),
-        path.join(process.cwd(), 'backend/frontend/pdfs'),
-        path.join(__dirname, 'frontend/pdfs')
+        path.join(__dirname, 'pdfs'),
+        path.join(process.cwd(), 'backend/pdfs'),
+        path.join(process.cwd(), 'pdfs')
     ];
     for (const p of checkPaths) {
         if (fs.existsSync(p)) return p;
     }
-    return path.join(__dirname, '../frontend/pdfs');
+    return path.join(__dirname, 'pdfs');
 }
 
 const pdfDir = getPDFDir();

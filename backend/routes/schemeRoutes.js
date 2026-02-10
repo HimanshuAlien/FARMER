@@ -10,28 +10,22 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 // Helper to find the correct PDF directory (especially for Vercel)
 function getPDFDir() {
     const checkPaths = [
-        path.join(__dirname, '../../frontend/pdfs'),
-        path.join(process.cwd(), 'frontend/pdfs'),
-        path.join(process.cwd(), 'backend/frontend/pdfs'),
-        path.join(__dirname, '../frontend/pdfs')
+        path.join(__dirname, '../pdfs'),                // Relative to routes/
+        path.join(process.cwd(), 'backend/pdfs'),      // Relative to project root
+        path.join(process.cwd(), 'pdfs'),              // Relative to backend root
+        path.join(__dirname, '../../backend/pdfs')
     ];
 
     console.log('🔍 [Schemes] Starting PDF directory discovery...');
-    console.log('📂 [Schemes] Current __dirname:', __dirname);
-    console.log('📂 [Schemes] Current process.cwd():', process.cwd());
-
     for (const p of checkPaths) {
         if (fs.existsSync(p)) {
             console.log('✅ [Schemes] Found PDF directory at:', p);
             return p;
-        } else {
-            console.log('❌ [Schemes] Not found at:', p);
         }
     }
 
-    // Fallback if none found
-    const defaultPath = path.join(__dirname, '../../frontend/pdfs');
-    console.log('⚠️ [Schemes] No PDF directory found, falling back to default:', defaultPath);
+    const defaultPath = path.join(__dirname, '../pdfs');
+    console.log('⚠️ [Schemes] Falling back to default:', defaultPath);
     return defaultPath;
 }
 
