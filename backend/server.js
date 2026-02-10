@@ -115,8 +115,26 @@ if (!process.env.VERCEL) {
 // Only serve statically if NOT on Vercel (Vercel handles frontend separately)
 if (!process.env.VERCEL) {
     app.use(express.static(path.join(__dirname, '../frontend')));
-    app.use('/pdfs', express.static(pdfDir));
 }
+// Always serve PDFs from the resolved pdfDir
+app.use('/pdfs', express.static(pdfDir));
+
+// Fallback explicit route for PDFs (more reliable on Vercel)
+app.get('/pdfs/:fileName', (req, res) => {
+    try {
+        const fileName = path.basename(req.params.fileName);
+        const filePath = path.join(pdfDir, fileName);
+        if (fs.existsSync(filePath)) {
+            res.sendFile(filePath);
+        } else {
+            console.error('❌ PDF not found:', filePath);
+            res.status(404).send('PDF not found');
+        }
+    } catch (error) {
+        console.error('❌ Error serving PDF:', error);
+        res.status(500).send('Error serving PDF');
+    }
+});
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 if (process.env.VERCEL) {
     app.use('/uploads', express.static('/tmp/uploads'));
