@@ -106,7 +106,7 @@ router.post('/login', async (req, res) => {
     }
 
     try {
-        const user = await User.findOne({ email });
+        const user = await User.findOne({ email }).lean();
         if (!user) {
             return res.status(400).json({ message: 'Invalid Credentials' });
         }
@@ -118,7 +118,7 @@ router.post('/login', async (req, res) => {
 
         const payload = {
             user: {
-                id: user.id,
+                id: user._id, // lean() returns _id, not id getter
                 role: user.role || 'farmer'
             }
         };
@@ -136,7 +136,7 @@ router.post('/login', async (req, res) => {
         res.json({
             message: 'Login successful',
             user: {
-                id: user.id,
+                id: user._id,
                 username: user.username,
                 email: user.email,
                 role: user.role || 'farmer'

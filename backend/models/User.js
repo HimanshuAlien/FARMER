@@ -114,4 +114,9 @@ const UserSchema = new mongoose.Schema({
     }]
 }, { timestamps: true });
 
+// Index for faster filtering of officers/farmers by location
+UserSchema.index({ role: 1, location: 1 });
+UserSchema.index({ location: 1, farmingType: 1 });
+UserSchema.index({ location: 1, primaryCrops: 1 });
+
 module.exports = mongoose.model('User', UserSchema);

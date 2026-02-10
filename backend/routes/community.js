@@ -5,16 +5,10 @@ const User = require('../models/User');
 const multer = require('multer');
 const path = require('path');
 const mongoose = require('mongoose');
+const cache = require('../utils/cache'); // Import cache utility
 
-// Configure multer for image uploads
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, '/tmp/uploads/posts/')
-    },
-    filename: function (req, file, cb) {
-        cb(null, Date.now() + '-' + Math.round(Math.random() * 1E9) + path.extname(file.originalname))
-    }
-});
+// Configure multer for memory storage (for Vercel/MongoDB consistency)
+const storage = multer.memoryStorage();
 
 const upload = multer({
     storage: storage,
@@ -49,7 +43,7 @@ const postSchema = new mongoose.Schema({
     content: { type: String, required: true },
     author: { type: String, required: true },
     authorId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-    image: { type: String },
+    image: { type: String }, // Stores Base64 string directly
     likes: { type: Number, default: 0 },
     likedBy: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
     comments: [commentSchema],
@@ -68,6 +62,13 @@ postSchema.index({ createdAt: -1 });
 postSchema.index({ authorId: 1 });
 postSchema.index({ tags: 1 });
 postSchema.index({ category: 1 });
+// Text index for search
+postSchema.index({ title: 'text', content: 'text', tags: 'text' });
+// Compound indexes for common filters
+postSchema.index({ category: 1, createdAt: -1 });
+postSchema.index({ tags: 1, createdAt: -1 });
+postSchema.index({ authorId: 1, createdAt: -1 });
+postSchema.index({ solved: 1, createdAt: -1 });
 
 const Post = mongoose.models.Post || mongoose.model('Post', postSchema);
 
@@ -84,6 +85,15 @@ router.get('/posts', auth, async (req, res) => {
             sortBy = 'createdAt',
             order = 'desc'
         } = req.query;
+
+        // Create a unique cache key based on query parameters
+        const cacheKey = `posts_${page}_${limit}_${category || 'all'}_${tags || 'all'}_${author || 'all'}_${search || 'none'}_${sortBy}_${order}`;
+
+        // Check cache first
+        const cachedData = cache.get(cacheKey);
+        if (cachedData) {
+            return res.json(cachedData);
+        }
 
         // Build filter object
         const filter = {};
@@ -102,12 +112,15 @@ router.get('/posts', auth, async (req, res) => {
         const sort = {};
         sort[sortBy] = order === 'desc' ? -1 : 1;
 
+        // Optimization: Use .lean() for faster execution and .select() to limit fields if needed
+        // We need most fields here, but lean() helps significantly with read performance
         const posts = await Post.find(filter)
             .populate('authorId', 'username profileImage location')
-            .populate('comments.authorId', 'username profileImage') // ADD THIS LINE
+            .populate('comments.authorId', 'username profileImage')
             .sort(sort)
             .limit(parseInt(limit))
-            .skip((parseInt(page) - 1) * parseInt(limit));
+            .skip((parseInt(page) - 1) * parseInt(limit))
+            .lean(); // Convert to plain JS objects
 
         const totalPosts = await Post.countDocuments(filter);
         const userId = req.user.id;
@@ -117,35 +130,35 @@ router.get('/posts', auth, async (req, res) => {
             id: post._id.toString(),
             title: post.title,
             content: post.content,
-            author: post.author,
-            authorId: post.authorId._id,
+            author: post.author, // Fallback if populate fails
+            authorId: post.authorId?._id || post.authorId, // Handle populated or raw ID
             authorProfileImage: post.authorId?.profileImage || null,
             authorLocation: post.authorId?.location || null,
             timestamp: post.createdAt.toISOString(),
             image: post.image,
             tags: post.tags,
             likes: post.likes,
-            liked: post.likedBy.includes(userId),
+            liked: post.likedBy ? post.likedBy.some(id => id.toString() === userId) : false, // Check if user liked
             views: post.views,
             solved: post.solved,
             category: post.category,
             featured: post.featured,
-            commentsCount: post.comments.length,
-            comments: post.comments.map(comment => ({
+            commentsCount: post.comments ? post.comments.length : 0,
+            comments: post.comments ? post.comments.map(comment => ({
                 id: comment._id.toString(),
                 author: comment.author,
-                authorId: comment.authorId,
+                authorId: comment.authorId?._id || comment.authorId,
                 // FIXED: Include profile image from populated data
                 authorProfileImage: comment.authorId?.profileImage || null,
                 content: comment.content,
                 timestamp: comment.createdAt.toISOString(),
                 likes: comment.likes,
-                liked: comment.likedBy.includes(userId),
+                liked: comment.likedBy ? comment.likedBy.some(id => id.toString() === userId) : false,
                 repliesCount: comment.replies?.length || 0
-            }))
+            })) : []
         }));
 
-        res.json({
+        const responseData = {
             success: true,
             posts: formattedPosts,
             pagination: {
@@ -155,21 +168,12 @@ router.get('/posts', auth, async (req, res) => {
                 hasNext: parseInt(page) < Math.ceil(totalPosts / parseInt(limit)),
                 hasPrev: parseInt(page) > 1
             },
-            stats: {
-                totalPosts: await Post.countDocuments(),
-                activeFarmers: await User.countDocuments(),
-                solvedQuestions: await Post.countDocuments({ solved: true }),
-                categories: await Post.aggregate([
-                    { $group: { _id: '$category', count: { $sum: 1 } } }
-                ]),
-                popularTags: await Post.aggregate([
-                    { $unwind: '$tags' },
-                    { $group: { _id: '$tags', count: { $sum: 1 } } },
-                    { $sort: { count: -1 } },
-                    { $limit: 10 }
-                ])
-            }
-        });
+        };
+
+        // Cache the response for 30 seconds (short cache for fresh content)
+        cache.set(cacheKey, responseData, 30);
+
+        res.json(responseData);
     } catch (error) {
         console.error('Error fetching posts:', error);
         res.status(500).json({ message: 'Failed to fetch posts' });
@@ -177,7 +181,7 @@ router.get('/posts', auth, async (req, res) => {
 });
 
 
-// FIXED: Create new post with profile image
+// FIXED: Create new post with profile image (MongoDB Base64 Storage)
 router.post('/posts', auth, upload.single('image'), async (req, res) => {
     try {
         const {
@@ -203,27 +207,27 @@ router.post('/posts', auth, upload.single('image'), async (req, res) => {
         }
 
         // Handle image (from file upload or base64)
-        let imageUrl = null;
+        let imageBase64 = null;
+
         if (req.file) {
-            imageUrl = `/uploads/posts/${req.file.filename}`;
-        } else if (image && image.startsWith('data:image')) {
-            try {
-                const fs = require('fs');
-                const base64Data = image.replace(/^data:image\/\w+;base64,/, '');
-                const buffer = Buffer.from(base64Data, 'base64');
-                const filename = `post-${Date.now()}-${userId}.jpg`;
-                const uploadDir = '/tmp/uploads/posts';
-                const uploadPath = path.join(uploadDir, filename);
-
-                if (!fs.existsSync(uploadDir)) {
-                    fs.mkdirSync(uploadDir, { recursive: true });
-                }
-
-                fs.writeFileSync(uploadPath, buffer);
-                imageUrl = `/uploads/posts/${filename}`;
-            } catch (imageError) {
-                console.error('Error saving image:', imageError);
+            // Check file size (double check)
+            if (req.file.size > 5 * 1024 * 1024) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'Image size too large (max 5MB)'
+                });
             }
+            // Convert buffer to base64
+            imageBase64 = `data:${req.file.mimetype};base64,${req.file.buffer.toString('base64')}`;
+        } else if (image && image.startsWith('data:image')) {
+            // Client sent base64 directly
+            if (image.length > 7 * 1024 * 1024) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'Image size too large'
+                });
+            }
+            imageBase64 = image;
         }
 
         // Process tags
@@ -236,7 +240,7 @@ router.post('/posts', auth, upload.single('image'), async (req, res) => {
             content: content.trim(),
             author: userName,
             authorId: userId,
-            image: imageUrl,
+            image: imageBase64, // Store base64 string directly
             tags: processedTags,
             category: category,
             cropType: cropType,
@@ -251,7 +255,11 @@ router.post('/posts', auth, upload.single('image'), async (req, res) => {
 
         await newPost.save();
 
-        console.log(`✅ Advanced post created by ${userName}: "${title}" (${category})`);
+        // Clear posts cache when new post is created
+        cache.del('posts_1_20_all_all_all_none_createdAt_desc'); // Clear default view
+        cache.flush(); // Simple strategy: flush all community caches to ensure freshness
+
+        console.log(`✅ MongoDB Post created by ${userName}: "${title}" (${category})`);
 
         // FIXED: Return formatted post with profile image
         res.status(201).json({
@@ -475,26 +483,40 @@ router.post('/posts/:id/solve', auth, async (req, res) => {
 // Get trending topics
 router.get('/trending', auth, async (req, res) => {
     try {
-        const trendingTags = await Post.aggregate([
-            { $unwind: '$tags' },
-            { $group: { _id: '$tags', count: { $sum: 1 }, posts: { $sum: 1 } } },
-            { $sort: { count: -1 } },
-            { $limit: 10 }
+        // Check cache first
+        const cacheKey = 'trending_topics';
+        const cachedData = cache.get(cacheKey);
+        if (cachedData) {
+            return res.json(cachedData);
+        }
+
+        // Parallel execution for better performance
+        const [trendingTags, popularCategories] = await Promise.all([
+            Post.aggregate([
+                { $unwind: '$tags' },
+                { $group: { _id: '$tags', count: { $sum: 1 }, posts: { $sum: 1 } } },
+                { $sort: { count: -1 } },
+                { $limit: 10 }
+            ]),
+            Post.aggregate([
+                { $group: { _id: '$category', count: { $sum: 1 } } },
+                { $sort: { count: -1 } }
+            ])
         ]);
 
-        const popularCategories = await Post.aggregate([
-            { $group: { _id: '$category', count: { $sum: 1 } } },
-            { $sort: { count: -1 } }
-        ]);
-
-        res.json({
+        const responseData = {
             success: true,
             trending: trendingTags.map(tag => ({
                 topic: tag._id,
                 count: tag.count
             })),
             categories: popularCategories
-        });
+        };
+
+        // Cache for 10 minutes
+        cache.set(cacheKey, responseData, 600);
+
+        res.json(responseData);
 
     } catch (error) {
         console.error('Error getting trending topics:', error);
@@ -517,6 +539,12 @@ router.get('/search', auth, async (req, res) => {
 
         if (!q) {
             return res.status(400).json({ message: 'Search query is required' });
+        }
+
+        const cacheKey = `search_${q}_${category || 'all'}_${tags || 'all'}_${solved || 'all'}_${sortBy}`;
+        const cachedData = cache.get(cacheKey);
+        if (cachedData) {
+            return res.json(cachedData);
         }
 
         // Build search filter
@@ -547,10 +575,12 @@ router.get('/search', auth, async (req, res) => {
             default: sort = { createdAt: -1 }; // Default relevance
         }
 
+        // Optimization: use .lean() and populate specific fields
         const searchResults = await Post.find(searchFilter)
             .populate('authorId', 'username profileImage')
             .sort(sort)
-            .limit(50);
+            .limit(50)
+            .lean();
 
         // FIXED: Format search results with profile images
         const formattedResults = searchResults.map(post => ({
@@ -558,7 +588,7 @@ router.get('/search', auth, async (req, res) => {
             title: post.title,
             content: post.content,
             author: post.author,
-            authorId: post.authorId._id,
+            authorId: post.authorId?._id || post.authorId,
             authorProfileImage: post.authorId?.profileImage || null,
             timestamp: post.createdAt.toISOString(),
             image: post.image,
@@ -566,16 +596,21 @@ router.get('/search', auth, async (req, res) => {
             likes: post.likes,
             category: post.category,
             solved: post.solved,
-            commentsCount: post.comments.length
+            commentsCount: post.comments ? post.comments.length : 0
         }));
 
-        res.json({
+        const responseData = {
             success: true,
             results: formattedResults,
             query: q,
             count: formattedResults.length,
             filters: { category, tags, solved }
-        });
+        };
+
+        // Cache search results for 2 minutes
+        cache.set(cacheKey, responseData, 120);
+
+        res.json(responseData);
 
     } catch (error) {
         console.error('Error searching posts:', error);

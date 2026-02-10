@@ -4,6 +4,7 @@ const { GoogleGenerativeAI } = require('@google/generative-ai');
 const auth = require('../middleware/auth');
 const Query = require('../models/Query');
 const User = require('../models/User');
+const cache = require('../utils/cache'); // Import cache utility
 
 // Initialize Gemini AI
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
@@ -109,6 +110,10 @@ Provide helpful farming advice:`;
             await newQuery.save();
             console.log('✅ Query saved to database');
 
+            // Invalidate caches for this user
+            cache.del(`recent_queries_${userId}`);
+            cache.del(`query_stats_${userId}`);
+
             // Clean up old queries (keep only last 100 per user)
             const oldQueries = await Query.find({ userId }).sort({ createdAt: -1 }).skip(100);
             if (oldQueries.length > 0) {
@@ -138,13 +143,21 @@ Provide helpful farming advice:`;
 router.get('/recent', auth, async (req, res) => {
     try {
         const userId = req.user.id;
+        const cacheKey = `recent_queries_${userId}`;
+
+        // Check cache
+        const cachedData = cache.get(cacheKey);
+        if (cachedData) {
+            return res.json(cachedData);
+        }
 
         const recentQueries = await Query.find({ userId })
             .sort({ createdAt: -1 })
             .limit(20)
-            .select('question response category language createdAt resolved rating escalation');
+            .select('question response category language createdAt resolved rating escalation')
+            .lean(); // Use lean for speed
 
-        res.json({
+        const responseData = {
             success: true,
             queries: recentQueries.map(q => {
                 const esc = q.escalation || {};
@@ -160,7 +173,7 @@ router.get('/recent', auth, async (req, res) => {
                 }
 
                 return {
-                    id: q._id,
+                    id: q._id.toString(),
                     question: q.question,
                     response: q.response,
                     category: q.category,
@@ -180,7 +193,13 @@ router.get('/recent', auth, async (req, res) => {
                     resolvedAt: q.resolvedAt || null
                 };
             })
-        });
+        };
+
+        // Cache for 1 minute (freshness is important here if they just asked a question, 
+        // but we handle invalidation on ask, so this is safe)
+        cache.set(cacheKey, responseData, 60);
+
+        res.json(responseData);
 
     } catch (error) {
         console.error('Error fetching recent queries:', error);
@@ -199,24 +218,31 @@ router.get('/recent', auth, async (req, res) => {
 router.get('/stats', auth, async (req, res) => {
     try {
         const userId = req.user.id;
+        const cacheKey = `query_stats_${userId}`;
 
-        const totalQueries = await Query.countDocuments({ userId });
-        const resolvedQueries = await Query.countDocuments({ userId, resolved: true });
-        const thisWeekQueries = await Query.countDocuments({
-            userId,
-            createdAt: { $gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) }
-        });
-        const thisMonthQueries = await Query.countDocuments({
-            userId,
-            createdAt: { $gte: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000) }
-        });
+        const cachedData = cache.get(cacheKey);
+        if (cachedData) {
+            return res.json(cachedData);
+        }
 
-        const categoryStats = await Query.aggregate([
-            { $match: { userId } },
-            { $group: { _id: '$category', count: { $sum: 1 } } }
+        const [totalQueries, resolvedQueries, thisWeekQueries, thisMonthQueries, categoryStats] = await Promise.all([
+            Query.countDocuments({ userId }),
+            Query.countDocuments({ userId, resolved: true }),
+            Query.countDocuments({
+                userId,
+                createdAt: { $gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) }
+            }),
+            Query.countDocuments({
+                userId,
+                createdAt: { $gte: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000) }
+            }),
+            Query.aggregate([
+                { $match: { userId } },
+                { $group: { _id: '$category', count: { $sum: 1 } } }
+            ])
         ]);
 
-        res.json({
+        const responseData = {
             success: true,
             stats: {
                 total: totalQueries,
@@ -228,7 +254,12 @@ router.get('/stats', auth, async (req, res) => {
                     return acc;
                 }, {})
             }
-        });
+        };
+
+        // Cache stats for 2 minutes
+        cache.set(cacheKey, responseData, 120);
+
+        res.json(responseData);
 
     } catch (error) {
         console.error('Error fetching query stats:', error);

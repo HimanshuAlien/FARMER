@@ -6,21 +6,8 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 
-// Configure multer for avatar uploads with advanced settings
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        const uploadPath = '/tmp/uploads/avatars/';
-        if (!fs.existsSync(uploadPath)) {
-            fs.mkdirSync(uploadPath, { recursive: true });
-        }
-        cb(null, uploadPath);
-    },
-    filename: function (req, file, cb) {
-        // Create unique filename with timestamp
-        const uniqueName = `avatar-${req.user.id}-${Date.now()}${path.extname(file.originalname)}`;
-        cb(null, uniqueName);
-    }
-});
+// Configure multer for memory storage (Base64 Profile Images)
+const storage = multer.memoryStorage();
 
 const upload = multer({
     storage: storage,
@@ -130,39 +117,16 @@ router.put('/profile', auth, async (req, res) => {
         if (website !== undefined) user.website = website.trim();
         if (socialLinks !== undefined) user.socialLinks = socialLinks;
 
-        // Handle base64 profile image with advanced processing
+        // Handle base64 profile image with MongoDB storage
         if (profileImage && profileImage.startsWith('data:image')) {
             try {
-                const base64Data = profileImage.replace(/^data:image\/\w+;base64,/, '');
-                const buffer = Buffer.from(base64Data, 'base64');
-
-                // Validate image size
-                if (buffer.length > 2 * 1024 * 1024) {
+                // Approximate size check
+                if (profileImage.length > 3 * 1024 * 1024) { // ~2.2MB binary
                     return res.status(400).json({ message: 'Image file too large (max 2MB)' });
                 }
 
-                const filename = `avatar-${req.user.id}-${Date.now()}.jpg`;
-                const uploadDir = '/tmp/uploads/avatars';
-                const uploadPath = path.join(uploadDir, filename);
-
-                // Ensure directory exists
-                if (!fs.existsSync(uploadDir)) {
-                    fs.mkdirSync(uploadDir, { recursive: true });
-                }
-
-                // Delete old avatar if exists
-                if (user.profileImage) {
-                    const oldPath = path.join(__dirname, '..', user.profileImage);
-                    if (fs.existsSync(oldPath)) {
-                        fs.unlinkSync(oldPath);
-                    }
-                }
-
-                // Save new image
-                fs.writeFileSync(uploadPath, buffer);
-                user.profileImage = `/uploads/avatars/${filename}`;
-
-                console.log(`✅ Profile image saved for ${user.username}: ${filename}`);
+                user.profileImage = profileImage; // Store base64 directly
+                console.log(`✅ Profile image updated in MongoDB for ${user.username}`);
 
             } catch (imageError) {
                 console.error('Error saving profile image:', imageError);
@@ -192,7 +156,7 @@ router.put('/profile', auth, async (req, res) => {
     }
 });
 
-// Advanced avatar upload with image processing
+// Advanced avatar upload (Memory -> Base64 -> MongoDB)
 router.post('/avatar', auth, upload.single('avatar'), async (req, res) => {
     try {
         if (!req.file) {
@@ -201,27 +165,19 @@ router.post('/avatar', auth, upload.single('avatar'), async (req, res) => {
 
         const user = await User.findById(req.user.id);
 
-        // Delete old avatar if exists
-        if (user.profileImage) {
-            const oldPath = path.join(__dirname, '..', user.profileImage);
-            if (fs.existsSync(oldPath)) {
-                fs.unlinkSync(oldPath);
-                console.log('✅ Old avatar deleted');
-            }
-        }
+        // Convert buffer to Base64
+        const imageBase64 = `data:${req.file.mimetype};base64,${req.file.buffer.toString('base64')}`;
 
-        const avatarUrl = `/uploads/avatars/${req.file.filename}`;
-        user.profileImage = avatarUrl;
+        user.profileImage = imageBase64;
         await user.save();
 
-        console.log(`✅ Avatar uploaded for ${user.username}: ${req.file.filename}`);
+        console.log(`✅ Avatar updated in MongoDB for ${user.username}`);
 
         res.json({
             success: true,
             message: 'Avatar updated successfully',
-            avatarUrl: avatarUrl,
+            avatarUrl: 'base64', // Keep as string for client compatibility
             fileInfo: {
-                filename: req.file.filename,
                 size: req.file.size,
                 mimetype: req.file.mimetype
             }
@@ -238,8 +194,6 @@ router.get('/stats', auth, async (req, res) => {
     try {
         const user = await User.findById(req.user.id);
 
-        // Advanced stats calculation
-        // Note: You'll need to import Post model and calculate real stats
         const stats = {
             profile: {
                 completeness: calculateProfileCompleteness(user),
@@ -247,10 +201,10 @@ router.get('/stats', auth, async (req, res) => {
                 lastUpdated: user.updatedAt
             },
             activity: {
-                posts: 0, // Calculate from Post model
-                comments: 0, // Calculate from Post model
-                likes: 0, // Calculate from Post model
-                reputation: 0 // Calculate based on activity
+                posts: 0,
+                comments: 0,
+                likes: 0,
+                reputation: 0
             },
             farming: {
                 experience: user.experience || 0,
@@ -321,7 +275,7 @@ router.put('/preferences', auth, async (req, res) => {
     }
 });
 
-// Delete user account with safety checks
+// Delete user account
 router.delete('/delete', auth, async (req, res) => {
     try {
         const { confirmation } = req.body;
@@ -331,18 +285,6 @@ router.delete('/delete', auth, async (req, res) => {
         }
 
         const user = await User.findById(req.user.id);
-
-        // Delete user's avatar if exists
-        if (user.profileImage) {
-            const avatarPath = path.join(__dirname, '..', user.profileImage);
-            if (fs.existsSync(avatarPath)) {
-                fs.unlinkSync(avatarPath);
-            }
-        }
-
-        // Note: You should also delete user's posts, comments, etc.
-        // This requires Post model integration
-
         await User.findByIdAndDelete(req.user.id);
 
         console.log(`✅ User account deleted: ${user.username}`);
@@ -358,7 +300,7 @@ router.delete('/delete', auth, async (req, res) => {
     }
 });
 
-// Check authentication with additional info
+// Check authentication
 router.get('/check-auth', auth, (req, res) => {
     res.json({
         authenticated: true,

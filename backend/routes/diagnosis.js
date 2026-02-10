@@ -10,18 +10,8 @@ const { GoogleGenerativeAI } = require('@google/generative-ai');
 // Initialize Gemini AI
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
-// Configure multer for image upload
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        const uploadPath = '/tmp/uploads/crop-images';
-        fs.ensureDirSync(uploadPath);
-        cb(null, uploadPath);
-    },
-    filename: (req, file, cb) => {
-        const uniqueName = `crop-${Date.now()}-${Math.round(Math.random() * 1E9)}${path.extname(file.originalname)}`;
-        cb(null, uniqueName);
-    }
-});
+// Configure multer for memory storage
+const storage = multer.memoryStorage();
 
 const upload = multer({
     storage: storage,
@@ -38,14 +28,13 @@ const upload = multer({
     }
 });
 
-// AI-powered crop analysis using Gemini Vision
-async function analyzeCropImage(imagePath) {
+// AI-powered crop analysis using Gemini Vision (Buffer-based)
+async function analyzeCropImage(buffer) {
     try {
         const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
-        // Read and process image
-        const imageBuffer = await fs.readFile(imagePath);
-        const processedImage = await sharp(imageBuffer)
+        // Process image from buffer
+        const processedImage = await sharp(buffer)
             .resize(1024, 1024, { fit: 'inside', withoutEnlargement: true })
             .jpeg({ quality: 90 })
             .toBuffer();
@@ -83,7 +72,6 @@ Guidelines:
 - Make Diagnosis, Treatment, and Prevention roughly similar in length.
 - Do NOT add extra sections or headings outside the format above.
 `;
-
 
         const result = await model.generateContent([
             prompt,
@@ -131,7 +119,7 @@ Guidelines:
     }
 }
 
-// Upload and analyze crop image
+// Upload and analyze crop image (Memory -> Base64 -> return)
 router.post('/analyze', auth, upload.single('cropImage'), async (req, res) => {
     try {
         if (!req.file) {
@@ -139,32 +127,23 @@ router.post('/analyze', auth, upload.single('cropImage'), async (req, res) => {
         }
 
         const { cropType, symptoms, location } = req.body;
-        const imagePath = req.file.path;
 
-        console.log(`Analyzing crop image: ${req.file.filename}`);
+        console.log(`Analyzing crop image (memory buffer): ${req.file.originalname}`);
         console.log(`Crop type: ${cropType}, Location: ${location}`);
 
         // Analyze image with AI
-        const analysisResult = await analyzeCropImage(imagePath);
+        const analysisResult = await analyzeCropImage(req.file.buffer);
 
-        // Save analysis record (you can create a model for this)
-        const diagnosisRecord = {
-            userId: req.user.id,
-            imagePath: req.file.filename,
-            cropType: cropType || 'Unknown',
-            symptoms: symptoms || 'Not specified',
-            location: location || 'Not specified',
-            analysis: analysisResult,
-            timestamp: new Date()
-        };
+        // Convert original/processed image to base64 for returning to UI if needed
+        // For diagnosis, we usually just return the analysis result and the image preview
+        const imageBase64 = `data:${req.file.mimetype};base64,${req.file.buffer.toString('base64')}`;
 
-        // Here you would typically save to database
         console.log('Diagnosis completed for user:', req.user.id);
 
         res.json({
             success: true,
             diagnosis: analysisResult,
-            imageUrl: `/uploads/crop-images/${req.file.filename}`,
+            imageUrl: imageBase64, // Return Base64 instead of URL
             metadata: {
                 cropType,
                 symptoms,
@@ -175,12 +154,6 @@ router.post('/analyze', auth, upload.single('cropImage'), async (req, res) => {
 
     } catch (error) {
         console.error('Crop analysis error:', error);
-
-        // Clean up uploaded file on error
-        if (req.file && req.file.path) {
-            fs.removeSync(req.file.path).catch(console.error);
-        }
-
         res.status(500).json({
             message: 'Failed to analyze crop image. Please try again.',
             error: error.message
@@ -188,9 +161,9 @@ router.post('/analyze', auth, upload.single('cropImage'), async (req, res) => {
     }
 });
 
-// Get analysis history
+// Get analysis history (Mock data updated with Base64 placeholder or URLs)
 router.get('/history', auth, (req, res) => {
-    // Mock history data - replace with database query
+    // Mock history data
     const mockHistory = [
         {
             id: 1,
@@ -198,7 +171,7 @@ router.get('/history', auth, (req, res) => {
             diagnosis: 'Early Blight Disease detected',
             severity: 'Moderate',
             date: '2025-09-10',
-            imageUrl: '/uploads/sample-tomato.jpg'
+            imageUrl: 'https://via.placeholder.com/150'
         },
         {
             id: 2,
@@ -206,7 +179,7 @@ router.get('/history', auth, (req, res) => {
             diagnosis: 'Healthy plant with good growth',
             severity: 'None',
             date: '2025-09-08',
-            imageUrl: '/uploads/sample-rice.jpg'
+            imageUrl: 'https://via.placeholder.com/150'
         }
     ];
 

@@ -150,4 +150,9 @@ querySchema.index({ escalated: 1, resolved: 1 }); // flat fields used by routes
 querySchema.index({ 'escalation.isEscalated': 1, createdAt: -1 });
 querySchema.index({ 'escalation.officerId': 1, 'escalation.status': 1 });
 
+// Optimization for stats and officer views
+querySchema.index({ userId: 1, resolved: 1 });
+querySchema.index({ userId: 1, category: 1 });
+querySchema.index({ escalated: 1, resolved: 1, escalatedAt: -1 });
+
 module.exports = mongoose.model('Query', querySchema);
