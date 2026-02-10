@@ -6,37 +6,37 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title> FarmSure</title>
     <link
-        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Manrope:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
 
     <style>
         :root {
-            --primary: #059669;
-            /* Deep Emerald */
-            --primary-dark: #065f46;
-            --primary-light: #d1fae5;
+            --primary: #064e3b;
+            /* Premium Deep Emerald */
+            --primary-dark: #064e3b;
+            --primary-light: #f0fdf4;
             --secondary: #0f172a;
-            /* Navy */
-            --accent: #6366f1;
-            /* Indigo accent */
+            /* Slate 900 */
+            --accent: #4f46e5;
             --warning: #f59e0b;
             --danger: #ef4444;
             --success: #10b981;
-            --bg-light: #e8ecf1;
+            --bg-light: #f8fafc;
+            /* Modern light Gray */
             --bg-dark: #020617;
             --card-light: #ffffff;
-            --card-dark: #0f172a;
+            --card-dark: #1e293b;
             --text-light: #0f172a;
             --text-dark: #f8fafc;
-            --text-secondary-light: #64748b;
+            --text-secondary-light: #475569;
             --text-secondary-dark: #94a3b8;
-            --border-light: #e2e8f0;
-            --border-dark: #1e293b;
+            --border-light: #f1f5f9;
+            --border-dark: #334155;
             --sidebar-light: #ffffff;
-            --sidebar-dark: #0f172a;
-            --glass-bg: rgba(255, 255, 255, 0.7);
-            --glass-bg-dark: rgba(15, 23, 42, 0.7);
+            --sidebar-dark: #020617;
+            --glass-bg: rgba(255, 255, 255, 0.8);
+            --glass-bg-dark: rgba(2, 6, 23, 0.8);
         }
 
         * {
@@ -46,7 +46,7 @@
         }
 
         body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
             background: var(--bg-light);
             color: var(--text-light);
             overflow-x: hidden;
@@ -360,19 +360,19 @@
         }
 
         .logo-text-krishi {
-            color: var(--primary);
-            font-weight: 800;
-            font-size: 1.5rem;
-            font-family: 'Outfit', sans-serif;
-            letter-spacing: -0.01em;
+            color: var(--secondary);
+            font-weight: 700;
+            font-size: 1.25rem;
+            font-family: 'Manrope', sans-serif;
+            letter-spacing: -0.02em;
         }
 
         .logo-text-mitr {
             color: var(--secondary);
-            font-weight: 800;
-            font-size: 1.5rem;
-            font-family: 'Outfit', sans-serif;
-            letter-spacing: -0.01em;
+            font-weight: 700;
+            font-size: 1.25rem;
+            font-family: 'Manrope', sans-serif;
+            letter-spacing: -0.02em;
         }
 
         .topbar-logo-brand {
@@ -420,39 +420,38 @@
             align-items: center;
             gap: 0.9rem;
             text-decoration: none;
-            padding: 0.75rem 1.5rem;
-            color: #111827;
+            padding: 0.65rem 1.25rem;
+            color: #475569;
             font-weight: 500;
             transition: all 0.2s ease;
-            border-left: 3px solid transparent;
-            font-size: 0.95rem;
+            margin: 0.2rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.875rem;
         }
 
         body.dark .nav-item {
-            color: #e5e7eb;
+            color: #94a3b8;
         }
 
         .nav-item i {
-            font-size: 1.1rem;
+            font-size: 1rem;
             width: 20px;
         }
 
         .nav-item:hover {
-            color: var(--primary);
-            background: var(--primary-light);
-            transform: translateX(5px);
+            color: var(--secondary);
+            background: #f1f5f9;
         }
 
         .nav-item.active {
             color: white;
             font-weight: 600;
-            background: var(--primary);
-            box-shadow: 0 4px 12px rgba(5, 150, 105, 0.25);
+            background: var(--secondary);
         }
 
         body.dark .nav-item.active {
-            background: var(--primary);
-            color: white;
+            background: white;
+            color: black;
         }
 
         .sidebar-footer {
@@ -585,15 +584,15 @@
         }
 
         .simple-title {
-            font-family: 'Outfit', sans-serif;
+            font-family: 'Manrope', sans-serif;
             font-weight: 700;
             letter-spacing: -0.02em;
-            font-size: 1.5rem;
+            font-size: 1.35rem;
             color: var(--secondary);
         }
 
         body.dark .simple-title {
-            color: var(--text-dark);
+            color: white;
         }
 
         @media (max-width: 768px) {
@@ -781,18 +780,19 @@
 
         /* Modern Premium Welcome Banner */
         .welcome-banner {
-            background: linear-gradient(135deg, #065f46 0%, #059669 100%);
-            border-radius: 24px;
-            padding: 2.5rem;
+            background: var(--secondary);
+            border-radius: 4px;
+            /* Square edges as requested */
+            padding: 3rem;
             margin-bottom: 2rem;
             color: white;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
             position: relative;
             overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: none;
         }
 
         .welcome-banner::before {
@@ -1111,43 +1111,14 @@
             display: inline-flex;
             align-items: center;
             gap: 0.4rem;
-            font-size: 0.8rem;
-            font-weight: 800;
+            font-size: 0.75rem;
+            font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 0.09em;
+            letter-spacing: 0.05em;
             color: #ffffff;
-            background: #dc2626;
-            /* solid red */
-            padding: 0.3rem 0.9rem;
-            border-radius: 999px;
-            border: 1px solid #b91c1c;
-            box-shadow:
-                0 0 0 1px rgba(248, 113, 113, 0.8),
-                0 8px 18px rgba(248, 113, 113, 0.55);
-            animation: dsBlink 0.9s ease-in-out infinite;
-        }
-
-        .ds-new-pulse i {
-            font-size: 0.9rem;
-        }
-
-        /* Stronger blinking / glow effect */
-        @keyframes dsBlink {
-
-            0%,
-            100% {
-                transform: translateY(0) scale(1);
-                box-shadow:
-                    0 0 0 0 rgba(248, 113, 113, 0.9),
-                    0 8px 18px rgba(248, 113, 113, 0.6);
-            }
-
-            50% {
-                transform: translateY(-1px) scale(1.04);
-                box-shadow:
-                    0 0 14px 2px rgba(248, 113, 113, 1),
-                    0 12px 26px rgba(248, 113, 113, 0.8);
-            }
+            background: var(--secondary);
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
         }
 
         .dashboard-schemes-list {
@@ -1158,19 +1129,26 @@
         }
 
         .ds-item {
-            background: rgba(22, 163, 74, 0.08);
-            border-radius: 12px;
-            padding: 0.7rem 0.85rem;
+            background: rgba(15, 23, 42, 0.03);
+            border-radius: 8px;
+            padding: 0.85rem 1rem;
             display: flex;
             flex-direction: column;
-            gap: 0.3rem;
-            border: 1px solid rgba(22, 163, 74, 0.5);
-            backdrop-filter: blur(4px);
+            gap: 0.4rem;
+            border: 1px solid rgba(15, 23, 42, 0.08);
+            transition: all 0.2s ease;
         }
 
         body.dark .ds-item {
-            background: rgba(15, 23, 42, 0.6);
-            border-color: rgba(148, 163, 184, 0.6);
+            background: rgba(255, 255, 255, 0.03);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .ds-item:hover {
+            background: #ffffff;
+            border-color: var(--secondary);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            transform: translateX(4px);
         }
 
         .ds-item-top {
@@ -1726,10 +1704,6 @@
                             <div class="stat-info">
                                 <h3 data-i18n="stat.cropsMonitored">Crops Monitored</h3>
                                 <div class="stat-value" id="cropsCount">0</div>
-                                <div class="stat-trend">
-                                    <i class="fas fa-arrow-up"></i>
-                                    <span data-i18n="stat.cropsNew">2 new this week</span>
-                                </div>
                             </div>
                             <div class="stat-icon-box">
                                 <img src="images/market-prices.png" alt="Crops">

@@ -4,26 +4,28 @@
 <head>
     <meta charset="UTF-8" />
     <title>Indian Agriculture Helpline Directory</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Manrope:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
 
     <style>
         :root {
-            --bg: #eef2ff;
+            --bg: #f8fafc;
             --surface: #ffffff;
-            --surface-soft: #f9fafb;
-            --border-subtle: #e5e7eb;
+            --surface-soft: #f1f5f9;
+            --border-subtle: #e2e8f0;
             --border-strong: #cbd5e1;
-            --primary: #2563eb;
-            /* main blue */
-            --primary-soft: #dbeafe;
-            --accent: #0f766e;
-            /* teal accent */
+            --primary: #0f172a;
+            /* Slate 900 for product feel */
+            --primary-soft: #f1f5f9;
+            --accent: #064e3b;
+            /* Deep Emerald */
             --text-main: #0f172a;
-            --text-soft: #6b7280;
-            --muted: #9ca3af;
-            --shadow-soft: 0 20px 50px rgba(15, 23, 42, 0.18);
-            --radius-lg: 16px;
-            --radius-xl: 20px;
+            --text-soft: #475569;
+            --muted: #94a3b8;
+            --shadow-soft: 0 10px 25px rgba(15, 23, 42, 0.08);
+            --radius-lg: 12px;
+            --radius-xl: 16px;
         }
 
         * {
@@ -32,9 +34,8 @@
 
         body {
             margin: 0;
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-                sans-serif;
-            background: radial-gradient(circle at top, #e0f2fe 0, #eef2ff 45%, #e5e7eb 100%);
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: var(--bg);
             color: var(--text-main);
         }
 
@@ -75,9 +76,10 @@
         }
 
         .india-title strong {
+            font-family: 'Manrope', sans-serif;
             font-size: 19px;
-            font-weight: 600;
-            letter-spacing: 0.32px;
+            font-weight: 700;
+            letter-spacing: -0.01em;
         }
 
         .india-title .sub {
@@ -102,11 +104,12 @@
 
         .portal-left h1 {
             margin: 0 0 6px;
+            font-family: 'Manrope', sans-serif;
             font-size: 26px;
             /* bigger */
             font-weight: 700;
             color: #0f172a;
-            letter-spacing: 0.02em;
+            letter-spacing: -0.02em;
         }
 
         .portal-left p {
