@@ -1390,14 +1390,7 @@
             </div>
         </div>
         <div class="sidebar-footer">
-            <div id="userInfo" class="user-info">
-                <div style="font-weight:600;" data-i18n="sidebar.user.loadingTitle">Loading...</div>
-                <div style="font-size:0.8rem;opacity:0.8;" data-i18n="sidebar.user.loadingSubtitle">
-                    Fetching profile
-                </div>
-            </div>
-            <!-- ======= /Pin controls (ADDED) ======= -->
-
+            <!-- User info removed from sidebar -->
             <button class="theme-toggle-sidebar" onclick="toggleTheme()">
                 <i class="fas fa-sun"></i>
                 <span data-i18n="sidebar.toggleTheme">Toggle Theme</span>
@@ -2254,22 +2247,7 @@
     }
 
     async function loadUserInfo() {
-        try {
-            const res = await fetch(API_BASE_URL + '/api/user/profile', { credentials: 'include' });
-            if (res.ok) {
-                const user = await res.json();
-                document.getElementById('userInfo').innerHTML = `
-            <div style="font-weight: 600;">${user.username}</div>
-            <div style="font-size: 0.8rem; opacity: 0.8;">${user.email}</div>
-          `;
-                return;
-            }
-        } catch (error) {
-        }
-        document.getElementById('userInfo').innerHTML = `
-        <div style="font-weight: 600;">Demo User</div>
-        <div style="font-size: 0.8rem; opacity: 0.8;">farmer@kerala.gov.in</div>
-      `;
+        /* User info removed from sidebar navigation */
     }
 
     // ---------- WEATHER CONDITION HELPER ----------
@@ -2292,18 +2270,18 @@
         const location = document.getElementById('locationInput').value || 'Kochi, Kerala';
 
         try {
-            console.log(`Loading weather for: ${location}`);
+            console.log(`Loading weather for: ${location} `);
             document.getElementById('loadingState').style.display = 'block';
             document.getElementById('errorState').style.display = 'none';
             document.getElementById('weatherContent').style.display = 'none';
 
-            const response = await fetch(`/api/weather/current/${encodeURIComponent(location)}`, {
+            const response = await fetch(`/ api / weather / current / ${encodeURIComponent(location)} `, {
                 credentials: 'include'
             });
 
             if (!response.ok) {
                 const errorText = await response.text();
-                throw new Error(`HTTP ${response.status}: ${errorText}`);
+                throw new Error(`HTTP ${response.status}: ${errorText} `);
             }
 
             const weatherData = await response.json();
@@ -2330,14 +2308,14 @@
 
         document.getElementById('weatherTemp').textContent = `${current.temp}°C`;
         document.getElementById('weatherCondition').textContent = condition.desc;
-        document.getElementById('weatherLocation').textContent = `${data.location.name}, ${data.location.country}`;
+        document.getElementById('weatherLocation').textContent = `${data.location.name}, ${data.location.country} `;
 
-        document.getElementById('humidity').textContent = `${current.humidity}%`;
-        document.getElementById('windSpeed').textContent = `${current.wind_speed} km/h`;
+        document.getElementById('humidity').textContent = `${current.humidity}% `;
+        document.getElementById('windSpeed').textContent = `${current.wind_speed} km / h`;
         document.getElementById('visibility').textContent = `${current.visibility} km`;
         document.getElementById('feelsLike').textContent = `${current.feels_like}°C`;
         document.getElementById('pressure').textContent = `${current.pressure} hPa`;
-        document.getElementById('mainWeatherIcon').className = `fas fa-${condition.icon}`;
+        document.getElementById('mainWeatherIcon').className = `fas fa - ${condition.icon} `;
 
         displayForecast(data.forecast);
         displayAlerts(data.alerts, data.forecast);
@@ -2380,7 +2358,7 @@
             }
 
             cards.push(`
-          <div class="forecast-card ${severityClass}">
+                    < div class="forecast-card ${severityClass}" >
             <div class="forecast-day">${dayName}</div>
             <div class="forecast-date">${monthDay}</div>
             <div class="forecast-main-row">
@@ -2389,8 +2367,8 @@
             </div>
             <div class="forecast-desc">${cond.desc}</div>
             ${rain > 0 ? `<div class="forecast-extra"><i class="fas fa-droplet"></i>${rain} mm rain</div>` : ''}
-          </div>
-        `);
+          </div >
+                    `);
         }
 
         forecastGrid.innerHTML = cards.join('');
@@ -2403,24 +2381,24 @@
 
         if (!alerts || alerts.length === 0) {
             html += `
-          <div class="alert-card low">
+                    < div class="alert-card low" >
             <div class="alert-icon">✅</div>
             <div class="alert-content">
               <div class="alert-title">No active IMD alerts</div>
               <div class="alert-message">Weather looks stable. Check coloured forecast cards for planning.</div>
             </div>
-          </div>
-        `;
+          </div >
+                    `;
         } else {
             html += alerts.map(alert => `
-          <div class="alert-card ${alert.severity || 'medium'}">
+                    < div class="alert-card ${alert.severity || 'medium'}" >
             <div class="alert-icon">${alert.icon || '⚠️'}</div>
             <div class="alert-content">
               <div class="alert-title">${alert.title}</div>
               <div class="alert-message">${alert.message}</div>
             </div>
-          </div>
-        `).join('');
+          </div >
+                    `).join('');
         }
 
         // EXTRA: auto heavy rainfall alert from forecast (next 5 days)
@@ -2441,7 +2419,7 @@
 
             if (heavy) {
                 const heavyHtml = `
-            <div class="alert-card high">
+                    < div class="alert-card high" >
               <div class="alert-icon">🚨</div>
               <div class="alert-content">
                 <div class="alert-title">Heavy rainfall expected on ${heavy.label}</div>
@@ -2449,8 +2427,8 @@
                   Forecast shows ~${heavy.rain} mm rain. Avoid spraying chemicals, ensure field drainage and protect stored grains.
                 </div>
               </div>
-            </div>
-          `;
+            </div >
+                    `;
                 html = heavyHtml + html;
             }
         }
@@ -2535,11 +2513,11 @@
         }
 
         container.innerHTML = items.map(text => `
-        <div class="today-advice-item">
+                    < div class="today-advice-item" >
           <i class="fas fa-check-circle"></i>
           <span>${text}</span>
-        </div>
-      `).join('');
+        </div >
+                    `).join('');
     }
 
     // ---------- MAP (KERALA-FOCUS, WEATHER LAYERS + EXTRA) ----------
@@ -2647,10 +2625,10 @@
         }).addTo(window.weatherMap);
 
         const tempLabel = data.current ? `${data.current.temp}°C` : '--°C';
-        const placeLabel = `${loc.name || 'Your area'}, ${loc.country || ''}`.trim();
+        const placeLabel = `${loc.name || 'Your area'}, ${loc.country || ''} `.trim();
 
         window.locationMarker.bindPopup(
-            `<strong>${placeLabel}</strong><br/>Current: ${tempLabel}`
+            `< strong > ${placeLabel}</strong > <br />Current: ${tempLabel} `
         );
 
         // ---- 4) Weather overlays (Rain / Clouds / Temp / Storm / Soil / Wind) ----

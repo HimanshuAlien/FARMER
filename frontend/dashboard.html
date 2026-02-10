@@ -1440,18 +1440,25 @@
 
             .features-grid {
                 grid-template-columns: 1fr;
-                gap: 0.75rem;
+                gap: 1rem;
+                margin-top: 1rem;
             }
 
             .feature-card {
-                padding: 1.25rem;
-                border-radius: 16px;
+                padding: 1.5rem;
+                border-radius: 18px;
             }
 
             .feature-title {
                 font-family: 'Outfit', sans-serif;
-                font-size: 1.1rem;
-                margin-bottom: 0.5rem;
+                font-size: 1.2rem;
+                margin-bottom: 0.6rem;
+            }
+
+            .feature-description {
+                font-size: 0.95rem;
+                line-height: 1.6;
+                margin-bottom: 1.25rem;
             }
         }
 
@@ -1596,7 +1603,7 @@
             </div>
         </div>
         <div class="sidebar-footer">
-            <div id="userInfo" class="user-info" style="display:none;"></div>
+            <!-- User info removed from sidebar to free up space -->
             <button class="theme-toggle-sidebar" onclick="toggleTheme()">
                 <i class="fas fa-sun"></i>
                 <span data-i18n="sidebar.toggleTheme">Toggle Theme</span>
@@ -2466,14 +2473,7 @@
             if (!res.ok) throw new Error('Unauthorized');
 
             const user = await res.json();
-            const userInfoElement = document.getElementById('userInfo');
-            if (userInfoElement) {
-                userInfoElement.style.display = 'block';
-                userInfoElement.innerHTML = `
-                    <div style="font-weight: 500;">${user.username}</div>
-                    <div style="font-size: 0.8rem; opacity: 0.8;">${user.email}</div>
-                `;
-            }
+            /* userInfoElement population removed to hide name/email from sidebar */
 
             // NEW: show tutorial once per user (per browser)
             if (user && user.username) {
@@ -2483,14 +2483,7 @@
             }
 
         } catch (error) {
-            const userInfoElement = document.getElementById('userInfo');
-            if (userInfoElement) {
-                userInfoElement.style.display = 'block';
-                userInfoElement.innerHTML = `
-                    <div style="font-weight: 500;">KrishiMitr User</div>
-                    <div style="font-size: 0.8rem; opacity: 0.8;">farmer@example.com</div>
-                `;
-            }
+            /* Fallback userInfo population removed */
 
             // Fallback: treat as generic user
             handleTutorialForUser(null);

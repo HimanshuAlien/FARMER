@@ -33,6 +33,7 @@
             --border-dark: #334155;
             --sidebar-light: #ffffff;
             --sidebar-dark: #020617;
+            --gradient-4: linear-gradient(135deg, #064e3b 0%, #10b981 100%);
         }
 
         * {
@@ -882,7 +883,7 @@
             border: none;
             padding: 0.8rem 1.2rem;
             background: var(--gradient-4);
-            color: #f9fafb;
+            color: #ffffff;
             font-size: 0.95rem;
             font-weight: 700;
             display: inline-flex;
@@ -890,8 +891,8 @@
             justify-content: center;
             gap: 0.5rem;
             cursor: pointer;
-            box-shadow: 0 12px 28px rgba(16, 185, 129, 0.35);
-            transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.2s ease;
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.35);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .analyze-btn i {
@@ -1342,12 +1343,7 @@
             </div>
         </div>
         <div class="sidebar-footer">
-            <div id="userInfo" class="user-info">
-                <div style="font-weight:600;" data-i18n="sidebar.user.loadingTitle">Loading...</div>
-                <div style="font-size:0.8rem;opacity:0.8;" data-i18n="sidebar.user.loadingSubtitle">
-                    Fetching profile
-                </div>
-            </div>
+            <!-- User info removed from sidebar -->
             <button class="theme-toggle-sidebar" onclick="toggleTheme()">
                 <i class="fas fa-sun"></i>
                 <span data-i18n="sidebar.toggleTheme">Toggle Theme</span>
@@ -1892,10 +1888,7 @@
             const res = await fetch(API_BASE_URL + '/api/user/profile', { credentials: 'include' });
             if (res.ok) {
                 const user = await res.json();
-                document.getElementById('userInfo').innerHTML = `
-            <div style="font-weight: 600;">${user.username}</div>
-            <div style="font-size: 0.8rem; opacity: 0.8;">${user.email}</div>
-          `;
+                /* userInfo population removed */
             }
         } catch (error) {
             console.error('Failed to load user info');

@@ -365,7 +365,7 @@
 
         .layout-grid {
             display: grid;
-            grid-template-columns: minmax(0, 1.6fr) minmax(0, 1.1fr);
+            grid-template-columns: minmax(0, 2fr) minmax(0, 0.8fr);
             gap: 1.75rem;
             align-items: stretch;
         }
@@ -1689,10 +1689,7 @@
         </div>
 
         <div class="sidebar-footer">
-            <div id="userInfo" class="user-info">
-                <div style="font-weight:600;">Loading...</div>
-                <div style="font-size:0.8rem;opacity:0.8;">Fetching profile</div>
-            </div>
+            <!-- User info removed from sidebar -->
             <button class="theme-toggle-sidebar" onclick="toggleTheme()">
                 <i class="fas fa-sun"></i>
                 <span data-i18n="sidebar.toggleTheme">Toggle Theme</span>
@@ -3049,10 +3046,7 @@
                     const user = await res.json();
                     const el = document.getElementById('userInfo');
                     if (el) {
-                        el.innerHTML = `
-                            <div style="font-weight: 600;">${user.username}</div>
-                            <div style="font-size: 0.8rem; opacity: 0.8;">${user.email}</div>
-                        `;
+                        /* userInfo population removed */
                     }
                 }
             } catch {

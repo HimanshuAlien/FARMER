@@ -1,4 +1,5 @@
 const express = require('express');
+const mongoose = require('mongoose');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const path = require('path');
@@ -38,8 +39,8 @@ const cropRoutes = require('./routes/cropRoutes');
 app.use("/api/crops", cropRoutes);
 
 // Connect to MongoDB
-if (!process.env.MONGO_URI) {
-    console.error('❌ MONGO_URI is not defined in environment variables!');
+if (!process.env.MONGO_URI && !process.env.MONGODB_URI) {
+    console.error('❌ MONGO_URI or MONGODB_URI is not defined in environment variables!');
 }
 connectDB();
 
@@ -170,7 +171,7 @@ app.get('/api', (req, res) => {
 
 // 🔍 DB Test Route
 app.get('/api/test-db', (req, res) => {
-    const uri = process.env.MONGO_URI || '';
+    const uri = process.env.MONGO_URI || process.env.MONGODB_URI || '';
     res.json({
         success: true,
         state: mongoose.connection.readyState,
