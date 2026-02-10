@@ -2,36 +2,49 @@
 const express = require('express');
 const router = express.Router();
 const { v4: uuidv4 } = require('uuid');
-const fs = require('fs').promises;
+const fs = require('fs-extra');
 const path = require('path');
 const auth = require('../middleware/auth'); // reuse your auth
 
-const ADDR_FILE = path.join(__dirname, '..', 'data', 'addresses.json');
+const DATA_DIR = path.join(__dirname, '..', 'data');
+const ADDR_FILE = path.join(DATA_DIR, 'addresses.json');
 
 // ensure data directory & file exist
 async function ensureFile() {
     try {
-        await fs.mkdir(path.join(__dirname, '..', 'data'), { recursive: true });
-        try {
-            await fs.access(ADDR_FILE);
-        } catch (e) {
-            await fs.writeFile(ADDR_FILE, JSON.stringify([]), 'utf8');
+        await fs.ensureDir(DATA_DIR);
+        const exists = await fs.pathExists(ADDR_FILE);
+        if (!exists) {
+            await fs.writeJson(ADDR_FILE, []);
         }
     } catch (err) {
-        console.error('ensureFile error', err);
+        console.error('ensureFile error:', err);
         throw err;
     }
 }
 
 async function readAddresses() {
-    await ensureFile();
-    const raw = await fs.readFile(ADDR_FILE, 'utf8');
-    return JSON.parse(raw || '[]');
+    try {
+        await ensureFile();
+        const exists = await fs.pathExists(ADDR_FILE);
+        if (!exists) return [];
+
+        const data = await fs.readJson(ADDR_FILE);
+        return Array.isArray(data) ? data : [];
+    } catch (err) {
+        console.error('readAddresses error:', err);
+        return []; // Fallback to empty list instead of crashing
+    }
 }
 
 async function writeAddresses(list) {
-    await ensureFile();
-    await fs.writeFile(ADDR_FILE, JSON.stringify(list, null, 2), 'utf8');
+    try {
+        await ensureFile();
+        await fs.writeJson(ADDR_FILE, list, { spaces: 2 });
+    } catch (err) {
+        console.error('writeAddresses error:', err);
+        throw err;
+    }
 }
 
 // GET all addresses
@@ -40,7 +53,7 @@ router.get('/', auth, async (req, res) => {
         const addresses = await readAddresses();
         res.json(addresses);
     } catch (err) {
-        console.error('GET /addresses error', err);
+        console.error('GET /addresses error:', err);
         res.status(500).json({ message: 'Failed to read addresses', error: err.message });
     }
 });

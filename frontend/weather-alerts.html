@@ -1756,14 +1756,14 @@
 
         // Add marker on map for an address (keeps reference for deletion)
         function addAddressMarker(addr) {
-            if (!window.weatherMap) return;
+            if (!window.lMap) return;
             // remove existing marker with same id
             if (window._savedAddressMarkers[addr.id]) {
-                try { window.weatherMap.removeLayer(window._savedAddressMarkers[addr.id]); } catch (e) { }
+                try { window.lMap.removeLayer(window._savedAddressMarkers[addr.id]); } catch (e) { }
             }
 
             const m = L.marker([addr.lat, addr.lon], { title: addr.name, riseOnHover: true })
-                .addTo(window.weatherMap)
+                .addTo(window.lMap)
                 .bindPopup(`<strong>${escapeHtml(addr.name)}</strong><br/>${addr.lat.toFixed(5)}, ${addr.lon.toFixed(5)}<br/>
       <button onclick="focusAndOpenPopup('${addr.id}')">Open</button>
       <button onclick="deleteAddress('${addr.id}')">Delete</button>`);
@@ -1779,8 +1779,8 @@
         // Focus a saved address marker and open popup
         function focusAndOpenPopup(id) {
             const m = window._savedAddressMarkers[id];
-            if (!m || !window.weatherMap) return;
-            window.weatherMap.setView(m.getLatLng(), Math.max(window.weatherMap.getZoom(), 12));
+            if (!m || !window.lMap) return;
+            window.lMap.setView(m.getLatLng(), Math.max(window.lMap.getZoom(), 12));
             m.openPopup();
         }
 
@@ -2275,7 +2275,7 @@
             document.getElementById('errorState').style.display = 'none';
             document.getElementById('weatherContent').style.display = 'none';
 
-            const response = await fetch(`/ api / weather / current / ${encodeURIComponent(location)} `, {
+            const response = await fetch(`/api/weather/current/${encodeURIComponent(location)}`, {
                 credentials: 'include'
             });
 
@@ -2560,13 +2560,13 @@
 
         // ---- 2) Create or reuse map safely ----
         const hasValidMap =
-            window.weatherMap &&
-            typeof window.weatherMap.setView === 'function' &&
-            typeof window.weatherMap.addLayer === 'function';
+            window.lMap &&
+            typeof window.lMap.setView === 'function' &&
+            typeof window.lMap.addLayer === 'function';
 
         if (!hasValidMap) {
             // Create a fresh map instance
-            window.weatherMap = L.map('weatherMap', {
+            window.lMap = L.map('weatherMap', {
                 center,
                 zoom: 8,
                 minZoom: 6,
@@ -2574,7 +2574,7 @@
             });
 
             // also keep in normal variable if you use it
-            weatherMap = window.weatherMap;
+            weatherMap = window.lMap;
 
             // Base OSM layer
             window.baseLayer = L.tileLayer(
@@ -2582,47 +2582,47 @@
                 {
                     attribution: '&copy; OpenStreetMap contributors'
                 }
-            ).addTo(window.weatherMap);
+            ).addTo(window.lMap);
 
             // Rough Kerala bounds
             const keralaBounds = L.latLngBounds(
                 [8.17, 74.85],   // South-West
                 [12.97, 77.70]   // North-East
             );
-            window.weatherMap.fitBounds(keralaBounds, { padding: [20, 20] });
+            window.lMap.fitBounds(keralaBounds, { padding: [20, 20] });
 
             // 🔗 Attach AI click handler (for AI panel) ONCE
             if (typeof handleMapClickForAi === 'function' && !window._aiMapClickBound) {
-                window.weatherMap.on('click', handleMapClickForAi);
+                window.lMap.on('click', handleMapClickForAi);
                 window._aiMapClickBound = true;
             }
         } else {
             // Reuse existing map
-            window.weatherMap.setView(center, 8);
-            weatherMap = window.weatherMap;
+            window.lMap.setView(center, 8);
+            weatherMap = window.lMap;
 
             if (typeof handleMapClickForAi === 'function' && !window._aiMapClickBound) {
-                window.weatherMap.on('click', handleMapClickForAi);
+                window.lMap.on('click', handleMapClickForAi);
                 window._aiMapClickBound = true;
             }
         }
 
         // ---- 3) Marker / circle for farmer location ----
-        if (window.locationMarker && typeof window.weatherMap.removeLayer === 'function') {
-            window.weatherMap.removeLayer(window.locationMarker);
+        if (window.locationMarker && typeof window.lMap.removeLayer === 'function') {
+            window.lMap.removeLayer(window.locationMarker);
         }
-        if (window.locationCircle && typeof window.weatherMap.removeLayer === 'function') {
-            window.weatherMap.removeLayer(window.locationCircle);
+        if (window.locationCircle && typeof window.lMap.removeLayer === 'function') {
+            window.lMap.removeLayer(window.locationCircle);
         }
 
-        window.locationMarker = L.marker(center).addTo(window.weatherMap);
+        window.locationMarker = L.marker(center).addTo(window.lMap);
         window.locationCircle = L.circle(center, {
             radius: 15000, // 15 km
             color: '#10b981',
             weight: 1.2,
             fillColor: '#10b981',
             fillOpacity: 0.18
-        }).addTo(window.weatherMap);
+        }).addTo(window.lMap);
 
         const tempLabel = data.current ? `${data.current.temp}°C` : '--°C';
         const placeLabel = `${loc.name || 'Your area'}, ${loc.country || ''} `.trim();
@@ -2693,13 +2693,13 @@
 
             // ---- Default ON: Rain + Clouds, others OFF ----
             Object.values(window.mapLayers).forEach(layer => {
-                if (layer && window.weatherMap.hasLayer(layer)) {
-                    window.weatherMap.removeLayer(layer);
+                if (layer && window.lMap.hasLayer(layer)) {
+                    window.lMap.removeLayer(layer);
                 }
             });
 
-            window.mapLayers.rain.addTo(window.weatherMap);
-            window.mapLayers.clouds.addTo(window.weatherMap);
+            window.mapLayers.rain.addTo(window.lMap);
+            window.mapLayers.clouds.addTo(window.lMap);
 
             // Sync chips
             document
@@ -2720,7 +2720,7 @@
 
 
     function toggleMapLayer(type) {
-        if (!window.weatherMap || !window.mapLayers || !window.mapLayers[type]) return;
+        if (!window.lMap || !window.mapLayers || !window.mapLayers[type]) return;
 
         const chip = document.querySelector(`.map-layer-chip[data-layer="${type}"]`);
         if (!chip) return;
@@ -2730,13 +2730,13 @@
 
         if (isActive) {
             // Turn OFF
-            if (window.weatherMap.hasLayer(layer)) {
-                window.weatherMap.removeLayer(layer);
+            if (window.lMap.hasLayer(layer)) {
+                window.lMap.removeLayer(layer);
             }
             chip.classList.remove('active');
         } else {
             // Turn ON
-            layer.addTo(window.weatherMap);
+            layer.addTo(window.lMap);
             chip.classList.add('active');
         }
     }
@@ -2756,12 +2756,12 @@
                 const lon = parseFloat(place.lon);
                 const latLng = [lat, lon];
 
-                window.weatherMap.flyTo(latLng, 10, { duration: 0.8 });
+                window.lMap.flyTo(latLng, 10, { duration: 0.8 });
 
-                if (window.weatherMap._searchMarker) {
-                    window.weatherMap.removeLayer(window.weatherMap._searchMarker);
+                if (window.lMap._searchMarker) {
+                    window.lMap.removeLayer(window.lMap._searchMarker);
                 }
-                window.weatherMap._searchMarker = L.marker(latLng).addTo(window.weatherMap)
+                window.lMap._searchMarker = L.marker(latLng).addTo(window.lMap)
                     .bindPopup(`<strong>${place.display_name.split(',')[0]}</strong><br/>Tap coloured layers to see weather.`)
                     .openPopup();
             } else {
@@ -2859,13 +2859,13 @@
         }
 
         // Optional: add a temporary marker for selected location
-        if (window.aiClickMarker && window.weatherMap) {
-            window.weatherMap.removeLayer(window.aiClickMarker);
+        if (window.aiClickMarker && window.lMap) {
+            window.lMap.removeLayer(window.aiClickMarker);
         }
-        if (window.weatherMap) {
+        if (window.lMap) {
             window.aiClickMarker = L.marker([lat, lon], {
                 opacity: 0.9
-            }).addTo(window.weatherMap);
+            }).addTo(window.lMap);
         }
     }
 
