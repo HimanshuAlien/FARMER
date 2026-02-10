@@ -87,7 +87,22 @@ app.use('/api/ml', async (req, res) => {
 const uploadsDir = 'uploads';
 const postsDir = 'uploads/posts';
 const avatarsDir = 'uploads/avatars';
-const pdfDir = path.join(__dirname, '../frontend', 'pdfs');
+// Helper to find the correct PDF directory (especially for Vercel)
+function getPDFDir() {
+    const checkPaths = [
+        path.join(__dirname, '../frontend/pdfs'),
+        path.join(process.cwd(), 'frontend/pdfs'),
+        path.join(process.cwd(), 'backend/frontend/pdfs'),
+        path.join(__dirname, 'frontend/pdfs')
+    ];
+    for (const p of checkPaths) {
+        if (fs.existsSync(p)) return p;
+    }
+    return path.join(__dirname, '../frontend/pdfs');
+}
+
+const pdfDir = getPDFDir();
+console.log('📂 [Server] PDF directory resolved to:', pdfDir);
 
 // Create upload dirs (only if NOT on Vercel)
 if (!process.env.VERCEL) {
