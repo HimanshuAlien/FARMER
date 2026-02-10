@@ -2358,7 +2358,7 @@
             }
 
             cards.push(`
-                    < div class="forecast-card ${severityClass}" >
+                <div class="forecast-card ${severityClass}">
             <div class="forecast-day">${dayName}</div>
             <div class="forecast-date">${monthDay}</div>
             <div class="forecast-main-row">
@@ -2367,8 +2367,8 @@
             </div>
             <div class="forecast-desc">${cond.desc}</div>
             ${rain > 0 ? `<div class="forecast-extra"><i class="fas fa-droplet"></i>${rain} mm rain</div>` : ''}
-          </div >
-                    `);
+          </div>
+                `);
         }
 
         forecastGrid.innerHTML = cards.join('');
@@ -2381,24 +2381,24 @@
 
         if (!alerts || alerts.length === 0) {
             html += `
-                    < div class="alert-card low" >
+                <div class="alert-card low">
             <div class="alert-icon">✅</div>
             <div class="alert-content">
               <div class="alert-title">No active IMD alerts</div>
               <div class="alert-message">Weather looks stable. Check coloured forecast cards for planning.</div>
             </div>
-          </div >
-                    `;
+          </div>
+                `;
         } else {
             html += alerts.map(alert => `
-                    < div class="alert-card ${alert.severity || 'medium'}" >
+                <div class="alert-card ${alert.severity || 'medium'}">
             <div class="alert-icon">${alert.icon || '⚠️'}</div>
             <div class="alert-content">
               <div class="alert-title">${alert.title}</div>
               <div class="alert-message">${alert.message}</div>
             </div>
-          </div >
-                    `).join('');
+          </div>
+                `).join('');
         }
 
         // EXTRA: auto heavy rainfall alert from forecast (next 5 days)
@@ -2419,7 +2419,7 @@
 
             if (heavy) {
                 const heavyHtml = `
-                    < div class="alert-card high" >
+                <div class="alert-card high">
               <div class="alert-icon">🚨</div>
               <div class="alert-content">
                 <div class="alert-title">Heavy rainfall expected on ${heavy.label}</div>
@@ -2427,8 +2427,8 @@
                   Forecast shows ~${heavy.rain} mm rain. Avoid spraying chemicals, ensure field drainage and protect stored grains.
                 </div>
               </div>
-            </div >
-                    `;
+            </div>
+                `;
                 html = heavyHtml + html;
             }
         }
@@ -2513,11 +2513,11 @@
         }
 
         container.innerHTML = items.map(text => `
-                    < div class="today-advice-item" >
+                <div class="today-advice-item">
           <i class="fas fa-check-circle"></i>
           <span>${text}</span>
-        </div >
-                    `).join('');
+        </div>
+                `).join('');
     }
 
     // ---------- MAP (KERALA-FOCUS, WEATHER LAYERS + EXTRA) ----------
