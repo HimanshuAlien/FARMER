@@ -58,87 +58,97 @@
         }
 
 
+        /* Floating Pill Header matching Satellite Page */
         header {
-            background: linear-gradient(120deg, #1f8a56, #2fa46c);
-            color: white;
-            padding: 16px 20px;
+            background: #ffffff;
+            color: #0f172a;
+            padding: 12px 24px;
             display: flex;
-            gap: 12px;
             align-items: center;
-            justify-content: space-between;
-            position: sticky;
-            top: 0;
+            justify-content: center;
+            position: fixed;
+            top: 16px;
+            left: 50%;
+            transform: translateX(-50%);
             z-index: 40;
-            box-shadow: 0 6px 18px rgba(31, 138, 86, 0.12);
-            backdrop-filter: blur(4px);
+            border-radius: 999px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            width: auto;
+            min-width: 250px;
+        }
+
+        /* Wait, to make it pop like the satellite text top bar - usually satellite view has a dark button but a white top bar. However, the user said white on white is plain. So let's make the background of the page a bit more dynamic, or the pill have a strong border. Let's make the background of the pill a solid #ffffff with a distinct shadow, and make the text bold green. Also let's style it so it resembles the screenshot exactly. */
+        header {
+            background: rgba(255, 255, 255, 0.98);
+            color: #000000;
+            padding: 14px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: fixed;
+            top: 16px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 40;
+            border-radius: 999px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
+            /* Stronger shadow so it pops against white bg */
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            /* very subtle stroke */
+            backdrop-filter: blur(10px);
+            width: 80%;
+            max-width: 400px;
         }
 
         header .brand {
             display: flex;
-            gap: 12px;
-            align-items: center
+            align-items: center;
+            justify-content: center;
+            width: 100%;
         }
 
         header h1 {
             margin: 0;
             font-family: 'Manrope', sans-serif;
-            font-size: 20px;
-            font-weight: 700;
-            letter-spacing: -0.02em;
+            font-size: 17px;
+            font-weight: 800;
+            letter-spacing: -0.01em;
+            text-align: center;
+            color: #1b2930;
+        }
+
+        header .tagline,
+        .header-actions {
+            display: none;
+            /* Hide tagline and actions to match minimal satellite header */
         }
 
         header .tagline {
             font-size: 13px;
-            opacity: 0.95;
-            color: rgba(255, 255, 255, 0.92)
-        }
-
-        header .pill {
-            background: rgba(255, 255, 255, 0.12);
-            padding: 6px 10px;
-            border-radius: 999px;
-            font-weight: 700;
-            font-size: 13px;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            white-space: nowrap;
+            color: rgba(255, 255, 255, 0.85);
         }
 
         @media (max-width: 600px) {
             header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 12px;
-                padding: 12px 16px;
-            }
-
-            .header-actions {
-                width: 100%;
-                justify-content: space-between;
-            }
-
-            header h1 {
-                font-size: 18px;
-            }
-
-            header .tagline {
-                font-size: 11px;
+                width: 90%;
             }
         }
 
         main {
             max-width: var(--maxw);
-            margin: 20px auto;
+            margin: 80px auto 20px auto;
+            /* Increased top margin for floating header */
             padding: 0 18px;
-            display: grid;
-            grid-template-columns: 1.0fr 1.7fr;
-            gap: 18px;
-            align-items: start;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            align-items: stretch;
         }
 
         @media (max-width:980px) {
             main {
-                grid-template-columns: 1fr;
-                padding: 16px
+                padding: 16px;
             }
         }
 
@@ -153,17 +163,30 @@
         }
 
         /* Left: plan list and create */
+        #leftCol {
+            background: transparent;
+            box-shadow: none;
+            padding: 0;
+            border: none;
+        }
+
         #leftCol .section-head {
             display: flex;
             align-items: center;
             justify-content: space-between;
             gap: 10px;
-            margin-bottom: 8px
+            margin-bottom: 8px;
         }
 
         #leftCol h2 {
             margin: 0;
-            font-size: 16px
+            font-size: 18px;
+            font-weight: 800;
+        }
+
+        /* hide old button in header, moved to card */
+        #newPlanBtn {
+            display: none;
         }
 
         .btn {
@@ -187,11 +210,15 @@
         .list {
             margin-top: 12px;
             display: flex;
-            flex-direction: column;
-            gap: 12px;
-            max-height: 621px;
-            overflow: auto;
-            padding-right: 6px
+            flex-direction: row;
+            gap: 16px;
+            overflow-x: auto;
+            padding-bottom: 12px;
+            scrollbar-width: none;
+        }
+
+        .list::-webkit-scrollbar {
+            display: none;
         }
 
         .empty-state {
@@ -202,33 +229,57 @@
 
         .crop-item {
             display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 10px;
-            border-radius: 10px;
-            background: linear-gradient(180deg, #ffffff, #fbfdfb);
-            border: 1px solid #eef6f1;
-            box-shadow: 0 3px 8px rgba(10, 20, 12, 0.03);
-            justify-content: space-between;
+            flex-direction: column;
+            width: 165px;
+            min-width: 165px;
+            background: #ffffff;
+            border-radius: 24px;
+            padding: 14px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+            border: none;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+            position: relative;
         }
 
-        .crop-left {
+        .crop-item.add-card {
+            border: none;
+            background: #ffffff;
+            align-items: stretch;
+        }
+
+        .add-card-inner {
+            border: 2px dashed #bceb6d;
+            border-radius: 20px;
+            height: 120px;
             display: flex;
-            gap: 12px;
-            align-items: center
+            align-items: center;
+            justify-content: center;
+            background: #f8fcf3;
         }
 
-        /* .crop-thumb supports <img> now */
+        .add-circle {
+            width: 44px;
+            height: 44px;
+            background: #bceb6d;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 28px;
+            font-weight: 300;
+        }
+
         .crop-thumb {
-            width: 68px;
-            height: 56px;
-            border-radius: 8px;
-            background: #eef5ef;
-            background-size: cover;
-            background-position: center;
-            border: 1px solid #e8f0ea;
+            width: 100%;
+            height: 120px;
+            border-radius: 20px;
+            background: #f0fdf4;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             flex-shrink: 0;
-            display: inline-block;
             overflow: hidden;
             position: relative;
         }
@@ -240,53 +291,73 @@
             display: block;
         }
 
-        .crop-meta {
-            display: flex;
-            flex-direction: column
-        }
-
-        .crop-meta .title {
-            font-weight: 700
-        }
-
-        .crop-meta .meta {
-            color: var(--muted);
-            font-size: 13px
-        }
-
-        .crop-right {
+        .crop-meta-box {
             display: flex;
             flex-direction: column;
-            align-items: flex-end;
-            gap: 8px;
-            flex-shrink: 0;
+            flex: 1;
+            margin-top: 14px;
         }
 
-        @media (max-width: 480px) {
-            .crop-item {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 12px;
-            }
-
-            .crop-right {
-                width: 100%;
-                flex-direction: row;
-                justify-content: space-between;
-                align-items: center;
-                border-top: 1px solid #eef6f1;
-                padding-top: 8px;
-            }
-
-            .crop-thumb {
-                width: 100%;
-                height: 120px;
-            }
+        .crop-meta-box .title {
+            font-weight: 800;
+            font-size: 15px;
+            color: #0f172a;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
-        .crop-right .date {
+        .crop-meta-box .meta {
+            color: #94a3b8;
             font-size: 13px;
-            color: var(--muted)
+            margin-top: 2px;
+        }
+
+        .action-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .card-ar-btn {
+            background: #0f172a;
+            color: white;
+            border-radius: 8px;
+            padding: 6px 10px;
+            font-size: 10px;
+            font-weight: 800;
+            border: none;
+            margin-left: auto;
+        }
+
+        .card-go-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #bceb6d;
+            color: #0f172a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .card-add-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #0f172a;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            cursor: pointer;
+            margin-left: auto;
+            font-size: 16px;
         }
 
         /* Right: Plan / lifecycle */
@@ -642,20 +713,19 @@
 
         /* Navigation-style header button */
         .track-nutrition-btn {
-            background: #ffffff;
-            color: #1f2937;
+            background: #f1f5f9;
+            color: #0f172a;
             border: none;
             padding: 8px 14px 8px 16px;
             border-radius: 10px;
             font-family: inherit;
             font-size: 14px;
-            font-weight: 700;
+            font-weight: 800;
             cursor: pointer;
             display: flex;
             align-items: center;
             gap: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
-            transition: transform 0.15s ease, box-shadow 0.15s ease;
+            transition: transform 0.15s ease, background 0.15s ease;
         }
 
         .track-nutrition-btn .nav-arrow {
@@ -668,7 +738,7 @@
 
         .track-nutrition-btn:hover {
             transform: translateY(-1px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
+            background: #e2e8f0;
         }
 
         .track-nutrition-btn:hover .nav-arrow {
@@ -685,18 +755,8 @@
 <body>
     <header>
         <div class="brand">
-            <div>
-                <h1>YOUR CROPS</h1>
-                <div class="tagline">Smart crop planning & daily field guidance</div>
-            </div>
+            <h1>Your Crops</h1>
         </div>
-        <div class="header-actions">
-            <button class="track-nutrition-btn" onclick="window.location.href='nutrition.html'">
-                Track Nutrition
-            </button>
-            <div class="pill">Farmer dashboard</div>
-        </div>
-
     </header>
 
     <main>
@@ -982,17 +1042,13 @@
         const cropImageMap = {
             "groundnut": "groundnut.jpg",
             "peanut": "groundnut.jpg",
-            "maize": "maize.jpg",
-            "corn": "maize.jpg",
-            "rice": "rice.jpg",
-            "wheat": "wheat.jpg",
-            "tomato": "tomato.jpg",
-            "potato": "potato.jpg",
-            "banana": "banana.jpg",
-            "sugarcane": "sugarcane.jpg",
             "cotton": "cotton.jpg",
-            "soybean": "soybean.jpg",
-            "sunflower": "sunflower.jpg"
+            "rice": "rice.jpg",
+            "paddy": "rice.jpg",
+            "paddy (rice)": "rice.jpg",
+            "soybean": "soybean.jpeg",
+            "mung bean": "mung bean.jpg",
+            "mungbean": "mung bean.jpg"
         };
 
         // Optional: set this to a GitHub raw folder where you host crop images.
@@ -1005,74 +1061,26 @@
             return name.toString().toLowerCase().replace(/\(.*?\)/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
         }
 
-        // Attempts to find a Commons image for a query; returns image url or null
-        async function fetchCommonsImage(query) {
-            if (!query || typeof query !== 'string') return null;
-            const q = `${query} plant`;
-            try {
-                const searchUrl = 'https://commons.wikimedia.org/w/api.php?action=query&format=json&origin=*&generator=search&gsrsearch='
-                    + encodeURIComponent(q + ' filetype:bitmap OR filetype:image')
-                    + '&gsrlimit=5&prop=imageinfo&iiprop=url';
-
-                const r = await fetch(searchUrl);
-                if (!r.ok) return null;
-                const j = await r.json();
-                if (!j.query || !j.query.pages) return null;
-                const pages = Object.values(j.query.pages);
-
-                for (const p of pages) {
-                    if (p.imageinfo && p.imageinfo[0] && p.imageinfo[0].url) {
-                        return p.imageinfo[0].url;
-                    }
-                }
-                return null;
-            } catch (e) {
-                console.warn('Commons fetch failed for', query, e);
-                return null;
-            }
-        }
-
-        // Build curated candidate list for a crop name: local, github, commons, picsum
+        // Build curated candidate list for a crop name strictly from local assets
         async function buildImageCandidatesForCrop(cropName) {
             const slug = normalizeCropName(cropName);
             const candidates = [];
 
-            // 1) Local asset (fast) - mapped or fallback to slug.jpg/png
+            // 1) Local asset mapped or fallback to slug.jpg/.png/.webp
             const mapped = cropImageMap[slug] || cropImageMap[cropName.toLowerCase()];
             if (mapped) {
-                candidates.push(`/assets/crops/${mapped}`);
+                candidates.push(`assets/crops/${mapped}`);
             } else {
-                candidates.push(`/assets/crops/${slug}.jpg`);
-                candidates.push(`/assets/crops/${slug}.png`);
+                candidates.push(`assets/crops/${slug}.jpg`);
+                candidates.push(`assets/crops/${slug}.png`);
+                candidates.push(`assets/crops/${slug}.webp`);
+                candidates.push(`assets/crops/${slug}.jpeg`);
             }
 
-            // 2) GitHub raw fallback (optional)
-            if (GITHUB_RAW_BASE) {
-                if (mapped) {
-                    candidates.push(GITHUB_RAW_BASE + mapped);
-                } else {
-                    candidates.push(GITHUB_RAW_BASE + `${slug}.jpg`);
-                    candidates.push(GITHUB_RAW_BASE + `${slug}.png`);
-                }
-            }
-
-            // 3) Wikimedia Commons - try lookup and place first if found
-            try {
-                const commonsUrl = await fetchCommonsImage(cropName);
-                if (commonsUrl) candidates.unshift(commonsUrl);
-            } catch (e) { /* ignore */ }
-
-            // 4) Picsum seeded fallbacks (last resort)
-            const baseName = (cropName || 'field crop').trim().replace(/\s+/g, '-').toLowerCase();
-            candidates.push(`https://picsum.photos/1600/900?seed=${encodeURIComponent(baseName)}`);
-            candidates.push('https://picsum.photos/1600/900?seed=agriculture-1');
-            candidates.push('https://picsum.photos/1600/900?seed=farm-2');
-
-            // unique preserve order
             return Array.from(new Set(candidates));
         }
 
-        // Build hero candidates wrapper used elsewhere (keeps existing usage)
+        // Build hero candidates wrapper used elsewhere
         async function buildHeroCandidates(cropName) {
             return await buildImageCandidatesForCrop(cropName);
         }
@@ -1126,17 +1134,13 @@
             tryNext();
         }
 
-        // Build hero image URL candidates (legacy function kept for compatibility but now calls buildImageCandidatesForCrop)
+        // Minimal fallback candidates for crop hero image (strictly local + svg if fail)
         function buildHeroCandidatesFallback(cropName) {
-            const baseName = (cropName || 'field crop').trim().replace(/\s+/g, '-').toLowerCase();
-            const picsumSeeded = `https://picsum.photos/1600/900?seed=${encodeURIComponent(baseName)}`;
-            const picsumFallback1 = 'https://picsum.photos/1600/900?seed=agriculture-1';
-            const picsumFallback2 = 'https://picsum.photos/1600/900?seed=farm-2';
+            const slug = normalizeCropName(cropName);
             return [
-                picsumSeeded,
-                picsumFallback1,
-                picsumFallback2,
-            ].filter(Boolean);
+                `assets/crops/${slug}.jpg`,
+                `assets/crops/${slug}.png`,
+            ];
         }
 
         // Init
@@ -1148,10 +1152,38 @@
                 if (!res.ok) throw new Error('Failed to fetch crops');
                 const crops = await res.json();
                 cropsListEl.innerHTML = '';
+
+                // --- Inject 'Add Field' Card First (Matches image UI) ---
+                const addDiv = document.createElement('div');
+                addDiv.className = 'crop-item add-card';
+                addDiv.innerHTML = `
+                    <div class="add-card-inner">
+                        <div class="add-circle">+</div>
+                    </div>
+                    <div class="crop-meta-box" style="margin-top:10px;">
+                        <div class="title" style="font-size:16px;">Find best crop</div>
+                        <div class="meta" style="margin-top:2px;">New crop</div>
+                        <div class="action-row">
+                            <button class="card-add-btn">+</button>
+                        </div>
+                    </div>
+                `;
+                addDiv.addEventListener('click', () => {
+                    newPlanSection.style.display = 'block';
+                    recommendSection.style.display = 'none';
+                    lifecycleSection.style.display = 'none';
+                    currentCropLabel.textContent = 'Creating new crop plan';
+                    if (cropForm) cropForm.reset();
+                    gpsField.value = '';
+                    gpsStatus.textContent = 'Not set';
+                    currentCropId = null;
+                });
+                cropsListEl.appendChild(addDiv);
+
                 if (!crops || crops.length === 0) {
-                    cropsListEl.innerHTML = '<div class="empty-state small muted">No crop plans yet. Start by creating a new crop plan.</div>';
-                    return;
+                    return; // "Add Field" handles empty state now
                 }
+
                 crops.forEach(async c => {
                     const div = document.createElement('div');
                     div.className = 'crop-item';
@@ -1161,26 +1193,22 @@
                     const stage = c.currentStage || 'Not started';
                     const dateLabel = c.startDate ? new Date(c.startDate).toLocaleDateString() : 'No date';
 
-                    // fast immediate seed so UI isn't empty (keeps UI snappy)
-                    const seed = encodeURIComponent((title || 'crop').trim().replace(/\s+/g, '-').toLowerCase());
-                    const initialThumb = `https://picsum.photos/300/220?seed=${seed}`;
+                    // Predict local crop image path immediately to avoid jarring loading
+                    const slug = normalizeCropName(title);
+                    const mapped = cropImageMap[slug] || cropImageMap[title.toLowerCase()];
+                    const initialThumb = mapped ? `assets/crops/${mapped}` : `assets/crops/${slug}.jpg`;
 
-                    // Create element with initial thumb (so UI shows immediately).
+                    // Create element with initial thumb (so UI shows immediately if image is locally present).
                     div.innerHTML = `
-            <div class="crop-left">
-              <div class="crop-thumb"><img class="crop-thumb-img" src="${initialThumb}" alt="${title}" loading="lazy" /></div>
-              <div class="crop-meta">
-                <div class="title">${title}</div>
-                <div class="meta">${landArea} • ${soilType} • ${stage}</div>
-              </div>
-            </div>
-            <div class="crop-right">
-              <div class="date">${dateLabel}</div>
-              <div style="display:flex;gap:8px">
-                <button class="btn secondary open-btn">Open</button>
-              </div>
-            </div>
-          `;
+                        <div class="crop-thumb"><img class="crop-thumb-img" src="${initialThumb}" alt="${title}" loading="lazy" /></div>
+                        <div class="crop-meta-box">
+                            <div class="title">${title}</div>
+                            <div class="meta">${dateLabel}</div>
+                            <div class="action-row" style="justify-content:flex-end;">
+                                <button class="card-go-btn open-btn">&rarr;</button>
+                            </div>
+                        </div>
+                    `;
 
                     // add onerror fallback for image element to avoid broken thumbs
                     const imgEl = div.querySelector('img.crop-thumb-img');
@@ -1237,22 +1265,14 @@
                 const crop = await res.json();
 
                 currentCropLabel.textContent = crop.selectedCrop || 'New plan';
-                // Try to fetch a Commons image for hero and put it first in candidates if found
                 const cropName = crop.selectedCrop || '';
-                let commonsHero = null;
-                try {
-                    commonsHero = await fetchCommonsImage(cropName);
-                } catch (e) { commonsHero = null; }
-                let candidates = [];
-                if (commonsHero) candidates.push(commonsHero);
 
-                // build curated candidates (local/github/commons/picsum). buildHeroCandidates returns a promise.
+                // build curated candidates (local fallback)
+                let candidates = [];
                 try {
-                    const built = await buildImageCandidatesForCrop(cropName);
-                    // If we already put commonsHero first, built may contain commons too; merge preserving order
-                    candidates = (commonsHero ? [commonsHero] : []).concat(built.filter(u => u !== commonsHero));
+                    candidates = await buildImageCandidatesForCrop(cropName);
                 } catch (e) {
-                    candidates = candidates.concat(buildHeroCandidatesFallback(cropName));
+                    candidates = buildHeroCandidatesFallback(cropName);
                 }
 
                 renderLifecycle(crop, candidates);
@@ -1379,18 +1399,13 @@
                 if (!res.ok) throw new Error('Failed to generate lifecycle');
                 const crop = await res.json();
 
-                // attempt to fetch commons image for selected crop for hero
-                let commonsHero = null;
-                try { commonsHero = await fetchCommonsImage(selected); } catch (e) { commonsHero = null; }
-
                 currentCropLabel.textContent = crop.selectedCrop || 'Crop plan';
+
                 let candidates = [];
-                if (commonsHero) candidates.push(commonsHero);
                 try {
-                    const built = await buildImageCandidatesForCrop(selected);
-                    candidates = candidates.concat(built.filter(u => u !== commonsHero));
+                    candidates = await buildImageCandidatesForCrop(selected);
                 } catch (e) {
-                    candidates = candidates.concat(buildHeroCandidatesFallback(selected));
+                    candidates = buildHeroCandidatesFallback(selected);
                 }
 
                 renderLifecycle(crop, candidates);

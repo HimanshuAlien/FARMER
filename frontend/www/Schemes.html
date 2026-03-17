@@ -39,96 +39,278 @@
             color: inherit;
         }
 
-        /* ---------- Header ---------- */
+        /* ---------- Header (Simple Topbar) ---------- */
 
-        .page-header {
-            border-bottom: 1px solid var(--border);
-            background: #ffffff;
-        }
-
-        .page-header-inner {
-            max-width: 1280px;
-            margin: 0 auto;
-            padding: 1.2rem 1.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 1.5rem;
-        }
-
-        .brand-block {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .brand-icon {
-            width: 44px;
-            height: 44px;
-            border-radius: 12px;
-            background: linear-gradient(135deg, var(--primary), var(--accent));
+        .simple-topbar {
+            background: rgba(255, 255, 255, 0.98);
+            color: #000000;
+            padding: 14px 24px;
             display: flex;
             align-items: center;
             justify-content: center;
+            position: fixed;
+            top: 16px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            border-radius: 999px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            backdrop-filter: blur(10px);
+            width: 80%;
+            max-width: 400px;
+        }
+
+        body.dark .simple-topbar {
+            background: rgba(15, 23, 42, 0.9);
+            border-color: var(--border-dark);
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
             color: #ffffff;
+        }
+
+        .topbar-left {
+            display: flex;
+            align-items: center;
+            gap: 0.9rem;
+        }
+
+        .topbar-logo {
+            width: 30px;
+            height: 30px;
+            border-radius: 0.7rem;
+            object-fit: contain;
+            background: #ecfdf5;
+            padding: 3px;
+        }
+
+        body.dark .topbar-logo {
+            background: #022c22;
+        }
+
+        .simple-title {
             font-size: 1.3rem;
-        }
-
-        .brand-text h1 {
-            font-size: 1.25rem;
             font-weight: 700;
-        }
-
-        .brand-text p {
-            font-size: 0.78rem;
-            color: var(--text-muted);
-        }
-
-        .header-actions {
+            color: var(--text-light);
             display: flex;
             align-items: center;
             gap: 0.75rem;
         }
 
-        .btn-outline {
-            border-radius: 999px;
-            border: 1px solid var(--border);
-            padding: 0.5rem 0.9rem;
-            font-size: 0.8rem;
+        body.dark .simple-title {
+            color: var(--text-dark);
+        }
+
+        .topbar-right {
             display: flex;
             align-items: center;
-            gap: 0.4rem;
-            background: #ffffff;
-            cursor: pointer;
+            gap: 0.75rem;
         }
 
-        .btn-primary {
-            border-radius: 999px;
-            border: none;
-            padding: 0.55rem 1.1rem;
-            font-size: 0.82rem;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.45rem;
+        .mobile-menu-btn {
+            display: none;
             background: var(--primary);
-            color: #ffffff;
+            color: white;
+            border: none;
+            padding: 0.5rem 0.7rem;
+            border-radius: 0.6rem;
             cursor: pointer;
+            font-size: 1rem;
         }
 
-        .btn-primary i {
-            font-size: 0.9rem;
+        @media (max-width: 768px) {
+            .simple-topbar {
+                width: 90%;
+                padding: 10px 16px;
+            }
+
+            .mobile-menu-btn {
+                display: inline-flex;
+                width: 36px;
+                height: 36px;
+                border-radius: 999px;
+                align-items: center;
+                justify-content: center;
+                background: #000;
+                color: #fff;
+            }
         }
 
-        .btn-outline i {
-            font-size: 0.9rem;
+        /* =============== SIDEBAR =============== */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100vh;
+            width: 280px;
+            background: #ffffff;
+            z-index: 1000;
+            transition: transform 0.3s ease, background 0.3s ease;
+            box-shadow: 4px 0 15px rgba(15, 23, 42, 0.12);
+            border-right: 1px solid #e2e8f0;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
         }
 
+        body.dark .sidebar {
+            background: var(--sidebar-dark, #020617);
+            border-right-color: var(--border-dark, #334155);
+            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.6);
+        }
+
+        .sidebar-header {
+            padding: 2rem 1.5rem;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+            background: transparent;
+        }
+
+        .logo-text-krishi {
+            color: #0f172a;
+            font-weight: 700;
+            font-size: 1.25rem;
+            font-family: 'Manrope', sans-serif;
+            letter-spacing: -0.02em;
+        }
+
+        .logo-text-mitr {
+            color: #0f172a;
+            font-weight: 700;
+            font-size: 1.25rem;
+            font-family: 'Manrope', sans-serif;
+            letter-spacing: -0.02em;
+        }
+
+        .nav-menu {
+            flex: 1;
+            overflow-y: auto;
+            padding: 0.5rem 0;
+        }
+
+        .nav-section-title {
+            padding: 0 1.5rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: #4b5563;
+            margin-bottom: 0.6rem;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 0.9rem;
+            text-decoration: none;
+            padding: 0.65rem 1.25rem;
+            color: #475569;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            margin: 0.2rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.875rem;
+        }
+
+        body.dark .nav-item {
+            color: #94a3b8;
+        }
+
+        .nav-item i {
+            font-size: 1rem;
+            width: 20px;
+        }
+
+        .nav-item:hover {
+            color: #0f172a;
+            background: #f1f5f9;
+        }
+
+        .nav-item.active {
+            color: white;
+            font-weight: 600;
+            background: #0f172a;
+        }
+
+        body.dark .nav-item.active {
+            background: white;
+            color: black;
+        }
+
+        .theme-toggle-sidebar,
+        .logout-btn {
+            width: 100%;
+            border-radius: 12px;
+            padding: 0.75rem 1rem;
+            font-size: 0.85rem;
+            cursor: pointer;
+            border: 1px solid transparent;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 0.75rem;
+            transition: all 0.2s ease;
+            font-weight: 600;
+        }
+
+        .theme-toggle-sidebar {
+            background: rgba(16, 185, 129, 0.06);
+            color: var(--primary);
+            border-color: rgba(16, 185, 129, 0.25);
+        }
+
+        .theme-toggle-sidebar:hover {
+            background: rgba(16, 185, 129, 0.12);
+        }
+
+        .logout-btn {
+            background: rgba(239, 68, 68, 0.06);
+            color: #ef4444;
+            border-color: rgba(239, 68, 68, 0.25);
+        }
+
+        .logout-btn:hover {
+            background: rgba(239, 68, 68, 0.12);
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 260px;
+                transform: translateX(-100%);
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .page-body {
+                margin-left: 0 !important;
+                width: 100% !important;
+            }
+            
+            .simple-topbar {
+                left: 50% !important;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .sidebar {
+                width: 240px;
+            }
+        }
+        
         /* ---------- Layout ---------- */
 
         .page-body {
             max-width: 1280px;
             margin: 0 auto;
+            margin-left: 280px;
             padding: 1.5rem;
+            transition: margin-left 0.3s ease;
+            min-height: 100vh;
+            width: calc(100% - 280px);
+        }
+        
+        .simple-topbar {
+            left: calc(50% + 140px);
         }
 
         .layout-grid {
@@ -252,27 +434,39 @@
         }
 
         .btn-text {
-            border-radius: 999px;
-            border: 1px solid var(--border);
-            padding: 0.35rem 0.7rem;
-            font-size: 0.78rem;
+            border-radius: 8px;
+            border: 1px solid transparent;
+            padding: 0.4rem 0.8rem;
+            font-size: 0.8rem;
+            font-weight: 500;
             display: inline-flex;
             align-items: center;
-            gap: 0.35rem;
-            background: #ffffff;
+            gap: 0.4rem;
+            background: #f1f5f9;
+            color: #475569;
             cursor: pointer;
             flex: 1;
             justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .btn-text:hover {
+            background: #e2e8f0;
+            color: #0f172a;
         }
 
         .btn-text.primary {
-            border-color: var(--primary);
-            background: var(--primary-soft);
-            color: var(--primary-dark);
+            background: #ecfdf5;
+            color: #064e3b;
+        }
+        
+        .btn-text.primary:hover {
+            background: #d1fae5;
+            color: #065f46;
         }
 
         .btn-text i {
-            font-size: 0.8rem;
+            font-size: 0.85rem;
         }
 
         .empty-state {
@@ -457,30 +651,101 @@
 </head>
 
 <body>
-    <!-- Header -->
-    <header class="page-header">
-        <div class="page-header-inner">
-            <div class="brand-block">
-                <div class="brand-icon">
-                    <i class="fas fa-landmark"></i>
-                </div>
-                <div class="brand-text">
-                    <h1>Government Schemes Explorer</h1>
-                    <p>Agriculture & Farmers Welfare – Official PDF based</p>
-                </div>
-            </div>
-            <div class="header-actions">
-                <a href="dashboard.html" class="btn-outline">
-                    <i class="fas fa-arrow-left"></i>
-                    <span>Back to Dashboard</span>
-                </a>
-                <button class="btn-primary" type="button" onclick="window.location.reload()">
-                    <i class="fas fa-rotate-right"></i>
-                    <span>Refresh Schemes</span>
-                </button>
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo-brand">
+                <span class="logo-text-krishi">Farm</span>
+                <span class="logo-text-mitr">Sure</span>
             </div>
         </div>
-    </header>
+        <div class="nav-menu">
+            <div class="nav-section">
+                <div class="nav-section-title" data-i18n="sidebar.mainMenu">Main Menu</div>
+                <a href="dashboard.html" class="nav-item">
+                    <i class="fas fa-home"></i>
+                    <span data-i18n="sidebar.dashboard">Dashboard</span>
+                </a>
+                <a href="ask-query.html" class="nav-item">
+                    <i class="fas fa-robot"></i>
+                    <span data-i18n="sidebar.askQuery">Ask Query</span>
+                </a>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title" data-i18n="sidebar.tools">Tools</div>
+                <a href="crops.html" class="nav-item">
+                    <i class="fa-solid fa-carrot"></i>
+                    <span data-i18n="sidebar.yourcrop">Your Crops</span>
+                </a>
+                <a href="crop-diagnosis.html" class="nav-item">
+                    <i class="fa-solid fa-briefcase-medical"></i>
+                    <span data-i18n="sidebar.cropDiagnosis">Crop Diagnosis</span>
+                </a>
+                <a href="weather-alerts.html" class="nav-item">
+                    <i class="fas fa-cloud-sun"></i>
+                    <span data-i18n="sidebar.weatherAlerts">Weather & Alerts</span>
+                </a>
+                <a href="Schemes.html" class="nav-item active">
+                    <i class="fa-solid fa-building-ngo"></i>
+                    <span data-i18n="sidebar.schemes">Govt Schemes</span>
+                </a>
+                <a href="helpline.html" class="nav-item">
+                    <i class="fa-solid fa-phone"></i>
+                    <span data-i18n="sidebar.helpline">Helpline Number</span>
+                </a>
+                <a href="smart-farming.html" class="nav-item">
+                    <i class="fa-solid fa-briefcase"></i>
+                    <span data-i18n="sidebar.agriSwasthya">Agri Swasthya</span>
+                </a>
+                <a href="market-prices.html" class="nav-item">
+                    <i class="fa-solid fa-dollar-sign"></i>
+                    <span data-i18n="sidebar.marketPrices">Market Prices</span>
+                </a>
+                <a href="iot.html" class="nav-item">
+                    <i class="fa-solid fa-screwdriver-wrench"></i>
+                    <span data-i18n="sidebar.IOT">IOT</span>
+                </a>
+                <a href="satellite.html" class="nav-item">
+                    <i class="fa-solid fa-satellite"></i>
+                    <span data-i18n="sidebar.satellite">Satellite Monitoring</span>
+                </a>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title" data-i18n="sidebar.communitySection">Community</div>
+                <a href="farmer-community.html" class="nav-item">
+                    <i class="fas fa-users"></i>
+                    <span data-i18n="sidebar.community">Community</span>
+                </a>
+                <a href="profile.html" class="nav-item">
+                    <i class="fas fa-user"></i>
+                    <span data-i18n="sidebar.profile">Profile</span>
+                </a>
+            </div>
+        </div>
+        <div class="sidebar-footer">
+            <button class="theme-toggle-sidebar" onclick="toggleTheme()">
+                <i class="fas fa-sun"></i>
+                <span data-i18n="sidebar.toggleTheme">Toggle Theme</span>
+            </button>
+            <button id="logoutBtn" class="logout-btn">
+                <i class="fas fa-sign-out-alt"></i>
+                <span data-i18n="sidebar.logout">Logout</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <div class="simple-topbar">
+        <div class="topbar-left">
+            <button class="mobile-menu-btn" onclick="toggleSidebar()">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+        <h1 class="simple-title">Govt Schemes</h1>
+        <div class="topbar-right"></div>
+    </div>
 
     <!-- Body -->
     <main class="page-body">
@@ -565,6 +830,13 @@
             toast.style.background = isError ? '#b91c1c' : '#111827';
             toast.classList.add('show');
             setTimeout(() => toast.classList.remove('show'), 2300);
+        }
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            if (sidebar) {
+                sidebar.classList.toggle('active');
+            }
         }
 
         function setLoadingSchemes(isLoading) {

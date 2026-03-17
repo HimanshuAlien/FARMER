@@ -352,8 +352,8 @@
 
         /* Layout */
         .content-area {
-            padding: 1.7rem 2rem 2.5rem;
-            max-width: 1400px;
+            padding: 1rem; /* Reduced padding */
+            max-width: none; /* Full width */
             margin: 0 auto;
         }
 
@@ -366,7 +366,7 @@
         .layout-grid {
             display: grid;
             grid-template-columns: minmax(0, 2fr) minmax(0, 0.8fr);
-            gap: 1.75rem;
+            gap: 1rem; /* Reduced gap */
             align-items: stretch;
         }
 
@@ -711,10 +711,10 @@
             border-radius: 0.8rem;
             border: 1px solid #cbd5f5;
             background: #ffffff;
-            font-size: 0.9rem;
-            resize: none;
-            min-height: 52px;
-            max-height: 130px;
+            font-size: 0.95rem;
+            resize: vertical;
+            min-height: 120px; /* Increased typing space */
+            max-height: 300px;
             outline: none;
             font-family: 'Inter', sans-serif;
             color: var(--text-light);
@@ -845,8 +845,8 @@
         }
 
         .section-title h2 {
-            font-size: 1rem;
-            font-weight: 700;
+            font-size: 1.1rem;
+            font-weight: 800;
             color: var(--text-light);
         }
 
@@ -854,19 +854,7 @@
             color: var(--text-dark);
         }
 
-        .section-subtitle {
-            text-align: right;
-        }
-
-        .section-subtitle p {
-            font-size: 0.8rem;
-            color: var(--text-secondary-light);
-            margin-bottom: 0.3rem;
-        }
-
-        body.dark .section-subtitle p {
-            color: var(--text-secondary-dark);
-        }
+        /* Subtitle removed for simplicity */
 
         .queries-count {
             display: inline-flex;
@@ -1746,17 +1734,6 @@
                             <div class="welcome-hero">
                                 <img src="images/banner.png" alt="AI Farming Assistant Banner" />
                             </div>
-                            <div class="sample-questions">
-                                <div class="sample-questions-title" data-i18n="ask.sampleTitle">Try asking:</div>
-                                <div class="sample-question">
-                                    <i class="fas fa-circle"></i>
-                                    <span data-i18n="ask.sampleQ1">How to control leaf curl in chilli?</span>
-                                </div>
-                                <div class="sample-question">
-                                    <i class="fas fa-circle"></i>
-                                    <span data-i18n="ask.sampleQ2">What fertilizer schedule is best for paddy?</span>
-                                </div>
-                            </div>
                         </div>
 
                         <!-- Input Section -->
@@ -1776,8 +1753,8 @@
                             <div class="input-row">
                                 <textarea id="questionInput" class="question-input"
                                     data-i18n-placeholder="ask.questionPlaceholder"
-                                    placeholder="Ask your farming question here... (e.g., How to control pests in tomato?)"
-                                    rows="2"></textarea>
+                                    placeholder="Type your question here..."
+                                    rows="4"></textarea>
                                 <div class="input-actions">
                                     <button id="micBtn" class="icon-btn mic-btn" title="Voice Input">
                                         <i class="fas fa-microphone"></i>
@@ -1801,14 +1778,7 @@
                         <div class="section-header">
                             <div class="section-title">
                                 <i class="fas fa-history"></i>
-                                <h2 data-i18n="ask.pastTitle">Past Queries</h2>
-                            </div>
-                            <div class="section-subtitle">
-                                <p data-i18n="ask.pastSubtitle">Your recent farming questions & AI replies</p>
-                                <div class="queries-count">
-                                    <span id="queriesCount">0</span>
-                                    <span data-i18n="ask.pastQuestionsLabel">questions</span>
-                                </div>
+                                <h2 data-i18n="ask.pastTitle">History</h2>
                             </div>
                         </div>
 
@@ -1828,11 +1798,8 @@
             <div class="my-status-section" id="myStatusSection">
                 <div class="my-status-header">
                     <div class="my-status-title">
-                        <i class="fas fa-list-check"></i>
-                        <div>
-                            <h2>My Query Status</h2>
-                            <p>See full lifecycle for each question – AI reply, officer update & resolution.</p>
-                        </div>
+                        <i class="fas fa-tasks"></i>
+                        <h2>Query Status</h2>
                     </div>
                     <div class="status-legend">
                         <span class="status-tag status-tag--resolved">🟢 Resolved</span>

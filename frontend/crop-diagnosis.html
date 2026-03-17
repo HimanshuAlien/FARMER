@@ -226,22 +226,32 @@
             background: var(--bg-dark);
         }
 
+        /* Floating Pill Header matching Satellite Page */
         .simple-topbar {
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(12px);
-            padding: 1rem 2rem;
-            border-bottom: 1px solid var(--border-light);
+            background: rgba(255, 255, 255, 0.98);
+            color: #000000;
+            padding: 14px 24px;
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 100;
+            justify-content: center;
+            position: fixed;
+            top: 16px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            border-radius: 999px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            backdrop-filter: blur(10px);
+            width: 80%;
+            max-width: 400px;
         }
 
         body.dark .simple-topbar {
-            background: rgba(15, 23, 42, 0.8);
-            border-bottom-color: var(--border-dark);
+            background: rgba(15, 23, 42, 0.9);
+            border-color: var(--border-dark);
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+            color: #ffffff;
         }
 
         .topbar-logo-brand {
@@ -265,21 +275,19 @@
 
         @media (max-width: 768px) {
             .simple-topbar {
-                padding: 0.85rem 0.75rem;
-                justify-content: space-between;
+                width: 90%;
+                padding: 10px 16px;
             }
 
             .mobile-menu-btn {
                 display: inline-flex;
-                width: 40px;
-                height: 40px;
+                width: 36px;
+                height: 36px;
+                border-radius: 999px;
                 align-items: center;
                 justify-content: center;
-            }
-
-            .topbar-logo-brand .logo-text-krishi,
-            .topbar-logo-brand .logo-text-mitr {
-                font-size: 1.25rem;
+                background: #000;
+                color: #fff;
             }
         }
 
@@ -393,9 +401,9 @@
 
         /* =============== PAGE CONTENT =============== */
         .content-area {
-            padding: 2rem 2.25rem 3rem;
-            max-width: 1200px;
-            margin: 0 auto;
+            padding: 1.5rem;
+            max-width: none; /* Full width */
+            margin: 60px auto 0 auto;
         }
 
         /* =============== HERO STRIP =============== */
@@ -835,45 +843,71 @@
         .field-input,
         .field-select,
         .field-textarea {
-            padding: 0.7rem 0.75rem;
-            border-radius: 10px;
-            border: 1px solid var(--border-light);
-            background: var(--card-light);
+            padding: 0.95rem 1.15rem;
+            border-radius: 12px;
+            border: 2px solid #e2e8f0;
+            background: #ffffff;
             color: var(--text-light);
-            font-size: 0.85rem;
+            font-size: 0.95rem;
+            font-weight: 500;
             font-family: 'Inter', sans-serif;
-            transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 2px 4px rgba(16, 185, 129, 0.04);
         }
 
         body.dark .field-input,
         body.dark .field-select,
         body.dark .field-textarea {
-            background: var(--card-dark);
-            border-color: var(--border-dark);
+            background: #1e293b;
+            border-color: #334155;
             color: var(--text-dark);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .field-input:hover,
+        .field-select:hover,
+        .field-textarea:hover {
+            border-color: #a7f3d0;
+            background: #f0fdf4;
+        }
+
+        body.dark .field-input:hover,
+        body.dark .field-select:hover,
+        body.dark .field-textarea:hover {
+            border-color: #059669;
+            background: #064e3b;
         }
 
         .field-textarea {
-            min-height: 80px;
+            min-height: 100px;
             resize: vertical;
         }
 
         .field-input::placeholder,
         .field-textarea::placeholder {
-            color: var(--text-secondary-light);
+            color: #94a3b8;
+            font-weight: 400;
         }
 
         body.dark .field-input::placeholder,
         body.dark .field-textarea::placeholder {
-            color: var(--text-secondary-dark);
+            color: #64748b;
         }
 
         .field-input:focus,
         .field-select:focus,
         .field-textarea:focus {
             outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 1px rgba(16, 185, 129, 0.6);
+            border-color: var(--success);
+            background: #ffffff;
+            box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.15);
+        }
+
+        body.dark .field-input:focus,
+        body.dark .field-select:focus,
+        body.dark .field-textarea:focus {
+            background: #1e293b;
+            box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.25);
         }
 
         .analyze-btn {
@@ -1363,14 +1397,9 @@
                 <button class="mobile-menu-btn" onclick="toggleSidebar()">
                     <i class="fas fa-bars-staggered"></i>
                 </button>
-                <div class="logo-brand topbar-logo-brand">
-                    <span class="logo-text-krishi">Farm</span>
-                    <span class="logo-text-mitr">Sure</span>
-                </div>
             </div>
-            <div class="topbar-right">
-                <!-- Removed old status badge as requested -->
-            </div>
+            <h1 class="simple-title">Crop Diagnosis</h1>
+            <div class="topbar-right"></div>
         </div>
 
         <div class="content-area">
@@ -1378,25 +1407,7 @@
             <div class="diagnosis-hero">
                 <div class="diagnosis-hero-main">
                     <div class="diagnosis-hero-title">
-                        <h2 data-i18n="crop.hero.title">Crop Diagnosis</h2>
-                    </div>
-                </div>
-
-                <div class="diagnosis-steps-card">
-                    <div class="steps-title" data-i18n="crop.steps.title">How this works</div>
-                    <div class="steps-list">
-                        <div class="step-row">
-                            <div class="step-icon"><i class="fas fa-image"></i></div>
-                            <span data-i18n="crop.steps.1">Upload clear photo of leaf / fruit / stem</span>
-                        </div>
-                        <div class="step-row">
-                            <div class="step-icon"><i class="fas fa-clipboard-list"></i></div>
-                            <span data-i18n="crop.steps.2">Fill crop, location & short symptom notes</span>
-                        </div>
-                        <div class="step-row">
-                            <div class="step-icon"><i class="fas fa-seedling"></i></div>
-                            <span data-i18n="crop.steps.3">Get diagnosis, field actions & prevention</span>
-                        </div>
+                        <h2 data-i18n="crop.hero.title">Crop Health Check</h2>
                     </div>
                 </div>
             </div>
