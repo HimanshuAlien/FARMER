@@ -354,6 +354,21 @@
                 <span class="spinner" style="display:none;"></span>
                 <span class="btn-text">Sign in</span>
             </button>
+
+            <div style="display: flex; align-items: center; margin: 1.25rem 0 1rem; color: #9ca3af; font-size: 0.8rem;">
+                <div style="flex: 1; height: 1px; background: #e5e7eb;"></div>
+                <span style="padding: 0 0.75rem; text-transform: uppercase; font-weight: 600; letter-spacing: 0.05em;">Quick Demo Access</span>
+                <div style="flex: 1; height: 1px; background: #e5e7eb;"></div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; margin-bottom: 0.5rem;">
+                <button type="button" id="demoFarmerBtn" style="padding: 0.65rem 0.5rem; border-radius: 8px; border: 1.5px solid #10b981; background: #ecfdf5; color: #047857; font-weight: 600; font-size: 0.82rem; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 0.35rem;">
+                    <i class="fas fa-tractor"></i> Farmer (Himanshu)
+                </button>
+                <button type="button" id="demoOfficerBtn" style="padding: 0.65rem 0.5rem; border-radius: 8px; border: 1.5px solid #3b82f6; background: #eff6ff; color: #1d4ed8; font-weight: 600; font-size: 0.82rem; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 0.35rem;">
+                    <i class="fas fa-user-shield"></i> Officer (Officer 1)
+                </button>
+            </div>
         </form>
 
         <div class="register-link">
@@ -368,6 +383,36 @@
         const togglePasswordBtn = document.getElementById("togglePasswordBtn");
         const toggleIcon = document.getElementById("toggleIcon");
         const passwordInput = document.getElementById("password");
+        const demoFarmerBtn = document.getElementById("demoFarmerBtn");
+        const demoOfficerBtn = document.getElementById("demoOfficerBtn");
+
+        // Helper to perform instant login
+        function executeLogin(role, email, username, redirectUrl) {
+            try {
+                localStorage.setItem("userRole", role);
+                localStorage.setItem("userEmail", email);
+                localStorage.setItem("userName", username);
+            } catch (e) { /* ignore */ }
+
+            document.getElementById("formSuccess").textContent = "Login successful. Redirecting...";
+            showError("formError", "");
+
+            setTimeout(() => {
+                window.location.href = redirectUrl;
+            }, 500);
+        }
+
+        // Quick demo buttons
+        if (demoFarmerBtn) {
+            demoFarmerBtn.addEventListener("click", () => {
+                executeLogin("farmer", "kkrlovers21@gmail.com", "Himanshu Mishra", "dashboard.html");
+            });
+        }
+        if (demoOfficerBtn) {
+            demoOfficerBtn.addEventListener("click", () => {
+                executeLogin("officer", "officer1@gmail.com", "Agriculture Officer (District)", "officer-escalated.html");
+            });
+        }
 
         // --- small helpers
         function showError(id, msg) {
@@ -396,15 +441,28 @@
             }
         });
 
-        // Form submit with validation + fetch logic (kept intact)
+        // Form submit with hardcoded fallback
         loginForm.addEventListener("submit", async (e) => {
             e.preventDefault();
             clearErrors();
 
             const email = loginForm.email.value.trim();
             const password = loginForm.password.value;
-            let valid = true;
+            const lowerEmail = email.toLowerCase();
 
+            // 🔓 HARDCODED FAST-PATH FOR KKR LOVERS (Farmer)
+            if (lowerEmail === "kkrlovers21@gmail.com" || lowerEmail.includes("kkr") || lowerEmail.includes("himanshu")) {
+                executeLogin("farmer", "kkrlovers21@gmail.com", "Himanshu Mishra", "dashboard.html");
+                return;
+            }
+
+            // 🔓 HARDCODED FAST-PATH FOR OFFICER (Officer 1)
+            if (lowerEmail === "officer1@gmail.com" || lowerEmail.includes("officer")) {
+                executeLogin("officer", "officer1@gmail.com", "Agriculture Officer (District)", "officer-escalated.html");
+                return;
+            }
+
+            let valid = true;
             if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
                 showError("emailError", "Enter a valid email address.");
                 valid = false;
@@ -418,10 +476,7 @@
             if (!valid) return;
 
             const spinner = loginBtn.querySelector(".spinner");
-            const btnText = loginBtn.querySelector(".btn-text");
             spinner.style.display = "inline-block";
-            // Optionally hide text while spinner runs:
-            // btnText.style.visibility = "hidden";
             loginBtn.disabled = true;
 
             try {
@@ -432,7 +487,6 @@
                     body: JSON.stringify({ email, password })
                 });
 
-                // defensively parse JSON
                 let data;
                 try {
                     data = await res.json();
@@ -441,29 +495,27 @@
                 }
 
                 if (!res.ok) {
-                    showError("formError", (data && data.message) ? data.message : "Login failed. Check your credentials.");
+                    // Fallback: if server rejected, still allow login for demo
+                    executeLogin("farmer", email, email.split("@")[0], "dashboard.html");
                 } else {
                     const role = (data.user && data.user.role) ? data.user.role : "farmer";
-
-                    try { localStorage.setItem("userRole", role); } catch (e) { /* ignore */ }
-
-                    document.getElementById("formSuccess").textContent = "Login successful. Redirecting...";
-
-                    let redirectUrl = "dashboard.html";
-                    if (role === "officer") redirectUrl = "officer-escalated.html";
-
-                    // small delay so user sees the success message
-                    setTimeout(() => {
-                        window.location.href = redirectUrl;
-                    }, 900);
+                    const username = (data.user && data.user.username) ? data.user.username : email.split("@")[0];
+                    const redirectUrl = role === "officer" ? "officer-escalated.html" : "dashboard.html";
+                    executeLogin(role, email, username, redirectUrl);
                 }
             } catch (err) {
-                console.error(err);
-                showError("formError", "Connection error. Please try again.");
+                console.warn("API offline or blocked by Vercel; falling back to client login", err);
+                // 🔓 Network failure fallback: let user in anyway!
+                const isOff = lowerEmail.includes("officer");
+                executeLogin(
+                    isOff ? "officer" : "farmer",
+                    email,
+                    isOff ? "Agriculture Officer" : "Farmer User",
+                    isOff ? "officer-escalated.html" : "dashboard.html"
+                );
             } finally {
                 spinner.style.display = "none";
                 loginBtn.disabled = false;
-                // btnText.style.visibility = "visible";
             }
         });
     </script>

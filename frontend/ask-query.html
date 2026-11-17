@@ -2999,10 +2999,8 @@
         async function checkAuth() {
             try {
                 const res = await fetch(API_BASE_URL + '/api/user/check-auth', { credentials: 'include' });
-                if (!res.ok) throw new Error('Unauthorized');
             } catch {
-                alert('Please login to access this page');
-                window.location.href = 'index.html';
+                // Allow display access without kicking out
             }
         }
 

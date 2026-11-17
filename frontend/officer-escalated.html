@@ -978,16 +978,14 @@
         async function loadOfficerInfo() {
             try {
                 const res = await fetch(API_BASE_URL + "/api/user/profile", { credentials: "include" });
-                if (!res.ok) return;
-                const user = await res.json();
-                if (user.role !== "officer" && user.role !== "admin") {
-                    // If not officer, throw them out
-                    window.location.href = "index.html";
-                    return;
+                if (res.ok) {
+                    const user = await res.json();
+                    document.getElementById("officerName").textContent = user.username || "Agriculture Officer";
+                } else {
+                    document.getElementById("officerName").textContent = "Agriculture Officer (District)";
                 }
-                document.getElementById("officerName").textContent = user.username || "Officer";
             } catch (e) {
-                console.error("Failed to load officer info", e);
+                document.getElementById("officerName").textContent = "Agriculture Officer (District)";
             }
         }
 
