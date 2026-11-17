@@ -537,13 +537,14 @@ async function fetchSoilData(lat, lon) {
 }
 
 async function callGeminiRecommend(facts) {
-    const key = process.env.GOOGLE_API_KEY;
+    const key = process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY;
 
     if (!key) {
-        throw new Error('Missing GOOGLE_API_KEY');
+        throw new Error('Missing GEMINI_API_KEY');
     }
 
-    const url = `https://generativelanguage.googleapis.com/v1beta2/models/gemini-2.5-flash:generateText?key=${encodeURIComponent(key)}`;
+    const modelName = process.env.GEMINI_MODEL || 'gemini-3.1-flash-lite';
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${encodeURIComponent(key)}`;
 
     const system = `You are an expert agronomist. Given precise site facts (centroid lat/lon, mean NDVI, recent rainfall/temperature summaries, soil info), produce a JSON object containing up to 6 recommended crops for the next major season.
 
@@ -566,9 +567,16 @@ Return JSON only (no extra text).`;
     const user = `Site facts:\n${JSON.stringify(facts, null, 2)}\n\nReturn JSON exactly using the schema described.`;
 
     const body = {
-        prompt: system + '\n\n' + user,
-        temperature: 0.1,
-        maxOutputTokens: 1200
+        contents: [
+            {
+                role: 'user',
+                parts: [{ text: system + '\n\n' + user }]
+            }
+        ],
+        generationConfig: {
+            temperature: 0.1,
+            maxOutputTokens: 1200
+        }
     };
 
     const resp = await fetch(url, {
@@ -586,22 +594,16 @@ Return JSON only (no extra text).`;
 
     const json = await resp.json();
 
-    let text = null;
-
-    if (json?.candidates && json.candidates.length > 0 && json.candidates[0].content) {
+    let text = json?.candidates?.[0]?.content?.parts?.[0]?.text || null;
+    if (!text && json?.candidates && json.candidates.length > 0 && json.candidates[0].content) {
         text = json.candidates[0].content;
-    } else if (json?.output?.content) {
-        text = Array.isArray(json.output.content)
-            ? json.output.content.map(c => c.text || c).join('')
-            : (json.output.content.text || JSON.stringify(json.output.content));
-    } else {
-        text = JSON.stringify(json);
     }
 
     try {
-        const s = text.indexOf('{') >= 0 && text.lastIndexOf('}') > text.indexOf('{')
-            ? text.substring(text.indexOf('{'), text.lastIndexOf('}') + 1)
-            : text;
+        const cleaned = (text || '').replace(/```json/g, '').replace(/```/g, '').trim();
+        const s = cleaned.indexOf('{') >= 0 && cleaned.lastIndexOf('}') > cleaned.indexOf('{')
+            ? cleaned.substring(cleaned.indexOf('{'), cleaned.lastIndexOf('}') + 1)
+            : cleaned;
 
         return JSON.parse(s);
     } catch (error) {
@@ -898,7 +900,7 @@ router.post('/recommend-crops', async (req, res) => {
             source_data: {
                 climate: !!climate,
                 soil: !!soil,
-                ai: 'gemini-2.5-flash'
+                ai: 'gemini-3.1-flash-lite'
             },
             generated_at: new Date().toISOString()
         });

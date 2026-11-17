@@ -249,7 +249,8 @@ router.post('/ai-recommendations', auth, async (req, res) => {
             lang = 'en'
         } = req.body;
 
-        const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
+        const modelName = process.env.GEMINI_MODEL || 'gemini-3.1-flash-lite';
+        const model = genAI.getGenerativeModel({ model: modelName });
 
         const prompt = `
 You are an expert agricultural market advisor for Indian farmers.

@@ -139,7 +139,7 @@ router.get('/schemes/:fileName/ai-summary', async (req, res) => {
 
         const schemeName = prettifyName(safeName);
 
-        const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
+        const model = genAI.getGenerativeModel({ model: process.env.GEMINI_MODEL || 'gemini-3.1-flash-lite' });
 
         const prompt = `
 You are "Krishi Mitra", an AI assistant helping Indian farmers understand government schemes.

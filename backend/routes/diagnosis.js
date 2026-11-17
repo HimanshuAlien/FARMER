@@ -31,7 +31,8 @@ const upload = multer({
 // AI-powered crop analysis using Gemini Vision (Buffer-based)
 async function analyzeCropImage(buffer) {
     try {
-        const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+        const modelName = process.env.GEMINI_MODEL || 'gemini-3.1-flash-lite';
+        const model = genAI.getGenerativeModel({ model: modelName });
 
         // Process image from buffer
         const processedImage = await sharp(buffer)

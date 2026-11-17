@@ -17,6 +17,7 @@ const upload = multer({
 router.use(express.json());
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+const GEMINI_MODEL = process.env.GEMINI_MODEL || "gemini-3.1-flash-lite";
 
 function cleanJsonText(text) {
     return text.replace(/```json/g, "").replace(/```/g, "").trim();
@@ -24,7 +25,7 @@ function cleanJsonText(text) {
 
 async function aiRecommendCrops(fieldData) {
     const model = genAI.getGenerativeModel({
-        model: "gemini-2.5-flash"
+        model: GEMINI_MODEL
     });
 
     const prompt = `
@@ -53,7 +54,7 @@ Return ONLY valid JSON as:
 
 async function aiGenerateLifecycle(selectedCrop, cropDoc) {
     const model = genAI.getGenerativeModel({
-        model: "gemini-2.5-flash"
+        model: GEMINI_MODEL
     });
 
     const prompt = `
@@ -116,7 +117,7 @@ async function getWeather(lat, lng) {
 
 async function aiDailyActions(cropDoc, weather) {
     const model = genAI.getGenerativeModel({
-        model: "gemini-2.5-flash"
+        model: GEMINI_MODEL
     });
 
     const prompt = `
@@ -139,7 +140,7 @@ Return STRICT JSON:
 
 async function aiAnalyzeFeedback(cropDoc, feedback, weather) {
     const model = genAI.getGenerativeModel({
-        model: "gemini-2.5-flash"
+        model: GEMINI_MODEL
     });
 
     const prompt = `Analyze feedback for ${cropDoc.selectedCrop} at stage ${cropDoc.currentStage}. Feedback: ${JSON.stringify(feedback)}. Weather: ${JSON.stringify(weather)}. Decide if stage should change. Return JSON: {todaysAction, weatherTips, newStage}`;
@@ -152,7 +153,7 @@ async function aiAnalyzeFeedback(cropDoc, feedback, weather) {
 
 async function aiAnswerQuestion(cropDoc, question, weather) {
     const model = genAI.getGenerativeModel({
-        model: "gemini-2.5-flash"
+        model: GEMINI_MODEL
     });
 
     const prompt = `As an agronomist, answer for ${cropDoc.selectedCrop}: ${question}. Context: ${JSON.stringify(cropDoc)}. Weather: ${JSON.stringify(weather)}. Return JSON: {answer}`;

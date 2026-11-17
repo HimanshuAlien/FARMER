@@ -45,7 +45,8 @@ router.post('/ask', auth, async (req, res) => {
         console.log('Question:', question);
         console.log('Language:', language);
 
-        const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
+        const modelName = process.env.GEMINI_MODEL || 'gemini-3.1-flash-lite';
+        const model = genAI.getGenerativeModel({ model: modelName });
 
         const languageInstruction = languages[language]?.prompt || languages.en.prompt;
 
@@ -64,9 +65,16 @@ Question: "${question}"
 
 Provide helpful farming advice:`;
 
-        console.log('Calling Gemini 2.5 Flash...');
+        console.log(`Calling Gemini (${modelName})...`);
 
-        const result = await model.generateContent(prompt);
+        let result;
+        try {
+            result = await model.generateContent(prompt);
+        } catch (genErr) {
+            console.warn(`Primary model ${modelName} error, falling back to gemini-3.1-flash-lite:`, genErr.message);
+            const fallbackModel = genAI.getGenerativeModel({ model: 'gemini-3.1-flash-lite' });
+            result = await fallbackModel.generateContent(prompt);
+        }
         const response = await result.response;
         let text = response.text();
 
