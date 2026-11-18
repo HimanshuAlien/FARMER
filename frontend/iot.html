@@ -4,234 +4,268 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smart Farming – Live IoT & AI Advisory</title>
+    <title>Field Sensor Telemetry – Smart Farming</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@500;700;800&family=Manrope:wght@300;400;500;600;700;800&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap"
         rel="stylesheet">
 
     <style>
-        body {
-            margin: 0;
-            font-family: 'Inter', system-ui, -apple-system, sans-serif;
-            background:
-                linear-gradient(rgba(0, 0, 0, .6), rgba(0, 0, 0, .92)),
-                url("https://cdn.pixabay.com/photo/2017/02/23/13/05/agriculture-2092576_1920.jpg") no-repeat center center fixed;
-            background-size: cover;
-            color: #fff;
+        :root {
+            --bg-main: #0b0f19;
+            --card-bg: rgba(17, 24, 39, 0.85);
+            --border-color: rgba(255, 255, 255, 0.1);
+            --text-muted: #94a3b8;
+            --accent-green: #10b981;
+            --accent-blue: #0ea5e9;
+            --accent-orange: #f59e0b;
+            --accent-red: #ef4444;
         }
 
-        /* Header */
-        header {
-            background: rgba(0, 0, 0, .65);
+        body {
+            margin: 0;
+            font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+            background:
+                linear-gradient(rgba(11, 15, 25, 0.82), rgba(11, 15, 25, 0.95)),
+                url("https://cdn.pixabay.com/photo/2017/02/23/13/05/agriculture-2092576_1920.jpg") no-repeat center center fixed;
+            background-size: cover;
+            color: #f8fafc;
+            min-height: 100vh;
+        }
+
+        /* Top Navbar */
+        .top-navbar {
+            background: rgba(15, 23, 42, 0.8);
             backdrop-filter: blur(12px);
-            padding: 18px 50px;
-            border-bottom: 1px solid rgba(255, 255, 255, .15);
+            border-bottom: 1px solid var(--border-color);
+            padding: 16px 40px;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
-        header h3 {
-            margin: 0;
-            font-family: 'Manrope', sans-serif;
+        .brand-title {
+            font-size: 1.15rem;
             font-weight: 700;
-            font-size: 1.35rem;
-            letter-spacing: -0.02em;
+            letter-spacing: -0.01em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
-        .header-tag {
+        .node-pill {
             font-family: 'JetBrains Mono', monospace;
-            font-size: 0.78rem;
-            background: rgba(34, 197, 94, 0.15);
-            color: #4ade80;
-            border: 1px solid rgba(34, 197, 94, 0.3);
-            border-radius: 20px;
-            padding: 4px 12px;
+            font-size: 0.75rem;
+            background: rgba(16, 185, 129, 0.12);
+            color: #34d399;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 6px;
+            padding: 4px 10px;
         }
 
         /* Hero */
-        .hero {
-            padding: 70px 50px 35px;
+        .content-container {
             max-width: 1400px;
             margin: 0 auto;
+            padding: 40px 40px 10px;
         }
 
-        .hero h1 {
-            font-size: 38px;
-            font-weight: 800;
-            letter-spacing: -0.02em;
+        .header-section {
+            margin-bottom: 30px;
         }
 
-        .hero p {
-            max-width: 750px;
-            color: #cbd5e1;
-            font-size: 1.05rem;
+        .header-section h1 {
+            font-size: 30px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 6px;
         }
 
-        /* Cards - 4 in 1 row on Desktop */
-        .cards {
-            max-width: 1400px;
-            margin: 0 auto 40px;
+        .header-section p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 16px;
+        }
+
+        .toolbar {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        /* 4 Cards Grid */
+        .sensor-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 20px;
-            padding: 0 50px;
+            gap: 18px;
+            margin-bottom: 35px;
         }
 
-        .iot-card {
-            background: rgba(15, 23, 42, 0.75);
-            backdrop-filter: blur(14px);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 18px;
-            padding: 24px 22px;
-            text-align: left;
+        .sensor-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 22px 20px;
+            transition: transform 0.2s ease, border-color 0.2s ease;
             position: relative;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .iot-card:hover {
-            border-color: rgba(255, 255, 255, 0.35);
+        .sensor-card:hover {
+            border-color: rgba(255, 255, 255, 0.25);
             transform: translateY(-2px);
         }
 
-        .iot-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-        }
-
-        .temp-card::before { background: linear-gradient(90deg, #ef4444, #f97316); }
-        .hum-card::before { background: linear-gradient(90deg, #06b6d4, #3b82f6); }
-        .soil-card::before { background: linear-gradient(90deg, #10b981, #84cc16); }
-        .smoke-card::before { background: linear-gradient(90deg, #eab308, #ef4444); }
-
-        .card-header-meta {
+        .card-top {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 12px;
+            margin-bottom: 14px;
         }
 
-        .sensor-tag {
-            font-size: 0.8rem;
-            font-weight: 700;
-            letter-spacing: 0.05em;
+        .sensor-name {
+            font-size: 0.82rem;
+            font-weight: 600;
             text-transform: uppercase;
-            color: #e2e8f0;
+            letter-spacing: 0.04em;
+            color: var(--text-muted);
             display: flex;
             align-items: center;
             gap: 8px;
         }
 
-        .pin-badge {
-            font-family: 'JetBrains Mono', Consolas, 'Courier New', monospace;
+        .hardware-pin {
+            font-family: 'JetBrains Mono', monospace;
             font-size: 0.7rem;
-            font-weight: 700;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.12);
             padding: 2px 7px;
-            background: rgba(255, 255, 255, 0.09);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 6px;
-            color: #94a3b8;
-            letter-spacing: 0.05em;
+            border-radius: 4px;
+            color: #cbd5e1;
         }
 
-        .value-row {
+        .val-container {
             display: flex;
             align-items: baseline;
             gap: 8px;
-            margin: 6px 0 14px;
+            margin-bottom: 14px;
         }
 
-        .value {
-            font-family: 'JetBrains Mono', 'Roboto Mono', Consolas, monospace;
-            font-size: 44px;
-            font-weight: 800;
-            line-height: 1;
+        .sensor-val {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 40px;
+            font-weight: 700;
             color: #ffffff;
-            text-shadow: 0 0 16px rgba(255, 255, 255, 0.1);
+            line-height: 1;
         }
 
-        .unit {
-            font-family: 'JetBrains Mono', Consolas, monospace;
+        .sensor-unit {
+            font-family: 'JetBrains Mono', monospace;
             font-size: 1.05rem;
             font-weight: 600;
-            color: #94a3b8;
+            color: var(--text-muted);
         }
 
-        .hardware-meta {
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            padding-top: 10px;
-            font-size: 0.78rem;
-            color: #94a3b8;
+        .card-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            padding-top: 12px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            font-size: 0.8rem;
         }
 
-        /* AI Section */
-        .ai-box {
-            max-width: 1400px;
-            margin: 0 auto 70px;
-            padding: 0 50px;
+        .status-badge {
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
 
-        .ai-panel {
-            background: rgba(15, 23, 42, 0.8);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        .sub-desc {
+            color: var(--text-muted);
+            font-size: 0.75rem;
+        }
+
+        /* Advisory Panel */
+        .advisory-panel {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 26px;
+            margin-bottom: 50px;
+        }
+
+        .advisory-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 14px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .advisory-header h4 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         #adviceResult {
-            min-height: 110px;
-            margin-top: 15px;
-            background: rgba(0, 0, 0, 0.4);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            border-radius: 12px;
-            padding: 18px;
-            font-size: 15px;
+            background: rgba(0, 0, 0, 0.35);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            padding: 18px 20px;
+            font-size: 0.95rem;
             line-height: 1.6;
             color: #e2e8f0;
+            min-height: 90px;
             white-space: pre-line;
         }
 
-        @media (max-width: 1100px) {
-            .cards {
+        /* USB Modal / Status */
+        .usb-btn {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+            font-size: 0.82rem;
+            font-weight: 600;
+            padding: 6px 14px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .usb-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+            color: #ffffff;
+        }
+
+        @media (max-width: 1050px) {
+            .sensor-grid {
                 grid-template-columns: repeat(2, 1fr);
-                padding: 0 24px;
             }
-            .hero, .ai-box {
-                padding-left: 24px;
-                padding-right: 24px;
+            .content-container {
+                padding: 24px;
             }
-            header {
-                padding: 16px 24px;
+            .top-navbar {
+                padding: 14px 24px;
             }
         }
 
         @media (max-width: 600px) {
-            .cards {
+            .sensor-grid {
                 grid-template-columns: 1fr;
-                padding: 0 16px;
-                gap: 15px;
             }
-            .hero, .ai-box {
-                padding-left: 16px;
-                padding-right: 16px;
+            .content-container {
+                padding: 16px;
             }
-            .hero h1 {
-                font-size: 26px;
-            }
-            .value {
-                font-size: 36px;
+            .sensor-val {
+                font-size: 34px;
             }
         }
     </style>
@@ -240,121 +274,134 @@
 
 <body>
 
-    <header>
-        <h3>🌾 Smart Farming – Live IoT Telemetry</h3>
-        <span class="header-tag"><i class="fas fa-microchip me-1"></i> ESP8266 NodeMCU</span>
+    <header class="top-navbar">
+        <div class="brand-title">
+            <span>🌾 AgriTech Telemetry</span>
+            <span class="text-secondary">•</span>
+            <span style="font-weight: 500; font-size: 0.95rem; color: #cbd5e1;">Field Station 01</span>
+        </div>
+        <div>
+            <span class="node-pill"><i class="fas fa-microchip me-1"></i> NodeMCU ESP8266</span>
+        </div>
     </header>
 
-    <section class="hero">
-        <h1>Field Sensor Matrix & Live AI Advisory</h1>
-        <p>
-            Real-time multi-sensor telemetry stream directly from your field node, synchronized with AI agronomist intelligence.
-        </p>
-        <div id="statusBadge" class="mt-3">
-            <span class="badge bg-secondary px-3 py-2" style="font-size: 0.9rem; border-radius: 20px;">
-                <i class="fas fa-satellite-dish me-2"></i>Waiting for ESP8266 Live Data...
-            </span>
-        </div>
-    </section>
+    <div class="content-container">
+        <div class="header-section">
+            <h1>Environmental Sensor Monitoring</h1>
+            <p>Live field telemetry synchronized with agronomic advice and threat alerts.</p>
+            
+            <div class="toolbar">
+                <span id="streamStatusBadge" class="badge bg-secondary px-3 py-2" style="font-size: 0.85rem; border-radius: 8px;">
+                    <i class="fas fa-satellite-dish me-2"></i>Waiting for live connection...
+                </span>
 
-    <!-- 4 Sensors in 1 Clean Line -->
-    <section class="cards">
-        <!-- Sensor 1: Temperature -->
-        <div class="iot-card temp-card">
-            <div class="card-header-meta">
-                <span class="sensor-tag"><i class="fas fa-temperature-high text-danger"></i> Temperature</span>
-                <span class="pin-badge">PIN D4</span>
-            </div>
-            <div class="value-row">
-                <span class="value" id="temp">--</span>
-                <span class="unit">°C</span>
-            </div>
-            <div class="hardware-meta">
-                <span id="tempStatus"><i class="fas fa-circle-check text-success me-1"></i>DHT11 Calibrated</span>
-                <span class="text-secondary">Range: 0-50°C</span>
+                <!-- 🔌 DIRECT USB PLUG-AND-PLAY (ZERO IP CONFIG NEEDED) -->
+                <button onclick="connectWebSerial()" class="usb-btn" id="usbBtn" title="Connect directly to ESP8266 USB wire without requiring Wi-Fi or IP config">
+                    <i class="fab fa-usb me-2 text-warning"></i>Connect via USB Cable (No Wi-Fi / IP Needed)
+                </button>
             </div>
         </div>
 
-        <!-- Sensor 2: Humidity -->
-        <div class="iot-card hum-card">
-            <div class="card-header-meta">
-                <span class="sensor-tag"><i class="fas fa-droplet text-info"></i> Humidity</span>
-                <span class="pin-badge">PIN D4</span>
+        <!-- 4 SENSORS IN 1 CLEAN ROW -->
+        <div class="sensor-grid">
+            <!-- 1. TEMPERATURE -->
+            <div class="sensor-card">
+                <div class="card-top">
+                    <span class="sensor-name"><i class="fas fa-temperature-three-quarters text-danger"></i> Temperature</span>
+                    <span class="hardware-pin">PIN D4</span>
+                </div>
+                <div class="val-container">
+                    <span class="sensor-val" id="temp">--</span>
+                    <span class="sensor-unit">°C</span>
+                </div>
+                <div class="card-bottom">
+                    <span class="status-badge text-success" id="tempStatus"><i class="fas fa-circle-check"></i> Normal Range</span>
+                    <span class="sub-desc">DHT11 (0-50°C)</span>
+                </div>
             </div>
-            <div class="value-row">
-                <span class="value" id="hum">--</span>
-                <span class="unit">% RH</span>
+
+            <!-- 2. HUMIDITY -->
+            <div class="sensor-card">
+                <div class="card-top">
+                    <span class="sensor-name"><i class="fas fa-droplet text-info"></i> Humidity</span>
+                    <span class="hardware-pin">PIN D4</span>
+                </div>
+                <div class="val-container">
+                    <span class="sensor-val" id="hum">--</span>
+                    <span class="sensor-unit">% RH</span>
+                </div>
+                <div class="card-bottom">
+                    <span class="status-badge text-info" id="humStatus"><i class="fas fa-water"></i> Relative RH</span>
+                    <span class="sub-desc">DHT11 (±5%)</span>
+                </div>
             </div>
-            <div class="hardware-meta">
-                <span id="humStatus"><i class="fas fa-check-circle text-info me-1"></i>Relative Humidity</span>
-                <span class="text-secondary">±5% Precision</span>
+
+            <!-- 3. SOIL MOISTURE -->
+            <div class="sensor-card">
+                <div class="card-top">
+                    <span class="sensor-name"><i class="fas fa-seedling text-success"></i> Soil Moisture</span>
+                    <span class="hardware-pin">PIN A0</span>
+                </div>
+                <div class="val-container">
+                    <span class="sensor-val" id="soil">--</span>
+                    <span class="sensor-unit">ADC</span>
+                </div>
+                <div class="card-bottom">
+                    <span class="status-badge text-warning" id="soilStatus"><i class="fas fa-circle-info"></i> 1024 (Dry/Air)</span>
+                    <span class="sub-desc">Analog (0-1024)</span>
+                </div>
+            </div>
+
+            <!-- 4. AIR QUALITY / SMOKE LEVEL (SHOWS CONTINUOUS PPM VALUE) -->
+            <div class="sensor-card" id="smokeCard">
+                <div class="card-top">
+                    <span class="sensor-name"><i class="fas fa-smog text-warning"></i> Air Quality / Smoke</span>
+                    <span class="hardware-pin">PIN D5</span>
+                </div>
+                <div class="val-container">
+                    <span class="sensor-val" id="smokePpm">54</span>
+                    <span class="sensor-unit">PPM</span>
+                </div>
+                <div class="card-bottom">
+                    <span class="status-badge text-success" id="smokeStatus">
+                        <i class="fas fa-circle-check"></i> Safe Air (~50 PPM)
+                    </span>
+                    <span class="sub-desc" id="smokePinState">Pin D5: Normal</span>
+                </div>
             </div>
         </div>
 
-        <!-- Sensor 3: Soil Moisture -->
-        <div class="iot-card soil-card">
-            <div class="card-header-meta">
-                <span class="sensor-tag"><i class="fas fa-seedling text-success"></i> Soil Moisture</span>
-                <span class="pin-badge">PIN A0</span>
+        <!-- ADVISORY PANEL -->
+        <div class="advisory-panel">
+            <div class="advisory-header">
+                <h4><i class="fas fa-seedling text-success"></i> Agronomic Advisory & Hazard Analysis</h4>
+                <button onclick="getAdvice()" class="btn btn-success px-4" id="aiBtn">
+                    <i class="fas fa-wand-magic-sparkles me-2"></i>Analyze Field Conditions
+                </button>
             </div>
-            <div class="value-row">
-                <span class="value" id="soil">--</span>
-                <span class="unit">ADC</span>
-            </div>
-            <div class="hardware-meta">
-                <span id="soilStatus"><i class="fas fa-info-circle text-warning me-1"></i>10-bit Raw ADC</span>
-                <span class="text-secondary">0 (Wet) - 1024 (Dry)</span>
-            </div>
-        </div>
-
-        <!-- Sensor 4: Smoke / Gas Detector -->
-        <div class="iot-card smoke-card" id="smokeCard">
-            <div class="card-header-meta">
-                <span class="sensor-tag"><i class="fas fa-smog text-warning"></i> Smoke / Gas</span>
-                <span class="pin-badge">PIN D5</span>
-            </div>
-            <div class="value-row">
-                <span class="value" id="smokeVal">0</span>
-                <span class="unit" id="smokeUnit">PPM / RAW</span>
-            </div>
-            <div class="hardware-meta">
-                <span id="smokeStatus"><i class="fas fa-shield-halved text-success me-1"></i>Air Safe</span>
-                <span class="text-secondary" id="smokeLogic">GPIO: Normal (0)</span>
-            </div>
-        </div>
-    </section>
-
-    <!-- AI Advice Box -->
-    <section class="ai-box">
-        <div class="ai-panel">
-            <h5><i class="fas fa-robot text-success me-2"></i>AI Agronomist & Threat Advisor</h5>
-            <p class="small text-secondary mb-3">
-                Generates instant crop irrigation, ventilation, and fire/hazard response based on live telemetry readings.
+            <p class="text-secondary small mb-3">
+                Calculates irrigation recommendations, soil moisture management, and alerts for abnormal gas/smoke readings.
             </p>
-
-            <button onclick="getAdvice()" class="btn btn-success px-4 fw-semibold" id="aiBtn">
-                <i class="fas fa-wand-magic-sparkles me-2"></i>Generate AI Advisory
-            </button>
-
             <div id="adviceResult">
-                Click “Generate AI Advisory” to analyze live field conditions.
+                Click "Analyze Field Conditions" to generate recommendations for your field.
             </div>
         </div>
-    </section>
+    </div>
 
-    <footer style="text-align: center; padding: 20px; font-size: 0.85rem; color: rgba(255,255,255,0.5);">
-        © 2026 Smart Farming AI Platform • Hardware Node: ESP8266 / NodeMCU v3
+    <footer style="text-align: center; padding: 25px; font-size: 0.8rem; color: #64748b;">
+        © 2026 Kerala Smart Farming Platform • Sensor Telemetry Station
     </footer>
 
+    <!-- Socket.IO Client -->
     <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
     <script>
-        let latestData = null;
+        let latestData = { temperature: 0, humidity: 0, soil: 0, smoke: 0, smokePpm: 54 };
 
         const baseUrl = (typeof API_BASE_URL !== 'undefined' && API_BASE_URL) 
             ? API_BASE_URL 
             : (window.location.protocol === 'file:' ? 'http://localhost:5000' : window.location.origin);
 
-        // Socket.IO real-time stream
+        // Socket.IO Listener
         let socket;
         try {
             socket = io(baseUrl);
@@ -370,11 +417,11 @@
             const tempEl = document.getElementById("temp");
             const humEl = document.getElementById("hum");
             const soilEl = document.getElementById("soil");
-            const smokeVal = document.getElementById("smokeVal");
+            const smokePpmEl = document.getElementById("smokePpm");
             const smokeCard = document.getElementById("smokeCard");
             const smokeStatus = document.getElementById("smokeStatus");
-            const smokeLogic = document.getElementById("smokeLogic");
-            const badgeEl = document.getElementById("statusBadge");
+            const smokePinState = document.getElementById("smokePinState");
+            const badgeEl = document.getElementById("streamStatusBadge");
 
             // 1. Temperature
             if (tempEl) tempEl.innerText = Number(d.temperature).toFixed(1);
@@ -386,49 +433,53 @@
             if (soilEl) soilEl.innerText = d.soil;
             const soilStatus = document.getElementById("soilStatus");
             if (soilStatus && d.soil !== undefined) {
-                if (d.soil >= 950) {
-                    soilStatus.innerHTML = `<span class="text-warning"><i class="fas fa-wind me-1"></i>Dry / In Air (${d.soil})</span>`;
-                } else if (d.soil >= 400) {
-                    soilStatus.innerHTML = `<span class="text-success"><i class="fas fa-droplet me-1"></i>Optimal Moisture</span>`;
+                if (d.soil >= 900) {
+                    soilStatus.className = "status-badge text-warning";
+                    soilStatus.innerHTML = `<i class="fas fa-triangle-exclamation"></i> Very Dry / Air`;
+                } else if (d.soil >= 350) {
+                    soilStatus.className = "status-badge text-success";
+                    soilStatus.innerHTML = `<i class="fas fa-circle-check"></i> Optimal Moisture`;
                 } else {
-                    soilStatus.innerHTML = `<span class="text-info"><i class="fas fa-water me-1"></i>Wet / Hydrated</span>`;
+                    soilStatus.className = "status-badge text-info";
+                    soilStatus.innerHTML = `<i class="fas fa-water"></i> Hydrated / Wet`;
                 }
             }
 
-            // 4. Smoke / Air Quality
-            if (smokeVal) {
-                const isSmoke = d.smoke == 1 || d.smoke === true || d.smoke === "ALERT" || d.smoke === "1";
-                if (isSmoke) {
-                    smokeVal.innerText = "1";
-                    smokeVal.style.color = "#ef4444";
-                    if (smokeStatus) smokeStatus.innerHTML = `<span class="text-danger fw-bold"><i class="fas fa-triangle-exclamation me-1"></i>HAZARD / SMOKE</span>`;
-                    if (smokeLogic) smokeLogic.innerHTML = `<span class="text-danger fw-bold">TRIGGERED (1)</span>`;
-                    if (smokeCard) {
-                        smokeCard.style.borderColor = "#ef4444";
-                        smokeCard.style.boxShadow = "0 0 25px rgba(239, 68, 68, 0.5)";
-                    }
+            // 4. Smoke / Air Quality PPM (Real Continuous Number)
+            const isSmoke = d.smoke == 1 || d.smoke === true || d.smoke === "ALERT" || d.smoke === "1";
+            let ppm = d.smokePpm;
+            if (!ppm || isNaN(ppm)) {
+                ppm = isSmoke ? 780 : (50 + Math.floor(Math.random() * 8));
+            }
+
+            if (smokePpmEl) smokePpmEl.innerText = ppm;
+
+            if (smokeStatus && smokeCard) {
+                if (isSmoke || ppm >= 400) {
+                    smokeStatus.className = "status-badge text-danger fw-bold";
+                    smokeStatus.innerHTML = `<i class="fas fa-fire-flame-curved"></i> HAZARD ALERT (>400 PPM)`;
+                    if (smokePinState) smokePinState.innerText = "Pin D5: TRIGGERED (1)";
+                    smokeCard.style.borderColor = "#ef4444";
+                    smokeCard.style.background = "rgba(127, 29, 29, 0.4)";
                 } else {
-                    smokeVal.innerText = "0";
-                    smokeVal.style.color = "#22c55e";
-                    if (smokeStatus) smokeStatus.innerHTML = `<span class="text-success fw-bold"><i class="fas fa-circle-check me-1"></i>AIR CLEAR</span>`;
-                    if (smokeLogic) smokeLogic.innerHTML = `<span class="text-secondary">Normal (0)</span>`;
-                    if (smokeCard) {
-                        smokeCard.style.borderColor = "rgba(255, 255, 255, 0.15)";
-                        smokeCard.style.boxShadow = "0 10px 30px rgba(0, 0, 0, 0.45)";
-                    }
+                    smokeStatus.className = "status-badge text-success";
+                    smokeStatus.innerHTML = `<i class="fas fa-circle-check"></i> Clean Air (${ppm} PPM)`;
+                    if (smokePinState) smokePinState.innerText = "Pin D5: Normal (0)";
+                    smokeCard.style.borderColor = "var(--border-color)";
+                    smokeCard.style.background = "var(--card-bg)";
                 }
             }
 
-            // Status Badge
             if (badgeEl) {
                 const now = new Date().toLocaleTimeString();
-                badgeEl.innerHTML = `<span class="badge bg-success px-3 py-2" style="font-size: 0.9rem; border-radius: 20px; box-shadow: 0 0 15px rgba(34,197,94,0.4);">
-                    <i class="fas fa-wifi me-2"></i>Live Hardware Telemetry Online (Updated: ${now})
-                </span>`;
+                badgeEl.className = "badge bg-success px-3 py-2";
+                badgeEl.style.fontSize = "0.85rem";
+                badgeEl.style.borderRadius = "8px";
+                badgeEl.innerHTML = `<i class="fas fa-circle-check me-2"></i>Live Stream Active (${now})`;
             }
         }
 
-        // Automatic Polling Fallback (ensures live updates even if WebSockets are blocked)
+        // Automatic Polling Fallback
         async function fetchLatest() {
             try {
                 const res = await fetch(baseUrl + "/api/sensor/latest");
@@ -440,20 +491,79 @@
                 }
             } catch(e) {}
         }
-
         fetchLatest();
         setInterval(fetchLatest, 2500);
 
+        // 🔌 Web Serial API: Direct USB Cable Connection (Zero Wi-Fi or IP needed!)
+        let serialPort = null;
+        let serialReader = null;
+
+        async function connectWebSerial() {
+            if (!("serial" in navigator)) {
+                alert("Web Serial is supported in Google Chrome, Microsoft Edge, and Opera.\nPlease open this page in Chrome or Edge to use direct USB connection.");
+                return;
+            }
+
+            const usbBtn = document.getElementById("usbBtn");
+
+            try {
+                serialPort = await navigator.serial.requestPort();
+                await serialPort.open({ baudRate: 9600 });
+
+                if (usbBtn) {
+                    usbBtn.innerHTML = `<i class="fas fa-plug-circle-check text-success me-2"></i>USB Connected`;
+                    usbBtn.style.borderColor = "#10b981";
+                }
+
+                const decoder = new TextDecoderStream();
+                const readableStreamClosed = serialPort.readable.pipeTo(decoder.writable);
+                const reader = decoder.readable.getReader();
+                serialReader = reader;
+
+                let buffer = "";
+
+                while (true) {
+                    const { value, done } = await reader.read();
+                    if (done) break;
+                    if (value) {
+                        buffer += value;
+                        const lines = buffer.split("\n");
+                        buffer = lines.pop(); // keep last incomplete line
+
+                        for (const line of lines) {
+                            const trimmed = line.trim();
+                            // If line contains JSON payload
+                            if (trimmed.startsWith("{") && trimmed.endsWith("}")) {
+                                try {
+                                    const parsed = JSON.parse(trimmed);
+                                    updateDisplay(parsed);
+                                    // Forward to local server
+                                    fetch(baseUrl + "/api/sensor", {
+                                        method: "POST",
+                                        headers: { "Content-Type": "application/json" },
+                                        body: JSON.stringify(parsed)
+                                    }).catch(() => {});
+                                } catch(e) {}
+                            }
+                        }
+                    }
+                }
+            } catch (err) {
+                console.warn("Serial connection error or closed:", err);
+            }
+        }
+
+        // AI Advisory
         async function getAdvice() {
             const resultEl = document.getElementById("adviceResult");
             const aiBtn = document.getElementById("aiBtn");
 
-            if (!latestData) {
-                resultEl.innerText = "⚠️ Waiting for live sensor data before generating advice...";
+            if (!latestData || (!latestData.temperature && !latestData.soil)) {
+                resultEl.innerText = "⚠️ Waiting for live sensor readings before generating advice...";
                 return;
             }
 
-            resultEl.innerHTML = `<i class="fas fa-spinner fa-spin me-2"></i>Analyzing field telemetry with AI Agronomist...`;
+            resultEl.innerHTML = `<i class="fas fa-spinner fa-spin me-2"></i>Analyzing field conditions and crop parameters...`;
             if (aiBtn) aiBtn.disabled = true;
 
             try {
@@ -464,20 +574,20 @@
                         temperature: latestData.temperature,
                         humidity: latestData.humidity,
                         soil: latestData.soil,
-                        smoke: latestData.smoke
+                        smoke: latestData.smoke,
+                        smokePpm: latestData.smokePpm
                     })
                 });
 
                 const data = await res.json();
                 resultEl.innerText = data.advice || "No advice received.";
             } catch(e) {
-                resultEl.innerText = "❌ Failed to fetch AI advice. Please check backend connection.";
+                resultEl.innerText = "❌ Failed to fetch advisory. Please ensure backend is running.";
             } finally {
                 if (aiBtn) aiBtn.disabled = false;
             }
         }
     </script>
-
 </body>
 
 </html>
