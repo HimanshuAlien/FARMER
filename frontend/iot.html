@@ -183,6 +183,11 @@
             <div class="value" id="soil">--</div>
             <div class="label"><i class="fas fa-seedling text-success me-2"></i>Soil Moisture</div>
         </div>
+
+        <div class="iot-card" id="smokeCard">
+            <div class="value" id="smokeVal" style="font-size: 2rem; padding-top: 10px;">--</div>
+            <div class="label"><i class="fas fa-smog text-warning me-2"></i>Air / Smoke Status</div>
+        </div>
     </section>
 
     <section class="ai-box">
@@ -230,11 +235,24 @@
             const tempEl = document.getElementById("temp");
             const humEl = document.getElementById("hum");
             const soilEl = document.getElementById("soil");
+            const smokeEl = document.getElementById("smokeVal");
+            const smokeCard = document.getElementById("smokeCard");
             const badgeEl = document.getElementById("statusBadge");
 
             if (tempEl) tempEl.innerText = Number(d.temperature).toFixed(1);
             if (humEl) humEl.innerText = Number(d.humidity).toFixed(1);
             if (soilEl) soilEl.innerText = d.soil;
+
+            if (smokeEl) {
+                const isSmoke = d.smoke == 1 || d.smoke === true || d.smoke === "ALERT";
+                if (isSmoke) {
+                    smokeEl.innerHTML = `<span class="text-danger fw-bold"><i class="fas fa-fire me-1"></i>ALERT</span>`;
+                    if (smokeCard) smokeCard.style.borderColor = "#ef4444";
+                } else {
+                    smokeEl.innerHTML = `<span class="text-success fw-bold"><i class="fas fa-check-circle me-1"></i>Clear</span>`;
+                    if (smokeCard) smokeCard.style.borderColor = "rgba(255, 255, 255, 0.2)";
+                }
+            }
 
             if (badgeEl) {
                 const now = new Date().toLocaleTimeString();
@@ -279,7 +297,8 @@
                     body: JSON.stringify({
                         temperature: latestData.temperature,
                         humidity: latestData.humidity,
-                        soil: latestData.soil
+                        soil: latestData.soil,
+                        smoke: latestData.smoke
                     })
                 });
 

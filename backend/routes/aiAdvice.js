@@ -4,7 +4,7 @@ const router = express.Router();
 router.use(express.json());
 
 router.post("/advice", (req, res) => {
-    const { temperature, humidity, soil } = req.body || {};
+    const { temperature, humidity, soil, smoke } = req.body || {};
 
     // Artificial delay (2 seconds)
     setTimeout(() => {
@@ -19,6 +19,13 @@ router.post("/advice", (req, res) => {
 
         let advice = "🌱 Field Analysis Report\n";
         advice += "---------------------------\n\n";
+
+        /* ---------- SMOKE / FIRE DETECTION ---------- */
+        if (smoke == 1 || smoke === true) {
+            advice += "🚨 SMOKE / HAZARD ALERT:\n";
+            advice += "• Smoke or combustible gas detected in the field!\n";
+            advice += "  ➜ Inspect field immediately for fire hazard or electrical short-circuit.\n\n";
+        }
 
         /* ---------- SOIL ANALYSIS ---------- */
         advice += "🟤 Soil Moisture Status:\n";

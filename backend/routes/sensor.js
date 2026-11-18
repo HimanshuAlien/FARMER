@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-let latest = { temperature: 0, humidity: 0, soil: 0 };
+let latest = { temperature: 0, humidity: 0, soil: 0, smoke: 0 };
 
 router.post("/", (req, res) => {
     latest = req.body;        // store live value
